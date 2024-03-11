@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strict": true,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"verbatimModuleSyntax": true,
+		"isolatedModules": true,
+		"lib": ["esnext", "DOM", "DOM.Iterable"],
+		"noEmit": true,
+		"target": "esnext"
+	},
+	"include": ["./src/**/*.js", "./src/**/*.ts", "./src/**/*.svelte"],
+	"exclude": ["./node_modules/**"]
+}

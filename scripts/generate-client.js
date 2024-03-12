@@ -106,13 +106,6 @@ function processMember(member, result, sourceFile, interfaceName) {
 function processPathsMember(member, result, sourceFile, name) {
   if (!ts.isTypeLiteralNode(member.type)) return;
 
-  // Extract JSDoc comments if available
-  const jsDocComments = ts
-    .getJSDocCommentsAndTags(member, sourceFile)
-    .map((doc) => doc.getText(sourceFile))
-    .join('\n')
-    .trim();
-
   member.type.members.forEach((typeMember) => {
     if (!ts.isPropertySignature(typeMember) || !typeMember.type) return;
 
@@ -124,7 +117,6 @@ function processPathsMember(member, result, sourceFile, name) {
 
     result[operationName].route = name.replace(/"/g, '');
     result[operationName].method = methodName;
-    result[operationName].description = jsDocComments; // Store the extracted JSDoc comments
   });
 }
 

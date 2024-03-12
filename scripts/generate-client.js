@@ -98,11 +98,26 @@ try {
 	result += `import type { components, operations, paths } from './schema.js';\n\n`;
 
 	result += `export class Client {
+		_options: ClientOptions;
 		client: ReturnType<typeof createClient<paths>>;
 
 		constructor(options: ClientOptions) {
+			this._options = options;
 			this.client = createClient<paths>(options);
-		}\n\n`;
+		}
+		
+		set baseUrl(baseUrl: string) {
+			this.client = createClient<paths>({ ...this.options, baseUrl });
+		};
+
+		get options() {
+			return this._options;
+		};
+
+		set options(options: ClientOptions) {
+			this.client = createClient<paths>({ ...this.options, ...options });
+		};
+		\n\n`;
 
 	for (const operation in operations) {
 		const { path, method, ...args } = operations[operation];

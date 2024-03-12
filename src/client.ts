@@ -4,9 +4,23 @@ import type { components, operations, paths } from './schema.js';
 
 export class Client {
 	client: ReturnType<typeof createClient<paths>>;
+	_options: ClientOptions;
 
 	constructor(options: ClientOptions) {
+		this._options = options;
 		this.client = createClient<paths>(options);
+	}
+
+	set baseUrl(baseUrl: string) {
+		this.client = createClient<paths>({ ...this.options, baseUrl });
+	}
+
+	get options() {
+		return this._options;
+	}
+
+	set options(options: ClientOptions) {
+		this.client = createClient<paths>({ ...this.options, ...options });
 	}
 
 	getClusterInfo() {

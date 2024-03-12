@@ -1,12 +1,13 @@
-import ts from 'typescript';
-import { promises as fs } from 'fs';
+import { readFile, writeFile } from 'fs/promises';
+
+import { camelCase } from 'change-case';
 import prettier from 'prettier';
 import { resolve } from 'path';
-import { camelCase } from 'change-case';
+import ts from 'typescript';
 
 const inputFilePath = resolve('./src/schema.d.ts');
 const outputFilePath = resolve('./src/methods.ts');
-const prettierConfigutation = await fs.readFile('.prettierrc', 'utf8').then(JSON.parse);
+const prettierConfigutation = await readFile('.prettierrc', 'utf8').then(JSON.parse);
 
 /**
  * Parses a TypeScript file to extract information and generate a JSON object.
@@ -15,7 +16,7 @@ const prettierConfigutation = await fs.readFile('.prettierrc', 'utf8').then(JSON
  */
 async function generateMethods(filePath) {
 	// Read the TypeScript file
-	const fileContents = await fs.readFile(filePath, 'utf8');
+	const fileContents = await readFile(filePath, 'utf8');
 	const sourceFile = ts.createSourceFile(filePath, fileContents, ts.ScriptTarget.Latest, true);
 
 	// The result object to be filled with the parsed data
@@ -90,7 +91,7 @@ async function generateMethods(filePath) {
 
 try {
 	const operations = await generateMethods(inputFilePath);
-	await fs.writeFile('./src/schema.json', JSON.stringify(operations, null, 2));
+	await writeFile('./src/schema.json', JSON.stringify(operations, null, 2));
 
 	let result = `import { createClient } from './client.js';\n\n`;
 
@@ -110,7 +111,7 @@ try {
     };\n\n`;
 	}
 
-	await fs.writeFile(
+	await writeFile(
 		outputFilePath,
 		await prettier.format(result, { ...prettierConfigutation, parser: 'typescript' })
 	);

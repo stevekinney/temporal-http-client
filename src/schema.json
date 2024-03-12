@@ -1,237 +1,331 @@
 {
   "GetClusterInfo": {
-    "path": "/api/v1/cluster-info",
+    "route": "/api/v1/cluster-info",
     "method": "GET"
   },
   "ListNamespaces": {
-    "path": "/api/v1/namespaces",
+    "route": "/api/v1/namespaces",
     "method": "GET",
-    "params": "operations['ListNamespaces']['parameters']"
+    "params": {
+      "query": "operations['ListNamespaces']['parameters']['query']"
+    }
   },
   "RegisterNamespace": {
-    "path": "/api/v1/namespaces",
+    "route": "/api/v1/namespaces",
     "method": "POST",
     "body": "components['schemas']['RegisterNamespaceRequest']"
   },
   "DescribeNamespace": {
-    "path": "/api/v1/namespaces/{namespace}",
+    "route": "/api/v1/namespaces/{namespace}",
     "method": "GET",
-    "params": "operations['DescribeNamespace']['parameters']"
+    "params": {
+      "query": "operations['DescribeNamespace']['parameters']['query']",
+      "path": "operations['DescribeNamespace']['parameters']['path']"
+    }
   },
   "RespondActivityTaskCanceled": {
-    "path": "/api/v1/namespaces/{namespace}/activities/cancel",
+    "route": "/api/v1/namespaces/{namespace}/activities/cancel",
     "method": "POST",
-    "params": "operations['RespondActivityTaskCanceled']['parameters']",
+    "params": {
+      "path": "operations['RespondActivityTaskCanceled']['parameters']['path']"
+    },
     "body": "components['schemas']['RespondActivityTaskCanceledRequest']"
   },
   "RespondActivityTaskCanceledById": {
-    "path": "/api/v1/namespaces/{namespace}/activities/cancel-by-id",
+    "route": "/api/v1/namespaces/{namespace}/activities/cancel-by-id",
     "method": "POST",
-    "params": "operations['RespondActivityTaskCanceledById']['parameters']",
+    "params": {
+      "path": "operations['RespondActivityTaskCanceledById']['parameters']['path']"
+    },
     "body": "components['schemas']['RespondActivityTaskCanceledByIdRequest']"
   },
   "RespondActivityTaskCompleted": {
-    "path": "/api/v1/namespaces/{namespace}/activities/complete",
+    "route": "/api/v1/namespaces/{namespace}/activities/complete",
     "method": "POST",
-    "params": "operations['RespondActivityTaskCompleted']['parameters']",
+    "params": {
+      "path": "operations['RespondActivityTaskCompleted']['parameters']['path']"
+    },
     "body": "components['schemas']['RespondActivityTaskCompletedRequest']"
   },
   "RespondActivityTaskCompletedById": {
-    "path": "/api/v1/namespaces/{namespace}/activities/complete-by-id",
+    "route": "/api/v1/namespaces/{namespace}/activities/complete-by-id",
     "method": "POST",
-    "params": "operations['RespondActivityTaskCompletedById']['parameters']",
+    "params": {
+      "path": "operations['RespondActivityTaskCompletedById']['parameters']['path']"
+    },
     "body": "components['schemas']['RespondActivityTaskCompletedByIdRequest']"
   },
   "RespondActivityTaskFailed": {
-    "path": "/api/v1/namespaces/{namespace}/activities/fail",
+    "route": "/api/v1/namespaces/{namespace}/activities/fail",
     "method": "POST",
-    "params": "operations['RespondActivityTaskFailed']['parameters']",
+    "params": {
+      "path": "operations['RespondActivityTaskFailed']['parameters']['path']"
+    },
     "body": "components['schemas']['RespondActivityTaskFailedRequest']"
   },
   "RespondActivityTaskFailedById": {
-    "path": "/api/v1/namespaces/{namespace}/activities/fail-by-id",
+    "route": "/api/v1/namespaces/{namespace}/activities/fail-by-id",
     "method": "POST",
-    "params": "operations['RespondActivityTaskFailedById']['parameters']",
+    "params": {
+      "path": "operations['RespondActivityTaskFailedById']['parameters']['path']"
+    },
     "body": "components['schemas']['RespondActivityTaskFailedByIdRequest']"
   },
   "RecordActivityTaskHeartbeat": {
-    "path": "/api/v1/namespaces/{namespace}/activities/heartbeat",
+    "route": "/api/v1/namespaces/{namespace}/activities/heartbeat",
     "method": "POST",
-    "params": "operations['RecordActivityTaskHeartbeat']['parameters']",
+    "params": {
+      "path": "operations['RecordActivityTaskHeartbeat']['parameters']['path']"
+    },
     "body": "components['schemas']['RecordActivityTaskHeartbeatRequest']"
   },
   "RecordActivityTaskHeartbeatById": {
-    "path": "/api/v1/namespaces/{namespace}/activities/heartbeat-by-id",
+    "route": "/api/v1/namespaces/{namespace}/activities/heartbeat-by-id",
     "method": "POST",
-    "params": "operations['RecordActivityTaskHeartbeatById']['parameters']",
+    "params": {
+      "path": "operations['RecordActivityTaskHeartbeatById']['parameters']['path']"
+    },
     "body": "components['schemas']['RecordActivityTaskHeartbeatByIdRequest']"
   },
   "ListArchivedWorkflowExecutions": {
-    "path": "/api/v1/namespaces/{namespace}/archived-workflows",
+    "route": "/api/v1/namespaces/{namespace}/archived-workflows",
     "method": "GET",
-    "params": "operations['ListArchivedWorkflowExecutions']['parameters']"
+    "params": {
+      "query": "operations['ListArchivedWorkflowExecutions']['parameters']['query']",
+      "path": "operations['ListArchivedWorkflowExecutions']['parameters']['path']"
+    }
   },
   "ListBatchOperations": {
-    "path": "/api/v1/namespaces/{namespace}/batch-operations",
+    "route": "/api/v1/namespaces/{namespace}/batch-operations",
     "method": "GET",
-    "params": "operations['ListBatchOperations']['parameters']"
+    "params": {
+      "query": "operations['ListBatchOperations']['parameters']['query']",
+      "path": "operations['ListBatchOperations']['parameters']['path']"
+    }
   },
   "DescribeBatchOperation": {
-    "path": "/api/v1/namespaces/{namespace}/batch-operations/{jobId}",
+    "route": "/api/v1/namespaces/{namespace}/batch-operations/{jobId}",
     "method": "GET",
-    "params": "operations['DescribeBatchOperation']['parameters']"
+    "params": {
+      "path": "operations['DescribeBatchOperation']['parameters']['path']"
+    }
   },
   "StartBatchOperation": {
-    "path": "/api/v1/namespaces/{namespace}/batch-operations/{jobId}",
+    "route": "/api/v1/namespaces/{namespace}/batch-operations/{jobId}",
     "method": "POST",
-    "params": "operations['StartBatchOperation']['parameters']",
+    "params": {
+      "path": "operations['StartBatchOperation']['parameters']['path']"
+    },
     "body": "components['schemas']['StartBatchOperationRequest']"
   },
   "StopBatchOperation": {
-    "path": "/api/v1/namespaces/{namespace}/batch-operations/{jobId}/stop",
+    "route": "/api/v1/namespaces/{namespace}/batch-operations/{jobId}/stop",
     "method": "POST",
-    "params": "operations['StopBatchOperation']['parameters']",
+    "params": {
+      "path": "operations['StopBatchOperation']['parameters']['path']"
+    },
     "body": "components['schemas']['StopBatchOperationRequest']"
   },
   "ListSchedules": {
-    "path": "/api/v1/namespaces/{namespace}/schedules",
+    "route": "/api/v1/namespaces/{namespace}/schedules",
     "method": "GET",
-    "params": "operations['ListSchedules']['parameters']"
+    "params": {
+      "query": "operations['ListSchedules']['parameters']['query']",
+      "path": "operations['ListSchedules']['parameters']['path']"
+    }
   },
   "DescribeSchedule": {
-    "path": "/api/v1/namespaces/{namespace}/schedules/{scheduleId}",
+    "route": "/api/v1/namespaces/{namespace}/schedules/{scheduleId}",
     "method": "GET",
-    "params": "operations['DescribeSchedule']['parameters']"
+    "params": {
+      "path": "operations['DescribeSchedule']['parameters']['path']"
+    }
   },
   "CreateSchedule": {
-    "path": "/api/v1/namespaces/{namespace}/schedules/{scheduleId}",
+    "route": "/api/v1/namespaces/{namespace}/schedules/{scheduleId}",
     "method": "POST",
-    "params": "operations['CreateSchedule']['parameters']",
+    "params": {
+      "path": "operations['CreateSchedule']['parameters']['path']"
+    },
     "body": "components['schemas']['CreateScheduleRequest']"
   },
   "DeleteSchedule": {
-    "path": "/api/v1/namespaces/{namespace}/schedules/{scheduleId}",
+    "route": "/api/v1/namespaces/{namespace}/schedules/{scheduleId}",
     "method": "DELETE",
-    "params": "operations['DeleteSchedule']['parameters']"
+    "params": {
+      "query": "operations['DeleteSchedule']['parameters']['query']",
+      "path": "operations['DeleteSchedule']['parameters']['path']"
+    }
   },
   "ListScheduleMatchingTimes": {
-    "path": "/api/v1/namespaces/{namespace}/schedules/{scheduleId}/matching-times",
+    "route": "/api/v1/namespaces/{namespace}/schedules/{scheduleId}/matching-times",
     "method": "GET",
-    "params": "operations['ListScheduleMatchingTimes']['parameters']"
+    "params": {
+      "query": "operations['ListScheduleMatchingTimes']['parameters']['query']",
+      "path": "operations['ListScheduleMatchingTimes']['parameters']['path']"
+    }
   },
   "PatchSchedule": {
-    "path": "/api/v1/namespaces/{namespace}/schedules/{scheduleId}/patch",
+    "route": "/api/v1/namespaces/{namespace}/schedules/{scheduleId}/patch",
     "method": "POST",
-    "params": "operations['PatchSchedule']['parameters']",
+    "params": {
+      "path": "operations['PatchSchedule']['parameters']['path']"
+    },
     "body": "components['schemas']['PatchScheduleRequest']"
   },
   "UpdateSchedule": {
-    "path": "/api/v1/namespaces/{namespace}/schedules/{scheduleId}/update",
+    "route": "/api/v1/namespaces/{namespace}/schedules/{scheduleId}/update",
     "method": "POST",
-    "params": "operations['UpdateSchedule']['parameters']",
+    "params": {
+      "path": "operations['UpdateSchedule']['parameters']['path']"
+    },
     "body": "components['schemas']['UpdateScheduleRequest']"
   },
   "ListSearchAttributes": {
-    "path": "/api/v1/namespaces/{namespace}/search-attributes",
+    "route": "/api/v1/namespaces/{namespace}/search-attributes",
     "method": "GET",
-    "params": "operations['ListSearchAttributes']['parameters']"
+    "params": {
+      "path": "operations['ListSearchAttributes']['parameters']['path']"
+    }
   },
   "GetWorkerBuildIdCompatibility": {
-    "path": "/api/v1/namespaces/{namespace}/task-queues/{taskQueue}/worker-build-id-compatibility",
+    "route": "/api/v1/namespaces/{namespace}/task-queues/{taskQueue}/worker-build-id-compatibility",
     "method": "GET",
-    "params": "operations['GetWorkerBuildIdCompatibility']['parameters']"
+    "params": {
+      "query": "operations['GetWorkerBuildIdCompatibility']['parameters']['query']",
+      "path": "operations['GetWorkerBuildIdCompatibility']['parameters']['path']"
+    }
   },
   "DescribeTaskQueue": {
-    "path": "/api/v1/namespaces/{namespace}/task-queues/{task_queue.name}",
+    "route": "/api/v1/namespaces/{namespace}/task-queues/{task_queue.name}",
     "method": "GET",
-    "params": "operations['DescribeTaskQueue']['parameters']"
+    "params": {
+      "query": "operations['DescribeTaskQueue']['parameters']['query']",
+      "path": "operations['DescribeTaskQueue']['parameters']['path']"
+    }
   },
   "UpdateNamespace": {
-    "path": "/api/v1/namespaces/{namespace}/update",
+    "route": "/api/v1/namespaces/{namespace}/update",
     "method": "POST",
-    "params": "operations['UpdateNamespace']['parameters']",
+    "params": {
+      "path": "operations['UpdateNamespace']['parameters']['path']"
+    },
     "body": "components['schemas']['UpdateNamespaceRequest']"
   },
   "GetWorkerTaskReachability": {
-    "path": "/api/v1/namespaces/{namespace}/worker-task-reachability",
+    "route": "/api/v1/namespaces/{namespace}/worker-task-reachability",
     "method": "GET",
-    "params": "operations['GetWorkerTaskReachability']['parameters']"
+    "params": {
+      "query": "operations['GetWorkerTaskReachability']['parameters']['query']",
+      "path": "operations['GetWorkerTaskReachability']['parameters']['path']"
+    }
   },
   "CountWorkflowExecutions": {
-    "path": "/api/v1/namespaces/{namespace}/workflow-count",
+    "route": "/api/v1/namespaces/{namespace}/workflow-count",
     "method": "GET",
-    "params": "operations['CountWorkflowExecutions']['parameters']"
+    "params": {
+      "query": "operations['CountWorkflowExecutions']['parameters']['query']",
+      "path": "operations['CountWorkflowExecutions']['parameters']['path']"
+    }
   },
   "ListWorkflowExecutions": {
-    "path": "/api/v1/namespaces/{namespace}/workflows",
+    "route": "/api/v1/namespaces/{namespace}/workflows",
     "method": "GET",
-    "params": "operations['ListWorkflowExecutions']['parameters']"
+    "params": {
+      "query": "operations['ListWorkflowExecutions']['parameters']['query']",
+      "path": "operations['ListWorkflowExecutions']['parameters']['path']"
+    }
   },
   "DescribeWorkflowExecution": {
-    "path": "/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}",
+    "route": "/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}",
     "method": "GET",
-    "params": "operations['DescribeWorkflowExecution']['parameters']"
+    "params": {
+      "query": "operations['DescribeWorkflowExecution']['parameters']['query']",
+      "path": "operations['DescribeWorkflowExecution']['parameters']['path']"
+    }
   },
   "GetWorkflowExecutionHistory": {
-    "path": "/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history",
+    "route": "/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history",
     "method": "GET",
-    "params": "operations['GetWorkflowExecutionHistory']['parameters']"
+    "params": {
+      "query": "operations['GetWorkflowExecutionHistory']['parameters']['query']",
+      "path": "operations['GetWorkflowExecutionHistory']['parameters']['path']"
+    }
   },
   "GetWorkflowExecutionHistoryReverse": {
-    "path": "/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history-reverse",
+    "route": "/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history-reverse",
     "method": "GET",
-    "params": "operations['GetWorkflowExecutionHistoryReverse']['parameters']"
+    "params": {
+      "query": "operations['GetWorkflowExecutionHistoryReverse']['parameters']['query']",
+      "path": "operations['GetWorkflowExecutionHistoryReverse']['parameters']['path']"
+    }
   },
   "QueryWorkflow": {
-    "path": "/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/query/{query.query_type}",
+    "route": "/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/query/{query.query_type}",
     "method": "POST",
-    "params": "operations['QueryWorkflow']['parameters']",
+    "params": {
+      "path": "operations['QueryWorkflow']['parameters']['path']"
+    },
     "body": "components['schemas']['QueryWorkflowRequest']"
   },
   "StartWorkflowExecution": {
-    "path": "/api/v1/namespaces/{namespace}/workflows/{workflowId}",
+    "route": "/api/v1/namespaces/{namespace}/workflows/{workflowId}",
     "method": "POST",
-    "params": "operations['StartWorkflowExecution']['parameters']",
+    "params": {
+      "path": "operations['StartWorkflowExecution']['parameters']['path']"
+    },
     "body": "components['schemas']['StartWorkflowExecutionRequest']"
   },
   "SignalWithStartWorkflowExecution": {
-    "path": "/api/v1/namespaces/{namespace}/workflows/{workflowId}/signal-with-start/{signalName}",
+    "route": "/api/v1/namespaces/{namespace}/workflows/{workflowId}/signal-with-start/{signalName}",
     "method": "POST",
-    "params": "operations['SignalWithStartWorkflowExecution']['parameters']",
+    "params": {
+      "path": "operations['SignalWithStartWorkflowExecution']['parameters']['path']"
+    },
     "body": "components['schemas']['SignalWithStartWorkflowExecutionRequest']"
   },
   "RequestCancelWorkflowExecution": {
-    "path": "/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/cancel",
+    "route": "/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/cancel",
     "method": "POST",
-    "params": "operations['RequestCancelWorkflowExecution']['parameters']",
+    "params": {
+      "path": "operations['RequestCancelWorkflowExecution']['parameters']['path']"
+    },
     "body": "components['schemas']['RequestCancelWorkflowExecutionRequest']"
   },
   "ResetWorkflowExecution": {
-    "path": "/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/reset",
+    "route": "/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/reset",
     "method": "POST",
-    "params": "operations['ResetWorkflowExecution']['parameters']",
+    "params": {
+      "path": "operations['ResetWorkflowExecution']['parameters']['path']"
+    },
     "body": "components['schemas']['ResetWorkflowExecutionRequest']"
   },
   "SignalWorkflowExecution": {
-    "path": "/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/signal/{signalName}",
+    "route": "/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/signal/{signalName}",
     "method": "POST",
-    "params": "operations['SignalWorkflowExecution']['parameters']",
+    "params": {
+      "path": "operations['SignalWorkflowExecution']['parameters']['path']"
+    },
     "body": "components['schemas']['SignalWorkflowExecutionRequest']"
   },
   "TerminateWorkflowExecution": {
-    "path": "/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/terminate",
+    "route": "/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/terminate",
     "method": "POST",
-    "params": "operations['TerminateWorkflowExecution']['parameters']",
+    "params": {
+      "path": "operations['TerminateWorkflowExecution']['parameters']['path']"
+    },
     "body": "components['schemas']['TerminateWorkflowExecutionRequest']"
   },
   "UpdateWorkflowExecution": {
-    "path": "/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update/{request.input.name}",
+    "route": "/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update/{request.input.name}",
     "method": "POST",
-    "params": "operations['UpdateWorkflowExecution']['parameters']",
+    "params": {
+      "path": "operations['UpdateWorkflowExecution']['parameters']['path']"
+    },
     "body": "components['schemas']['UpdateWorkflowExecutionRequest']"
   },
   "GetSystemInfo": {
-    "path": "/api/v1/system-info",
+    "route": "/api/v1/system-info",
     "method": "GET"
   }
 }

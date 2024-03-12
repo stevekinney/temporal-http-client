@@ -1,6 +1,5 @@
 import { readFile, writeFile } from 'fs/promises';
 
-import { camelCase } from 'change-case';
 import prettier from 'prettier';
 import { resolve } from 'path';
 import ts from 'typescript';
@@ -27,7 +26,7 @@ async function generateMethods(filePath) {
 		if (ts.isInterfaceDeclaration(node) && node.name.text === 'paths') {
 			node.members.forEach((member) => {
 				if (ts.isPropertySignature(member) && member.type) {
-					const path = member.name.getText(sourceFile).replace(/"/g, '');
+					const route = member.name.getText(sourceFile).replace(/"/g, '');
 					if (ts.isTypeLiteralNode(member.type)) {
 						member.type.members.forEach((typeMember) => {
 							if (ts.isPropertySignature(typeMember) && typeMember.type) {
@@ -40,7 +39,7 @@ async function generateMethods(filePath) {
 
 								result[operationName] = {
 									...result[operationName],
-									path,
+									route,
 									method: methodName
 								};
 							}
@@ -60,7 +59,19 @@ async function generateMethods(filePath) {
 							if (ts.isPropertySignature(typeMember) && typeMember.type) {
 								if (typeMember.name.getText(sourceFile) === 'parameters') {
 									if (!result[operation]) result[operation] = {};
-									result[operation].params = `operations['${operation}']['parameters']`;
+									typeMember.type.members.forEach((paramMember) => {
+										if (ts.isPropertySignature(paramMember) && paramMember.type) {
+											result[operation].params = result[operation].params || {};
+											if (paramMember.name.getText(sourceFile) === 'path') {
+												result[operation].params.path =
+													`operations['${operation}']['parameters']['path']`;
+											}
+											if (paramMember.name.getText(sourceFile) === 'query') {
+												result[operation].params.query =
+													`operations['${operation}']['parameters']['query']`;
+											}
+										}
+									});
 								}
 
 								if (typeMember.name.getText(sourceFile) === 'requestBody') {
@@ -93,46 +104,39 @@ try {
 	const operations = await generateMethods(inputFilePath);
 	await writeFile('./src/schema.json', JSON.stringify(operations, null, 2));
 
-	let result = `import createClient, { type ClientOptions } from 'openapi-fetch';\n\n`;
+	const methods = Object.entries(operations)
+		.map(([operation, config]) => formatMethod(operation, config))
+		.join('\n\n');
 
-	result += `import type { components, operations, paths } from './schema.js';\n\n`;
+	const result = `
+		import createClient, { type ClientOptions } from 'openapi-fetch';
+		import type { components, operations, paths } from './schema.js';
 
-	result += `export class Client {
-		_options: ClientOptions;
-		client: ReturnType<typeof createClient<paths>>;
+		export class Client {
+			private client: ReturnType<typeof createClient<paths>>;
+			private _options: ClientOptions;
 
-		constructor(options: ClientOptions) {
-			this._options = options;
-			this.client = createClient<paths>(options);
+			constructor(options: ClientOptions) {
+				this._options = options;
+				this.client = createClient<paths>(options);
+			}
+			
+			set baseUrl(baseUrl: string) {
+				this.client = createClient<paths>({ ...this.options, baseUrl });
+			};
+
+			get options() {
+				return this._options;
+			};
+
+			set options(options: ClientOptions) {
+				this.client = createClient<paths>({ ...this.options, ...options });
+			};
+
+			${methods}
+
 		}
-		
-		set baseUrl(baseUrl: string) {
-			this.client = createClient<paths>({ ...this.options, baseUrl });
-		};
-
-		get options() {
-			return this._options;
-		};
-
-		set options(options: ClientOptions) {
-			this.client = createClient<paths>({ ...this.options, ...options });
-		};
-		\n\n`;
-
-	for (const operation in operations) {
-		const { path, method, ...args } = operations[operation];
-
-		const argNames = Object.keys(args).join(', ');
-		const argsWithTypes = Object.entries(args)
-			.map(([name, type]) => `${name}: ${type}`)
-			.join(', ');
-
-		result += `${camelCase(operation)}(${argsWithTypes}) {
-      return this.client.${method}(${[`'${path}'`, argNames.length && `{${argNames}}`].filter(Boolean).join(', ')});
-    };\n\n`;
-	}
-
-	result += `}\n`;
+	`.trim();
 
 	await writeFile(
 		outputFilePath,
@@ -142,4 +146,71 @@ try {
 	console.log('Client generated successfully.');
 } catch (error) {
 	console.error('An error occurred:', error);
+}
+
+/**
+ * Formats a method for an API client.
+ *
+ * @param {string} operation - The name of the operation to be formatted.
+ * @param {Object} config - The configuration object for the method.
+ * @param {string} config.route - The API route the method will call.
+ * @param {string} config.method - The HTTP method to be used.
+ * @param {Object} [config.params] - The parameters for the route, if any.
+ * @param {string} [config.body] - The body schema reference, if applicable.
+ * @returns {string} The formatted method as a string.
+ */
+function formatMethod(operation, config) {
+	// Convert the first character to lowercase to follow JS naming conventions
+	const methodName = operation.charAt(0).toLowerCase() + operation.slice(1);
+
+	// Base method structure
+	let methodSignature = `${methodName}(`;
+	let methodBody = `return this.client.${config.method.toUpperCase()}('${config.route}'`;
+
+	// Determine if params or body are required
+	const hasParams = config.params && Object.keys(config.params).length > 0;
+	const hasBody = !!config.body;
+
+	// Handling params and/or body
+	if (hasParams || hasBody) {
+		/** @type { string[] } */
+		let paramsList = [];
+		/** @type { string[] } */
+		let paramsSignature = [];
+		let methodParams = `{ `;
+
+		if (config.params) {
+			for (let [key, value] of Object.entries(config.params)) {
+				paramsList.push(key);
+				if (key === 'query') key = 'query?';
+				paramsSignature.push(`${key}: ${value}`);
+			}
+		}
+
+		if (hasBody) {
+			paramsList.push('body');
+			paramsSignature.push(`body: ${config.body}`);
+		}
+
+		methodSignature += `{ ${paramsList.join(', ')} }: { ${paramsSignature.join(', ')} }`;
+
+		// Add a default value if there are only optional parameters
+		if (paramsSignature.every((key) => key.includes('?'))) {
+			methodSignature += ` = {}`;
+		}
+
+		methodParams += hasParams ? `params: { ${Object.keys(config.params).join(', ')} }` : '';
+
+		if (hasBody) {
+			methodParams += hasParams ? `, body` : `body`;
+		}
+
+		methodParams += ` `;
+		methodBody += `, ${methodParams} }`;
+	}
+
+	methodSignature += `) {\n\t`;
+	methodBody += `);\n};`;
+
+	return methodSignature + methodBody;
 }

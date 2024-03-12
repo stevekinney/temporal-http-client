@@ -1,10 +1,9 @@
 import createClient, { type ClientOptions } from 'openapi-fetch';
-
 import type { components, operations, paths } from './schema.js';
 
 export class Client {
-	client: ReturnType<typeof createClient<paths>>;
-	_options: ClientOptions;
+	private client: ReturnType<typeof createClient<paths>>;
+	private _options: ClientOptions;
 
 	constructor(options: ClientOptions) {
 		this._options = options;
@@ -27,306 +26,485 @@ export class Client {
 		return this.client.GET('/api/v1/cluster-info');
 	}
 
-	listNamespaces(params: operations['ListNamespaces']['parameters']) {
-		return this.client.GET('/api/v1/namespaces', { params });
+	listNamespaces({ query }: { query?: operations['ListNamespaces']['parameters']['query'] } = {}) {
+		return this.client.GET('/api/v1/namespaces', { params: { query } });
 	}
 
-	registerNamespace(body: components['schemas']['RegisterNamespaceRequest']) {
+	registerNamespace({ body }: { body: components['schemas']['RegisterNamespaceRequest'] }) {
 		return this.client.POST('/api/v1/namespaces', { body });
 	}
 
-	describeNamespace(params: operations['DescribeNamespace']['parameters']) {
-		return this.client.GET('/api/v1/namespaces/{namespace}', { params });
+	describeNamespace({
+		query,
+		path
+	}: {
+		query?: operations['DescribeNamespace']['parameters']['query'];
+		path: operations['DescribeNamespace']['parameters']['path'];
+	}) {
+		return this.client.GET('/api/v1/namespaces/{namespace}', { params: { query, path } });
 	}
 
-	respondActivityTaskCanceled(
-		params: operations['RespondActivityTaskCanceled']['parameters'],
-		body: components['schemas']['RespondActivityTaskCanceledRequest']
-	) {
-		return this.client.POST('/api/v1/namespaces/{namespace}/activities/cancel', { params, body });
+	respondActivityTaskCanceled({
+		path,
+		body
+	}: {
+		path: operations['RespondActivityTaskCanceled']['parameters']['path'];
+		body: components['schemas']['RespondActivityTaskCanceledRequest'];
+	}) {
+		return this.client.POST('/api/v1/namespaces/{namespace}/activities/cancel', {
+			params: { path },
+			body
+		});
 	}
 
-	respondActivityTaskCanceledById(
-		params: operations['RespondActivityTaskCanceledById']['parameters'],
-		body: components['schemas']['RespondActivityTaskCanceledByIdRequest']
-	) {
+	respondActivityTaskCanceledById({
+		path,
+		body
+	}: {
+		path: operations['RespondActivityTaskCanceledById']['parameters']['path'];
+		body: components['schemas']['RespondActivityTaskCanceledByIdRequest'];
+	}) {
 		return this.client.POST('/api/v1/namespaces/{namespace}/activities/cancel-by-id', {
-			params,
+			params: { path },
 			body
 		});
 	}
 
-	respondActivityTaskCompleted(
-		params: operations['RespondActivityTaskCompleted']['parameters'],
-		body: components['schemas']['RespondActivityTaskCompletedRequest']
-	) {
-		return this.client.POST('/api/v1/namespaces/{namespace}/activities/complete', { params, body });
+	respondActivityTaskCompleted({
+		path,
+		body
+	}: {
+		path: operations['RespondActivityTaskCompleted']['parameters']['path'];
+		body: components['schemas']['RespondActivityTaskCompletedRequest'];
+	}) {
+		return this.client.POST('/api/v1/namespaces/{namespace}/activities/complete', {
+			params: { path },
+			body
+		});
 	}
 
-	respondActivityTaskCompletedById(
-		params: operations['RespondActivityTaskCompletedById']['parameters'],
-		body: components['schemas']['RespondActivityTaskCompletedByIdRequest']
-	) {
+	respondActivityTaskCompletedById({
+		path,
+		body
+	}: {
+		path: operations['RespondActivityTaskCompletedById']['parameters']['path'];
+		body: components['schemas']['RespondActivityTaskCompletedByIdRequest'];
+	}) {
 		return this.client.POST('/api/v1/namespaces/{namespace}/activities/complete-by-id', {
-			params,
+			params: { path },
 			body
 		});
 	}
 
-	respondActivityTaskFailed(
-		params: operations['RespondActivityTaskFailed']['parameters'],
-		body: components['schemas']['RespondActivityTaskFailedRequest']
-	) {
-		return this.client.POST('/api/v1/namespaces/{namespace}/activities/fail', { params, body });
+	respondActivityTaskFailed({
+		path,
+		body
+	}: {
+		path: operations['RespondActivityTaskFailed']['parameters']['path'];
+		body: components['schemas']['RespondActivityTaskFailedRequest'];
+	}) {
+		return this.client.POST('/api/v1/namespaces/{namespace}/activities/fail', {
+			params: { path },
+			body
+		});
 	}
 
-	respondActivityTaskFailedById(
-		params: operations['RespondActivityTaskFailedById']['parameters'],
-		body: components['schemas']['RespondActivityTaskFailedByIdRequest']
-	) {
+	respondActivityTaskFailedById({
+		path,
+		body
+	}: {
+		path: operations['RespondActivityTaskFailedById']['parameters']['path'];
+		body: components['schemas']['RespondActivityTaskFailedByIdRequest'];
+	}) {
 		return this.client.POST('/api/v1/namespaces/{namespace}/activities/fail-by-id', {
-			params,
+			params: { path },
 			body
 		});
 	}
 
-	recordActivityTaskHeartbeat(
-		params: operations['RecordActivityTaskHeartbeat']['parameters'],
-		body: components['schemas']['RecordActivityTaskHeartbeatRequest']
-	) {
+	recordActivityTaskHeartbeat({
+		path,
+		body
+	}: {
+		path: operations['RecordActivityTaskHeartbeat']['parameters']['path'];
+		body: components['schemas']['RecordActivityTaskHeartbeatRequest'];
+	}) {
 		return this.client.POST('/api/v1/namespaces/{namespace}/activities/heartbeat', {
-			params,
+			params: { path },
 			body
 		});
 	}
 
-	recordActivityTaskHeartbeatById(
-		params: operations['RecordActivityTaskHeartbeatById']['parameters'],
-		body: components['schemas']['RecordActivityTaskHeartbeatByIdRequest']
-	) {
+	recordActivityTaskHeartbeatById({
+		path,
+		body
+	}: {
+		path: operations['RecordActivityTaskHeartbeatById']['parameters']['path'];
+		body: components['schemas']['RecordActivityTaskHeartbeatByIdRequest'];
+	}) {
 		return this.client.POST('/api/v1/namespaces/{namespace}/activities/heartbeat-by-id', {
-			params,
+			params: { path },
 			body
 		});
 	}
 
-	listArchivedWorkflowExecutions(
-		params: operations['ListArchivedWorkflowExecutions']['parameters']
-	) {
-		return this.client.GET('/api/v1/namespaces/{namespace}/archived-workflows', { params });
+	listArchivedWorkflowExecutions({
+		query,
+		path
+	}: {
+		query?: operations['ListArchivedWorkflowExecutions']['parameters']['query'];
+		path: operations['ListArchivedWorkflowExecutions']['parameters']['path'];
+	}) {
+		return this.client.GET('/api/v1/namespaces/{namespace}/archived-workflows', {
+			params: { query, path }
+		});
 	}
 
-	listBatchOperations(params: operations['ListBatchOperations']['parameters']) {
-		return this.client.GET('/api/v1/namespaces/{namespace}/batch-operations', { params });
+	listBatchOperations({
+		query,
+		path
+	}: {
+		query?: operations['ListBatchOperations']['parameters']['query'];
+		path: operations['ListBatchOperations']['parameters']['path'];
+	}) {
+		return this.client.GET('/api/v1/namespaces/{namespace}/batch-operations', {
+			params: { query, path }
+		});
 	}
 
-	describeBatchOperation(params: operations['DescribeBatchOperation']['parameters']) {
-		return this.client.GET('/api/v1/namespaces/{namespace}/batch-operations/{jobId}', { params });
+	describeBatchOperation({
+		path
+	}: {
+		path: operations['DescribeBatchOperation']['parameters']['path'];
+	}) {
+		return this.client.GET('/api/v1/namespaces/{namespace}/batch-operations/{jobId}', {
+			params: { path }
+		});
 	}
 
-	startBatchOperation(
-		params: operations['StartBatchOperation']['parameters'],
-		body: components['schemas']['StartBatchOperationRequest']
-	) {
+	startBatchOperation({
+		path,
+		body
+	}: {
+		path: operations['StartBatchOperation']['parameters']['path'];
+		body: components['schemas']['StartBatchOperationRequest'];
+	}) {
 		return this.client.POST('/api/v1/namespaces/{namespace}/batch-operations/{jobId}', {
-			params,
+			params: { path },
 			body
 		});
 	}
 
-	stopBatchOperation(
-		params: operations['StopBatchOperation']['parameters'],
-		body: components['schemas']['StopBatchOperationRequest']
-	) {
+	stopBatchOperation({
+		path,
+		body
+	}: {
+		path: operations['StopBatchOperation']['parameters']['path'];
+		body: components['schemas']['StopBatchOperationRequest'];
+	}) {
 		return this.client.POST('/api/v1/namespaces/{namespace}/batch-operations/{jobId}/stop', {
-			params,
+			params: { path },
 			body
 		});
 	}
 
-	listSchedules(params: operations['ListSchedules']['parameters']) {
-		return this.client.GET('/api/v1/namespaces/{namespace}/schedules', { params });
+	listSchedules({
+		query,
+		path
+	}: {
+		query?: operations['ListSchedules']['parameters']['query'];
+		path: operations['ListSchedules']['parameters']['path'];
+	}) {
+		return this.client.GET('/api/v1/namespaces/{namespace}/schedules', { params: { query, path } });
 	}
 
-	describeSchedule(params: operations['DescribeSchedule']['parameters']) {
-		return this.client.GET('/api/v1/namespaces/{namespace}/schedules/{scheduleId}', { params });
+	describeSchedule({ path }: { path: operations['DescribeSchedule']['parameters']['path'] }) {
+		return this.client.GET('/api/v1/namespaces/{namespace}/schedules/{scheduleId}', {
+			params: { path }
+		});
 	}
 
-	createSchedule(
-		params: operations['CreateSchedule']['parameters'],
-		body: components['schemas']['CreateScheduleRequest']
-	) {
+	createSchedule({
+		path,
+		body
+	}: {
+		path: operations['CreateSchedule']['parameters']['path'];
+		body: components['schemas']['CreateScheduleRequest'];
+	}) {
 		return this.client.POST('/api/v1/namespaces/{namespace}/schedules/{scheduleId}', {
-			params,
+			params: { path },
 			body
 		});
 	}
 
-	deleteSchedule(params: operations['DeleteSchedule']['parameters']) {
-		return this.client.DELETE('/api/v1/namespaces/{namespace}/schedules/{scheduleId}', { params });
+	deleteSchedule({
+		query,
+		path
+	}: {
+		query?: operations['DeleteSchedule']['parameters']['query'];
+		path: operations['DeleteSchedule']['parameters']['path'];
+	}) {
+		return this.client.DELETE('/api/v1/namespaces/{namespace}/schedules/{scheduleId}', {
+			params: { query, path }
+		});
 	}
 
-	listScheduleMatchingTimes(params: operations['ListScheduleMatchingTimes']['parameters']) {
+	listScheduleMatchingTimes({
+		query,
+		path
+	}: {
+		query?: operations['ListScheduleMatchingTimes']['parameters']['query'];
+		path: operations['ListScheduleMatchingTimes']['parameters']['path'];
+	}) {
 		return this.client.GET('/api/v1/namespaces/{namespace}/schedules/{scheduleId}/matching-times', {
-			params
+			params: { query, path }
 		});
 	}
 
-	patchSchedule(
-		params: operations['PatchSchedule']['parameters'],
-		body: components['schemas']['PatchScheduleRequest']
-	) {
+	patchSchedule({
+		path,
+		body
+	}: {
+		path: operations['PatchSchedule']['parameters']['path'];
+		body: components['schemas']['PatchScheduleRequest'];
+	}) {
 		return this.client.POST('/api/v1/namespaces/{namespace}/schedules/{scheduleId}/patch', {
-			params,
+			params: { path },
 			body
 		});
 	}
 
-	updateSchedule(
-		params: operations['UpdateSchedule']['parameters'],
-		body: components['schemas']['UpdateScheduleRequest']
-	) {
+	updateSchedule({
+		path,
+		body
+	}: {
+		path: operations['UpdateSchedule']['parameters']['path'];
+		body: components['schemas']['UpdateScheduleRequest'];
+	}) {
 		return this.client.POST('/api/v1/namespaces/{namespace}/schedules/{scheduleId}/update', {
-			params,
+			params: { path },
 			body
 		});
 	}
 
-	listSearchAttributes(params: operations['ListSearchAttributes']['parameters']) {
-		return this.client.GET('/api/v1/namespaces/{namespace}/search-attributes', { params });
+	listSearchAttributes({
+		path
+	}: {
+		path: operations['ListSearchAttributes']['parameters']['path'];
+	}) {
+		return this.client.GET('/api/v1/namespaces/{namespace}/search-attributes', {
+			params: { path }
+		});
 	}
 
-	getWorkerBuildIdCompatibility(params: operations['GetWorkerBuildIdCompatibility']['parameters']) {
+	getWorkerBuildIdCompatibility({
+		query,
+		path
+	}: {
+		query?: operations['GetWorkerBuildIdCompatibility']['parameters']['query'];
+		path: operations['GetWorkerBuildIdCompatibility']['parameters']['path'];
+	}) {
 		return this.client.GET(
 			'/api/v1/namespaces/{namespace}/task-queues/{taskQueue}/worker-build-id-compatibility',
-			{ params }
+			{ params: { query, path } }
 		);
 	}
 
-	describeTaskQueue(params: operations['DescribeTaskQueue']['parameters']) {
+	describeTaskQueue({
+		query,
+		path
+	}: {
+		query?: operations['DescribeTaskQueue']['parameters']['query'];
+		path: operations['DescribeTaskQueue']['parameters']['path'];
+	}) {
 		return this.client.GET('/api/v1/namespaces/{namespace}/task-queues/{task_queue.name}', {
-			params
+			params: { query, path }
 		});
 	}
 
-	updateNamespace(
-		params: operations['UpdateNamespace']['parameters'],
-		body: components['schemas']['UpdateNamespaceRequest']
-	) {
-		return this.client.POST('/api/v1/namespaces/{namespace}/update', { params, body });
+	updateNamespace({
+		path,
+		body
+	}: {
+		path: operations['UpdateNamespace']['parameters']['path'];
+		body: components['schemas']['UpdateNamespaceRequest'];
+	}) {
+		return this.client.POST('/api/v1/namespaces/{namespace}/update', { params: { path }, body });
 	}
 
-	getWorkerTaskReachability(params: operations['GetWorkerTaskReachability']['parameters']) {
-		return this.client.GET('/api/v1/namespaces/{namespace}/worker-task-reachability', { params });
+	getWorkerTaskReachability({
+		query,
+		path
+	}: {
+		query?: operations['GetWorkerTaskReachability']['parameters']['query'];
+		path: operations['GetWorkerTaskReachability']['parameters']['path'];
+	}) {
+		return this.client.GET('/api/v1/namespaces/{namespace}/worker-task-reachability', {
+			params: { query, path }
+		});
 	}
 
-	countWorkflowExecutions(params: operations['CountWorkflowExecutions']['parameters']) {
-		return this.client.GET('/api/v1/namespaces/{namespace}/workflow-count', { params });
+	countWorkflowExecutions({
+		query,
+		path
+	}: {
+		query?: operations['CountWorkflowExecutions']['parameters']['query'];
+		path: operations['CountWorkflowExecutions']['parameters']['path'];
+	}) {
+		return this.client.GET('/api/v1/namespaces/{namespace}/workflow-count', {
+			params: { query, path }
+		});
 	}
 
-	listWorkflowExecutions(params: operations['ListWorkflowExecutions']['parameters']) {
-		return this.client.GET('/api/v1/namespaces/{namespace}/workflows', { params });
+	listWorkflowExecutions({
+		query,
+		path
+	}: {
+		query?: operations['ListWorkflowExecutions']['parameters']['query'];
+		path: operations['ListWorkflowExecutions']['parameters']['path'];
+	}) {
+		return this.client.GET('/api/v1/namespaces/{namespace}/workflows', { params: { query, path } });
 	}
 
-	describeWorkflowExecution(params: operations['DescribeWorkflowExecution']['parameters']) {
+	describeWorkflowExecution({
+		query,
+		path
+	}: {
+		query?: operations['DescribeWorkflowExecution']['parameters']['query'];
+		path: operations['DescribeWorkflowExecution']['parameters']['path'];
+	}) {
 		return this.client.GET('/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}', {
-			params
+			params: { query, path }
 		});
 	}
 
-	getWorkflowExecutionHistory(params: operations['GetWorkflowExecutionHistory']['parameters']) {
+	getWorkflowExecutionHistory({
+		query,
+		path
+	}: {
+		query?: operations['GetWorkflowExecutionHistory']['parameters']['query'];
+		path: operations['GetWorkflowExecutionHistory']['parameters']['path'];
+	}) {
 		return this.client.GET(
 			'/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history',
-			{ params }
+			{ params: { query, path } }
 		);
 	}
 
-	getWorkflowExecutionHistoryReverse(
-		params: operations['GetWorkflowExecutionHistoryReverse']['parameters']
-	) {
+	getWorkflowExecutionHistoryReverse({
+		query,
+		path
+	}: {
+		query?: operations['GetWorkflowExecutionHistoryReverse']['parameters']['query'];
+		path: operations['GetWorkflowExecutionHistoryReverse']['parameters']['path'];
+	}) {
 		return this.client.GET(
 			'/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history-reverse',
-			{ params }
+			{ params: { query, path } }
 		);
 	}
 
-	queryWorkflow(
-		params: operations['QueryWorkflow']['parameters'],
-		body: components['schemas']['QueryWorkflowRequest']
-	) {
+	queryWorkflow({
+		path,
+		body
+	}: {
+		path: operations['QueryWorkflow']['parameters']['path'];
+		body: components['schemas']['QueryWorkflowRequest'];
+	}) {
 		return this.client.POST(
 			'/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/query/{query.query_type}',
-			{ params, body }
+			{ params: { path }, body }
 		);
 	}
 
-	startWorkflowExecution(
-		params: operations['StartWorkflowExecution']['parameters'],
-		body: components['schemas']['StartWorkflowExecutionRequest']
-	) {
+	startWorkflowExecution({
+		path,
+		body
+	}: {
+		path: operations['StartWorkflowExecution']['parameters']['path'];
+		body: components['schemas']['StartWorkflowExecutionRequest'];
+	}) {
 		return this.client.POST('/api/v1/namespaces/{namespace}/workflows/{workflowId}', {
-			params,
+			params: { path },
 			body
 		});
 	}
 
-	signalWithStartWorkflowExecution(
-		params: operations['SignalWithStartWorkflowExecution']['parameters'],
-		body: components['schemas']['SignalWithStartWorkflowExecutionRequest']
-	) {
+	signalWithStartWorkflowExecution({
+		path,
+		body
+	}: {
+		path: operations['SignalWithStartWorkflowExecution']['parameters']['path'];
+		body: components['schemas']['SignalWithStartWorkflowExecutionRequest'];
+	}) {
 		return this.client.POST(
 			'/api/v1/namespaces/{namespace}/workflows/{workflowId}/signal-with-start/{signalName}',
-			{ params, body }
+			{ params: { path }, body }
 		);
 	}
 
-	requestCancelWorkflowExecution(
-		params: operations['RequestCancelWorkflowExecution']['parameters'],
-		body: components['schemas']['RequestCancelWorkflowExecutionRequest']
-	) {
+	requestCancelWorkflowExecution({
+		path,
+		body
+	}: {
+		path: operations['RequestCancelWorkflowExecution']['parameters']['path'];
+		body: components['schemas']['RequestCancelWorkflowExecutionRequest'];
+	}) {
 		return this.client.POST(
 			'/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/cancel',
-			{ params, body }
+			{ params: { path }, body }
 		);
 	}
 
-	resetWorkflowExecution(
-		params: operations['ResetWorkflowExecution']['parameters'],
-		body: components['schemas']['ResetWorkflowExecutionRequest']
-	) {
+	resetWorkflowExecution({
+		path,
+		body
+	}: {
+		path: operations['ResetWorkflowExecution']['parameters']['path'];
+		body: components['schemas']['ResetWorkflowExecutionRequest'];
+	}) {
 		return this.client.POST(
 			'/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/reset',
-			{ params, body }
+			{ params: { path }, body }
 		);
 	}
 
-	signalWorkflowExecution(
-		params: operations['SignalWorkflowExecution']['parameters'],
-		body: components['schemas']['SignalWorkflowExecutionRequest']
-	) {
+	signalWorkflowExecution({
+		path,
+		body
+	}: {
+		path: operations['SignalWorkflowExecution']['parameters']['path'];
+		body: components['schemas']['SignalWorkflowExecutionRequest'];
+	}) {
 		return this.client.POST(
 			'/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/signal/{signalName}',
-			{ params, body }
+			{ params: { path }, body }
 		);
 	}
 
-	terminateWorkflowExecution(
-		params: operations['TerminateWorkflowExecution']['parameters'],
-		body: components['schemas']['TerminateWorkflowExecutionRequest']
-	) {
+	terminateWorkflowExecution({
+		path,
+		body
+	}: {
+		path: operations['TerminateWorkflowExecution']['parameters']['path'];
+		body: components['schemas']['TerminateWorkflowExecutionRequest'];
+	}) {
 		return this.client.POST(
 			'/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/terminate',
-			{ params, body }
+			{ params: { path }, body }
 		);
 	}
 
-	updateWorkflowExecution(
-		params: operations['UpdateWorkflowExecution']['parameters'],
-		body: components['schemas']['UpdateWorkflowExecutionRequest']
-	) {
+	updateWorkflowExecution({
+		path,
+		body
+	}: {
+		path: operations['UpdateWorkflowExecution']['parameters']['path'];
+		body: components['schemas']['UpdateWorkflowExecutionRequest'];
+	}) {
 		return this.client.POST(
 			'/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update/{request.input.name}',
-			{ params, body }
+			{ params: { path }, body }
 		);
 	}
 

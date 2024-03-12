@@ -14,13 +14,17 @@ This will download [Temporal's API repository](https://github.com/temporalio/api
 ## Usage
 
 ```ts
-import { createClient } from 'temporal-http-client';
+import { Client } from 'temporal-http-client';
 
-const client = createClient({ baseUrl: 'http://localhost:8233' });
+const client = new Client({ baseUrl: 'http://localhost:8233' });
 
-const namespaces = await client.GET('/api/v1/namespaces');
+const response = await client.listNamespaces();
 
-namespaces.data?.namespaces?.forEach((namespace) => {
-  console.log(namespace.namespaceInfo?.name);
+response.data?.namespaces?.forEach((namespace) => {
+	console.log(namespace);
+});
+
+if (response.error) {
+	console.error(response.error.code, response.error.message);
 }
 ```

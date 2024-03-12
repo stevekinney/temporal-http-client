@@ -22,6 +22,8 @@
 		"prepublishOnly": "npm run package",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
+		"generate": "npm run generate:schema && npm run generate:methods",
+		"generate:methods": "node ./scripts/generate-methods.js",
 		"generate:schema": "node ./scripts/generate-schema.js"
 	},
 	"files": [
@@ -35,6 +37,7 @@
 		"@typescript-eslint/eslint-plugin": "^7.0.0",
 		"@typescript-eslint/parser": "^7.0.0",
 		"chalk": "^5.3.0",
+		"change-case": "^5.4.3",
 		"degit": "^2.8.4",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",

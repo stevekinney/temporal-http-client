@@ -5,7 +5,7 @@ import type { operations, components } from './schema.js';
 const client = createClient({});
 
 export const getClusterInfo = () => {
-	return client.GET('/api/v1/cluster-info', {});
+	return client.GET('/api/v1/cluster-info');
 };
 
 export const listNamespaces = (params: operations['ListNamespaces']['parameters']) => {
@@ -299,5 +299,5 @@ export const updateWorkflowExecution = (
 };
 
 export const getSystemInfo = () => {
-	return client.GET('/api/v1/system-info', {});
+	return client.GET('/api/v1/system-info');
 };

@@ -106,7 +106,7 @@ try {
 			.join(', ');
 
 		result += `export const ${camelCase(operation)} = (${argsWithTypes}) => {
-      return client.${method}(${[`'${path}'`, `{${argNames}}`].join(', ')});
+      return client.${method}(${[`'${path}'`, argNames.length && `{${argNames}}`].filter(Boolean).join(', ')});
     };\n\n`;
 	}
 
@@ -115,7 +115,7 @@ try {
 		await prettier.format(result, { ...prettierConfigutation, parser: 'typescript' })
 	);
 
-	console.log('JSON file generated successfully.');
+	console.log('Methods generated successfully.');
 } catch (error) {
 	console.error('An error occurred:', error);
 }

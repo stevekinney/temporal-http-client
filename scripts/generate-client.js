@@ -6,7 +6,7 @@ import { resolve } from 'path';
 import ts from 'typescript';
 
 const inputFilePath = resolve('./src/schema.d.ts');
-const outputFilePath = resolve('./src/methods.ts');
+const outputFilePath = resolve('./src/client.ts');
 const prettierConfigutation = await readFile('.prettierrc', 'utf8').then(JSON.parse);
 
 /**
@@ -93,10 +93,16 @@ try {
 	const operations = await generateMethods(inputFilePath);
 	await writeFile('./src/schema.json', JSON.stringify(operations, null, 2));
 
-	let result = `import { createClient } from './client.js';\n\n`;
+	let result = `import createClient, { type ClientOptions } from 'openapi-fetch';\n\n`;
 
-	result += `import type { operations, components } from './schema.js';\n\n`;
-	result += `const client = createClient({});\n\n`;
+	result += `import type { components, operations, paths } from './schema.js';\n\n`;
+
+	result += `export class Client {
+		client: ReturnType<typeof createClient<paths>>;
+
+		constructor(options: ClientOptions) {
+			this.client = createClient<paths>(options);
+		}\n\n`;
 
 	for (const operation in operations) {
 		const { path, method, ...args } = operations[operation];
@@ -106,17 +112,19 @@ try {
 			.map(([name, type]) => `${name}: ${type}`)
 			.join(', ');
 
-		result += `export const ${camelCase(operation)} = (${argsWithTypes}) => {
-      return client.${method}(${[`'${path}'`, argNames.length && `{${argNames}}`].filter(Boolean).join(', ')});
+		result += `${camelCase(operation)}(${argsWithTypes}) {
+      return this.client.${method}(${[`'${path}'`, argNames.length && `{${argNames}}`].filter(Boolean).join(', ')});
     };\n\n`;
 	}
+
+	result += `}\n`;
 
 	await writeFile(
 		outputFilePath,
 		await prettier.format(result, { ...prettierConfigutation, parser: 'typescript' })
 	);
 
-	console.log('Methods generated successfully.');
+	console.log('Client generated successfully.');
 } catch (error) {
 	console.error('An error occurred:', error);
 }

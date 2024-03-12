@@ -10,31 +10,31 @@ const openApiDefinitions = join(openAPIDefinitionsDirectory, 'openapi', 'openapi
 const schema = join('src', 'schema.d.ts');
 
 const directoryExists = await stat(openAPIDefinitionsDirectory)
-	.then(() => true)
-	.catch(() => false);
+  .then(() => true)
+  .catch(() => false);
 
 if (directoryExists) {
-	await rm(openAPIDefinitionsDirectory, { recursive: true });
+  await rm(openAPIDefinitionsDirectory, { recursive: true });
 }
 
 await mkdir(openAPIDefinitionsDirectory, { recursive: true });
 
 const emitter = degit('temporalio/api', {
-	cache: false,
-	force: true,
-	verbose: true
+  cache: false,
+  force: true,
+  verbose: true,
 });
 
 emitter.on('info', (info) => {
-	console.log(chalk.bgBlue(' INFO '), info.message);
+  console.log(chalk.bgBlue(' INFO '), info.message);
 });
 
 emitter.on('warn', (warning) => {
-	console.warn(chalk.bgYellow(' WARN '), warning.message);
+  console.warn(chalk.bgYellow(' WARN '), warning.message);
 });
 
 emitter.on('error', (error) => {
-	console.error(chalk.bgRed(' ERROR '), error.message);
+  console.error(chalk.bgRed(' ERROR '), error.message);
 });
 
 await emitter.clone(openAPIDefinitionsDirectory);

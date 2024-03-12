@@ -21,10 +21,10 @@ const client = new Client({ baseUrl: 'http://localhost:8233' });
 const response = await client.listNamespaces();
 
 response.data?.namespaces?.forEach((namespace) => {
-	console.log(namespace);
+  console.log(namespace);
 });
 
 if (response.error) {
-	console.error(response.error.code, response.error.message);
+  console.error(response.error.code, response.error.message);
 }
 ```

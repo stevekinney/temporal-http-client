@@ -1,57 +1,57 @@
 {
-	"name": "temporal-http-client",
-	"description": "A client for interacting with Temporal's HTTP API.",
-	"version": "0.0.2",
-	"type": "module",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/stevekinney/ui-sdk.git"
-	},
-	"main": "./dist/temporal-http-client.umd.cjs",
-	"module": "./dist/temporal-http-client.js",
-	"exports": {
-		".": {
-			"types": "./dist/temporal-http-client.d.ts",
-			"import": "./dist/temporal-http-client.js",
-			"require": "./dist/temporal-http-client.umd.cjs"
-		}
-	},
-	"scripts": {
-		"build": "vite build && npm run package",
-		"package": "publint",
-		"prepublishOnly": "npm run package",
-		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write .",
-		"generate": "npm run generate:schema && npm run generate:methods",
-		"generate:methods": "node ./scripts/generate-methods.js",
-		"generate:schema": "node ./scripts/generate-schema.js"
-	},
-	"files": [
-		"dist",
-		"!dist/**/*.test.*",
-		"!dist/**/*.spec.*"
-	],
-	"devDependencies": {
-		"@types/eslint": "^8.56.0",
-		"@types/node": "^20.11.25",
-		"@typescript-eslint/eslint-plugin": "^7.0.0",
-		"@typescript-eslint/parser": "^7.0.0",
-		"chalk": "^5.3.0",
-		"change-case": "^5.4.3",
-		"degit": "^2.8.4",
-		"eslint": "^8.56.0",
-		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-svelte": "^2.35.1",
-		"openapi-fetch": "^0.9.3",
-		"openapi-typescript": "^6.7.4",
-		"prettier": "^3.1.1",
-		"prettier-plugin-svelte": "^3.1.2",
-		"publint": "^0.1.9",
-		"tslib": "^2.4.1",
-		"typescript": "^5.4.2",
-		"vite": "^5.0.11",
-		"vite-plugin-dts": "^3.7.3",
-		"vitest": "^1.3.1",
-		"zx": "^7.2.3"
-	}
+  "name": "temporal-http-client",
+  "description": "A client for interacting with Temporal's HTTP API.",
+  "version": "0.0.3",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stevekinney/ui-sdk.git"
+  },
+  "main": "./dist/temporal-http-client.umd.cjs",
+  "module": "./dist/temporal-http-client.js",
+  "exports": {
+    ".": {
+      "types": "./dist/temporal-http-client.d.ts",
+      "import": "./dist/temporal-http-client.js",
+      "require": "./dist/temporal-http-client.umd.cjs"
+    }
+  },
+  "scripts": {
+    "build": "vite build && npm run package",
+    "package": "publint",
+    "prepublishOnly": "npm run package",
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write .",
+    "generate": "npm run generate:schema && npm run generate:client",
+    "generate:client": "node ./scripts/generate-client.js",
+    "generate:schema": "node ./scripts/generate-schema.js"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.test.*",
+    "!dist/**/*.spec.*"
+  ],
+  "devDependencies": {
+    "@types/eslint": "^8.56.0",
+    "@types/node": "^20.11.25",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "chalk": "^5.3.0",
+    "change-case": "^5.4.3",
+    "degit": "^2.8.4",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-svelte": "^2.35.1",
+    "openapi-fetch": "^0.9.3",
+    "openapi-typescript": "^6.7.4",
+    "prettier": "^3.1.1",
+    "prettier-plugin-svelte": "^3.1.2",
+    "publint": "^0.1.9",
+    "tslib": "^2.4.1",
+    "typescript": "^5.4.2",
+    "vite": "^5.0.11",
+    "vite-plugin-dts": "^3.7.3",
+    "vitest": "^1.3.1",
+    "zx": "^7.2.3"
+  }
 }

@@ -1,5 +1,747 @@
-import createClient, { type ClientOptions } from 'openapi-fetch';
-import type { components, paths } from './schema.js';
+import createClient, { type ClientOptions, type FetchResponse } from 'openapi-fetch';
+import type { components, operations, paths } from './schema.js';
+
+export type GetClusterInfoResponse = Promise<
+  FetchResponse<paths['/api/v1/cluster-info']['get'], operations['GetClusterInfo']>
+>;
+
+export type ListNamespacesRequestParameters = {
+  query?: {
+    pageSize?: number;
+    nextPageToken?: string;
+    /**
+     * @description By default namespaces in NAMESPACE_STATE_DELETED state are not included.
+     *  Setting include_deleted to true will include deleted namespaces.
+     *  Note: Namespace is in NAMESPACE_STATE_DELETED state when it was deleted from the system but associated data is not deleted yet.
+     */
+    'namespaceFilter.includeDeleted'?: boolean;
+  };
+};
+
+export type ListNamespacesResponse = Promise<
+  FetchResponse<paths['/api/v1/namespaces']['get'], operations['ListNamespaces']>
+>;
+
+export type RegisterNamespaceRequestParameters = {
+  body: components['schemas']['RegisterNamespaceRequest'];
+};
+
+export type RegisterNamespaceResponse = Promise<
+  FetchResponse<paths['/api/v1/namespaces']['post'], operations['RegisterNamespace']>
+>;
+
+export type DescribeNamespaceRequestParameters = {
+  query?: {
+    id?: string;
+  };
+  path: {
+    namespace: string;
+  };
+};
+
+export type DescribeNamespaceResponse = Promise<
+  FetchResponse<paths['/api/v1/namespaces/{namespace}']['get'], operations['DescribeNamespace']>
+>;
+
+export type RespondActivityTaskCanceledRequestParameters = {
+  path: {
+    namespace: string;
+  };
+  body: components['schemas']['RespondActivityTaskCanceledRequest'];
+};
+
+export type RespondActivityTaskCanceledResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/activities/cancel']['post'],
+    operations['RespondActivityTaskCanceled']
+  >
+>;
+
+export type RespondActivityTaskCanceledByIdRequestParameters = {
+  path: {
+    /** @description Namespace of the workflow which scheduled this activity */
+    namespace: string;
+  };
+  body: components['schemas']['RespondActivityTaskCanceledByIdRequest'];
+};
+
+export type RespondActivityTaskCanceledByIdResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/activities/cancel-by-id']['post'],
+    operations['RespondActivityTaskCanceledById']
+  >
+>;
+
+export type RespondActivityTaskCompletedRequestParameters = {
+  path: {
+    namespace: string;
+  };
+  body: components['schemas']['RespondActivityTaskCompletedRequest'];
+};
+
+export type RespondActivityTaskCompletedResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/activities/complete']['post'],
+    operations['RespondActivityTaskCompleted']
+  >
+>;
+
+export type RespondActivityTaskCompletedByIdRequestParameters = {
+  path: {
+    /** @description Namespace of the workflow which scheduled this activity */
+    namespace: string;
+  };
+  body: components['schemas']['RespondActivityTaskCompletedByIdRequest'];
+};
+
+export type RespondActivityTaskCompletedByIdResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/activities/complete-by-id']['post'],
+    operations['RespondActivityTaskCompletedById']
+  >
+>;
+
+export type RespondActivityTaskFailedRequestParameters = {
+  path: {
+    namespace: string;
+  };
+  body: components['schemas']['RespondActivityTaskFailedRequest'];
+};
+
+export type RespondActivityTaskFailedResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/activities/fail']['post'],
+    operations['RespondActivityTaskFailed']
+  >
+>;
+
+export type RespondActivityTaskFailedByIdRequestParameters = {
+  path: {
+    /** @description Namespace of the workflow which scheduled this activity */
+    namespace: string;
+  };
+  body: components['schemas']['RespondActivityTaskFailedByIdRequest'];
+};
+
+export type RespondActivityTaskFailedByIdResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/activities/fail-by-id']['post'],
+    operations['RespondActivityTaskFailedById']
+  >
+>;
+
+export type RecordActivityTaskHeartbeatRequestParameters = {
+  path: {
+    namespace: string;
+  };
+  body: components['schemas']['RecordActivityTaskHeartbeatRequest'];
+};
+
+export type RecordActivityTaskHeartbeatResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/activities/heartbeat']['post'],
+    operations['RecordActivityTaskHeartbeat']
+  >
+>;
+
+export type RecordActivityTaskHeartbeatByIdRequestParameters = {
+  path: {
+    /** @description Namespace of the workflow which scheduled this activity */
+    namespace: string;
+  };
+  body: components['schemas']['RecordActivityTaskHeartbeatByIdRequest'];
+};
+
+export type RecordActivityTaskHeartbeatByIdResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/activities/heartbeat-by-id']['post'],
+    operations['RecordActivityTaskHeartbeatById']
+  >
+>;
+
+export type ListArchivedWorkflowExecutionsRequestParameters = {
+  query?: {
+    pageSize?: number;
+    nextPageToken?: string;
+    query?: string;
+  };
+  path: {
+    namespace: string;
+  };
+};
+
+export type ListArchivedWorkflowExecutionsResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/archived-workflows']['get'],
+    operations['ListArchivedWorkflowExecutions']
+  >
+>;
+
+export type ListBatchOperationsRequestParameters = {
+  query?: {
+    /** @description List page size */
+    pageSize?: number;
+    /** @description Next page token */
+    nextPageToken?: string;
+  };
+  path: {
+    /** @description Namespace that contains the batch operation */
+    namespace: string;
+  };
+};
+
+export type ListBatchOperationsResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/batch-operations']['get'],
+    operations['ListBatchOperations']
+  >
+>;
+
+export type DescribeBatchOperationRequestParameters = {
+  path: {
+    /** @description Namespace that contains the batch operation */
+    namespace: string;
+    /** @description Batch job id */
+    jobId: string;
+  };
+};
+
+export type DescribeBatchOperationResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/batch-operations/{jobId}']['get'],
+    operations['DescribeBatchOperation']
+  >
+>;
+
+export type StartBatchOperationRequestParameters = {
+  path: {
+    /** @description Namespace that contains the batch operation */
+    namespace: string;
+    /** @description Job ID defines the unique ID for the batch job */
+    jobId: string;
+  };
+  body: components['schemas']['StartBatchOperationRequest'];
+};
+
+export type StartBatchOperationResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/batch-operations/{jobId}']['post'],
+    operations['StartBatchOperation']
+  >
+>;
+
+export type StopBatchOperationRequestParameters = {
+  path: {
+    /** @description Namespace that contains the batch operation */
+    namespace: string;
+    /** @description Batch job id */
+    jobId: string;
+  };
+  body: components['schemas']['StopBatchOperationRequest'];
+};
+
+export type StopBatchOperationResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/batch-operations/{jobId}/stop']['post'],
+    operations['StopBatchOperation']
+  >
+>;
+
+export type ListSchedulesRequestParameters = {
+  query?: {
+    /** @description How many to return at once. */
+    maximumPageSize?: number;
+    /** @description Token to get the next page of results. */
+    nextPageToken?: string;
+  };
+  path: {
+    /** @description The namespace to list schedules in. */
+    namespace: string;
+  };
+};
+
+export type ListSchedulesResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/schedules']['get'],
+    operations['ListSchedules']
+  >
+>;
+
+export type DescribeScheduleRequestParameters = {
+  path: {
+    /** @description The namespace of the schedule to describe. */
+    namespace: string;
+    /** @description The id of the schedule to describe. */
+    scheduleId: string;
+  };
+};
+
+export type DescribeScheduleResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/schedules/{scheduleId}']['get'],
+    operations['DescribeSchedule']
+  >
+>;
+
+export type CreateScheduleRequestParameters = {
+  path: {
+    /** @description The namespace the schedule should be created in. */
+    namespace: string;
+    /** @description The id of the new schedule. */
+    scheduleId: string;
+  };
+  body: components['schemas']['CreateScheduleRequest'];
+};
+
+export type CreateScheduleResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/schedules/{scheduleId}']['post'],
+    operations['CreateSchedule']
+  >
+>;
+
+export type DeleteScheduleRequestParameters = {
+  query?: {
+    /** @description The identity of the client who initiated this request. */
+    identity?: string;
+  };
+  path: {
+    /** @description The namespace of the schedule to delete. */
+    namespace: string;
+    /** @description The id of the schedule to delete. */
+    scheduleId: string;
+  };
+};
+
+export type DeleteScheduleResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/schedules/{scheduleId}']['delete'],
+    operations['DeleteSchedule']
+  >
+>;
+
+export type ListScheduleMatchingTimesRequestParameters = {
+  query?: {
+    /** @description Time range to query. */
+    startTime?: string;
+    endTime?: string;
+  };
+  path: {
+    /** @description The namespace of the schedule to query. */
+    namespace: string;
+    /** @description The id of the schedule to query. */
+    scheduleId: string;
+  };
+};
+
+export type ListScheduleMatchingTimesResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/schedules/{scheduleId}/matching-times']['get'],
+    operations['ListScheduleMatchingTimes']
+  >
+>;
+
+export type PatchScheduleRequestParameters = {
+  path: {
+    /** @description The namespace of the schedule to patch. */
+    namespace: string;
+    /** @description The id of the schedule to patch. */
+    scheduleId: string;
+  };
+  body: components['schemas']['PatchScheduleRequest'];
+};
+
+export type PatchScheduleResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/schedules/{scheduleId}/patch']['post'],
+    operations['PatchSchedule']
+  >
+>;
+
+export type UpdateScheduleRequestParameters = {
+  path: {
+    /** @description The namespace of the schedule to update. */
+    namespace: string;
+    /** @description The id of the schedule to update. */
+    scheduleId: string;
+  };
+  body: components['schemas']['UpdateScheduleRequest'];
+};
+
+export type UpdateScheduleResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/schedules/{scheduleId}/update']['post'],
+    operations['UpdateSchedule']
+  >
+>;
+
+export type ListSearchAttributesRequestParameters = {
+  path: {
+    namespace: string;
+  };
+};
+
+export type ListSearchAttributesResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/search-attributes']['get'],
+    operations['ListSearchAttributes']
+  >
+>;
+
+export type GetWorkerBuildIdCompatibilityRequestParameters = {
+  query?: {
+    /**
+     * @description Limits how many compatible sets will be returned. Specify 1 to only return the current
+     *  default major version set. 0 returns all sets.
+     */
+    maxSets?: number;
+  };
+  path: {
+    namespace: string;
+    /** @description Must be set, the task queue to interrogate about worker id compatibility. */
+    taskQueue: string;
+  };
+};
+
+export type GetWorkerBuildIdCompatibilityResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/task-queues/{taskQueue}/worker-build-id-compatibility']['get'],
+    operations['GetWorkerBuildIdCompatibility']
+  >
+>;
+
+export type DescribeTaskQueueRequestParameters = {
+  query?: {
+    'taskQueue.name'?: string;
+    /** @description Default: TASK_QUEUE_KIND_NORMAL. */
+    'taskQueue.kind'?:
+      | 'TASK_QUEUE_KIND_UNSPECIFIED'
+      | 'TASK_QUEUE_KIND_NORMAL'
+      | 'TASK_QUEUE_KIND_STICKY';
+    /**
+     * @description Iff kind == TASK_QUEUE_KIND_STICKY, then this field contains the name of
+     *  the normal task queue that the sticky worker is running on.
+     */
+    'taskQueue.normalName'?: string;
+    /** @description If unspecified (TASK_QUEUE_TYPE_UNSPECIFIED), then default value (TASK_QUEUE_TYPE_WORKFLOW) will be used. */
+    taskQueueType?:
+      | 'TASK_QUEUE_TYPE_UNSPECIFIED'
+      | 'TASK_QUEUE_TYPE_WORKFLOW'
+      | 'TASK_QUEUE_TYPE_ACTIVITY'
+      | 'TASK_QUEUE_TYPE_NEXUS';
+    includeTaskQueueStatus?: boolean;
+  };
+  path: {
+    namespace: string;
+    'task_queue.name': string;
+  };
+};
+
+export type DescribeTaskQueueResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/task-queues/{task_queue.name}']['get'],
+    operations['DescribeTaskQueue']
+  >
+>;
+
+export type UpdateNamespaceRequestParameters = {
+  path: {
+    namespace: string;
+  };
+  body: components['schemas']['UpdateNamespaceRequest'];
+};
+
+export type UpdateNamespaceResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/update']['post'],
+    operations['UpdateNamespace']
+  >
+>;
+
+export type GetWorkerTaskReachabilityRequestParameters = {
+  query?: {
+    /**
+     * @description Build ids to retrieve reachability for. An empty string will be interpreted as an unversioned worker.
+     *  The number of build ids that can be queried in a single API call is limited.
+     *  Open source users can adjust this limit by setting the server's dynamic config value for
+     *  `limit.reachabilityQueryBuildIds` with the caveat that this call can strain the visibility store.
+     */
+    buildIds?: string[];
+    /**
+     * @description Task queues to retrieve reachability for. Leave this empty to query for all task queues associated with given
+     *  build ids in the namespace.
+     *  Must specify at least one task queue if querying for an unversioned worker.
+     *  The number of task queues that the server will fetch reachability information for is limited.
+     *  See the `GetWorkerTaskReachabilityResponse` documentation for more information.
+     */
+    taskQueues?: string[];
+    /**
+     * @description Type of reachability to query for.
+     *  `TASK_REACHABILITY_NEW_WORKFLOWS` is always returned in the response.
+     *  Use `TASK_REACHABILITY_EXISTING_WORKFLOWS` if your application needs to respond to queries on closed workflows.
+     *  Otherwise, use `TASK_REACHABILITY_OPEN_WORKFLOWS`. Default is `TASK_REACHABILITY_EXISTING_WORKFLOWS` if left
+     *  unspecified.
+     *  See the TaskReachability docstring for information about each enum variant.
+     */
+    reachability?:
+      | 'TASK_REACHABILITY_UNSPECIFIED'
+      | 'TASK_REACHABILITY_NEW_WORKFLOWS'
+      | 'TASK_REACHABILITY_EXISTING_WORKFLOWS'
+      | 'TASK_REACHABILITY_OPEN_WORKFLOWS'
+      | 'TASK_REACHABILITY_CLOSED_WORKFLOWS';
+  };
+  path: {
+    namespace: string;
+  };
+};
+
+export type GetWorkerTaskReachabilityResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/worker-task-reachability']['get'],
+    operations['GetWorkerTaskReachability']
+  >
+>;
+
+export type CountWorkflowExecutionsRequestParameters = {
+  query?: {
+    query?: string;
+  };
+  path: {
+    namespace: string;
+  };
+};
+
+export type CountWorkflowExecutionsResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/workflow-count']['get'],
+    operations['CountWorkflowExecutions']
+  >
+>;
+
+export type ListWorkflowExecutionsRequestParameters = {
+  query?: {
+    pageSize?: number;
+    nextPageToken?: string;
+    query?: string;
+  };
+  path: {
+    namespace: string;
+  };
+};
+
+export type ListWorkflowExecutionsResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/workflows']['get'],
+    operations['ListWorkflowExecutions']
+  >
+>;
+
+export type DescribeWorkflowExecutionRequestParameters = {
+  query?: {
+    'execution.workflowId'?: string;
+    'execution.runId'?: string;
+  };
+  path: {
+    namespace: string;
+    'execution.workflow_id': string;
+  };
+};
+
+export type DescribeWorkflowExecutionResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}']['get'],
+    operations['DescribeWorkflowExecution']
+  >
+>;
+
+export type GetWorkflowExecutionHistoryRequestParameters = {
+  query?: {
+    'execution.workflowId'?: string;
+    'execution.runId'?: string;
+    maximumPageSize?: number;
+    /**
+     * @description If a `GetWorkflowExecutionHistoryResponse` or a `PollWorkflowTaskQueueResponse` had one of
+     *  these, it should be passed here to fetch the next page.
+     */
+    nextPageToken?: string;
+    /**
+     * @description If set to true, the RPC call will not resolve until there is a new event which matches
+     *  the `history_event_filter_type`, or a timeout is hit.
+     */
+    waitNewEvent?: boolean;
+    /**
+     * @description Filter returned events such that they match the specified filter type.
+     *  Default: HISTORY_EVENT_FILTER_TYPE_ALL_EVENT.
+     */
+    historyEventFilterType?:
+      | 'HISTORY_EVENT_FILTER_TYPE_UNSPECIFIED'
+      | 'HISTORY_EVENT_FILTER_TYPE_ALL_EVENT'
+      | 'HISTORY_EVENT_FILTER_TYPE_CLOSE_EVENT';
+    skipArchival?: boolean;
+  };
+  path: {
+    namespace: string;
+    'execution.workflow_id': string;
+  };
+};
+
+export type GetWorkflowExecutionHistoryResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history']['get'],
+    operations['GetWorkflowExecutionHistory']
+  >
+>;
+
+export type GetWorkflowExecutionHistoryReverseRequestParameters = {
+  query?: {
+    'execution.workflowId'?: string;
+    'execution.runId'?: string;
+    maximumPageSize?: number;
+    nextPageToken?: string;
+  };
+  path: {
+    namespace: string;
+    'execution.workflow_id': string;
+  };
+};
+
+export type GetWorkflowExecutionHistoryReverseResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history-reverse']['get'],
+    operations['GetWorkflowExecutionHistoryReverse']
+  >
+>;
+
+export type QueryWorkflowRequestParameters = {
+  path: {
+    namespace: string;
+    'execution.workflow_id': string;
+    'query.query_type': string;
+  };
+  body: components['schemas']['QueryWorkflowRequest'];
+};
+
+export type QueryWorkflowResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/query/{query.query_type}']['post'],
+    operations['QueryWorkflow']
+  >
+>;
+
+export type StartWorkflowExecutionRequestParameters = {
+  path: {
+    namespace: string;
+    workflowId: string;
+  };
+  body: components['schemas']['StartWorkflowExecutionRequest'];
+};
+
+export type StartWorkflowExecutionResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/workflows/{workflowId}']['post'],
+    operations['StartWorkflowExecution']
+  >
+>;
+
+export type SignalWithStartWorkflowExecutionRequestParameters = {
+  path: {
+    namespace: string;
+    workflowId: string;
+    /** @description The workflow author-defined name of the signal to send to the workflow */
+    signalName: string;
+  };
+  body: components['schemas']['SignalWithStartWorkflowExecutionRequest'];
+};
+
+export type SignalWithStartWorkflowExecutionResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/workflows/{workflowId}/signal-with-start/{signalName}']['post'],
+    operations['SignalWithStartWorkflowExecution']
+  >
+>;
+
+export type RequestCancelWorkflowExecutionRequestParameters = {
+  path: {
+    namespace: string;
+    'workflow_execution.workflow_id': string;
+  };
+  body: components['schemas']['RequestCancelWorkflowExecutionRequest'];
+};
+
+export type RequestCancelWorkflowExecutionResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/cancel']['post'],
+    operations['RequestCancelWorkflowExecution']
+  >
+>;
+
+export type ResetWorkflowExecutionRequestParameters = {
+  path: {
+    namespace: string;
+    'workflow_execution.workflow_id': string;
+  };
+  body: components['schemas']['ResetWorkflowExecutionRequest'];
+};
+
+export type ResetWorkflowExecutionResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/reset']['post'],
+    operations['ResetWorkflowExecution']
+  >
+>;
+
+export type SignalWorkflowExecutionRequestParameters = {
+  path: {
+    namespace: string;
+    'workflow_execution.workflow_id': string;
+    /** @description The workflow author-defined name of the signal to send to the workflow */
+    signalName: string;
+  };
+  body: components['schemas']['SignalWorkflowExecutionRequest'];
+};
+
+export type SignalWorkflowExecutionResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/signal/{signalName}']['post'],
+    operations['SignalWorkflowExecution']
+  >
+>;
+
+export type TerminateWorkflowExecutionRequestParameters = {
+  path: {
+    namespace: string;
+    'workflow_execution.workflow_id': string;
+  };
+  body: components['schemas']['TerminateWorkflowExecutionRequest'];
+};
+
+export type TerminateWorkflowExecutionResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/terminate']['post'],
+    operations['TerminateWorkflowExecution']
+  >
+>;
+
+export type UpdateWorkflowExecutionRequestParameters = {
+  path: {
+    /** @description The namespace name of the target workflow */
+    namespace: string;
+    'workflow_execution.workflow_id': string;
+    'request.input.name': string;
+  };
+  body: components['schemas']['UpdateWorkflowExecutionRequest'];
+};
+
+export type UpdateWorkflowExecutionResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update/{request.input.name}']['post'],
+    operations['UpdateWorkflowExecution']
+  >
+>;
+
+export type GetSystemInfoResponse = Promise<
+  FetchResponse<paths['/api/v1/system-info']['get'], operations['GetSystemInfo']>
+>;
 
 /**
  * The API client class encapsulating all methods for interacting with Temporal's HTTP API.
@@ -36,25 +778,12 @@ export class Client {
   }
 
   /** @description GetClusterInfo returns information about temporal cluster */
-  getClusterInfo() {
+  getClusterInfo(): GetClusterInfoResponse {
     return this.client.GET('/api/v1/cluster-info');
   }
 
   /** @description ListNamespaces returns the information and configuration for all namespaces. */
-  listNamespaces({
-    query,
-  }: {
-    query?: {
-      pageSize?: number;
-      nextPageToken?: string;
-      /**
-       * @description By default namespaces in NAMESPACE_STATE_DELETED state are not included.
-       *  Setting include_deleted to true will include deleted namespaces.
-       *  Note: Namespace is in NAMESPACE_STATE_DELETED state when it was deleted from the system but associated data is not deleted yet.
-       */
-      'namespaceFilter.includeDeleted'?: boolean;
-    };
-  } = {}) {
+  listNamespaces({ query }: ListNamespacesRequestParameters = {}): ListNamespacesResponse {
     return this.client.GET('/api/v1/namespaces', { params: { query } });
   }
 
@@ -66,7 +795,7 @@ export class Client {
    *  isolation for all resources within the namespace. All resources belongs to exactly one
    *  namespace.
    */
-  registerNamespace({ body }: { body: components['schemas']['RegisterNamespaceRequest'] }) {
+  registerNamespace({ body }: RegisterNamespaceRequestParameters): RegisterNamespaceResponse {
     return this.client.POST('/api/v1/namespaces', { body });
   }
 
@@ -74,14 +803,7 @@ export class Client {
   describeNamespace({
     query,
     path,
-  }: {
-    query?: {
-      id?: string;
-    };
-    path: {
-      namespace: string;
-    };
-  }) {
+  }: DescribeNamespaceRequestParameters): DescribeNamespaceResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}', { params: { query, path } });
   }
 
@@ -95,12 +817,7 @@ export class Client {
   respondActivityTaskCanceled({
     path,
     body,
-  }: {
-    path: {
-      namespace: string;
-    };
-    body: components['schemas']['RespondActivityTaskCanceledRequest'];
-  }) {
+  }: RespondActivityTaskCanceledRequestParameters): RespondActivityTaskCanceledResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/activities/cancel', {
       params: { path },
       body,
@@ -117,13 +834,7 @@ export class Client {
   respondActivityTaskCanceledById({
     path,
     body,
-  }: {
-    path: {
-      /** @description Namespace of the workflow which scheduled this activity */
-      namespace: string;
-    };
-    body: components['schemas']['RespondActivityTaskCanceledByIdRequest'];
-  }) {
+  }: RespondActivityTaskCanceledByIdRequestParameters): RespondActivityTaskCanceledByIdResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/activities/cancel-by-id', {
       params: { path },
       body,
@@ -141,12 +852,7 @@ export class Client {
   respondActivityTaskCompleted({
     path,
     body,
-  }: {
-    path: {
-      namespace: string;
-    };
-    body: components['schemas']['RespondActivityTaskCompletedRequest'];
-  }) {
+  }: RespondActivityTaskCompletedRequestParameters): RespondActivityTaskCompletedResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/activities/complete', {
       params: { path },
       body,
@@ -163,13 +869,7 @@ export class Client {
   respondActivityTaskCompletedById({
     path,
     body,
-  }: {
-    path: {
-      /** @description Namespace of the workflow which scheduled this activity */
-      namespace: string;
-    };
-    body: components['schemas']['RespondActivityTaskCompletedByIdRequest'];
-  }) {
+  }: RespondActivityTaskCompletedByIdRequestParameters): RespondActivityTaskCompletedByIdResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/activities/complete-by-id', {
       params: { path },
       body,
@@ -186,12 +886,7 @@ export class Client {
   respondActivityTaskFailed({
     path,
     body,
-  }: {
-    path: {
-      namespace: string;
-    };
-    body: components['schemas']['RespondActivityTaskFailedRequest'];
-  }) {
+  }: RespondActivityTaskFailedRequestParameters): RespondActivityTaskFailedResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/activities/fail', {
       params: { path },
       body,
@@ -208,13 +903,7 @@ export class Client {
   respondActivityTaskFailedById({
     path,
     body,
-  }: {
-    path: {
-      /** @description Namespace of the workflow which scheduled this activity */
-      namespace: string;
-    };
-    body: components['schemas']['RespondActivityTaskFailedByIdRequest'];
-  }) {
+  }: RespondActivityTaskFailedByIdRequestParameters): RespondActivityTaskFailedByIdResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/activities/fail-by-id', {
       params: { path },
       body,
@@ -232,12 +921,7 @@ export class Client {
   recordActivityTaskHeartbeat({
     path,
     body,
-  }: {
-    path: {
-      namespace: string;
-    };
-    body: components['schemas']['RecordActivityTaskHeartbeatRequest'];
-  }) {
+  }: RecordActivityTaskHeartbeatRequestParameters): RecordActivityTaskHeartbeatResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/activities/heartbeat', {
       params: { path },
       body,
@@ -254,13 +938,7 @@ export class Client {
   recordActivityTaskHeartbeatById({
     path,
     body,
-  }: {
-    path: {
-      /** @description Namespace of the workflow which scheduled this activity */
-      namespace: string;
-    };
-    body: components['schemas']['RecordActivityTaskHeartbeatByIdRequest'];
-  }) {
+  }: RecordActivityTaskHeartbeatByIdRequestParameters): RecordActivityTaskHeartbeatByIdResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/activities/heartbeat-by-id', {
       params: { path },
       body,
@@ -271,16 +949,7 @@ export class Client {
   listArchivedWorkflowExecutions({
     query,
     path,
-  }: {
-    query?: {
-      pageSize?: number;
-      nextPageToken?: string;
-      query?: string;
-    };
-    path: {
-      namespace: string;
-    };
-  }) {
+  }: ListArchivedWorkflowExecutionsRequestParameters): ListArchivedWorkflowExecutionsResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/archived-workflows', {
       params: { query, path },
     });
@@ -290,18 +959,7 @@ export class Client {
   listBatchOperations({
     query,
     path,
-  }: {
-    query?: {
-      /** @description List page size */
-      pageSize?: number;
-      /** @description Next page token */
-      nextPageToken?: string;
-    };
-    path: {
-      /** @description Namespace that contains the batch operation */
-      namespace: string;
-    };
-  }) {
+  }: ListBatchOperationsRequestParameters): ListBatchOperationsResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/batch-operations', {
       params: { query, path },
     });
@@ -310,14 +968,7 @@ export class Client {
   /** @description DescribeBatchOperation returns the information about a batch operation */
   describeBatchOperation({
     path,
-  }: {
-    path: {
-      /** @description Namespace that contains the batch operation */
-      namespace: string;
-      /** @description Batch job id */
-      jobId: string;
-    };
-  }) {
+  }: DescribeBatchOperationRequestParameters): DescribeBatchOperationResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/batch-operations/{jobId}', {
       params: { path },
     });
@@ -327,15 +978,7 @@ export class Client {
   startBatchOperation({
     path,
     body,
-  }: {
-    path: {
-      /** @description Namespace that contains the batch operation */
-      namespace: string;
-      /** @description Job ID defines the unique ID for the batch job */
-      jobId: string;
-    };
-    body: components['schemas']['StartBatchOperationRequest'];
-  }) {
+  }: StartBatchOperationRequestParameters): StartBatchOperationResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/batch-operations/{jobId}', {
       params: { path },
       body,
@@ -346,15 +989,7 @@ export class Client {
   stopBatchOperation({
     path,
     body,
-  }: {
-    path: {
-      /** @description Namespace that contains the batch operation */
-      namespace: string;
-      /** @description Batch job id */
-      jobId: string;
-    };
-    body: components['schemas']['StopBatchOperationRequest'];
-  }) {
+  }: StopBatchOperationRequestParameters): StopBatchOperationResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/batch-operations/{jobId}/stop', {
       params: { path },
       body,
@@ -362,53 +997,19 @@ export class Client {
   }
 
   /** @description List all schedules in a namespace. */
-  listSchedules({
-    query,
-    path,
-  }: {
-    query?: {
-      /** @description How many to return at once. */
-      maximumPageSize?: number;
-      /** @description Token to get the next page of results. */
-      nextPageToken?: string;
-    };
-    path: {
-      /** @description The namespace to list schedules in. */
-      namespace: string;
-    };
-  }) {
+  listSchedules({ query, path }: ListSchedulesRequestParameters): ListSchedulesResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/schedules', { params: { query, path } });
   }
 
   /** @description Returns the schedule description and current state of an existing schedule. */
-  describeSchedule({
-    path,
-  }: {
-    path: {
-      /** @description The namespace of the schedule to describe. */
-      namespace: string;
-      /** @description The id of the schedule to describe. */
-      scheduleId: string;
-    };
-  }) {
+  describeSchedule({ path }: DescribeScheduleRequestParameters): DescribeScheduleResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/schedules/{scheduleId}', {
       params: { path },
     });
   }
 
   /** @description Creates a new schedule. */
-  createSchedule({
-    path,
-    body,
-  }: {
-    path: {
-      /** @description The namespace the schedule should be created in. */
-      namespace: string;
-      /** @description The id of the new schedule. */
-      scheduleId: string;
-    };
-    body: components['schemas']['CreateScheduleRequest'];
-  }) {
+  createSchedule({ path, body }: CreateScheduleRequestParameters): CreateScheduleResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/schedules/{scheduleId}', {
       params: { path },
       body,
@@ -416,21 +1017,7 @@ export class Client {
   }
 
   /** @description Deletes a schedule, removing it from the system. */
-  deleteSchedule({
-    query,
-    path,
-  }: {
-    query?: {
-      /** @description The identity of the client who initiated this request. */
-      identity?: string;
-    };
-    path: {
-      /** @description The namespace of the schedule to delete. */
-      namespace: string;
-      /** @description The id of the schedule to delete. */
-      scheduleId: string;
-    };
-  }) {
+  deleteSchedule({ query, path }: DeleteScheduleRequestParameters): DeleteScheduleResponse {
     return this.client.DELETE('/api/v1/namespaces/{namespace}/schedules/{scheduleId}', {
       params: { query, path },
     });
@@ -440,37 +1027,14 @@ export class Client {
   listScheduleMatchingTimes({
     query,
     path,
-  }: {
-    query?: {
-      /** @description Time range to query. */
-      startTime?: string;
-      endTime?: string;
-    };
-    path: {
-      /** @description The namespace of the schedule to query. */
-      namespace: string;
-      /** @description The id of the schedule to query. */
-      scheduleId: string;
-    };
-  }) {
+  }: ListScheduleMatchingTimesRequestParameters): ListScheduleMatchingTimesResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/schedules/{scheduleId}/matching-times', {
       params: { query, path },
     });
   }
 
   /** @description Makes a specific change to a schedule or triggers an immediate action. */
-  patchSchedule({
-    path,
-    body,
-  }: {
-    path: {
-      /** @description The namespace of the schedule to patch. */
-      namespace: string;
-      /** @description The id of the schedule to patch. */
-      scheduleId: string;
-    };
-    body: components['schemas']['PatchScheduleRequest'];
-  }) {
+  patchSchedule({ path, body }: PatchScheduleRequestParameters): PatchScheduleResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/schedules/{scheduleId}/patch', {
       params: { path },
       body,
@@ -478,18 +1042,7 @@ export class Client {
   }
 
   /** @description Changes the configuration or state of an existing schedule. */
-  updateSchedule({
-    path,
-    body,
-  }: {
-    path: {
-      /** @description The namespace of the schedule to update. */
-      namespace: string;
-      /** @description The id of the schedule to update. */
-      scheduleId: string;
-    };
-    body: components['schemas']['UpdateScheduleRequest'];
-  }) {
+  updateSchedule({ path, body }: UpdateScheduleRequestParameters): UpdateScheduleResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/schedules/{scheduleId}/update', {
       params: { path },
       body,
@@ -499,11 +1052,7 @@ export class Client {
   /** @description ListSearchAttributes returns comprehensive information about search attributes. */
   listSearchAttributes({
     path,
-  }: {
-    path: {
-      namespace: string;
-    };
-  }) {
+  }: ListSearchAttributesRequestParameters): ListSearchAttributesResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/search-attributes', {
       params: { path },
     });
@@ -513,20 +1062,7 @@ export class Client {
   getWorkerBuildIdCompatibility({
     query,
     path,
-  }: {
-    query?: {
-      /**
-       * @description Limits how many compatible sets will be returned. Specify 1 to only return the current
-       *  default major version set. 0 returns all sets.
-       */
-      maxSets?: number;
-    };
-    path: {
-      namespace: string;
-      /** @description Must be set, the task queue to interrogate about worker id compatibility. */
-      taskQueue: string;
-    };
-  }) {
+  }: GetWorkerBuildIdCompatibilityRequestParameters): GetWorkerBuildIdCompatibilityResponse {
     return this.client.GET(
       '/api/v1/namespaces/{namespace}/task-queues/{taskQueue}/worker-build-id-compatibility',
       { params: { query, path } },
@@ -537,32 +1073,7 @@ export class Client {
   describeTaskQueue({
     query,
     path,
-  }: {
-    query?: {
-      'taskQueue.name'?: string;
-      /** @description Default: TASK_QUEUE_KIND_NORMAL. */
-      'taskQueue.kind'?:
-        | 'TASK_QUEUE_KIND_UNSPECIFIED'
-        | 'TASK_QUEUE_KIND_NORMAL'
-        | 'TASK_QUEUE_KIND_STICKY';
-      /**
-       * @description Iff kind == TASK_QUEUE_KIND_STICKY, then this field contains the name of
-       *  the normal task queue that the sticky worker is running on.
-       */
-      'taskQueue.normalName'?: string;
-      /** @description If unspecified (TASK_QUEUE_TYPE_UNSPECIFIED), then default value (TASK_QUEUE_TYPE_WORKFLOW) will be used. */
-      taskQueueType?:
-        | 'TASK_QUEUE_TYPE_UNSPECIFIED'
-        | 'TASK_QUEUE_TYPE_WORKFLOW'
-        | 'TASK_QUEUE_TYPE_ACTIVITY'
-        | 'TASK_QUEUE_TYPE_NEXUS';
-      includeTaskQueueStatus?: boolean;
-    };
-    path: {
-      namespace: string;
-      'task_queue.name': string;
-    };
-  }) {
+  }: DescribeTaskQueueRequestParameters): DescribeTaskQueueResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/task-queues/{task_queue.name}', {
       params: { query, path },
     });
@@ -572,15 +1083,7 @@ export class Client {
    * @description UpdateNamespace is used to update the information and configuration of a registered
    *  namespace.
    */
-  updateNamespace({
-    path,
-    body,
-  }: {
-    path: {
-      namespace: string;
-    };
-    body: components['schemas']['UpdateNamespaceRequest'];
-  }) {
+  updateNamespace({ path, body }: UpdateNamespaceRequestParameters): UpdateNamespaceResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/update', { params: { path }, body });
   }
 
@@ -601,42 +1104,7 @@ export class Client {
   getWorkerTaskReachability({
     query,
     path,
-  }: {
-    query?: {
-      /**
-       * @description Build ids to retrieve reachability for. An empty string will be interpreted as an unversioned worker.
-       *  The number of build ids that can be queried in a single API call is limited.
-       *  Open source users can adjust this limit by setting the server's dynamic config value for
-       *  `limit.reachabilityQueryBuildIds` with the caveat that this call can strain the visibility store.
-       */
-      buildIds?: string[];
-      /**
-       * @description Task queues to retrieve reachability for. Leave this empty to query for all task queues associated with given
-       *  build ids in the namespace.
-       *  Must specify at least one task queue if querying for an unversioned worker.
-       *  The number of task queues that the server will fetch reachability information for is limited.
-       *  See the `GetWorkerTaskReachabilityResponse` documentation for more information.
-       */
-      taskQueues?: string[];
-      /**
-       * @description Type of reachability to query for.
-       *  `TASK_REACHABILITY_NEW_WORKFLOWS` is always returned in the response.
-       *  Use `TASK_REACHABILITY_EXISTING_WORKFLOWS` if your application needs to respond to queries on closed workflows.
-       *  Otherwise, use `TASK_REACHABILITY_OPEN_WORKFLOWS`. Default is `TASK_REACHABILITY_EXISTING_WORKFLOWS` if left
-       *  unspecified.
-       *  See the TaskReachability docstring for information about each enum variant.
-       */
-      reachability?:
-        | 'TASK_REACHABILITY_UNSPECIFIED'
-        | 'TASK_REACHABILITY_NEW_WORKFLOWS'
-        | 'TASK_REACHABILITY_EXISTING_WORKFLOWS'
-        | 'TASK_REACHABILITY_OPEN_WORKFLOWS'
-        | 'TASK_REACHABILITY_CLOSED_WORKFLOWS';
-    };
-    path: {
-      namespace: string;
-    };
-  }) {
+  }: GetWorkerTaskReachabilityRequestParameters): GetWorkerTaskReachabilityResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/worker-task-reachability', {
       params: { query, path },
     });
@@ -646,14 +1114,7 @@ export class Client {
   countWorkflowExecutions({
     query,
     path,
-  }: {
-    query?: {
-      query?: string;
-    };
-    path: {
-      namespace: string;
-    };
-  }) {
+  }: CountWorkflowExecutionsRequestParameters): CountWorkflowExecutionsResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/workflow-count', {
       params: { query, path },
     });
@@ -663,16 +1124,7 @@ export class Client {
   listWorkflowExecutions({
     query,
     path,
-  }: {
-    query?: {
-      pageSize?: number;
-      nextPageToken?: string;
-      query?: string;
-    };
-    path: {
-      namespace: string;
-    };
-  }) {
+  }: ListWorkflowExecutionsRequestParameters): ListWorkflowExecutionsResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/workflows', { params: { query, path } });
   }
 
@@ -680,16 +1132,7 @@ export class Client {
   describeWorkflowExecution({
     query,
     path,
-  }: {
-    query?: {
-      'execution.workflowId'?: string;
-      'execution.runId'?: string;
-    };
-    path: {
-      namespace: string;
-      'execution.workflow_id': string;
-    };
-  }) {
+  }: DescribeWorkflowExecutionRequestParameters): DescribeWorkflowExecutionResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}', {
       params: { query, path },
     });
@@ -702,36 +1145,7 @@ export class Client {
   getWorkflowExecutionHistory({
     query,
     path,
-  }: {
-    query?: {
-      'execution.workflowId'?: string;
-      'execution.runId'?: string;
-      maximumPageSize?: number;
-      /**
-       * @description If a `GetWorkflowExecutionHistoryResponse` or a `PollWorkflowTaskQueueResponse` had one of
-       *  these, it should be passed here to fetch the next page.
-       */
-      nextPageToken?: string;
-      /**
-       * @description If set to true, the RPC call will not resolve until there is a new event which matches
-       *  the `history_event_filter_type`, or a timeout is hit.
-       */
-      waitNewEvent?: boolean;
-      /**
-       * @description Filter returned events such that they match the specified filter type.
-       *  Default: HISTORY_EVENT_FILTER_TYPE_ALL_EVENT.
-       */
-      historyEventFilterType?:
-        | 'HISTORY_EVENT_FILTER_TYPE_UNSPECIFIED'
-        | 'HISTORY_EVENT_FILTER_TYPE_ALL_EVENT'
-        | 'HISTORY_EVENT_FILTER_TYPE_CLOSE_EVENT';
-      skipArchival?: boolean;
-    };
-    path: {
-      namespace: string;
-      'execution.workflow_id': string;
-    };
-  }) {
+  }: GetWorkflowExecutionHistoryRequestParameters): GetWorkflowExecutionHistoryResponse {
     return this.client.GET(
       '/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history',
       { params: { query, path } },
@@ -746,18 +1160,7 @@ export class Client {
   getWorkflowExecutionHistoryReverse({
     query,
     path,
-  }: {
-    query?: {
-      'execution.workflowId'?: string;
-      'execution.runId'?: string;
-      maximumPageSize?: number;
-      nextPageToken?: string;
-    };
-    path: {
-      namespace: string;
-      'execution.workflow_id': string;
-    };
-  }) {
+  }: GetWorkflowExecutionHistoryReverseRequestParameters): GetWorkflowExecutionHistoryReverseResponse {
     return this.client.GET(
       '/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history-reverse',
       { params: { query, path } },
@@ -765,17 +1168,7 @@ export class Client {
   }
 
   /** @description QueryWorkflow requests a query be executed for a specified workflow execution. */
-  queryWorkflow({
-    path,
-    body,
-  }: {
-    path: {
-      namespace: string;
-      'execution.workflow_id': string;
-      'query.query_type': string;
-    };
-    body: components['schemas']['QueryWorkflowRequest'];
-  }) {
+  queryWorkflow({ path, body }: QueryWorkflowRequestParameters): QueryWorkflowResponse {
     return this.client.POST(
       '/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/query/{query.query_type}',
       { params: { path }, body },
@@ -792,13 +1185,7 @@ export class Client {
   startWorkflowExecution({
     path,
     body,
-  }: {
-    path: {
-      namespace: string;
-      workflowId: string;
-    };
-    body: components['schemas']['StartWorkflowExecutionRequest'];
-  }) {
+  }: StartWorkflowExecutionRequestParameters): StartWorkflowExecutionResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/workflows/{workflowId}', {
       params: { path },
       body,
@@ -822,15 +1209,7 @@ export class Client {
   signalWithStartWorkflowExecution({
     path,
     body,
-  }: {
-    path: {
-      namespace: string;
-      workflowId: string;
-      /** @description The workflow author-defined name of the signal to send to the workflow */
-      signalName: string;
-    };
-    body: components['schemas']['SignalWithStartWorkflowExecutionRequest'];
-  }) {
+  }: SignalWithStartWorkflowExecutionRequestParameters): SignalWithStartWorkflowExecutionResponse {
     return this.client.POST(
       '/api/v1/namespaces/{namespace}/workflows/{workflowId}/signal-with-start/{signalName}',
       { params: { path }, body },
@@ -848,13 +1227,7 @@ export class Client {
   requestCancelWorkflowExecution({
     path,
     body,
-  }: {
-    path: {
-      namespace: string;
-      'workflow_execution.workflow_id': string;
-    };
-    body: components['schemas']['RequestCancelWorkflowExecutionRequest'];
-  }) {
+  }: RequestCancelWorkflowExecutionRequestParameters): RequestCancelWorkflowExecutionResponse {
     return this.client.POST(
       '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/cancel',
       { params: { path }, body },
@@ -870,13 +1243,7 @@ export class Client {
   resetWorkflowExecution({
     path,
     body,
-  }: {
-    path: {
-      namespace: string;
-      'workflow_execution.workflow_id': string;
-    };
-    body: components['schemas']['ResetWorkflowExecutionRequest'];
-  }) {
+  }: ResetWorkflowExecutionRequestParameters): ResetWorkflowExecutionResponse {
     return this.client.POST(
       '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/reset',
       { params: { path }, body },
@@ -892,15 +1259,7 @@ export class Client {
   signalWorkflowExecution({
     path,
     body,
-  }: {
-    path: {
-      namespace: string;
-      'workflow_execution.workflow_id': string;
-      /** @description The workflow author-defined name of the signal to send to the workflow */
-      signalName: string;
-    };
-    body: components['schemas']['SignalWorkflowExecutionRequest'];
-  }) {
+  }: SignalWorkflowExecutionRequestParameters): SignalWorkflowExecutionResponse {
     return this.client.POST(
       '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/signal/{signalName}',
       { params: { path }, body },
@@ -915,13 +1274,7 @@ export class Client {
   terminateWorkflowExecution({
     path,
     body,
-  }: {
-    path: {
-      namespace: string;
-      'workflow_execution.workflow_id': string;
-    };
-    body: components['schemas']['TerminateWorkflowExecutionRequest'];
-  }) {
+  }: TerminateWorkflowExecutionRequestParameters): TerminateWorkflowExecutionResponse {
     return this.client.POST(
       '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/terminate',
       { params: { path }, body },
@@ -932,15 +1285,7 @@ export class Client {
   updateWorkflowExecution({
     path,
     body,
-  }: {
-    path: {
-      /** @description The namespace name of the target workflow */
-      namespace: string;
-      'workflow_execution.workflow_id': string;
-      'request.input.name': string;
-    };
-    body: components['schemas']['UpdateWorkflowExecutionRequest'];
-  }) {
+  }: UpdateWorkflowExecutionRequestParameters): UpdateWorkflowExecutionResponse {
     return this.client.POST(
       '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update/{request.input.name}',
       { params: { path }, body },
@@ -948,7 +1293,7 @@ export class Client {
   }
 
   /** @description GetSystemInfo returns information about the system. */
-  getSystemInfo() {
+  getSystemInfo(): GetSystemInfoResponse {
     return this.client.GET('/api/v1/system-info');
   }
 }

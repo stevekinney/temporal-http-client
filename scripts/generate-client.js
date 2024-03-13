@@ -62,11 +62,13 @@ async function generateOperations(filePath = inputFilePath) {
  * @param {Record<string, OperationConfig>} operations - The record of operation names to their configurations.
  */
 async function writeClient(operations) {
+  /** @type {string[]} */
+  const types = [];
   const methods = Object.entries(operations)
-    .map(([operation, config]) => formatMethod(operation, config))
+    .map(([operation, config]) => formatMethod(operation, config, types))
     .join('\n\n');
 
-  const clientTemplate = getClientTemplate(methods);
+  const clientTemplate = getClientTemplate(methods, types);
 
   const formattedCode = await prettier.format(clientTemplate, {
     ...prettierConfigutation,
@@ -213,9 +215,10 @@ function getJSDocComments(node, sourceFile) {
  * @param {string} config.description - JSDoc comments for the method.
  * @param {Object} [config.params] - The parameters for the route, if any.
  * @param {string} [config.body] - The body schema reference, if applicable.
+ * @param {string[]} types - A manifest of all of the types generated.
  * @returns {string} The formatted method as a string.
  */
-function formatMethod(operation, config) {
+function formatMethod(operation, config, types) {
   // Convert the first character to lowercase to follow JS naming conventions
   const methodName = operation.charAt(0).toLowerCase() + operation.slice(1);
 
@@ -248,7 +251,12 @@ function formatMethod(operation, config) {
       paramsSignature.push(`body: ${config.body}`);
     }
 
-    methodSignature += `{ ${paramsList.join(', ')} }: { ${paramsSignature.join(', ')} }`;
+    const paramsTypeName = `${operation}RequestParameters`;
+    const paramsType = `export type ${paramsTypeName} = { ${paramsSignature.join('; ')} }`;
+
+    types.push(paramsType);
+
+    methodSignature += `{ ${paramsList.join(', ')} }: ${paramsTypeName}`;
 
     // Add a default value if there are only optional parameters
     if (paramsSignature.every((key) => key.includes('?'))) {
@@ -265,7 +273,12 @@ function formatMethod(operation, config) {
     methodBody += `, ${methodParams} }`;
   }
 
-  methodSignature += `) {\n\t`;
+  const returnTypeName = `${operation}Response`;
+  const returnType = `export type ${returnTypeName} = Promise<FetchResponse<paths['${config.route}']['${config.method.toLowerCase()}'], operations['${operation}']>>`;
+
+  types.push(returnType);
+
+  methodSignature += `): ${returnTypeName} {\n\t`;
   methodBody += `);\n};`;
 
   return config.description + '\n' + methodSignature + methodBody;
@@ -275,13 +288,16 @@ function formatMethod(operation, config) {
  * Generates the API client class template with dynamically inserted methods.
  *
  * @param {string} methods - The string representation of all methods generated from the API schema.
+ * @param {string[]} types - A manifest of all of the types generated.
  * @returns {string} The full client class as a string ready to be formatted and written to a file.
  */
-function getClientTemplate(methods) {
+function getClientTemplate(methods, types) {
   return `
-    import createClient, { type ClientOptions } from 'openapi-fetch';
-    import type { components, paths } from './schema.js';
+    import createClient, { type ClientOptions, type FetchResponse } from 'openapi-fetch';
+    import type { components, operations, paths } from './schema.js';
     
+		${types.join('\n\n')}
+
     /**
      * The API client class encapsulating all methods for interacting with Temporal's HTTP API.
      */

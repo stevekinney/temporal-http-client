@@ -3,15 +3,14 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
-  "/api/v1/cluster-info": {
+  '/api/v1/cluster-info': {
     /** @description GetClusterInfo returns information about temporal cluster */
-    get: operations["GetClusterInfo"];
+    get: operations['GetClusterInfo'];
   };
-  "/api/v1/namespaces": {
+  '/api/v1/namespaces': {
     /** @description ListNamespaces returns the information and configuration for all namespaces. */
-    get: operations["ListNamespaces"];
+    get: operations['ListNamespaces'];
     /**
      * @description RegisterNamespace creates a new namespace which can be used as a container for all resources.
      *
@@ -20,13 +19,13 @@ export interface paths {
      *  isolation for all resources within the namespace. All resources belongs to exactly one
      *  namespace.
      */
-    post: operations["RegisterNamespace"];
+    post: operations['RegisterNamespace'];
   };
-  "/api/v1/namespaces/{namespace}": {
+  '/api/v1/namespaces/{namespace}': {
     /** @description DescribeNamespace returns the information and configuration for a registered namespace. */
-    get: operations["DescribeNamespace"];
+    get: operations['DescribeNamespace'];
   };
-  "/api/v1/namespaces/{namespace}/activities/cancel": {
+  '/api/v1/namespaces/{namespace}/activities/cancel': {
     /**
      * @description RespondActivityTaskFailed is called by workers when processing an activity task fails.
      *
@@ -34,9 +33,9 @@ export interface paths {
      *  and a new workflow task created for the workflow. Fails with `NotFound` if the task token is
      *  no longer valid due to activity timeout, already being completed, or never having existed.
      */
-    post: operations["RespondActivityTaskCanceled"];
+    post: operations['RespondActivityTaskCanceled'];
   };
-  "/api/v1/namespaces/{namespace}/activities/cancel-by-id": {
+  '/api/v1/namespaces/{namespace}/activities/cancel-by-id': {
     /**
      * @description See `RecordActivityTaskCanceled`. This version allows clients to record failures by
      *  namespace/workflow id/activity id instead of task token.
@@ -44,9 +43,9 @@ export interface paths {
      *  (-- api-linter: core::0136::prepositions=disabled
      *      aip.dev/not-precedent: "By" is used to indicate request type. --)
      */
-    post: operations["RespondActivityTaskCanceledById"];
+    post: operations['RespondActivityTaskCanceledById'];
   };
-  "/api/v1/namespaces/{namespace}/activities/complete": {
+  '/api/v1/namespaces/{namespace}/activities/complete': {
     /**
      * @description RespondActivityTaskCompleted is called by workers when they successfully complete an activity
      *  task.
@@ -55,9 +54,9 @@ export interface paths {
      *  and a new workflow task created for the workflow. Fails with `NotFound` if the task token is
      *  no longer valid due to activity timeout, already being completed, or never having existed.
      */
-    post: operations["RespondActivityTaskCompleted"];
+    post: operations['RespondActivityTaskCompleted'];
   };
-  "/api/v1/namespaces/{namespace}/activities/complete-by-id": {
+  '/api/v1/namespaces/{namespace}/activities/complete-by-id': {
     /**
      * @description See `RecordActivityTaskCompleted`. This version allows clients to record completions by
      *  namespace/workflow id/activity id instead of task token.
@@ -65,9 +64,9 @@ export interface paths {
      *  (-- api-linter: core::0136::prepositions=disabled
      *      aip.dev/not-precedent: "By" is used to indicate request type. --)
      */
-    post: operations["RespondActivityTaskCompletedById"];
+    post: operations['RespondActivityTaskCompletedById'];
   };
-  "/api/v1/namespaces/{namespace}/activities/fail": {
+  '/api/v1/namespaces/{namespace}/activities/fail': {
     /**
      * @description RespondActivityTaskFailed is called by workers when processing an activity task fails.
      *
@@ -75,9 +74,9 @@ export interface paths {
      *  a new workflow task created for the workflow. Fails with `NotFound` if the task token is no
      *  longer valid due to activity timeout, already being completed, or never having existed.
      */
-    post: operations["RespondActivityTaskFailed"];
+    post: operations['RespondActivityTaskFailed'];
   };
-  "/api/v1/namespaces/{namespace}/activities/fail-by-id": {
+  '/api/v1/namespaces/{namespace}/activities/fail-by-id': {
     /**
      * @description See `RecordActivityTaskFailed`. This version allows clients to record failures by
      *  namespace/workflow id/activity id instead of task token.
@@ -85,9 +84,9 @@ export interface paths {
      *  (-- api-linter: core::0136::prepositions=disabled
      *      aip.dev/not-precedent: "By" is used to indicate request type. --)
      */
-    post: operations["RespondActivityTaskFailedById"];
+    post: operations['RespondActivityTaskFailedById'];
   };
-  "/api/v1/namespaces/{namespace}/activities/heartbeat": {
+  '/api/v1/namespaces/{namespace}/activities/heartbeat': {
     /**
      * @description RecordActivityTaskHeartbeat is optionally called by workers while they execute activities.
      *
@@ -96,9 +95,9 @@ export interface paths {
      *  the workflow history. Calling `RecordActivityTaskHeartbeat` will fail with `NotFound` in
      *  such situations, in that event, the SDK should request cancellation of the activity.
      */
-    post: operations["RecordActivityTaskHeartbeat"];
+    post: operations['RecordActivityTaskHeartbeat'];
   };
-  "/api/v1/namespaces/{namespace}/activities/heartbeat-by-id": {
+  '/api/v1/namespaces/{namespace}/activities/heartbeat-by-id': {
     /**
      * @description See `RecordActivityTaskHeartbeat`. This version allows clients to record heartbeats by
      *  namespace/workflow id/activity id instead of task token.
@@ -106,72 +105,123 @@ export interface paths {
      *  (-- api-linter: core::0136::prepositions=disabled
      *      aip.dev/not-precedent: "By" is used to indicate request type. --)
      */
-    post: operations["RecordActivityTaskHeartbeatById"];
+    post: operations['RecordActivityTaskHeartbeatById'];
   };
-  "/api/v1/namespaces/{namespace}/archived-workflows": {
+  '/api/v1/namespaces/{namespace}/archived-workflows': {
     /** @description ListArchivedWorkflowExecutions is a visibility API to list archived workflow executions in a specific namespace. */
-    get: operations["ListArchivedWorkflowExecutions"];
+    get: operations['ListArchivedWorkflowExecutions'];
   };
-  "/api/v1/namespaces/{namespace}/batch-operations": {
+  '/api/v1/namespaces/{namespace}/batch-operations': {
     /** @description ListBatchOperations returns a list of batch operations */
-    get: operations["ListBatchOperations"];
+    get: operations['ListBatchOperations'];
   };
-  "/api/v1/namespaces/{namespace}/batch-operations/{jobId}": {
+  '/api/v1/namespaces/{namespace}/batch-operations/{jobId}': {
     /** @description DescribeBatchOperation returns the information about a batch operation */
-    get: operations["DescribeBatchOperation"];
+    get: operations['DescribeBatchOperation'];
     /** @description StartBatchOperation starts a new batch operation */
-    post: operations["StartBatchOperation"];
+    post: operations['StartBatchOperation'];
   };
-  "/api/v1/namespaces/{namespace}/batch-operations/{jobId}/stop": {
+  '/api/v1/namespaces/{namespace}/batch-operations/{jobId}/stop': {
     /** @description StopBatchOperation stops a batch operation */
-    post: operations["StopBatchOperation"];
+    post: operations['StopBatchOperation'];
   };
-  "/api/v1/namespaces/{namespace}/schedules": {
+  '/api/v1/namespaces/{namespace}/nexus/outgoing-services': {
+    /**
+     * @description List all Nexus outgoing services for a namespace, sorted by service name in ascending order. Set page_token in
+     *  the request to the next_page_token field of the previous response to get the next page of results. An empty
+     *  next_page_token indicates that there are no more results. During pagination, a newly added service with a name
+     *  lexicographically earlier than the previous page's last service name may be missed.
+     */
+    get: operations['ListNexusOutgoingServices'];
+    /**
+     * @description Create a Nexus service. This will fail if a service with the same name already exists in the namespace with a
+     *  status of ALREADY_EXISTS.
+     *  Returns the created service with its initial version. You may use this version for subsequent updates. You don't
+     *  need to increment the version yourself. The server will increment the version for you after each update.
+     */
+    post: operations['CreateNexusOutgoingService'];
+  };
+  '/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}': {
+    /**
+     * @description Get a registered outgoing Nexus service by namespace and service name. The returned version can be used for
+     *  optimistic updates.
+     */
+    get: operations['GetNexusOutgoingService'];
+    /** @description Delete an outgoing Nexus service by namespace and service name. */
+    delete: operations['DeleteNexusOutgoingService'];
+  };
+  '/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}/update': {
+    /**
+     * @description Update an outgoing Nexus service by namespace and service name. The version in the request should match the
+     *  current version of the service. This will fail with a status of FAILED_PRECONDITION if the version does not match.
+     *  Returns the updated service with the updated version, which can be used for subsequent updates. You don't need
+     *  to increment the version yourself. The server will increment the version for you.
+     */
+    post: operations['UpdateNexusOutgoingService'];
+  };
+  '/api/v1/namespaces/{namespace}/schedules': {
     /** @description List all schedules in a namespace. */
-    get: operations["ListSchedules"];
+    get: operations['ListSchedules'];
   };
-  "/api/v1/namespaces/{namespace}/schedules/{scheduleId}": {
+  '/api/v1/namespaces/{namespace}/schedules/{scheduleId}': {
     /** @description Returns the schedule description and current state of an existing schedule. */
-    get: operations["DescribeSchedule"];
+    get: operations['DescribeSchedule'];
     /** @description Creates a new schedule. */
-    post: operations["CreateSchedule"];
+    post: operations['CreateSchedule'];
     /** @description Deletes a schedule, removing it from the system. */
-    delete: operations["DeleteSchedule"];
+    delete: operations['DeleteSchedule'];
   };
-  "/api/v1/namespaces/{namespace}/schedules/{scheduleId}/matching-times": {
+  '/api/v1/namespaces/{namespace}/schedules/{scheduleId}/matching-times': {
     /** @description Lists matching times within a range. */
-    get: operations["ListScheduleMatchingTimes"];
+    get: operations['ListScheduleMatchingTimes'];
   };
-  "/api/v1/namespaces/{namespace}/schedules/{scheduleId}/patch": {
+  '/api/v1/namespaces/{namespace}/schedules/{scheduleId}/patch': {
     /** @description Makes a specific change to a schedule or triggers an immediate action. */
-    post: operations["PatchSchedule"];
+    post: operations['PatchSchedule'];
   };
-  "/api/v1/namespaces/{namespace}/schedules/{scheduleId}/update": {
+  '/api/v1/namespaces/{namespace}/schedules/{scheduleId}/update': {
     /** @description Changes the configuration or state of an existing schedule. */
-    post: operations["UpdateSchedule"];
+    post: operations['UpdateSchedule'];
   };
-  "/api/v1/namespaces/{namespace}/search-attributes": {
+  '/api/v1/namespaces/{namespace}/search-attributes': {
     /** @description ListSearchAttributes returns comprehensive information about search attributes. */
-    get: operations["ListSearchAttributes"];
+    get: operations['ListSearchAttributes'];
   };
-  "/api/v1/namespaces/{namespace}/task-queues/{taskQueue}/worker-build-id-compatibility": {
-    /** @description Fetches the worker build id versioning sets for a task queue. */
-    get: operations["GetWorkerBuildIdCompatibility"];
+  '/api/v1/namespaces/{namespace}/task-queues/{taskQueue}/worker-build-id-compatibility': {
+    /**
+     * @description Deprecated. Use `GetWorkerVersioningRules`.
+     *  Fetches the worker build id versioning sets for a task queue.
+     */
+    get: operations['GetWorkerBuildIdCompatibility'];
   };
-  "/api/v1/namespaces/{namespace}/task-queues/{task_queue.name}": {
-    /** @description DescribeTaskQueue returns information about the target task queue. */
-    get: operations["DescribeTaskQueue"];
+  '/api/v1/namespaces/{namespace}/task-queues/{taskQueue}/worker-versioning-rules': {
+    /**
+     * @description Fetches the Build ID assignment and redirect rules for a Task Queue.
+     *  WARNING: Worker Versioning is not yet stable and the API and behavior may change incompatibly.
+     */
+    get: operations['GetWorkerVersioningRules'];
   };
-  "/api/v1/namespaces/{namespace}/update": {
+  '/api/v1/namespaces/{namespace}/task-queues/{task_queue.name}': {
+    /**
+     * @description DescribeTaskQueue returns the following information about the target task queue, broken down by Build ID:
+     *    - List of pollers
+     *    - Workflow Reachability status
+     *    - Backlog info for Workflow and/or Activity tasks
+     */
+    get: operations['DescribeTaskQueue'];
+  };
+  '/api/v1/namespaces/{namespace}/update': {
     /**
      * @description UpdateNamespace is used to update the information and configuration of a registered
      *  namespace.
      */
-    post: operations["UpdateNamespace"];
+    post: operations['UpdateNamespace'];
   };
-  "/api/v1/namespaces/{namespace}/worker-task-reachability": {
+  '/api/v1/namespaces/{namespace}/worker-task-reachability': {
     /**
-     * @description Fetches task reachability to determine whether a worker may be retired.
+     * @description Deprecated. Use `DescribeTaskQueue`.
+     *
+     *  Fetches task reachability to determine whether a worker may be retired.
      *  The request may specify task queues to query for or let the server fetch all task queues mapped to the given
      *  build IDs.
      *
@@ -184,40 +234,54 @@ export interface paths {
      *  Open source users can adjust this limit by setting the server's dynamic config value for
      *  `limit.reachabilityTaskQueueScan` with the caveat that this call can strain the visibility store.
      */
-    get: operations["GetWorkerTaskReachability"];
+    get: operations['GetWorkerTaskReachability'];
   };
-  "/api/v1/namespaces/{namespace}/workflow-count": {
+  '/api/v1/namespaces/{namespace}/workflow-count': {
     /** @description CountWorkflowExecutions is a visibility API to count of workflow executions in a specific namespace. */
-    get: operations["CountWorkflowExecutions"];
+    get: operations['CountWorkflowExecutions'];
   };
-  "/api/v1/namespaces/{namespace}/workflows": {
+  '/api/v1/namespaces/{namespace}/workflows': {
     /** @description ListWorkflowExecutions is a visibility API to list workflow executions in a specific namespace. */
-    get: operations["ListWorkflowExecutions"];
+    get: operations['ListWorkflowExecutions'];
   };
-  "/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}": {
+  '/api/v1/namespaces/{namespace}/workflows/execute-multi-operation': {
+    /**
+     * @description ExecuteMultiOperation executes multiple operations within a single workflow.
+     *
+     *  Operations are started atomically, meaning if *any* operation fails to be started, none are,
+     *  and the request fails. Upon start, the API returns only when *all* operations have a response.
+     *
+     *  Upon failure, it returns `MultiOperationExecutionFailure` where the status code
+     *  equals the status code of the *first* operation that failed to be started.
+     *
+     *  NOTE: Experimental API.
+     */
+    post: operations['ExecuteMultiOperation'];
+  };
+  '/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}': {
     /** @description DescribeWorkflowExecution returns information about the specified workflow execution. */
-    get: operations["DescribeWorkflowExecution"];
+    get: operations['DescribeWorkflowExecution'];
   };
-  "/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history": {
+  '/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history': {
     /**
      * @description GetWorkflowExecutionHistory returns the history of specified workflow execution. Fails with
      *  `NotFound` if the specified workflow execution is unknown to the service.
      */
-    get: operations["GetWorkflowExecutionHistory"];
+    get: operations['GetWorkflowExecutionHistory'];
   };
-  "/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history-reverse": {
+  '/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history-reverse': {
     /**
      * @description GetWorkflowExecutionHistoryReverse returns the history of specified workflow execution in reverse
      *  order (starting from last event). Fails with`NotFound` if the specified workflow execution is
      *  unknown to the service.
      */
-    get: operations["GetWorkflowExecutionHistoryReverse"];
+    get: operations['GetWorkflowExecutionHistoryReverse'];
   };
-  "/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/query/{query.query_type}": {
+  '/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/query/{query.query_type}': {
     /** @description QueryWorkflow requests a query be executed for a specified workflow execution. */
-    post: operations["QueryWorkflow"];
+    post: operations['QueryWorkflow'];
   };
-  "/api/v1/namespaces/{namespace}/workflows/{workflowId}": {
+  '/api/v1/namespaces/{namespace}/workflows/{workflowId}': {
     /**
      * @description StartWorkflowExecution starts a new workflow execution.
      *
@@ -225,9 +289,9 @@ export interface paths {
      *  also schedule the first workflow task. Returns `WorkflowExecutionAlreadyStarted`, if an
      *  instance already exists with same workflow id.
      */
-    post: operations["StartWorkflowExecution"];
+    post: operations['StartWorkflowExecution'];
   };
-  "/api/v1/namespaces/{namespace}/workflows/{workflowId}/signal-with-start/{signalName}": {
+  '/api/v1/namespaces/{namespace}/workflows/{workflowId}/signal-with-start/{signalName}': {
     /**
      * @description SignalWithStartWorkflowExecution is used to ensure a signal is sent to a workflow, even if
      *  it isn't yet started.
@@ -242,9 +306,9 @@ export interface paths {
      *  (-- api-linter: core::0136::prepositions=disabled
      *      aip.dev/not-precedent: "With" is used to indicate combined operation. --)
      */
-    post: operations["SignalWithStartWorkflowExecution"];
+    post: operations['SignalWithStartWorkflowExecution'];
   };
-  "/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/cancel": {
+  '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/cancel': {
     /**
      * @description RequestCancelWorkflowExecution is called by workers when they want to request cancellation of
      *  a workflow execution.
@@ -253,41 +317,72 @@ export interface paths {
      *  workflow history and a new workflow task created for the workflow. It returns success if the requested
      *  workflow is already closed. It fails with 'NotFound' if the requested workflow doesn't exist.
      */
-    post: operations["RequestCancelWorkflowExecution"];
+    post: operations['RequestCancelWorkflowExecution'];
   };
-  "/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/reset": {
+  '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/reset': {
     /**
      * @description ResetWorkflowExecution will reset an existing workflow execution to a specified
      *  `WORKFLOW_TASK_COMPLETED` event (exclusive). It will immediately terminate the current
      *  execution instance.
      *  TODO: Does exclusive here mean *just* the completed event, or also WFT started? Otherwise the task is doomed to time out?
      */
-    post: operations["ResetWorkflowExecution"];
+    post: operations['ResetWorkflowExecution'];
   };
-  "/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/signal/{signalName}": {
+  '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/signal/{signalName}': {
     /**
      * @description SignalWorkflowExecution is used to send a signal to a running workflow execution.
      *
      *  This results in a `WORKFLOW_EXECUTION_SIGNALED` event recorded in the history and a workflow
      *  task being created for the execution.
      */
-    post: operations["SignalWorkflowExecution"];
+    post: operations['SignalWorkflowExecution'];
   };
-  "/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/terminate": {
+  '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/terminate': {
     /**
      * @description TerminateWorkflowExecution terminates an existing workflow execution by recording a
      *  `WORKFLOW_EXECUTION_TERMINATED` event in the history and immediately terminating the
      *  execution instance.
      */
-    post: operations["TerminateWorkflowExecution"];
+    post: operations['TerminateWorkflowExecution'];
   };
-  "/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update/{request.input.name}": {
+  '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update/{request.input.name}': {
     /** @description Invokes the specified update function on user workflow code. */
-    post: operations["UpdateWorkflowExecution"];
+    post: operations['UpdateWorkflowExecution'];
   };
-  "/api/v1/system-info": {
+  '/api/v1/nexus/incoming-services': {
+    /**
+     * @description List all Nexus incoming services for the cluster, sorted by service ID in ascending order. Set page_token in the
+     *  request to the next_page_token field of the previous response to get the next page of results. An empty
+     *  next_page_token indicates that there are no more results. During pagination, a newly added service with an ID
+     *  lexicographically earlier than the previous page's last service name may be missed.
+     */
+    get: operations['ListNexusIncomingServices'];
+    /**
+     * @description Create a Nexus service. This will fail if a service with the same name already exists in the namespace with a
+     *  status of ALREADY_EXISTS.
+     *  Returns the created service with its initial version. You may use this version for subsequent updates.
+     */
+    post: operations['CreateNexusIncomingService'];
+  };
+  '/api/v1/nexus/incoming-services/{id}': {
+    /** @description Get a registered incoming Nexus service by ID. The returned version can be used for optimistic updates. */
+    get: operations['GetNexusIncomingService'];
+    /** @description Delete an incoming Nexus service by ID. */
+    delete: operations['DeleteNexusIncomingService'];
+  };
+  '/api/v1/nexus/incoming-services/{id}/update': {
+    /**
+     * @description Optimistically update a Nexus service based on provided version as obtained via the
+     *  `GetNexusIncomingService` or `ListNexusOutgoingServicesResponse` APIs. This will fail with a status of
+     *  FAILED_PRECONDITION if the version does not match.
+     *  Returns the updated service with its updated version. You may use this version for subsequent updates. You don't
+     *  need to increment the version yourself. The server will increment the version for you after each update.
+     */
+    post: operations['UpdateNexusIncomingService'];
+  };
+  '/api/v1/system-info': {
     /** @description GetSystemInfo returns information about the system. */
-    get: operations["GetSystemInfo"];
+    get: operations['GetSystemInfo'];
   };
 }
 
@@ -299,13 +394,21 @@ export interface components {
       scheduledEventId?: string;
       startedEventId?: string;
       identity?: string;
-      activityType?: components["schemas"]["ActivityType"];
+      activityType?: components['schemas']['ActivityType'];
       activityId?: string;
       /**
        * Format: enum
        * @enum {string}
        */
-      retryState?: "RETRY_STATE_UNSPECIFIED" | "RETRY_STATE_IN_PROGRESS" | "RETRY_STATE_NON_RETRYABLE_FAILURE" | "RETRY_STATE_TIMEOUT" | "RETRY_STATE_MAXIMUM_ATTEMPTS_REACHED" | "RETRY_STATE_RETRY_POLICY_NOT_SET" | "RETRY_STATE_INTERNAL_SERVER_ERROR" | "RETRY_STATE_CANCEL_REQUESTED";
+      retryState?:
+        | 'RETRY_STATE_UNSPECIFIED'
+        | 'RETRY_STATE_IN_PROGRESS'
+        | 'RETRY_STATE_NON_RETRYABLE_FAILURE'
+        | 'RETRY_STATE_TIMEOUT'
+        | 'RETRY_STATE_MAXIMUM_ATTEMPTS_REACHED'
+        | 'RETRY_STATE_RETRY_POLICY_NOT_SET'
+        | 'RETRY_STATE_INTERNAL_SERVER_ERROR'
+        | 'RETRY_STATE_CANCEL_REQUESTED';
     };
     ActivityPropertiesModifiedExternallyEventAttributes: {
       /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this modification corresponds to. */
@@ -314,7 +417,7 @@ export interface components {
        * @description If set, update the retry policy of the activity, replacing it with the specified one.
        *  The number of attempts at the activity is preserved.
        */
-      newRetryPolicy?: components["schemas"]["RetryPolicy"];
+      newRetryPolicy?: components['schemas']['RetryPolicy'];
     };
     ActivityTaskCancelRequestedEventAttributes: {
       /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this cancel request corresponds to */
@@ -324,7 +427,7 @@ export interface components {
     };
     ActivityTaskCanceledEventAttributes: {
       /** @description Additional information that the activity reported upon confirming cancellation */
-      details?: components["schemas"]["Payloads"];
+      details?: components['schemas']['Payloads'];
       /**
        * @description id of the most recent `ACTIVITY_TASK_CANCEL_REQUESTED` event which refers to the same
        *  activity
@@ -336,24 +439,30 @@ export interface components {
       startedEventId?: string;
       /** @description id of the worker who canceled this activity */
       identity?: string;
-      /** @description Version info of the worker who processed this workflow task. */
-      workerVersion?: components["schemas"]["WorkerVersionStamp"];
+      /**
+       * @description Version info of the worker who processed this workflow task.
+       *  Deprecated. Use the info inside the corresponding ActivityTaskStartedEvent
+       */
+      workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
     ActivityTaskCompletedEventAttributes: {
       /** @description Serialized results of the activity. IE: The return value of the activity function */
-      result?: components["schemas"]["Payloads"];
+      result?: components['schemas']['Payloads'];
       /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this completion corresponds to */
       scheduledEventId?: string;
       /** @description The id of the `ACTIVITY_TASK_STARTED` event this completion corresponds to */
       startedEventId?: string;
       /** @description id of the worker that completed this task */
       identity?: string;
-      /** @description Version info of the worker who processed this workflow task. */
-      workerVersion?: components["schemas"]["WorkerVersionStamp"];
+      /**
+       * @description Version info of the worker who processed this workflow task.
+       *  Deprecated. Use the info inside the corresponding ActivityTaskStartedEvent
+       */
+      workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
     ActivityTaskFailedEventAttributes: {
       /** @description Failure details */
-      failure?: components["schemas"]["Failure"];
+      failure?: components['schemas']['Failure'];
       /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this failure corresponds to */
       scheduledEventId?: string;
       /** @description The id of the `ACTIVITY_TASK_STARTED` event this failure corresponds to */
@@ -364,17 +473,28 @@ export interface components {
        * Format: enum
        * @enum {string}
        */
-      retryState?: "RETRY_STATE_UNSPECIFIED" | "RETRY_STATE_IN_PROGRESS" | "RETRY_STATE_NON_RETRYABLE_FAILURE" | "RETRY_STATE_TIMEOUT" | "RETRY_STATE_MAXIMUM_ATTEMPTS_REACHED" | "RETRY_STATE_RETRY_POLICY_NOT_SET" | "RETRY_STATE_INTERNAL_SERVER_ERROR" | "RETRY_STATE_CANCEL_REQUESTED";
-      /** @description Version info of the worker who processed this workflow task. */
-      workerVersion?: components["schemas"]["WorkerVersionStamp"];
+      retryState?:
+        | 'RETRY_STATE_UNSPECIFIED'
+        | 'RETRY_STATE_IN_PROGRESS'
+        | 'RETRY_STATE_NON_RETRYABLE_FAILURE'
+        | 'RETRY_STATE_TIMEOUT'
+        | 'RETRY_STATE_MAXIMUM_ATTEMPTS_REACHED'
+        | 'RETRY_STATE_RETRY_POLICY_NOT_SET'
+        | 'RETRY_STATE_INTERNAL_SERVER_ERROR'
+        | 'RETRY_STATE_CANCEL_REQUESTED';
+      /**
+       * @description Version info of the worker who processed this workflow task.
+       *  Deprecated. Use the info inside the corresponding ActivityTaskStartedEvent
+       */
+      workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
     ActivityTaskScheduledEventAttributes: {
       /** @description The worker/user assigned identifier for the activity */
       activityId?: string;
-      activityType?: components["schemas"]["ActivityType"];
-      taskQueue?: components["schemas"]["TaskQueue"];
-      header?: components["schemas"]["Header"];
-      input?: components["schemas"]["Payloads"];
+      activityType?: components['schemas']['ActivityType'];
+      taskQueue?: components['schemas']['TaskQueue'];
+      header?: components['schemas']['Header'];
+      input?: components['schemas']['Payloads'];
       /**
        * @description Indicates how long the caller is willing to wait for an activity completion. Limits how long
        *  retries will be attempted. Either this or `start_to_close_timeout` must be specified.
@@ -411,13 +531,12 @@ export interface components {
        *  configuration. Retries will happen up to `schedule_to_close_timeout`. To disable retries set
        *  retry_policy.maximum_attempts to 1.
        */
-      retryPolicy?: components["schemas"]["RetryPolicy"];
+      retryPolicy?: components['schemas']['RetryPolicy'];
       /**
-       * @description If this is set, the workflow executing this command wishes to start the activity using
-       *  a version compatible with the version that this workflow most recently ran on, if such
-       *  behavior is possible.
+       * @description If this is set, the activity would be assigned to the Build ID of the workflow. Otherwise,
+       *  Assignment rules of the activity's Task Queue will be used to determine the Build ID.
        */
-      useCompatibleVersion?: boolean;
+      useWorkflowBuildId?: boolean;
     };
     ActivityTaskStartedEventAttributes: {
       /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this task corresponds to */
@@ -435,14 +554,21 @@ export interface components {
        * @description Will be set to the most recent failure details, if this task has previously failed and then
        *  been retried.
        */
-      lastFailure?: components["schemas"]["Failure"];
+      lastFailure?: components['schemas']['Failure'];
+      /** @description Version info of the worker to whom this task was dispatched. */
+      workerVersion?: components['schemas']['WorkerVersionStamp'];
+      /**
+       * @description Used by server internally to properly reapply build ID redirects to an execution
+       *  when rebuilding it from events.
+       */
+      buildIdRedirectCounter?: string;
     };
     ActivityTaskTimedOutEventAttributes: {
       /**
        * @description If this activity had failed, was retried, and then timed out, that failure is stored as the
        *  `cause` in here.
        */
-      failure?: components["schemas"]["Failure"];
+      failure?: components['schemas']['Failure'];
       /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this timeout corresponds to */
       scheduledEventId?: string;
       /** @description The id of the `ACTIVITY_TASK_STARTED` event this timeout corresponds to */
@@ -451,7 +577,15 @@ export interface components {
        * Format: enum
        * @enum {string}
        */
-      retryState?: "RETRY_STATE_UNSPECIFIED" | "RETRY_STATE_IN_PROGRESS" | "RETRY_STATE_NON_RETRYABLE_FAILURE" | "RETRY_STATE_TIMEOUT" | "RETRY_STATE_MAXIMUM_ATTEMPTS_REACHED" | "RETRY_STATE_RETRY_POLICY_NOT_SET" | "RETRY_STATE_INTERNAL_SERVER_ERROR" | "RETRY_STATE_CANCEL_REQUESTED";
+      retryState?:
+        | 'RETRY_STATE_UNSPECIFIED'
+        | 'RETRY_STATE_IN_PROGRESS'
+        | 'RETRY_STATE_NON_RETRYABLE_FAILURE'
+        | 'RETRY_STATE_TIMEOUT'
+        | 'RETRY_STATE_MAXIMUM_ATTEMPTS_REACHED'
+        | 'RETRY_STATE_RETRY_POLICY_NOT_SET'
+        | 'RETRY_STATE_INTERNAL_SERVER_ERROR'
+        | 'RETRY_STATE_CANCEL_REQUESTED';
     };
     /**
      * @description Represents the identifier used by a activity author to define the activity. Typically, the
@@ -467,12 +601,12 @@ export interface components {
        * Format: enum
        * @enum {string}
        */
-      severity?: "SEVERITY_UNSPECIFIED" | "SEVERITY_HIGH" | "SEVERITY_MEDIUM" | "SEVERITY_LOW";
+      severity?: 'SEVERITY_UNSPECIFIED' | 'SEVERITY_HIGH' | 'SEVERITY_MEDIUM' | 'SEVERITY_LOW';
     };
     ApplicationFailureInfo: {
       type?: string;
       nonRetryable?: boolean;
-      details?: components["schemas"]["Payloads"];
+      details?: components['schemas']['Payloads'];
       /**
        * @description next_retry_delay can be used by the client to override the activity
        *  retry interval calculated by the retry policy. Retry attempts will
@@ -501,11 +635,18 @@ export interface components {
        * @description If set, override overlap policy for this request.
        * @enum {string}
        */
-      overlapPolicy?: "SCHEDULE_OVERLAP_POLICY_UNSPECIFIED" | "SCHEDULE_OVERLAP_POLICY_SKIP" | "SCHEDULE_OVERLAP_POLICY_BUFFER_ONE" | "SCHEDULE_OVERLAP_POLICY_BUFFER_ALL" | "SCHEDULE_OVERLAP_POLICY_CANCEL_OTHER" | "SCHEDULE_OVERLAP_POLICY_TERMINATE_OTHER" | "SCHEDULE_OVERLAP_POLICY_ALLOW_ALL";
+      overlapPolicy?:
+        | 'SCHEDULE_OVERLAP_POLICY_UNSPECIFIED'
+        | 'SCHEDULE_OVERLAP_POLICY_SKIP'
+        | 'SCHEDULE_OVERLAP_POLICY_BUFFER_ONE'
+        | 'SCHEDULE_OVERLAP_POLICY_BUFFER_ALL'
+        | 'SCHEDULE_OVERLAP_POLICY_CANCEL_OTHER'
+        | 'SCHEDULE_OVERLAP_POLICY_TERMINATE_OTHER'
+        | 'SCHEDULE_OVERLAP_POLICY_ALLOW_ALL';
     };
     BadBinaries: {
       binaries?: {
-        [key: string]: components["schemas"]["BadBinaryInfo"];
+        [key: string]: components['schemas']['BadBinaryInfo'];
       };
     };
     BadBinaryInfo: {
@@ -539,7 +680,11 @@ export interface components {
        * @description Batch operation state
        * @enum {string}
        */
-      state?: "BATCH_OPERATION_STATE_UNSPECIFIED" | "BATCH_OPERATION_STATE_RUNNING" | "BATCH_OPERATION_STATE_COMPLETED" | "BATCH_OPERATION_STATE_FAILED";
+      state?:
+        | 'BATCH_OPERATION_STATE_UNSPECIFIED'
+        | 'BATCH_OPERATION_STATE_RUNNING'
+        | 'BATCH_OPERATION_STATE_COMPLETED'
+        | 'BATCH_OPERATION_STATE_FAILED';
       /**
        * Format: date-time
        * @description Batch operation start time
@@ -559,19 +704,26 @@ export interface components {
       /** @description The identity of the worker/client. */
       identity?: string;
       /** @description Describes what to reset to and how. If set, `reset_type` and `reset_reapply_type` are ignored. */
-      options?: components["schemas"]["ResetOptions"];
+      options?: components['schemas']['ResetOptions'];
       /**
        * Format: enum
        * @description Reset type (deprecated, use `options`).
        * @enum {string}
        */
-      resetType?: "RESET_TYPE_UNSPECIFIED" | "RESET_TYPE_FIRST_WORKFLOW_TASK" | "RESET_TYPE_LAST_WORKFLOW_TASK";
+      resetType?:
+        | 'RESET_TYPE_UNSPECIFIED'
+        | 'RESET_TYPE_FIRST_WORKFLOW_TASK'
+        | 'RESET_TYPE_LAST_WORKFLOW_TASK';
       /**
        * Format: enum
        * @description History event reapply options (deprecated, use `options`).
        * @enum {string}
        */
-      resetReapplyType?: "RESET_REAPPLY_TYPE_UNSPECIFIED" | "RESET_REAPPLY_TYPE_SIGNAL" | "RESET_REAPPLY_TYPE_NONE" | "RESET_REAPPLY_TYPE_ALL_ELIGIBLE";
+      resetReapplyType?:
+        | 'RESET_REAPPLY_TYPE_UNSPECIFIED'
+        | 'RESET_REAPPLY_TYPE_SIGNAL'
+        | 'RESET_REAPPLY_TYPE_NONE'
+        | 'RESET_REAPPLY_TYPE_ALL_ELIGIBLE';
     };
     /**
      * @description BatchOperationSignal sends signals to batch workflows.
@@ -581,12 +733,12 @@ export interface components {
       /** @description The workflow author-defined name of the signal to send to the workflow */
       signal?: string;
       /** @description Serialized value(s) to provide with the signal */
-      input?: components["schemas"]["Payloads"];
+      input?: components['schemas']['Payloads'];
       /**
        * @description Headers that are passed with the signal to the processing workflow.
        *  These can include things like auth or tracing tokens.
        */
-      header?: components["schemas"]["Header"];
+      header?: components['schemas']['Header'];
       /** @description The identity of the worker/client */
       identity?: string;
     };
@@ -597,16 +749,64 @@ export interface components {
      */
     BatchOperationTermination: {
       /** @description Serialized value(s) to provide to the termination event */
-      details?: components["schemas"]["Payloads"];
+      details?: components['schemas']['Payloads'];
       /** @description The identity of the worker/client */
       identity?: string;
+    };
+    /**
+     * @description These rules assign a Build ID to Unassigned Workflow Executions and
+     *  Activities.
+     *
+     *  Specifically, assignment rules are applied to the following Executions or
+     *  Activities when they are scheduled in a Task Queue:
+     *     - Generally, any new Workflow Execution, except:
+     *       - When A Child Workflow or a Continue-As-New Execution inherits the
+     *         Build ID from its parent/previous execution by setting the
+     *         `inherit_build_id` flag.
+     *       - Workflow Executions started Eagerly are assigned to the Build ID of
+     *         the Starter.
+     *     - An Activity that is scheduled on a Task Queue different from the one
+     *       their Workflow runs on, unless the `use_workflow_build_id` flag is set.
+     *
+     *  In absence of (applicable) redirect rules (`CompatibleBuildIdRedirectRule`s)
+     *  the task will be dispatched to Workers of the Build ID determined by the
+     *  assignment rules. Otherwise, the final Build ID will be determined by the
+     *  redirect rules.
+     *
+     *  When using Worker Versioning, in the steady state, for a given Task Queue,
+     *  there should typically be exactly one assignment rule to send all Unassigned
+     *  tasks to the latest Build ID. Existence of at least one such "unconditional"
+     *  rule at all times is enforce by the system, unless the `force` flag is used
+     *  by the user when replacing/deleting these rules (for exceptional cases).
+     *
+     *  During a deployment, one or more additional rules can be added to assign a
+     *  subset of the tasks to a new Build ID based on a "ramp percentage".
+     *
+     *  When there are multiple assignment rules for a Task Queue, the rules are
+     *  evaluated in order, starting from index 0. The first applicable rule will be
+     *  applied and the rest will be ignored.
+     *
+     *  In the event that no assignment rule is applicable on a task (or the Task
+     *  Queue is simply not versioned), the tasks will be sent to unversioned
+     *  workers, if available. Otherwise, they remain Unassigned, and will be
+     *  retried for assignment, or dispatch to unversioned workers, at a later time
+     *  depending on the availability of workers.
+     */
+    BuildIdAssignmentRule: {
+      targetBuildId?: string;
+      /**
+       * @description This ramp is useful for gradual Blue/Green deployments (and similar)
+       *  where you want to send a certain portion of the traffic to the target
+       *  Build ID.
+       */
+      percentageRamp?: components['schemas']['RampByPercentage'];
     };
     /** @description Reachability of tasks for a worker by build id, in one or more task queues. */
     BuildIdReachability: {
       /** @description A build id or empty if unversioned. */
       buildId?: string;
       /** @description Reachability per task queue. */
-      taskQueueReachability?: components["schemas"]["TaskQueueReachability"][];
+      taskQueueReachability?: components['schemas']['TaskQueueReachability'][];
     };
     /**
      * @description CalendarSpec describes an event specification relative to the calendar,
@@ -652,14 +852,14 @@ export interface components {
     };
     /** @description Callback to attach to various events in the system, e.g. workflow run completion. */
     Callback: {
-      nexus?: components["schemas"]["Callback_Nexus"];
+      nexus?: components['schemas']['Callback_Nexus'];
     };
     /** @description CallbackInfo contains the state of an attached workflow callback. */
     CallbackInfo: {
       /** @description Information on how this callback should be invoked (e.g. its URL and type). */
-      callback?: components["schemas"]["Callback"];
+      callback?: components['schemas']['Callback'];
       /** @description Trigger for this callback. */
-      trigger?: components["schemas"]["CallbackInfo_Trigger"];
+      trigger?: components['schemas']['CallbackInfo_Trigger'];
       /**
        * Format: date-time
        * @description The time when the callback was registered.
@@ -669,7 +869,13 @@ export interface components {
        * Format: enum
        * @enum {string}
        */
-      state?: "CALLBACK_STATE_UNSPECIFIED" | "CALLBACK_STATE_STANDBY" | "CALLBACK_STATE_SCHEDULED" | "CALLBACK_STATE_BACKING_OFF" | "CALLBACK_STATE_FAILED" | "CALLBACK_STATE_SUCCEEDED";
+      state?:
+        | 'CALLBACK_STATE_UNSPECIFIED'
+        | 'CALLBACK_STATE_STANDBY'
+        | 'CALLBACK_STATE_SCHEDULED'
+        | 'CALLBACK_STATE_BACKING_OFF'
+        | 'CALLBACK_STATE_FAILED'
+        | 'CALLBACK_STATE_SUCCEEDED';
       /**
        * Format: int32
        * @description The number of attempts made to deliver the callback.
@@ -682,7 +888,7 @@ export interface components {
        */
       lastAttemptCompleteTime?: string;
       /** @description The last attempt's failure, if any. */
-      lastAttemptFailure?: components["schemas"]["Failure"];
+      lastAttemptFailure?: components['schemas']['Failure'];
       /**
        * Format: date-time
        * @description The time when the next attempt is scheduled.
@@ -690,61 +896,61 @@ export interface components {
       nextAttemptScheduleTime?: string;
     };
     CallbackInfo_Trigger: {
-      workflowClosed?: components["schemas"]["CallbackInfo_WorkflowClosed"];
+      workflowClosed?: components['schemas']['CallbackInfo_WorkflowClosed'];
     };
     /** @description Trigger for when the workflow is closed. */
     CallbackInfo_WorkflowClosed: Record<string, never>;
     Callback_Nexus: {
-      /**
-       * @description Callback URL.
-       *  (-- api-linter: core::0140::uri=disabled
-       *      aip.dev/not-precedent: Not following this guideline. --)
-       */
+      /** @description Callback URL. */
       url?: string;
+      /** @description Header to attach to callback request. */
+      header?: {
+        [key: string]: string;
+      };
     };
     CanceledFailureInfo: {
-      details?: components["schemas"]["Payloads"];
+      details?: components['schemas']['Payloads'];
     };
     ChildWorkflowExecutionCanceledEventAttributes: {
-      details?: components["schemas"]["Payloads"];
+      details?: components['schemas']['Payloads'];
       /**
        * @description Namespace of the child workflow.
        *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
        */
       namespace?: string;
       namespaceId?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
-      workflowType?: components["schemas"]["WorkflowType"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
+      workflowType?: components['schemas']['WorkflowType'];
       /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
       initiatedEventId?: string;
       /** @description Id of the `CHILD_WORKFLOW_EXECUTION_STARTED` event which this event corresponds to */
       startedEventId?: string;
     };
     ChildWorkflowExecutionCompletedEventAttributes: {
-      result?: components["schemas"]["Payloads"];
+      result?: components['schemas']['Payloads'];
       /**
        * @description Namespace of the child workflow.
        *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
        */
       namespace?: string;
       namespaceId?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
-      workflowType?: components["schemas"]["WorkflowType"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
+      workflowType?: components['schemas']['WorkflowType'];
       /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
       initiatedEventId?: string;
       /** @description Id of the `CHILD_WORKFLOW_EXECUTION_STARTED` event which this event corresponds to */
       startedEventId?: string;
     };
     ChildWorkflowExecutionFailedEventAttributes: {
-      failure?: components["schemas"]["Failure"];
+      failure?: components['schemas']['Failure'];
       /**
        * @description Namespace of the child workflow.
        *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
        */
       namespace?: string;
       namespaceId?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
-      workflowType?: components["schemas"]["WorkflowType"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
+      workflowType?: components['schemas']['WorkflowType'];
       /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
       initiatedEventId?: string;
       /** @description Id of the `CHILD_WORKFLOW_EXECUTION_STARTED` event which this event corresponds to */
@@ -753,19 +959,35 @@ export interface components {
        * Format: enum
        * @enum {string}
        */
-      retryState?: "RETRY_STATE_UNSPECIFIED" | "RETRY_STATE_IN_PROGRESS" | "RETRY_STATE_NON_RETRYABLE_FAILURE" | "RETRY_STATE_TIMEOUT" | "RETRY_STATE_MAXIMUM_ATTEMPTS_REACHED" | "RETRY_STATE_RETRY_POLICY_NOT_SET" | "RETRY_STATE_INTERNAL_SERVER_ERROR" | "RETRY_STATE_CANCEL_REQUESTED";
+      retryState?:
+        | 'RETRY_STATE_UNSPECIFIED'
+        | 'RETRY_STATE_IN_PROGRESS'
+        | 'RETRY_STATE_NON_RETRYABLE_FAILURE'
+        | 'RETRY_STATE_TIMEOUT'
+        | 'RETRY_STATE_MAXIMUM_ATTEMPTS_REACHED'
+        | 'RETRY_STATE_RETRY_POLICY_NOT_SET'
+        | 'RETRY_STATE_INTERNAL_SERVER_ERROR'
+        | 'RETRY_STATE_CANCEL_REQUESTED';
     };
     ChildWorkflowExecutionFailureInfo: {
       namespace?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
-      workflowType?: components["schemas"]["WorkflowType"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
+      workflowType?: components['schemas']['WorkflowType'];
       initiatedEventId?: string;
       startedEventId?: string;
       /**
        * Format: enum
        * @enum {string}
        */
-      retryState?: "RETRY_STATE_UNSPECIFIED" | "RETRY_STATE_IN_PROGRESS" | "RETRY_STATE_NON_RETRYABLE_FAILURE" | "RETRY_STATE_TIMEOUT" | "RETRY_STATE_MAXIMUM_ATTEMPTS_REACHED" | "RETRY_STATE_RETRY_POLICY_NOT_SET" | "RETRY_STATE_INTERNAL_SERVER_ERROR" | "RETRY_STATE_CANCEL_REQUESTED";
+      retryState?:
+        | 'RETRY_STATE_UNSPECIFIED'
+        | 'RETRY_STATE_IN_PROGRESS'
+        | 'RETRY_STATE_NON_RETRYABLE_FAILURE'
+        | 'RETRY_STATE_TIMEOUT'
+        | 'RETRY_STATE_MAXIMUM_ATTEMPTS_REACHED'
+        | 'RETRY_STATE_RETRY_POLICY_NOT_SET'
+        | 'RETRY_STATE_INTERNAL_SERVER_ERROR'
+        | 'RETRY_STATE_CANCEL_REQUESTED';
     };
     ChildWorkflowExecutionStartedEventAttributes: {
       /**
@@ -776,9 +998,9 @@ export interface components {
       namespaceId?: string;
       /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
       initiatedEventId?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
-      workflowType?: components["schemas"]["WorkflowType"];
-      header?: components["schemas"]["Header"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
+      workflowType?: components['schemas']['WorkflowType'];
+      header?: components['schemas']['Header'];
     };
     ChildWorkflowExecutionTerminatedEventAttributes: {
       /**
@@ -787,8 +1009,8 @@ export interface components {
        */
       namespace?: string;
       namespaceId?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
-      workflowType?: components["schemas"]["WorkflowType"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
+      workflowType?: components['schemas']['WorkflowType'];
       /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
       initiatedEventId?: string;
       /** @description Id of the `CHILD_WORKFLOW_EXECUTION_STARTED` event which this event corresponds to */
@@ -801,8 +1023,8 @@ export interface components {
        */
       namespace?: string;
       namespaceId?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
-      workflowType?: components["schemas"]["WorkflowType"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
+      workflowType?: components['schemas']['WorkflowType'];
       /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
       initiatedEventId?: string;
       /** @description Id of the `CHILD_WORKFLOW_EXECUTION_STARTED` event which this event corresponds to */
@@ -811,10 +1033,45 @@ export interface components {
        * Format: enum
        * @enum {string}
        */
-      retryState?: "RETRY_STATE_UNSPECIFIED" | "RETRY_STATE_IN_PROGRESS" | "RETRY_STATE_NON_RETRYABLE_FAILURE" | "RETRY_STATE_TIMEOUT" | "RETRY_STATE_MAXIMUM_ATTEMPTS_REACHED" | "RETRY_STATE_RETRY_POLICY_NOT_SET" | "RETRY_STATE_INTERNAL_SERVER_ERROR" | "RETRY_STATE_CANCEL_REQUESTED";
+      retryState?:
+        | 'RETRY_STATE_UNSPECIFIED'
+        | 'RETRY_STATE_IN_PROGRESS'
+        | 'RETRY_STATE_NON_RETRYABLE_FAILURE'
+        | 'RETRY_STATE_TIMEOUT'
+        | 'RETRY_STATE_MAXIMUM_ATTEMPTS_REACHED'
+        | 'RETRY_STATE_RETRY_POLICY_NOT_SET'
+        | 'RETRY_STATE_INTERNAL_SERVER_ERROR'
+        | 'RETRY_STATE_CANCEL_REQUESTED';
     };
     ClusterReplicationConfig: {
       clusterName?: string;
+    };
+    /**
+     * @description These rules apply to tasks assigned to a particular Build ID
+     *  (`source_build_id`) to redirect them to another *compatible* Build ID
+     *  (`target_build_id`).
+     *
+     *  It is user's responsibility to ensure that the target Build ID is compatible
+     *  with the source Build ID (e.g. by using the Patching API).
+     *
+     *  Most deployments are not expected to need these rules, however following
+     *  situations can greatly benefit from redirects:
+     *   - Need to move long-running Workflow Executions from an old Build ID to a
+     *     newer one.
+     *   - Need to hotfix some broken or stuck Workflow Executions.
+     *
+     *  In steady state, redirect rules are beneficial when dealing with old
+     *  Executions ran on now-decommissioned Build IDs:
+     *   - To redirecting the Workflow Queries to the current (compatible) Build ID.
+     *   - To be able to Reset an old Execution so it can run on the current
+     *     (compatible) Build ID.
+     *
+     *  Redirect rules can be chained, but only the last rule in the chain can have
+     *  a ramp.
+     */
+    CompatibleBuildIdRedirectRule: {
+      sourceBuildId?: string;
+      targetBuildId?: string;
     };
     /**
      * @description Used by the worker versioning APIs, represents an unordered set of one or more versions which are
@@ -837,20 +1094,34 @@ export interface components {
        * @description `groups` contains the groups if the request is grouping by a field.
        *  The list might not be complete, and the counts of each group is approximate.
        */
-      groups?: components["schemas"]["CountWorkflowExecutionsResponse_AggregationGroup"][];
+      groups?: components['schemas']['CountWorkflowExecutionsResponse_AggregationGroup'][];
     };
     CountWorkflowExecutionsResponse_AggregationGroup: {
-      groupValues?: components["schemas"]["Payload"][];
+      groupValues?: components['schemas']['Payload'][];
       count?: string;
     };
+    CreateNexusIncomingServiceRequest: {
+      /** @description Service definition to create. */
+      spec?: components['schemas']['IncomingServiceSpec'];
+    };
+    CreateNexusIncomingServiceResponse: {
+      /** @description Data post acceptance. Can be used to issue additional updates to this record. */
+      service?: components['schemas']['IncomingService'];
+    };
+    CreateNexusOutgoingServiceRequest: {
+      /** @description Namespace to create this service definition in. */
+      namespace?: string;
+      /** @description Name of service to create. */
+      name?: string;
+      /** @description Service definition to create. Does not contain a version because there's nothing to match against. */
+      spec?: components['schemas']['OutgoingServiceSpec'];
+    };
+    CreateNexusOutgoingServiceResponse: {
+      /** @description Data post acceptance. Can be used to issue additional updates to this record. */
+      service?: components['schemas']['OutgoingService'];
+    };
     /**
-     * @description (-- api-linter: core::0133::request-parent-required=disabled
-     *      aip.dev/not-precedent: CreateSchedule doesn't follow Google API format --)
-     *  (-- api-linter: core::0133::request-unknown-fields=disabled
-     *      aip.dev/not-precedent: CreateSchedule doesn't follow Google API format --)
-     *  (-- api-linter: core::0133::request-resource-behavior=disabled
-     *      aip.dev/not-precedent: field_behavior annotation not available in our gogo fork --)
-     *  (-- api-linter: core::0203::optional=disabled
+     * @description (-- api-linter: core::0203::optional=disabled
      *      aip.dev/not-precedent: field_behavior annotation not available in our gogo fork --)
      */
     CreateScheduleRequest: {
@@ -859,16 +1130,16 @@ export interface components {
       /** @description The id of the new schedule. */
       scheduleId?: string;
       /** @description The schedule spec, policies, action, and initial state. */
-      schedule?: components["schemas"]["Schedule"];
+      schedule?: components['schemas']['Schedule'];
       /** @description Optional initial patch (e.g. to run the action once immediately). */
-      initialPatch?: components["schemas"]["SchedulePatch"];
+      initialPatch?: components['schemas']['SchedulePatch'];
       /** @description The identity of the client who initiated this request. */
       identity?: string;
       /** @description A unique identifier for this create request for idempotence. Typically UUIDv4. */
       requestId?: string;
       /** @description Memo and search attributes to attach to the schedule itself. */
-      memo?: components["schemas"]["Memo"];
-      searchAttributes?: components["schemas"]["SearchAttributes"];
+      memo?: components['schemas']['Memo'];
+      searchAttributes?: components['schemas']['SearchAttributes'];
     };
     CreateScheduleResponse: {
       /** Format: bytes */
@@ -879,10 +1150,12 @@ export interface components {
        * Format: enum
        * @enum {string}
        */
-      encodingType?: "ENCODING_TYPE_UNSPECIFIED" | "ENCODING_TYPE_PROTO3" | "ENCODING_TYPE_JSON";
+      encodingType?: 'ENCODING_TYPE_UNSPECIFIED' | 'ENCODING_TYPE_PROTO3' | 'ENCODING_TYPE_JSON';
       /** Format: bytes */
       data?: string;
     };
+    DeleteNexusIncomingServiceResponse: Record<string, never>;
+    DeleteNexusOutgoingServiceResponse: Record<string, never>;
     DeleteScheduleResponse: Record<string, never>;
     DescribeBatchOperationResponse: {
       /**
@@ -890,7 +1163,13 @@ export interface components {
        * @description Batch operation type
        * @enum {string}
        */
-      operationType?: "BATCH_OPERATION_TYPE_UNSPECIFIED" | "BATCH_OPERATION_TYPE_TERMINATE" | "BATCH_OPERATION_TYPE_CANCEL" | "BATCH_OPERATION_TYPE_SIGNAL" | "BATCH_OPERATION_TYPE_DELETE" | "BATCH_OPERATION_TYPE_RESET";
+      operationType?:
+        | 'BATCH_OPERATION_TYPE_UNSPECIFIED'
+        | 'BATCH_OPERATION_TYPE_TERMINATE'
+        | 'BATCH_OPERATION_TYPE_CANCEL'
+        | 'BATCH_OPERATION_TYPE_SIGNAL'
+        | 'BATCH_OPERATION_TYPE_DELETE'
+        | 'BATCH_OPERATION_TYPE_RESET';
       /** @description Batch job ID */
       jobId?: string;
       /**
@@ -898,7 +1177,11 @@ export interface components {
        * @description Batch operation state
        * @enum {string}
        */
-      state?: "BATCH_OPERATION_STATE_UNSPECIFIED" | "BATCH_OPERATION_STATE_RUNNING" | "BATCH_OPERATION_STATE_COMPLETED" | "BATCH_OPERATION_STATE_FAILED";
+      state?:
+        | 'BATCH_OPERATION_STATE_UNSPECIFIED'
+        | 'BATCH_OPERATION_STATE_RUNNING'
+        | 'BATCH_OPERATION_STATE_COMPLETED'
+        | 'BATCH_OPERATION_STATE_FAILED';
       /**
        * Format: date-time
        * @description Batch operation start time
@@ -921,16 +1204,16 @@ export interface components {
       reason?: string;
     };
     DescribeNamespaceResponse: {
-      namespaceInfo?: components["schemas"]["NamespaceInfo"];
-      config?: components["schemas"]["NamespaceConfig"];
-      replicationConfig?: components["schemas"]["NamespaceReplicationConfig"];
+      namespaceInfo?: components['schemas']['NamespaceInfo'];
+      config?: components['schemas']['NamespaceConfig'];
+      replicationConfig?: components['schemas']['NamespaceReplicationConfig'];
       failoverVersion?: string;
       isGlobalNamespace?: boolean;
       /**
        * @description Contains the historical state of failover_versions for the cluster, truncated to contain only the last N
        *  states to ensure that the list does not grow unbounded.
        */
-      failoverHistory?: components["schemas"]["FailoverStatus"][];
+      failoverHistory?: components['schemas']['FailoverStatus'][];
     };
     DescribeScheduleResponse: {
       /**
@@ -942,12 +1225,12 @@ export interface components {
        *  - some fields in the state are modified automatically
        *  - the schedule may have been modified by UpdateSchedule or PatchSchedule
        */
-      schedule?: components["schemas"]["Schedule"];
+      schedule?: components['schemas']['Schedule'];
       /** @description Extra schedule state info. */
-      info?: components["schemas"]["ScheduleInfo"];
+      info?: components['schemas']['ScheduleInfo'];
       /** @description The memo and search attributes that the schedule was created with. */
-      memo?: components["schemas"]["Memo"];
-      searchAttributes?: components["schemas"]["SearchAttributes"];
+      memo?: components['schemas']['Memo'];
+      searchAttributes?: components['schemas']['SearchAttributes'];
       /**
        * Format: bytes
        * @description This value can be passed back to UpdateSchedule to ensure that the
@@ -957,16 +1240,59 @@ export interface components {
       conflictToken?: string;
     };
     DescribeTaskQueueResponse: {
-      pollers?: components["schemas"]["PollerInfo"][];
-      taskQueueStatus?: components["schemas"]["TaskQueueStatus"];
+      /**
+       * @description Deprecated. Use `versions_info.types_info.pollers` with `ENHANCED` mode instead.
+       *  Not set in `ENHANCED` mode.
+       */
+      pollers?: components['schemas']['PollerInfo'][];
+      /** @description Deprecated. Not set in `ENHANCED` mode. */
+      taskQueueStatus?: components['schemas']['TaskQueueStatus'];
+      /**
+       * @description This map contains Task Queue information for each Build ID. Empty string as key value means unversioned.
+       *  Only set in `ENHANCED` mode.
+       */
+      versionsInfo?: {
+        [key: string]: components['schemas']['TaskQueueVersionInfo'];
+      };
     };
     DescribeWorkflowExecutionResponse: {
-      executionConfig?: components["schemas"]["WorkflowExecutionConfig"];
-      workflowExecutionInfo?: components["schemas"]["WorkflowExecutionInfo"];
-      pendingActivities?: components["schemas"]["PendingActivityInfo"][];
-      pendingChildren?: components["schemas"]["PendingChildExecutionInfo"][];
-      pendingWorkflowTask?: components["schemas"]["PendingWorkflowTaskInfo"];
-      callbacks?: components["schemas"]["CallbackInfo"][];
+      executionConfig?: components['schemas']['WorkflowExecutionConfig'];
+      workflowExecutionInfo?: components['schemas']['WorkflowExecutionInfo'];
+      pendingActivities?: components['schemas']['PendingActivityInfo'][];
+      pendingChildren?: components['schemas']['PendingChildExecutionInfo'][];
+      pendingWorkflowTask?: components['schemas']['PendingWorkflowTaskInfo'];
+      callbacks?: components['schemas']['CallbackInfo'][];
+      pendingNexusOperations?: components['schemas']['PendingNexusOperationInfo'][];
+    };
+    ExecuteMultiOperationRequest: {
+      namespace?: string;
+      /**
+       * @description List of operations to execute within a single workflow.
+       *
+       *  Preconditions:
+       *  - The list of operations must not be empty.
+       *  - The workflow ids must match across operations.
+       *  - The only valid list of operations at this time is [StartWorkflow, UpdateWorkflow], in this order.
+       *
+       *  Note that additional operation-specific restrictions have to be considered.
+       */
+      operations?: components['schemas']['ExecuteMultiOperationRequest_Operation'][];
+    };
+    ExecuteMultiOperationRequest_Operation: {
+      /**
+       * @description Additional restrictions:
+       *  - setting `cron_schedule` is invalid
+       *  - setting `request_eager_execution` is invalid
+       */
+      startWorkflow?: components['schemas']['StartWorkflowExecutionRequest'];
+      updateWorkflow?: components['schemas']['UpdateWorkflowExecutionRequest'];
+    };
+    ExecuteMultiOperationResponse: {
+      responses?: components['schemas']['ExecuteMultiOperationResponse_Response'][];
+    };
+    ExecuteMultiOperationResponse_Response: {
+      startWorkflow?: components['schemas']['StartWorkflowExecutionResponse'];
+      updateWorkflow?: components['schemas']['UpdateWorkflowExecutionResponse'];
     };
     ExternalWorkflowExecutionCancelRequestedEventAttributes: {
       /**
@@ -980,7 +1306,7 @@ export interface components {
        */
       namespace?: string;
       namespaceId?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
     };
     ExternalWorkflowExecutionSignaledEventAttributes: {
       /** @description id of the `SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_INITIATED` event this event corresponds to */
@@ -991,7 +1317,7 @@ export interface components {
        */
       namespace?: string;
       namespaceId?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
       /** @description Deprecated */
       control?: string;
     };
@@ -1028,16 +1354,17 @@ export interface components {
        *
        *  - If there's demand, we could allow overriding the default SDK implementation to encode other opaque Failure attributes.
        */
-      encodedAttributes?: components["schemas"]["Payload"];
-      cause?: components["schemas"]["Failure"];
-      applicationFailureInfo?: components["schemas"]["ApplicationFailureInfo"];
-      timeoutFailureInfo?: components["schemas"]["TimeoutFailureInfo"];
-      canceledFailureInfo?: components["schemas"]["CanceledFailureInfo"];
-      terminatedFailureInfo?: components["schemas"]["TerminatedFailureInfo"];
-      serverFailureInfo?: components["schemas"]["ServerFailureInfo"];
-      resetWorkflowFailureInfo?: components["schemas"]["ResetWorkflowFailureInfo"];
-      activityFailureInfo?: components["schemas"]["ActivityFailureInfo"];
-      childWorkflowExecutionFailureInfo?: components["schemas"]["ChildWorkflowExecutionFailureInfo"];
+      encodedAttributes?: components['schemas']['Payload'];
+      cause?: components['schemas']['Failure'];
+      applicationFailureInfo?: components['schemas']['ApplicationFailureInfo'];
+      timeoutFailureInfo?: components['schemas']['TimeoutFailureInfo'];
+      canceledFailureInfo?: components['schemas']['CanceledFailureInfo'];
+      terminatedFailureInfo?: components['schemas']['TerminatedFailureInfo'];
+      serverFailureInfo?: components['schemas']['ServerFailureInfo'];
+      resetWorkflowFailureInfo?: components['schemas']['ResetWorkflowFailureInfo'];
+      activityFailureInfo?: components['schemas']['ActivityFailureInfo'];
+      childWorkflowExecutionFailureInfo?: components['schemas']['ChildWorkflowExecutionFailureInfo'];
+      nexusOperationExecutionFailureInfo?: components['schemas']['NexusOperationFailureInfo'];
     };
     /** @description GetClusterInfoResponse contains information about Temporal cluster. */
     GetClusterInfoResponse: {
@@ -1050,18 +1377,24 @@ export interface components {
       };
       serverVersion?: string;
       clusterId?: string;
-      versionInfo?: components["schemas"]["VersionInfo"];
+      versionInfo?: components['schemas']['VersionInfo'];
       clusterName?: string;
       /** Format: int32 */
       historyShardCount?: number;
       persistenceStore?: string;
       visibilityStore?: string;
     };
+    GetNexusIncomingServiceResponse: {
+      service?: components['schemas']['IncomingService'];
+    };
+    GetNexusOutgoingServiceResponse: {
+      service?: components['schemas']['OutgoingService'];
+    };
     GetSystemInfoResponse: {
       /** @description Version of the server. */
       serverVersion?: string;
       /** @description All capabilities the system supports. */
-      capabilities?: components["schemas"]["GetSystemInfoResponse_Capabilities"];
+      capabilities?: components['schemas']['GetSystemInfoResponse_Capabilities'];
     };
     /** @description System capability details. */
     GetSystemInfoResponse_Capabilities: {
@@ -1107,8 +1440,9 @@ export interface components {
        *
        *  There may be fewer sets returned than exist, if the request chose to limit this response.
        */
-      majorVersionSets?: components["schemas"]["CompatibleVersionSet"][];
+      majorVersionSets?: components['schemas']['CompatibleVersionSet'][];
     };
+    /** @description Deprecated. Use `DescribeTaskQueue`. */
     GetWorkerTaskReachabilityResponse: {
       /**
        * @description Task reachability, broken down by build id and then task queue.
@@ -1121,15 +1455,26 @@ export interface components {
        *  Open source users can adjust this limit by setting the server's dynamic config value for
        *  `limit.reachabilityTaskQueueScan` with the caveat that this call can strain the visibility store.
        */
-      buildIdReachability?: components["schemas"]["BuildIdReachability"][];
+      buildIdReachability?: components['schemas']['BuildIdReachability'][];
+    };
+    GetWorkerVersioningRulesResponse: {
+      assignmentRules?: components['schemas']['TimestampedBuildIdAssignmentRule'][];
+      compatibleRedirectRules?: components['schemas']['TimestampedCompatibleBuildIdRedirectRule'][];
+      /**
+       * Format: bytes
+       * @description This value can be passed back to UpdateWorkerVersioningRulesRequest to
+       *  ensure that the rules were not modified between this List and the Update,
+       *  which could lead to lost updates and other confusion.
+       */
+      conflictToken?: string;
     };
     GetWorkflowExecutionHistoryResponse: {
-      history?: components["schemas"]["History"];
+      history?: components['schemas']['History'];
       /**
        * @description Raw history is an alternate representation of history that may be returned if configured on
        *  the frontend. This is not supported by all SDKs. Either this or `history` will be set.
        */
-      rawHistory?: components["schemas"]["DataBlob"][];
+      rawHistory?: components['schemas']['DataBlob'][];
       /**
        * Format: bytes
        * @description Will be set if there are more history events than were included in this response
@@ -1138,7 +1483,7 @@ export interface components {
       archived?: boolean;
     };
     GetWorkflowExecutionHistoryReverseResponse: {
-      history?: components["schemas"]["History"];
+      history?: components['schemas']['History'];
       /**
        * Format: bytes
        * @description Will be set if there are more history events than were included in this response
@@ -1148,7 +1493,7 @@ export interface components {
     /** @description Contains an arbitrary serialized message along with a @type that describes the type of the serialized message. */
     GoogleProtobufAny: {
       /** @description The type of the serialized message. */
-      "@type"?: string;
+      '@type'?: string;
       [key: string]: unknown;
     };
     /**
@@ -1157,11 +1502,11 @@ export interface components {
      */
     Header: {
       fields?: {
-        [key: string]: components["schemas"]["Payload"];
+        [key: string]: components['schemas']['Payload'];
       };
     };
     History: {
-      events?: components["schemas"]["HistoryEvent"][];
+      events?: components['schemas']['HistoryEvent'][];
     };
     /**
      * @description History events are the method by which Temporal SDKs advance (or recreate) workflow state.
@@ -1176,7 +1521,62 @@ export interface components {
        * Format: enum
        * @enum {string}
        */
-      eventType?: "EVENT_TYPE_UNSPECIFIED" | "EVENT_TYPE_WORKFLOW_EXECUTION_STARTED" | "EVENT_TYPE_WORKFLOW_EXECUTION_COMPLETED" | "EVENT_TYPE_WORKFLOW_EXECUTION_FAILED" | "EVENT_TYPE_WORKFLOW_EXECUTION_TIMED_OUT" | "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED" | "EVENT_TYPE_WORKFLOW_TASK_STARTED" | "EVENT_TYPE_WORKFLOW_TASK_COMPLETED" | "EVENT_TYPE_WORKFLOW_TASK_TIMED_OUT" | "EVENT_TYPE_WORKFLOW_TASK_FAILED" | "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED" | "EVENT_TYPE_ACTIVITY_TASK_STARTED" | "EVENT_TYPE_ACTIVITY_TASK_COMPLETED" | "EVENT_TYPE_ACTIVITY_TASK_FAILED" | "EVENT_TYPE_ACTIVITY_TASK_TIMED_OUT" | "EVENT_TYPE_ACTIVITY_TASK_CANCEL_REQUESTED" | "EVENT_TYPE_ACTIVITY_TASK_CANCELED" | "EVENT_TYPE_TIMER_STARTED" | "EVENT_TYPE_TIMER_FIRED" | "EVENT_TYPE_TIMER_CANCELED" | "EVENT_TYPE_WORKFLOW_EXECUTION_CANCEL_REQUESTED" | "EVENT_TYPE_WORKFLOW_EXECUTION_CANCELED" | "EVENT_TYPE_REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_INITIATED" | "EVENT_TYPE_REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_FAILED" | "EVENT_TYPE_EXTERNAL_WORKFLOW_EXECUTION_CANCEL_REQUESTED" | "EVENT_TYPE_MARKER_RECORDED" | "EVENT_TYPE_WORKFLOW_EXECUTION_SIGNALED" | "EVENT_TYPE_WORKFLOW_EXECUTION_TERMINATED" | "EVENT_TYPE_WORKFLOW_EXECUTION_CONTINUED_AS_NEW" | "EVENT_TYPE_START_CHILD_WORKFLOW_EXECUTION_INITIATED" | "EVENT_TYPE_START_CHILD_WORKFLOW_EXECUTION_FAILED" | "EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_STARTED" | "EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_COMPLETED" | "EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_FAILED" | "EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_CANCELED" | "EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_TIMED_OUT" | "EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_TERMINATED" | "EVENT_TYPE_SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_INITIATED" | "EVENT_TYPE_SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_FAILED" | "EVENT_TYPE_EXTERNAL_WORKFLOW_EXECUTION_SIGNALED" | "EVENT_TYPE_UPSERT_WORKFLOW_SEARCH_ATTRIBUTES" | "EVENT_TYPE_WORKFLOW_EXECUTION_UPDATE_ACCEPTED" | "EVENT_TYPE_WORKFLOW_EXECUTION_UPDATE_REJECTED" | "EVENT_TYPE_WORKFLOW_EXECUTION_UPDATE_COMPLETED" | "EVENT_TYPE_WORKFLOW_PROPERTIES_MODIFIED_EXTERNALLY" | "EVENT_TYPE_ACTIVITY_PROPERTIES_MODIFIED_EXTERNALLY" | "EVENT_TYPE_WORKFLOW_PROPERTIES_MODIFIED" | "EVENT_TYPE_WORKFLOW_EXECUTION_UPDATE_REQUESTED";
+      eventType?:
+        | 'EVENT_TYPE_UNSPECIFIED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_STARTED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_COMPLETED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_FAILED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_TIMED_OUT'
+        | 'EVENT_TYPE_WORKFLOW_TASK_SCHEDULED'
+        | 'EVENT_TYPE_WORKFLOW_TASK_STARTED'
+        | 'EVENT_TYPE_WORKFLOW_TASK_COMPLETED'
+        | 'EVENT_TYPE_WORKFLOW_TASK_TIMED_OUT'
+        | 'EVENT_TYPE_WORKFLOW_TASK_FAILED'
+        | 'EVENT_TYPE_ACTIVITY_TASK_SCHEDULED'
+        | 'EVENT_TYPE_ACTIVITY_TASK_STARTED'
+        | 'EVENT_TYPE_ACTIVITY_TASK_COMPLETED'
+        | 'EVENT_TYPE_ACTIVITY_TASK_FAILED'
+        | 'EVENT_TYPE_ACTIVITY_TASK_TIMED_OUT'
+        | 'EVENT_TYPE_ACTIVITY_TASK_CANCEL_REQUESTED'
+        | 'EVENT_TYPE_ACTIVITY_TASK_CANCELED'
+        | 'EVENT_TYPE_TIMER_STARTED'
+        | 'EVENT_TYPE_TIMER_FIRED'
+        | 'EVENT_TYPE_TIMER_CANCELED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_CANCEL_REQUESTED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_CANCELED'
+        | 'EVENT_TYPE_REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_INITIATED'
+        | 'EVENT_TYPE_REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_FAILED'
+        | 'EVENT_TYPE_EXTERNAL_WORKFLOW_EXECUTION_CANCEL_REQUESTED'
+        | 'EVENT_TYPE_MARKER_RECORDED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_SIGNALED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_TERMINATED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_CONTINUED_AS_NEW'
+        | 'EVENT_TYPE_START_CHILD_WORKFLOW_EXECUTION_INITIATED'
+        | 'EVENT_TYPE_START_CHILD_WORKFLOW_EXECUTION_FAILED'
+        | 'EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_STARTED'
+        | 'EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_COMPLETED'
+        | 'EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_FAILED'
+        | 'EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_CANCELED'
+        | 'EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_TIMED_OUT'
+        | 'EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_TERMINATED'
+        | 'EVENT_TYPE_SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_INITIATED'
+        | 'EVENT_TYPE_SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_FAILED'
+        | 'EVENT_TYPE_EXTERNAL_WORKFLOW_EXECUTION_SIGNALED'
+        | 'EVENT_TYPE_UPSERT_WORKFLOW_SEARCH_ATTRIBUTES'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_UPDATE_ACCEPTED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_UPDATE_REJECTED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_UPDATE_COMPLETED'
+        | 'EVENT_TYPE_WORKFLOW_PROPERTIES_MODIFIED_EXTERNALLY'
+        | 'EVENT_TYPE_ACTIVITY_PROPERTIES_MODIFIED_EXTERNALLY'
+        | 'EVENT_TYPE_WORKFLOW_PROPERTIES_MODIFIED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_UPDATE_ADMITTED'
+        | 'EVENT_TYPE_NEXUS_OPERATION_SCHEDULED'
+        | 'EVENT_TYPE_NEXUS_OPERATION_STARTED'
+        | 'EVENT_TYPE_NEXUS_OPERATION_COMPLETED'
+        | 'EVENT_TYPE_NEXUS_OPERATION_FAILED'
+        | 'EVENT_TYPE_NEXUS_OPERATION_CANCELED'
+        | 'EVENT_TYPE_NEXUS_OPERATION_TIMED_OUT'
+        | 'EVENT_TYPE_NEXUS_OPERATION_CANCEL_REQUESTED';
       /** @description TODO: What is this? Appears unused by SDKs */
       version?: string;
       /** @description TODO: What is this? Appears unused by SDKs */
@@ -1188,64 +1588,117 @@ export interface components {
        *  acceptable for the event type and/or attributes to be uninterpretable.
        */
       workerMayIgnore?: boolean;
-      workflowExecutionStartedEventAttributes?: components["schemas"]["WorkflowExecutionStartedEventAttributes"];
-      workflowExecutionCompletedEventAttributes?: components["schemas"]["WorkflowExecutionCompletedEventAttributes"];
-      workflowExecutionFailedEventAttributes?: components["schemas"]["WorkflowExecutionFailedEventAttributes"];
-      workflowExecutionTimedOutEventAttributes?: components["schemas"]["WorkflowExecutionTimedOutEventAttributes"];
-      workflowTaskScheduledEventAttributes?: components["schemas"]["WorkflowTaskScheduledEventAttributes"];
-      workflowTaskStartedEventAttributes?: components["schemas"]["WorkflowTaskStartedEventAttributes"];
-      workflowTaskCompletedEventAttributes?: components["schemas"]["WorkflowTaskCompletedEventAttributes"];
-      workflowTaskTimedOutEventAttributes?: components["schemas"]["WorkflowTaskTimedOutEventAttributes"];
-      workflowTaskFailedEventAttributes?: components["schemas"]["WorkflowTaskFailedEventAttributes"];
-      activityTaskScheduledEventAttributes?: components["schemas"]["ActivityTaskScheduledEventAttributes"];
-      activityTaskStartedEventAttributes?: components["schemas"]["ActivityTaskStartedEventAttributes"];
-      activityTaskCompletedEventAttributes?: components["schemas"]["ActivityTaskCompletedEventAttributes"];
-      activityTaskFailedEventAttributes?: components["schemas"]["ActivityTaskFailedEventAttributes"];
-      activityTaskTimedOutEventAttributes?: components["schemas"]["ActivityTaskTimedOutEventAttributes"];
-      timerStartedEventAttributes?: components["schemas"]["TimerStartedEventAttributes"];
-      timerFiredEventAttributes?: components["schemas"]["TimerFiredEventAttributes"];
-      activityTaskCancelRequestedEventAttributes?: components["schemas"]["ActivityTaskCancelRequestedEventAttributes"];
-      activityTaskCanceledEventAttributes?: components["schemas"]["ActivityTaskCanceledEventAttributes"];
-      timerCanceledEventAttributes?: components["schemas"]["TimerCanceledEventAttributes"];
-      markerRecordedEventAttributes?: components["schemas"]["MarkerRecordedEventAttributes"];
-      workflowExecutionSignaledEventAttributes?: components["schemas"]["WorkflowExecutionSignaledEventAttributes"];
-      workflowExecutionTerminatedEventAttributes?: components["schemas"]["WorkflowExecutionTerminatedEventAttributes"];
-      workflowExecutionCancelRequestedEventAttributes?: components["schemas"]["WorkflowExecutionCancelRequestedEventAttributes"];
-      workflowExecutionCanceledEventAttributes?: components["schemas"]["WorkflowExecutionCanceledEventAttributes"];
-      requestCancelExternalWorkflowExecutionInitiatedEventAttributes?: components["schemas"]["RequestCancelExternalWorkflowExecutionInitiatedEventAttributes"];
-      requestCancelExternalWorkflowExecutionFailedEventAttributes?: components["schemas"]["RequestCancelExternalWorkflowExecutionFailedEventAttributes"];
-      externalWorkflowExecutionCancelRequestedEventAttributes?: components["schemas"]["ExternalWorkflowExecutionCancelRequestedEventAttributes"];
-      workflowExecutionContinuedAsNewEventAttributes?: components["schemas"]["WorkflowExecutionContinuedAsNewEventAttributes"];
-      startChildWorkflowExecutionInitiatedEventAttributes?: components["schemas"]["StartChildWorkflowExecutionInitiatedEventAttributes"];
-      startChildWorkflowExecutionFailedEventAttributes?: components["schemas"]["StartChildWorkflowExecutionFailedEventAttributes"];
-      childWorkflowExecutionStartedEventAttributes?: components["schemas"]["ChildWorkflowExecutionStartedEventAttributes"];
-      childWorkflowExecutionCompletedEventAttributes?: components["schemas"]["ChildWorkflowExecutionCompletedEventAttributes"];
-      childWorkflowExecutionFailedEventAttributes?: components["schemas"]["ChildWorkflowExecutionFailedEventAttributes"];
-      childWorkflowExecutionCanceledEventAttributes?: components["schemas"]["ChildWorkflowExecutionCanceledEventAttributes"];
-      childWorkflowExecutionTimedOutEventAttributes?: components["schemas"]["ChildWorkflowExecutionTimedOutEventAttributes"];
-      childWorkflowExecutionTerminatedEventAttributes?: components["schemas"]["ChildWorkflowExecutionTerminatedEventAttributes"];
-      signalExternalWorkflowExecutionInitiatedEventAttributes?: components["schemas"]["SignalExternalWorkflowExecutionInitiatedEventAttributes"];
-      signalExternalWorkflowExecutionFailedEventAttributes?: components["schemas"]["SignalExternalWorkflowExecutionFailedEventAttributes"];
-      externalWorkflowExecutionSignaledEventAttributes?: components["schemas"]["ExternalWorkflowExecutionSignaledEventAttributes"];
-      upsertWorkflowSearchAttributesEventAttributes?: components["schemas"]["UpsertWorkflowSearchAttributesEventAttributes"];
-      workflowExecutionUpdateAcceptedEventAttributes?: components["schemas"]["WorkflowExecutionUpdateAcceptedEventAttributes"];
-      workflowExecutionUpdateRejectedEventAttributes?: components["schemas"]["WorkflowExecutionUpdateRejectedEventAttributes"];
-      workflowExecutionUpdateCompletedEventAttributes?: components["schemas"]["WorkflowExecutionUpdateCompletedEventAttributes"];
-      workflowPropertiesModifiedExternallyEventAttributes?: components["schemas"]["WorkflowPropertiesModifiedExternallyEventAttributes"];
-      activityPropertiesModifiedExternallyEventAttributes?: components["schemas"]["ActivityPropertiesModifiedExternallyEventAttributes"];
-      workflowPropertiesModifiedEventAttributes?: components["schemas"]["WorkflowPropertiesModifiedEventAttributes"];
-      workflowExecutionUpdateRequestedEventAttributes?: components["schemas"]["WorkflowExecutionUpdateRequestedEventAttributes"];
+      workflowExecutionStartedEventAttributes?: components['schemas']['WorkflowExecutionStartedEventAttributes'];
+      workflowExecutionCompletedEventAttributes?: components['schemas']['WorkflowExecutionCompletedEventAttributes'];
+      workflowExecutionFailedEventAttributes?: components['schemas']['WorkflowExecutionFailedEventAttributes'];
+      workflowExecutionTimedOutEventAttributes?: components['schemas']['WorkflowExecutionTimedOutEventAttributes'];
+      workflowTaskScheduledEventAttributes?: components['schemas']['WorkflowTaskScheduledEventAttributes'];
+      workflowTaskStartedEventAttributes?: components['schemas']['WorkflowTaskStartedEventAttributes'];
+      workflowTaskCompletedEventAttributes?: components['schemas']['WorkflowTaskCompletedEventAttributes'];
+      workflowTaskTimedOutEventAttributes?: components['schemas']['WorkflowTaskTimedOutEventAttributes'];
+      workflowTaskFailedEventAttributes?: components['schemas']['WorkflowTaskFailedEventAttributes'];
+      activityTaskScheduledEventAttributes?: components['schemas']['ActivityTaskScheduledEventAttributes'];
+      activityTaskStartedEventAttributes?: components['schemas']['ActivityTaskStartedEventAttributes'];
+      activityTaskCompletedEventAttributes?: components['schemas']['ActivityTaskCompletedEventAttributes'];
+      activityTaskFailedEventAttributes?: components['schemas']['ActivityTaskFailedEventAttributes'];
+      activityTaskTimedOutEventAttributes?: components['schemas']['ActivityTaskTimedOutEventAttributes'];
+      timerStartedEventAttributes?: components['schemas']['TimerStartedEventAttributes'];
+      timerFiredEventAttributes?: components['schemas']['TimerFiredEventAttributes'];
+      activityTaskCancelRequestedEventAttributes?: components['schemas']['ActivityTaskCancelRequestedEventAttributes'];
+      activityTaskCanceledEventAttributes?: components['schemas']['ActivityTaskCanceledEventAttributes'];
+      timerCanceledEventAttributes?: components['schemas']['TimerCanceledEventAttributes'];
+      markerRecordedEventAttributes?: components['schemas']['MarkerRecordedEventAttributes'];
+      workflowExecutionSignaledEventAttributes?: components['schemas']['WorkflowExecutionSignaledEventAttributes'];
+      workflowExecutionTerminatedEventAttributes?: components['schemas']['WorkflowExecutionTerminatedEventAttributes'];
+      workflowExecutionCancelRequestedEventAttributes?: components['schemas']['WorkflowExecutionCancelRequestedEventAttributes'];
+      workflowExecutionCanceledEventAttributes?: components['schemas']['WorkflowExecutionCanceledEventAttributes'];
+      requestCancelExternalWorkflowExecutionInitiatedEventAttributes?: components['schemas']['RequestCancelExternalWorkflowExecutionInitiatedEventAttributes'];
+      requestCancelExternalWorkflowExecutionFailedEventAttributes?: components['schemas']['RequestCancelExternalWorkflowExecutionFailedEventAttributes'];
+      externalWorkflowExecutionCancelRequestedEventAttributes?: components['schemas']['ExternalWorkflowExecutionCancelRequestedEventAttributes'];
+      workflowExecutionContinuedAsNewEventAttributes?: components['schemas']['WorkflowExecutionContinuedAsNewEventAttributes'];
+      startChildWorkflowExecutionInitiatedEventAttributes?: components['schemas']['StartChildWorkflowExecutionInitiatedEventAttributes'];
+      startChildWorkflowExecutionFailedEventAttributes?: components['schemas']['StartChildWorkflowExecutionFailedEventAttributes'];
+      childWorkflowExecutionStartedEventAttributes?: components['schemas']['ChildWorkflowExecutionStartedEventAttributes'];
+      childWorkflowExecutionCompletedEventAttributes?: components['schemas']['ChildWorkflowExecutionCompletedEventAttributes'];
+      childWorkflowExecutionFailedEventAttributes?: components['schemas']['ChildWorkflowExecutionFailedEventAttributes'];
+      childWorkflowExecutionCanceledEventAttributes?: components['schemas']['ChildWorkflowExecutionCanceledEventAttributes'];
+      childWorkflowExecutionTimedOutEventAttributes?: components['schemas']['ChildWorkflowExecutionTimedOutEventAttributes'];
+      childWorkflowExecutionTerminatedEventAttributes?: components['schemas']['ChildWorkflowExecutionTerminatedEventAttributes'];
+      signalExternalWorkflowExecutionInitiatedEventAttributes?: components['schemas']['SignalExternalWorkflowExecutionInitiatedEventAttributes'];
+      signalExternalWorkflowExecutionFailedEventAttributes?: components['schemas']['SignalExternalWorkflowExecutionFailedEventAttributes'];
+      externalWorkflowExecutionSignaledEventAttributes?: components['schemas']['ExternalWorkflowExecutionSignaledEventAttributes'];
+      upsertWorkflowSearchAttributesEventAttributes?: components['schemas']['UpsertWorkflowSearchAttributesEventAttributes'];
+      workflowExecutionUpdateAcceptedEventAttributes?: components['schemas']['WorkflowExecutionUpdateAcceptedEventAttributes'];
+      workflowExecutionUpdateRejectedEventAttributes?: components['schemas']['WorkflowExecutionUpdateRejectedEventAttributes'];
+      workflowExecutionUpdateCompletedEventAttributes?: components['schemas']['WorkflowExecutionUpdateCompletedEventAttributes'];
+      workflowPropertiesModifiedExternallyEventAttributes?: components['schemas']['WorkflowPropertiesModifiedExternallyEventAttributes'];
+      activityPropertiesModifiedExternallyEventAttributes?: components['schemas']['ActivityPropertiesModifiedExternallyEventAttributes'];
+      workflowPropertiesModifiedEventAttributes?: components['schemas']['WorkflowPropertiesModifiedEventAttributes'];
+      workflowExecutionUpdateAdmittedEventAttributes?: components['schemas']['WorkflowExecutionUpdateAdmittedEventAttributes'];
+      nexusOperationScheduledEventAttributes?: components['schemas']['NexusOperationScheduledEventAttributes'];
+      nexusOperationStartedEventAttributes?: components['schemas']['NexusOperationStartedEventAttributes'];
+      nexusOperationCompletedEventAttributes?: components['schemas']['NexusOperationCompletedEventAttributes'];
+      nexusOperationFailedEventAttributes?: components['schemas']['NexusOperationFailedEventAttributes'];
+      nexusOperationCanceledEventAttributes?: components['schemas']['NexusOperationCanceledEventAttributes'];
+      nexusOperationTimedOutEventAttributes?: components['schemas']['NexusOperationTimedOutEventAttributes'];
+      nexusOperationCancelRequestedEventAttributes?: components['schemas']['NexusOperationCancelRequestedEventAttributes'];
+    };
+    /**
+     * @description A cluster-global binding from a service ID to namespace, task queue, and metadata for dispatching incoming Nexus
+     *  requests.
+     */
+    IncomingService: {
+      /** @description Data version for this service, incremented for every update issued via the UpdateNexusIncomingService API. */
+      version?: string;
+      /** @description Unique server-generated service ID. */
+      id?: string;
+      /** @description Spec for the service. */
+      spec?: components['schemas']['IncomingServiceSpec'];
+      /**
+       * Format: date-time
+       * @description The date and time when the service was created.
+       *  (-- api-linter: core::0142::time-field-names=disabled
+       *      aip.dev/not-precedent: Not following linter rules. --)
+       */
+      createdTime?: string;
+      /**
+       * Format: date-time
+       * @description The date and time when the service was last modified.
+       *  Will not be set if the service has never been modified.
+       *  (-- api-linter: core::0142::time-field-names=disabled
+       *      aip.dev/not-precedent: Not following linter rules. --)
+       */
+      lastModifiedTime?: string;
+      /**
+       * @description Server exposed URL prefix for invocation of operations on this service.
+       *  This doesn't include the protocol, hostname or port as the server does not know how it should be accessed
+       *  publicly. The URL is stable in the face of service renames.
+       */
+      urlPrefix?: string;
+    };
+    /** @description Contains mutable fields for an IncomingService. */
+    IncomingServiceSpec: {
+      /** @description Service name, unique for this cluster. Must match `[a-zA-Z_][a-zA-Z0-9_]*`. */
+      name?: string;
+      /** @description Namespace to route requests to. */
+      namespace?: string;
+      /** @description Task queue to route requests to. */
+      taskQueue?: string;
+      /** @description Generic service metadata that is available to the server's authorizer. */
+      metadata?: {
+        [key: string]: components['schemas']['GoogleProtobufAny'];
+      };
     };
     Input: {
       /**
        * @description Headers that are passed with the update from the requesting entity.
        *  These can include things like auth or tracing tokens.
        */
-      header?: components["schemas"]["Header"];
+      header?: components['schemas']['Header'];
       /** @description The name of the input handler to invoke on the target workflow */
       name?: string;
       /** @description The arguments to pass to the named handler. */
-      args?: components["schemas"]["Payloads"];
+      args?: components['schemas']['Payloads'];
     };
     /**
      * @description IntervalSpec matches times that can be expressed as:
@@ -1265,37 +1718,70 @@ export interface components {
       phase?: string;
     };
     ListArchivedWorkflowExecutionsResponse: {
-      executions?: components["schemas"]["WorkflowExecutionInfo"][];
+      executions?: components['schemas']['WorkflowExecutionInfo'][];
       /** Format: bytes */
       nextPageToken?: string;
     };
     ListBatchOperationsResponse: {
       /** @description BatchOperationInfo contains the basic info about batch operation */
-      operationInfo?: components["schemas"]["BatchOperationInfo"][];
+      operationInfo?: components['schemas']['BatchOperationInfo'][];
       /** Format: bytes */
       nextPageToken?: string;
     };
     ListNamespacesResponse: {
-      namespaces?: components["schemas"]["DescribeNamespaceResponse"][];
+      namespaces?: components['schemas']['DescribeNamespaceResponse'][];
       /** Format: bytes */
+      nextPageToken?: string;
+    };
+    ListNexusIncomingServicesResponse: {
+      /**
+       * Format: bytes
+       * @description Token for getting the next page.
+       */
+      nextPageToken?: string;
+      services?: components['schemas']['IncomingService'][];
+    };
+    ListNexusOutgoingServicesResponse: {
+      /** @description List of services in the namespace for the requested page. */
+      services?: components['schemas']['OutgoingService'][];
+      /**
+       * Format: bytes
+       * @description Token for getting the next page.
+       */
       nextPageToken?: string;
     };
     ListScheduleMatchingTimesResponse: {
       startTime?: string[];
     };
     ListSchedulesResponse: {
-      schedules?: components["schemas"]["ScheduleListEntry"][];
+      schedules?: components['schemas']['ScheduleListEntry'][];
       /** Format: bytes */
       nextPageToken?: string;
     };
     ListSearchAttributesResponse: {
       /** @description Mapping between custom (user-registered) search attribute name to its IndexedValueType. */
       customAttributes?: {
-        [key: string]: "INDEXED_VALUE_TYPE_UNSPECIFIED" | "INDEXED_VALUE_TYPE_TEXT" | "INDEXED_VALUE_TYPE_KEYWORD" | "INDEXED_VALUE_TYPE_INT" | "INDEXED_VALUE_TYPE_DOUBLE" | "INDEXED_VALUE_TYPE_BOOL" | "INDEXED_VALUE_TYPE_DATETIME" | "INDEXED_VALUE_TYPE_KEYWORD_LIST";
+        [key: string]:
+          | 'INDEXED_VALUE_TYPE_UNSPECIFIED'
+          | 'INDEXED_VALUE_TYPE_TEXT'
+          | 'INDEXED_VALUE_TYPE_KEYWORD'
+          | 'INDEXED_VALUE_TYPE_INT'
+          | 'INDEXED_VALUE_TYPE_DOUBLE'
+          | 'INDEXED_VALUE_TYPE_BOOL'
+          | 'INDEXED_VALUE_TYPE_DATETIME'
+          | 'INDEXED_VALUE_TYPE_KEYWORD_LIST';
       };
       /** @description Mapping between system (predefined) search attribute name to its IndexedValueType. */
       systemAttributes?: {
-        [key: string]: "INDEXED_VALUE_TYPE_UNSPECIFIED" | "INDEXED_VALUE_TYPE_TEXT" | "INDEXED_VALUE_TYPE_KEYWORD" | "INDEXED_VALUE_TYPE_INT" | "INDEXED_VALUE_TYPE_DOUBLE" | "INDEXED_VALUE_TYPE_BOOL" | "INDEXED_VALUE_TYPE_DATETIME" | "INDEXED_VALUE_TYPE_KEYWORD_LIST";
+        [key: string]:
+          | 'INDEXED_VALUE_TYPE_UNSPECIFIED'
+          | 'INDEXED_VALUE_TYPE_TEXT'
+          | 'INDEXED_VALUE_TYPE_KEYWORD'
+          | 'INDEXED_VALUE_TYPE_INT'
+          | 'INDEXED_VALUE_TYPE_DOUBLE'
+          | 'INDEXED_VALUE_TYPE_BOOL'
+          | 'INDEXED_VALUE_TYPE_DATETIME'
+          | 'INDEXED_VALUE_TYPE_KEYWORD_LIST';
       };
       /** @description Mapping from the attribute name to the visibility storage native type. */
       storageSchema?: {
@@ -1303,7 +1789,7 @@ export interface components {
       };
     };
     ListWorkflowExecutionsResponse: {
-      executions?: components["schemas"]["WorkflowExecutionInfo"][];
+      executions?: components['schemas']['WorkflowExecutionInfo'][];
       /** Format: bytes */
       nextPageToken?: string;
     };
@@ -1312,18 +1798,18 @@ export interface components {
       markerName?: string;
       /** @description Serialized information recorded in the marker */
       details?: {
-        [key: string]: components["schemas"]["Payloads"];
+        [key: string]: components['schemas']['Payloads'];
       };
       /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
       workflowTaskCompletedEventId?: string;
-      header?: components["schemas"]["Header"];
+      header?: components['schemas']['Header'];
       /** @description Some uses of markers, like a local activity, could "fail". If they did that is recorded here. */
-      failure?: components["schemas"]["Failure"];
+      failure?: components['schemas']['Failure'];
     };
     /** @description A user-defined set of *unindexed* fields that are exposed when listing/searching workflows */
     Memo: {
       fields?: {
-        [key: string]: components["schemas"]["Payload"];
+        [key: string]: components['schemas']['Payload'];
       };
     };
     /**
@@ -1344,7 +1830,7 @@ export interface components {
        * @description The opaque data carried by this message. The protocol type can be
        *  extracted from the package name of the message carried inside the Any.
        */
-      body?: components["schemas"]["GoogleProtobufAny"];
+      body?: components['schemas']['GoogleProtobufAny'];
     };
     /** @description Metadata about a workflow execution update. */
     Meta: {
@@ -1368,20 +1854,26 @@ export interface components {
     };
     NamespaceConfig: {
       workflowExecutionRetentionTtl?: string;
-      badBinaries?: components["schemas"]["BadBinaries"];
+      badBinaries?: components['schemas']['BadBinaries'];
       /**
        * Format: enum
        * @description If unspecified (ARCHIVAL_STATE_UNSPECIFIED) then default server configuration is used.
        * @enum {string}
        */
-      historyArchivalState?: "ARCHIVAL_STATE_UNSPECIFIED" | "ARCHIVAL_STATE_DISABLED" | "ARCHIVAL_STATE_ENABLED";
+      historyArchivalState?:
+        | 'ARCHIVAL_STATE_UNSPECIFIED'
+        | 'ARCHIVAL_STATE_DISABLED'
+        | 'ARCHIVAL_STATE_ENABLED';
       historyArchivalUri?: string;
       /**
        * Format: enum
        * @description If unspecified (ARCHIVAL_STATE_UNSPECIFIED) then default server configuration is used.
        * @enum {string}
        */
-      visibilityArchivalState?: "ARCHIVAL_STATE_UNSPECIFIED" | "ARCHIVAL_STATE_DISABLED" | "ARCHIVAL_STATE_ENABLED";
+      visibilityArchivalState?:
+        | 'ARCHIVAL_STATE_UNSPECIFIED'
+        | 'ARCHIVAL_STATE_DISABLED'
+        | 'ARCHIVAL_STATE_ENABLED';
       visibilityArchivalUri?: string;
       /** @description Map from field name to alias. */
       customSearchAttributeAliases?: {
@@ -1394,7 +1886,11 @@ export interface components {
        * Format: enum
        * @enum {string}
        */
-      state?: "NAMESPACE_STATE_UNSPECIFIED" | "NAMESPACE_STATE_REGISTERED" | "NAMESPACE_STATE_DEPRECATED" | "NAMESPACE_STATE_DELETED";
+      state?:
+        | 'NAMESPACE_STATE_UNSPECIFIED'
+        | 'NAMESPACE_STATE_REGISTERED'
+        | 'NAMESPACE_STATE_DEPRECATED'
+        | 'NAMESPACE_STATE_DELETED';
       description?: string;
       ownerEmail?: string;
       /** @description A key-value map for any customized purpose. */
@@ -1403,7 +1899,7 @@ export interface components {
       };
       id?: string;
       /** @description All capabilities the namespace supports. */
-      capabilities?: components["schemas"]["NamespaceInfo_Capabilities"];
+      capabilities?: components['schemas']['NamespaceInfo_Capabilities'];
       /**
        * @description Whether scheduled workflows are supported on this namespace. This is only needed
        *  temporarily while the feature is experimental, so we can give it a high tag.
@@ -1421,12 +1917,15 @@ export interface components {
     };
     NamespaceReplicationConfig: {
       activeClusterName?: string;
-      clusters?: components["schemas"]["ClusterReplicationConfig"][];
+      clusters?: components['schemas']['ClusterReplicationConfig'][];
       /**
        * Format: enum
        * @enum {string}
        */
-      state?: "REPLICATION_STATE_UNSPECIFIED" | "REPLICATION_STATE_NORMAL" | "REPLICATION_STATE_HANDOVER";
+      state?:
+        | 'REPLICATION_STATE_UNSPECIFIED'
+        | 'REPLICATION_STATE_NORMAL'
+        | 'REPLICATION_STATE_HANDOVER';
     };
     /**
      * @description NewWorkflowExecutionInfo is a shared message that encapsulates all the
@@ -1434,10 +1933,10 @@ export interface components {
      */
     NewWorkflowExecutionInfo: {
       workflowId?: string;
-      workflowType?: components["schemas"]["WorkflowType"];
-      taskQueue?: components["schemas"]["TaskQueue"];
+      workflowType?: components['schemas']['WorkflowType'];
+      taskQueue?: components['schemas']['TaskQueue'];
       /** @description Serialized arguments to the workflow. */
-      input?: components["schemas"]["Payloads"];
+      input?: components['schemas']['Payloads'];
       /** @description Total workflow execution timeout including retries and continue as new. */
       workflowExecutionTimeout?: string;
       /** @description Timeout of a single workflow run. */
@@ -1449,26 +1948,209 @@ export interface components {
        * @description Default: WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE.
        * @enum {string}
        */
-      workflowIdReusePolicy?: "WORKFLOW_ID_REUSE_POLICY_UNSPECIFIED" | "WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE" | "WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY" | "WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE" | "WORKFLOW_ID_REUSE_POLICY_TERMINATE_IF_RUNNING";
+      workflowIdReusePolicy?:
+        | 'WORKFLOW_ID_REUSE_POLICY_UNSPECIFIED'
+        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE'
+        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY'
+        | 'WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE'
+        | 'WORKFLOW_ID_REUSE_POLICY_TERMINATE_IF_RUNNING';
       /** @description The retry policy for the workflow. Will never exceed `workflow_execution_timeout`. */
-      retryPolicy?: components["schemas"]["RetryPolicy"];
+      retryPolicy?: components['schemas']['RetryPolicy'];
       /** @description See https://docs.temporal.io/docs/content/what-is-a-temporal-cron-job/ */
       cronSchedule?: string;
-      memo?: components["schemas"]["Memo"];
-      searchAttributes?: components["schemas"]["SearchAttributes"];
-      header?: components["schemas"]["Header"];
+      memo?: components['schemas']['Memo'];
+      searchAttributes?: components['schemas']['SearchAttributes'];
+      header?: components['schemas']['Header'];
+    };
+    NexusOperationCancelRequestedEventAttributes: {
+      /** @description The id of the `NEXUS_OPERATION_SCHEDULED` event this cancel request corresponds to. */
+      scheduledEventId?: string;
+      /**
+       * @description The `WORKFLOW_TASK_COMPLETED` event that the corresponding RequestCancelNexusOperation command was reported
+       *  with.
+       */
+      workflowTaskCompletedEventId?: string;
+    };
+    /** @description Nexus operation completed as canceled. May or may not have been due to a cancellation request by the workflow. */
+    NexusOperationCanceledEventAttributes: {
+      /** @description The ID of the `NEXUS_OPERATION_SCHEDULED` event. Uniquely identifies this operation. */
+      scheduledEventId?: string;
+      /** @description Cancellation details. */
+      failure?: components['schemas']['Failure'];
+    };
+    /** @description NexusOperationCancellationInfo contains the state of a nexus operation cancellation. */
+    NexusOperationCancellationInfo: {
+      /**
+       * Format: date-time
+       * @description The time when cancellation was requested.
+       */
+      requestedTime?: string;
+      /**
+       * Format: enum
+       * @enum {string}
+       */
+      state?:
+        | 'NEXUS_OPERATION_CANCELLATION_STATE_UNSPECIFIED'
+        | 'NEXUS_OPERATION_CANCELLATION_STATE_SCHEDULED'
+        | 'NEXUS_OPERATION_CANCELLATION_STATE_BACKING_OFF'
+        | 'NEXUS_OPERATION_CANCELLATION_STATE_SUCCEEDED'
+        | 'NEXUS_OPERATION_CANCELLATION_STATE_FAILED'
+        | 'NEXUS_OPERATION_CANCELLATION_STATE_TIMED_OUT';
+      /**
+       * Format: int32
+       * @description The number of attempts made to deliver the cancel operation request.
+       *  This number represents a minimum bound since the attempt is incremented after the request completes.
+       */
+      attempt?: number;
+      /**
+       * Format: date-time
+       * @description The time when the last attempt completed.
+       */
+      lastAttemptCompleteTime?: string;
+      /** @description The last attempt's failure, if any. */
+      lastAttemptFailure?: components['schemas']['Failure'];
+      /**
+       * Format: date-time
+       * @description The time when the next attempt is scheduled.
+       */
+      nextAttemptScheduleTime?: string;
+    };
+    /** @description Nexus operation completed successfully. */
+    NexusOperationCompletedEventAttributes: {
+      /** @description The ID of the `NEXUS_OPERATION_SCHEDULED` event. Uniquely identifies this operation. */
+      scheduledEventId?: string;
+      /**
+       * @description Serialized result of the Nexus operation. The response of the Nexus handler.
+       *  Delivered either via a completion callback or as a response to a synchronous operation.
+       */
+      result?: components['schemas']['Payload'];
+    };
+    /** @description Nexus operation failed. */
+    NexusOperationFailedEventAttributes: {
+      /** @description The ID of the `NEXUS_OPERATION_SCHEDULED` event. Uniquely identifies this operation. */
+      scheduledEventId?: string;
+      /** @description Failure details. A NexusOperationFailureInfo wrapping an ApplicationFailureInfo. */
+      failure?: components['schemas']['Failure'];
+    };
+    NexusOperationFailureInfo: {
+      /** @description The NexusOperationScheduled event ID. */
+      scheduledEventId?: string;
+      /** @description Service name. */
+      service?: string;
+      /** @description Operation name. */
+      operation?: string;
+      /** @description Operation ID - may be empty if the operation completed synchronously. */
+      operationId?: string;
+    };
+    /** @description Event marking that an operation was scheduled by a workflow via the ScheduleNexusOperation command. */
+    NexusOperationScheduledEventAttributes: {
+      /** @description Service name, resolved to a URL and a call config via the namespace's outgoing service registry. */
+      service?: string;
+      /** @description Operation name. */
+      operation?: string;
+      /**
+       * @description Input for the operation. The server converts this into Nexus request content and the appropriate content headers
+       *  internally when sending the StartOperation request. On the handler side, if it is also backed by Temporal, the
+       *  content is transformed back to the original Payload stored in this event.
+       */
+      input?: components['schemas']['Payload'];
+      /**
+       * @description Schedule-to-close timeout for this operation.
+       *  Indicates how long the caller is willing to wait for operation completion.
+       *  Calls are retried internally by the server.
+       *  (-- api-linter: core::0140::prepositions=disabled
+       *      aip.dev/not-precedent: "to" is used to indicate interval. --)
+       */
+      scheduleToCloseTimeout?: string;
+      /**
+       * @description Header to attach to the Nexus request. Note these headers are not the same as Temporal headers on internal
+       *  activities and child workflows, these are transmitted to Nexus operations that may be external and are not
+       *  traditional payloads.
+       */
+      nexusHeader?: {
+        [key: string]: string;
+      };
+      /** @description The `WORKFLOW_TASK_COMPLETED` event that the corresponding ScheduleNexusOperation command was reported with. */
+      workflowTaskCompletedEventId?: string;
+      /**
+       * @description A unique ID generated by the history service upon creation of this event.
+       *  The ID will be transmitted with all nexus StartOperation requests and is used as an idempotentency key.
+       */
+      requestId?: string;
+    };
+    /**
+     * @description Event marking an asynchronous operation was started by the responding Nexus handler.
+     *  If the operation completes synchronously, this event is not generated.
+     *  In rare situations, such as request timeouts, the service may fail to record the actual start time and will fabricate
+     *  this event upon receiving the operation completion via callback.
+     */
+    NexusOperationStartedEventAttributes: {
+      /** @description The ID of the `NEXUS_OPERATION_SCHEDULED` event this task corresponds to. */
+      scheduledEventId?: string;
+      /**
+       * @description The operation ID returned by the Nexus handler in the response to the StartOperation request.
+       *  This ID is used when canceling the operation.
+       */
+      operationId?: string;
+    };
+    /** @description Nexus operation timed out. */
+    NexusOperationTimedOutEventAttributes: {
+      /** @description The ID of the `NEXUS_OPERATION_SCHEDULED` event. Uniquely identifies this operation. */
+      scheduledEventId?: string;
+      /** @description Failure details. A NexusOperationFailureInfo wrapping a CanceledFailureInfo. */
+      failure?: components['schemas']['Failure'];
     };
     /** @description The outcome of a workflow update - success or failure. */
     Outcome: {
-      success?: components["schemas"]["Payloads"];
-      failure?: components["schemas"]["Failure"];
+      success?: components['schemas']['Payloads'];
+      failure?: components['schemas']['Failure'];
+    };
+    /**
+     * @description A per-namespace binding from service name to URL that is used by the service to invoke Nexus requests that are
+     *  initiated by workflows.
+     */
+    OutgoingService: {
+      /** @description Data version for this service, incremented for every mutation. */
+      version?: string;
+      /** @description Name of the service */
+      name?: string;
+      /** @description Spec for the service. */
+      spec?: components['schemas']['OutgoingServiceSpec'];
+      /**
+       * Format: date-time
+       * @description The date and time when the service was created.
+       *  (-- api-linter: core::0142::time-field-names=disabled
+       *      aip.dev/not-precedent: Not following linter rules. --)
+       */
+      createdTime?: string;
+      /**
+       * Format: date-time
+       * @description The date and time when the service was last modified.
+       *  Will not be set if the service has never been modified.
+       *  (-- api-linter: core::0142::time-field-names=disabled
+       *      aip.dev/not-precedent: Not following linter rules. --)
+       */
+      lastModifiedTime?: string;
+    };
+    /** @description Contains mutable fields for an OutgoingService. */
+    OutgoingServiceSpec: {
+      /** @description URL to invoke requests. */
+      url?: string;
+      /**
+       * @description Callback URL that is attached to every StartOperation request for this service.
+       *  The URL should be accessible to the handler of the StartOperation requests.
+       *  The service handles callbacks in the /api/v1/namespaces/{namespace_name}/nexus/callback route. Note that if the
+       *  namespace is renamed this URL will no longer be valid.
+       *  See https://github.com/nexus-rpc/api/blob/main/SPEC.md#query-parameters for more information.
+       */
+      publicCallbackUrl?: string;
     };
     PatchScheduleRequest: {
       /** @description The namespace of the schedule to patch. */
       namespace?: string;
       /** @description The id of the schedule to patch. */
       scheduleId?: string;
-      patch?: components["schemas"]["SchedulePatch"];
+      patch?: components['schemas']['SchedulePatch'];
       /** @description The identity of the client who initiated this request. */
       identity?: string;
       /** @description A unique identifier for this update request for idempotence. Typically UUIDv4. */
@@ -1483,17 +2165,21 @@ export interface components {
     Payload: unknown;
     /** @description See `Payload` */
     Payloads: {
-      payloads?: components["schemas"]["Payload"][];
+      payloads?: components['schemas']['Payload'][];
     };
     PendingActivityInfo: {
       activityId?: string;
-      activityType?: components["schemas"]["ActivityType"];
+      activityType?: components['schemas']['ActivityType'];
       /**
        * Format: enum
        * @enum {string}
        */
-      state?: "PENDING_ACTIVITY_STATE_UNSPECIFIED" | "PENDING_ACTIVITY_STATE_SCHEDULED" | "PENDING_ACTIVITY_STATE_STARTED" | "PENDING_ACTIVITY_STATE_CANCEL_REQUESTED";
-      heartbeatDetails?: components["schemas"]["Payloads"];
+      state?:
+        | 'PENDING_ACTIVITY_STATE_UNSPECIFIED'
+        | 'PENDING_ACTIVITY_STATE_SCHEDULED'
+        | 'PENDING_ACTIVITY_STATE_STARTED'
+        | 'PENDING_ACTIVITY_STATE_CANCEL_REQUESTED';
+      heartbeatDetails?: components['schemas']['Payloads'];
       /** Format: date-time */
       lastHeartbeatTime?: string;
       /** Format: date-time */
@@ -1506,8 +2192,17 @@ export interface components {
       scheduledTime?: string;
       /** Format: date-time */
       expirationTime?: string;
-      lastFailure?: components["schemas"]["Failure"];
+      lastFailure?: components['schemas']['Failure'];
       lastWorkerIdentity?: string;
+      /**
+       * @description This means the activity is independently versioned and not bound to the build ID of its workflow.
+       *  The activity will use the build id in this field instead.
+       *  If the task fails and is scheduled again, the assigned build ID may change according to the latest versioning
+       *  rules.
+       */
+      lastIndependentlyAssignedBuildId?: string;
+      /** @description The version stamp of the worker to whom this activity was most recently dispatched */
+      lastWorkerVersionStamp?: components['schemas']['WorkerVersionStamp'];
     };
     PendingChildExecutionInfo: {
       workflowId?: string;
@@ -1519,14 +2214,73 @@ export interface components {
        * @description Default: PARENT_CLOSE_POLICY_TERMINATE.
        * @enum {string}
        */
-      parentClosePolicy?: "PARENT_CLOSE_POLICY_UNSPECIFIED" | "PARENT_CLOSE_POLICY_TERMINATE" | "PARENT_CLOSE_POLICY_ABANDON" | "PARENT_CLOSE_POLICY_REQUEST_CANCEL";
+      parentClosePolicy?:
+        | 'PARENT_CLOSE_POLICY_UNSPECIFIED'
+        | 'PARENT_CLOSE_POLICY_TERMINATE'
+        | 'PARENT_CLOSE_POLICY_ABANDON'
+        | 'PARENT_CLOSE_POLICY_REQUEST_CANCEL';
+    };
+    /** @description PendingNexusOperationInfo contains the state of a pending Nexus operation. */
+    PendingNexusOperationInfo: {
+      /**
+       * @description Service name.
+       *  Resolved to a URL via the outgoing service registry for this workflow's namespace.
+       */
+      service?: string;
+      /** @description Operation name. */
+      operation?: string;
+      /** @description Operation ID. Only set for asynchronous operations after a successful StartOperation call. */
+      operationId?: string;
+      /**
+       * @description Schedule-to-close timeout for this operation.
+       *  This is the only timeout settable by a workflow.
+       *  (-- api-linter: core::0140::prepositions=disabled
+       *      aip.dev/not-precedent: "to" is used to indicate interval. --)
+       */
+      scheduleToCloseTimeout?: string;
+      /**
+       * Format: date-time
+       * @description The time when the operation was scheduled.
+       */
+      scheduledTime?: string;
+      /**
+       * Format: enum
+       * @enum {string}
+       */
+      state?:
+        | 'PENDING_NEXUS_OPERATION_STATE_UNSPECIFIED'
+        | 'PENDING_NEXUS_OPERATION_STATE_SCHEDULED'
+        | 'PENDING_NEXUS_OPERATION_STATE_BACKING_OFF'
+        | 'PENDING_NEXUS_OPERATION_STATE_STARTED';
+      /**
+       * Format: int32
+       * @description The number of attempts made to deliver the start operation request.
+       *  This number represents a minimum bound since the attempt is incremented after the request completes.
+       */
+      attempt?: number;
+      /**
+       * Format: date-time
+       * @description The time when the last attempt completed.
+       */
+      lastAttemptCompleteTime?: string;
+      /** @description The last attempt's failure, if any. */
+      lastAttemptFailure?: components['schemas']['Failure'];
+      /**
+       * Format: date-time
+       * @description The time when the next attempt is scheduled.
+       */
+      nextAttemptScheduleTime?: string;
+      cancellationInfo?: components['schemas']['NexusOperationCancellationInfo'];
     };
     PendingWorkflowTaskInfo: {
       /**
        * Format: enum
        * @enum {string}
        */
-      state?: "PENDING_WORKFLOW_TASK_STATE_UNSPECIFIED" | "PENDING_WORKFLOW_TASK_STATE_SCHEDULED" | "PENDING_WORKFLOW_TASK_STATE_STARTED";
+      state?:
+        | 'PENDING_WORKFLOW_TASK_STATE_UNSPECIFIED'
+        | 'PENDING_WORKFLOW_TASK_STATE_SCHEDULED'
+        | 'PENDING_WORKFLOW_TASK_STATE_STARTED';
       /** Format: date-time */
       scheduledTime?: string;
       /**
@@ -1548,8 +2302,8 @@ export interface components {
        * @description A unique identifier for this task
        */
       taskToken?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
-      workflowType?: components["schemas"]["WorkflowType"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
+      workflowType?: components['schemas']['WorkflowType'];
       /**
        * @description The last workflow task started event which was processed by some worker for this execution.
        *  Will be zero if no task has ever started.
@@ -1577,7 +2331,7 @@ export interface components {
        *  are sent to workers who have signaled that they are using a sticky queue when completing
        *  a workflow task.
        */
-      history?: components["schemas"]["History"];
+      history?: components['schemas']['History'];
       /**
        * Format: bytes
        * @description Will be set if there are more history events than were included in this response. Such events
@@ -1590,12 +2344,12 @@ export interface components {
        *  closed workflows) then the `history` field will be populated with the entire history. It
        *  may also be populated if this task originates on a non-sticky queue.
        */
-      query?: components["schemas"]["WorkflowQuery"];
+      query?: components['schemas']['WorkflowQuery'];
       /**
        * @description The task queue this task originated from, which will always be the original non-sticky name
        *  for the queue, even if this response came from polling a sticky queue.
        */
-      workflowExecutionTaskQueue?: components["schemas"]["TaskQueue"];
+      workflowExecutionTaskQueue?: components['schemas']['TaskQueue'];
       /**
        * Format: date-time
        * @description When this task was scheduled by the server
@@ -1611,10 +2365,10 @@ export interface components {
        *  attached to `RespondWorkflowTaskCompletedRequest::query_results`
        */
       queries?: {
-        [key: string]: components["schemas"]["WorkflowQuery"];
+        [key: string]: components['schemas']['WorkflowQuery'];
       };
       /** @description Protocol messages piggybacking on a WFT as a transport */
-      messages?: components["schemas"]["Message"][];
+      messages?: components['schemas']['Message'][];
     };
     PollerInfo: {
       /** Format: date-time */
@@ -1626,30 +2380,49 @@ export interface components {
        * @description If a worker has opted into the worker versioning feature while polling, its capabilities will
        *  appear here.
        */
-      workerVersionCapabilities?: components["schemas"]["WorkerVersionCapabilities"];
+      workerVersionCapabilities?: components['schemas']['WorkerVersionCapabilities'];
     };
     QueryRejected: {
       /**
        * Format: enum
        * @enum {string}
        */
-      status?: "WORKFLOW_EXECUTION_STATUS_UNSPECIFIED" | "WORKFLOW_EXECUTION_STATUS_RUNNING" | "WORKFLOW_EXECUTION_STATUS_COMPLETED" | "WORKFLOW_EXECUTION_STATUS_FAILED" | "WORKFLOW_EXECUTION_STATUS_CANCELED" | "WORKFLOW_EXECUTION_STATUS_TERMINATED" | "WORKFLOW_EXECUTION_STATUS_CONTINUED_AS_NEW" | "WORKFLOW_EXECUTION_STATUS_TIMED_OUT";
+      status?:
+        | 'WORKFLOW_EXECUTION_STATUS_UNSPECIFIED'
+        | 'WORKFLOW_EXECUTION_STATUS_RUNNING'
+        | 'WORKFLOW_EXECUTION_STATUS_COMPLETED'
+        | 'WORKFLOW_EXECUTION_STATUS_FAILED'
+        | 'WORKFLOW_EXECUTION_STATUS_CANCELED'
+        | 'WORKFLOW_EXECUTION_STATUS_TERMINATED'
+        | 'WORKFLOW_EXECUTION_STATUS_CONTINUED_AS_NEW'
+        | 'WORKFLOW_EXECUTION_STATUS_TIMED_OUT';
     };
     QueryWorkflowRequest: {
       namespace?: string;
-      execution?: components["schemas"]["WorkflowExecution"];
-      query?: components["schemas"]["WorkflowQuery"];
+      execution?: components['schemas']['WorkflowExecution'];
+      query?: components['schemas']['WorkflowQuery'];
       /**
        * Format: enum
        * @description QueryRejectCondition can used to reject the query if workflow state does not satisfy condition.
        *  Default: QUERY_REJECT_CONDITION_NONE.
        * @enum {string}
        */
-      queryRejectCondition?: "QUERY_REJECT_CONDITION_UNSPECIFIED" | "QUERY_REJECT_CONDITION_NONE" | "QUERY_REJECT_CONDITION_NOT_OPEN" | "QUERY_REJECT_CONDITION_NOT_COMPLETED_CLEANLY";
+      queryRejectCondition?:
+        | 'QUERY_REJECT_CONDITION_UNSPECIFIED'
+        | 'QUERY_REJECT_CONDITION_NONE'
+        | 'QUERY_REJECT_CONDITION_NOT_OPEN'
+        | 'QUERY_REJECT_CONDITION_NOT_COMPLETED_CLEANLY';
     };
     QueryWorkflowResponse: {
-      queryResult?: components["schemas"]["Payloads"];
-      queryRejected?: components["schemas"]["QueryRejected"];
+      queryResult?: components['schemas']['Payloads'];
+      queryRejected?: components['schemas']['QueryRejected'];
+    };
+    RampByPercentage: {
+      /**
+       * Format: float
+       * @description Acceptable range is [0,100).
+       */
+      rampPercentage?: number;
     };
     /**
      * @description Range represents a set of integer values, used to match fields of a calendar
@@ -1684,7 +2457,7 @@ export interface components {
       /** @description Id of the activity we're heartbeating */
       activityId?: string;
       /** @description Arbitrary data, of which the most recent call is kept, to store for this activity */
-      details?: components["schemas"]["Payloads"];
+      details?: components['schemas']['Payloads'];
       /** @description The identity of the worker/client */
       identity?: string;
     };
@@ -1702,7 +2475,7 @@ export interface components {
        */
       taskToken?: string;
       /** @description Arbitrary data, of which the most recent call is kept, to store for this activity */
-      details?: components["schemas"]["Payloads"];
+      details?: components['schemas']['Payloads'];
       /** @description The identity of the worker/client */
       identity?: string;
       namespace?: string;
@@ -1719,7 +2492,7 @@ export interface components {
       description?: string;
       ownerEmail?: string;
       workflowExecutionRetentionPeriod?: string;
-      clusters?: components["schemas"]["ClusterReplicationConfig"][];
+      clusters?: components['schemas']['ClusterReplicationConfig'][];
       activeClusterName?: string;
       /** @description A key-value map for any customized purpose. */
       data?: {
@@ -1732,14 +2505,20 @@ export interface components {
        * @description If unspecified (ARCHIVAL_STATE_UNSPECIFIED) then default server configuration is used.
        * @enum {string}
        */
-      historyArchivalState?: "ARCHIVAL_STATE_UNSPECIFIED" | "ARCHIVAL_STATE_DISABLED" | "ARCHIVAL_STATE_ENABLED";
+      historyArchivalState?:
+        | 'ARCHIVAL_STATE_UNSPECIFIED'
+        | 'ARCHIVAL_STATE_DISABLED'
+        | 'ARCHIVAL_STATE_ENABLED';
       historyArchivalUri?: string;
       /**
        * Format: enum
        * @description If unspecified (ARCHIVAL_STATE_UNSPECIFIED) then default server configuration is used.
        * @enum {string}
        */
-      visibilityArchivalState?: "ARCHIVAL_STATE_UNSPECIFIED" | "ARCHIVAL_STATE_DISABLED" | "ARCHIVAL_STATE_ENABLED";
+      visibilityArchivalState?:
+        | 'ARCHIVAL_STATE_UNSPECIFIED'
+        | 'ARCHIVAL_STATE_DISABLED'
+        | 'ARCHIVAL_STATE_ENABLED';
       visibilityArchivalUri?: string;
     };
     RegisterNamespaceResponse: Record<string, never>;
@@ -1752,15 +2531,18 @@ export interface components {
     };
     /** @description The client request that triggers a workflow execution update */
     Request: {
-      meta?: components["schemas"]["Meta"];
-      input?: components["schemas"]["Input"];
+      meta?: components['schemas']['Meta'];
+      input?: components['schemas']['Input'];
     };
     RequestCancelExternalWorkflowExecutionFailedEventAttributes: {
       /**
        * Format: enum
        * @enum {string}
        */
-      cause?: "CANCEL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_UNSPECIFIED" | "CANCEL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_EXTERNAL_WORKFLOW_EXECUTION_NOT_FOUND" | "CANCEL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_NAMESPACE_NOT_FOUND";
+      cause?:
+        | 'CANCEL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_UNSPECIFIED'
+        | 'CANCEL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_EXTERNAL_WORKFLOW_EXECUTION_NOT_FOUND'
+        | 'CANCEL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_NAMESPACE_NOT_FOUND';
       /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
       workflowTaskCompletedEventId?: string;
       /**
@@ -1769,7 +2551,7 @@ export interface components {
        */
       namespace?: string;
       namespaceId?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
       /**
        * @description id of the `REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_INITIATED` event this failure
        *  corresponds to
@@ -1787,7 +2569,7 @@ export interface components {
        */
       namespace?: string;
       namespaceId?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
       /** @description Deprecated */
       control?: string;
       /**
@@ -1800,7 +2582,7 @@ export interface components {
     };
     RequestCancelWorkflowExecutionRequest: {
       namespace?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
       /** @description The identity of the worker/client */
       identity?: string;
       /** @description Used to de-dupe cancellation requests */
@@ -1839,7 +2621,11 @@ export interface components {
        * @description History event reapply options.
        * @enum {string}
        */
-      resetReapplyType?: "RESET_REAPPLY_TYPE_UNSPECIFIED" | "RESET_REAPPLY_TYPE_SIGNAL" | "RESET_REAPPLY_TYPE_NONE" | "RESET_REAPPLY_TYPE_ALL_ELIGIBLE";
+      resetReapplyType?:
+        | 'RESET_REAPPLY_TYPE_UNSPECIFIED'
+        | 'RESET_REAPPLY_TYPE_SIGNAL'
+        | 'RESET_REAPPLY_TYPE_NONE'
+        | 'RESET_REAPPLY_TYPE_ALL_ELIGIBLE';
       /**
        * @description If true, limit the reset to only within the current run. (Applies to build_id targets and
        *  possibly others in the future.)
@@ -1873,11 +2659,11 @@ export interface components {
       resettable?: boolean;
     };
     ResetPoints: {
-      points?: components["schemas"]["ResetPointInfo"][];
+      points?: components['schemas']['ResetPointInfo'][];
     };
     ResetWorkflowExecutionRequest: {
       namespace?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
       reason?: string;
       /**
        * @description The id of a `WORKFLOW_TASK_COMPLETED`,`WORKFLOW_TASK_TIMED_OUT`, `WORKFLOW_TASK_FAILED`, or
@@ -1892,15 +2678,23 @@ export interface components {
        *  Default: RESET_REAPPLY_TYPE_ALL_ELIGIBLE
        * @enum {string}
        */
-      resetReapplyType?: "RESET_REAPPLY_TYPE_UNSPECIFIED" | "RESET_REAPPLY_TYPE_SIGNAL" | "RESET_REAPPLY_TYPE_NONE" | "RESET_REAPPLY_TYPE_ALL_ELIGIBLE";
+      resetReapplyType?:
+        | 'RESET_REAPPLY_TYPE_UNSPECIFIED'
+        | 'RESET_REAPPLY_TYPE_SIGNAL'
+        | 'RESET_REAPPLY_TYPE_NONE'
+        | 'RESET_REAPPLY_TYPE_ALL_ELIGIBLE';
       /** @description Event types not to be reapplied */
-      resetReapplyExcludeTypes?: ("RESET_REAPPLY_EXCLUDE_TYPE_UNSPECIFIED" | "RESET_REAPPLY_EXCLUDE_TYPE_SIGNAL" | "RESET_REAPPLY_EXCLUDE_TYPE_UPDATE")[];
+      resetReapplyExcludeTypes?: (
+        | 'RESET_REAPPLY_EXCLUDE_TYPE_UNSPECIFIED'
+        | 'RESET_REAPPLY_EXCLUDE_TYPE_SIGNAL'
+        | 'RESET_REAPPLY_EXCLUDE_TYPE_UPDATE'
+      )[];
     };
     ResetWorkflowExecutionResponse: {
       runId?: string;
     };
     ResetWorkflowFailureInfo: {
-      lastHeartbeatDetails?: components["schemas"]["Payloads"];
+      lastHeartbeatDetails?: components['schemas']['Payloads'];
     };
     RespondActivityTaskCanceledByIdRequest: {
       /** @description Namespace of the workflow which scheduled this activity */
@@ -1912,7 +2706,7 @@ export interface components {
       /** @description Id of the activity to confirm is cancelled */
       activityId?: string;
       /** @description Serialized additional information to attach to the cancellation */
-      details?: components["schemas"]["Payloads"];
+      details?: components['schemas']['Payloads'];
       /** @description The identity of the worker/client */
       identity?: string;
     };
@@ -1924,7 +2718,7 @@ export interface components {
        */
       taskToken?: string;
       /** @description Serialized additional information to attach to the cancellation */
-      details?: components["schemas"]["Payloads"];
+      details?: components['schemas']['Payloads'];
       /** @description The identity of the worker/client */
       identity?: string;
       namespace?: string;
@@ -1933,7 +2727,7 @@ export interface components {
        *  always be set by SDKs. Workers opting into versioning will also set the `use_versioning`
        *  field to true. See message docstrings for more.
        */
-      workerVersion?: components["schemas"]["WorkerVersionStamp"];
+      workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
     RespondActivityTaskCanceledResponse: Record<string, never>;
     RespondActivityTaskCompletedByIdRequest: {
@@ -1946,7 +2740,7 @@ export interface components {
       /** @description Id of the activity to complete */
       activityId?: string;
       /** @description The serialized result of activity execution */
-      result?: components["schemas"]["Payloads"];
+      result?: components['schemas']['Payloads'];
       /** @description The identity of the worker/client */
       identity?: string;
     };
@@ -1958,7 +2752,7 @@ export interface components {
        */
       taskToken?: string;
       /** @description The result of successfully executing the activity */
-      result?: components["schemas"]["Payloads"];
+      result?: components['schemas']['Payloads'];
       /** @description The identity of the worker/client */
       identity?: string;
       namespace?: string;
@@ -1967,7 +2761,7 @@ export interface components {
        *  always be set by SDKs. Workers opting into versioning will also set the `use_versioning`
        *  field to true. See message docstrings for more.
        */
-      workerVersion?: components["schemas"]["WorkerVersionStamp"];
+      workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
     RespondActivityTaskCompletedResponse: Record<string, never>;
     RespondActivityTaskFailedByIdRequest: {
@@ -1980,18 +2774,18 @@ export interface components {
       /** @description Id of the activity to fail */
       activityId?: string;
       /** @description Detailed failure information */
-      failure?: components["schemas"]["Failure"];
+      failure?: components['schemas']['Failure'];
       /** @description The identity of the worker/client */
       identity?: string;
       /** @description Additional details to be stored as last activity heartbeat */
-      lastHeartbeatDetails?: components["schemas"]["Payloads"];
+      lastHeartbeatDetails?: components['schemas']['Payloads'];
     };
     RespondActivityTaskFailedByIdResponse: {
       /**
        * @description Server validation failures could include
        *  last_heartbeat_details payload is too large, request failure is too large
        */
-      failures?: components["schemas"]["Failure"][];
+      failures?: components['schemas']['Failure'][];
     };
     RespondActivityTaskFailedRequest: {
       /**
@@ -2000,25 +2794,25 @@ export interface components {
        */
       taskToken?: string;
       /** @description Detailed failure information */
-      failure?: components["schemas"]["Failure"];
+      failure?: components['schemas']['Failure'];
       /** @description The identity of the worker/client */
       identity?: string;
       namespace?: string;
       /** @description Additional details to be stored as last activity heartbeat */
-      lastHeartbeatDetails?: components["schemas"]["Payloads"];
+      lastHeartbeatDetails?: components['schemas']['Payloads'];
       /**
        * @description Version info of the worker who processed this task. This message's `build_id` field should
        *  always be set by SDKs. Workers opting into versioning will also set the `use_versioning`
        *  field to true. See message docstrings for more.
        */
-      workerVersion?: components["schemas"]["WorkerVersionStamp"];
+      workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
     RespondActivityTaskFailedResponse: {
       /**
        * @description Server validation failures could include
        *  last_heartbeat_details payload is too large, request failure is too large
        */
-      failures?: components["schemas"]["Failure"][];
+      failures?: components['schemas']['Failure'][];
     };
     /** @description How retries ought to be handled, usable by both workflows and activities */
     RetryPolicy: {
@@ -2049,10 +2843,10 @@ export interface components {
       nonRetryableErrorTypes?: string[];
     };
     Schedule: {
-      spec?: components["schemas"]["ScheduleSpec"];
-      action?: components["schemas"]["ScheduleAction"];
-      policies?: components["schemas"]["SchedulePolicies"];
-      state?: components["schemas"]["ScheduleState"];
+      spec?: components['schemas']['ScheduleSpec'];
+      action?: components['schemas']['ScheduleAction'];
+      policies?: components['schemas']['SchedulePolicies'];
+      state?: components['schemas']['ScheduleState'];
     };
     ScheduleAction: {
       /**
@@ -2062,7 +2856,7 @@ export interface components {
        *  The workflow id of the started workflow may not match this exactly,
        *  it may have a timestamp appended for uniqueness.
        */
-      startWorkflow?: components["schemas"]["NewWorkflowExecutionInfo"];
+      startWorkflow?: components['schemas']['NewWorkflowExecutionInfo'];
     };
     ScheduleActionResult: {
       /**
@@ -2076,7 +2870,7 @@ export interface components {
        */
       actualTime?: string;
       /** @description If action was start_workflow: */
-      startWorkflowResult?: components["schemas"]["WorkflowExecution"];
+      startWorkflowResult?: components['schemas']['WorkflowExecution'];
     };
     ScheduleInfo: {
       /** @description Number of actions taken so far. */
@@ -2100,9 +2894,9 @@ export interface components {
        *  started by the schedule. If the workflows retried, did continue-as-new,
        *  or were reset, they might still be running but with a different run_id.
        */
-      runningWorkflows?: components["schemas"]["WorkflowExecution"][];
+      runningWorkflows?: components['schemas']['WorkflowExecution'][];
       /** @description Most recent ten actual action times (including manual triggers). */
-      recentActions?: components["schemas"]["ScheduleActionResult"][];
+      recentActions?: components['schemas']['ScheduleActionResult'][];
       /** @description Next ten scheduled action times. */
       futureActionTimes?: string[];
       /**
@@ -2117,9 +2911,9 @@ export interface components {
     /** @description ScheduleListEntry is returned by ListSchedules. */
     ScheduleListEntry: {
       scheduleId?: string;
-      memo?: components["schemas"]["Memo"];
-      searchAttributes?: components["schemas"]["SearchAttributes"];
-      info?: components["schemas"]["ScheduleListInfo"];
+      memo?: components['schemas']['Memo'];
+      searchAttributes?: components['schemas']['SearchAttributes'];
+      info?: components['schemas']['ScheduleListInfo'];
     };
     /**
      * @description ScheduleListInfo is an abbreviated set of values from Schedule and ScheduleInfo
@@ -2130,29 +2924,29 @@ export interface components {
        * @description From spec:
        *  Some fields are dropped from this copy of spec: timezone_data
        */
-      spec?: components["schemas"]["ScheduleSpec"];
+      spec?: components['schemas']['ScheduleSpec'];
       /**
        * @description From action:
        *  Action is a oneof field, but we need to encode this in JSON and oneof fields don't work
        *  well with JSON. If action is start_workflow, this is set:
        */
-      workflowType?: components["schemas"]["WorkflowType"];
+      workflowType?: components['schemas']['WorkflowType'];
       /** @description From state: */
       notes?: string;
       paused?: boolean;
       /** @description From info (maybe fewer entries): */
-      recentActions?: components["schemas"]["ScheduleActionResult"][];
+      recentActions?: components['schemas']['ScheduleActionResult'][];
       futureActionTimes?: string[];
     };
     SchedulePatch: {
       /** @description If set, trigger one action immediately. */
-      triggerImmediately?: components["schemas"]["TriggerImmediatelyRequest"];
+      triggerImmediately?: components['schemas']['TriggerImmediatelyRequest'];
       /**
        * @description If set, runs though the specified time period(s) and takes actions as if that time
        *  passed by right now, all at once. The overlap policy can be overridden for the
        *  scope of the backfill.
        */
-      backfillRequest?: components["schemas"]["BackfillRequest"][];
+      backfillRequest?: components['schemas']['BackfillRequest'][];
       /**
        * @description If set, change the state to paused or unpaused (respectively) and set the
        *  notes field to the value of the string.
@@ -2169,7 +2963,14 @@ export interface components {
        *  policy overrides the earlier policy.
        * @enum {string}
        */
-      overlapPolicy?: "SCHEDULE_OVERLAP_POLICY_UNSPECIFIED" | "SCHEDULE_OVERLAP_POLICY_SKIP" | "SCHEDULE_OVERLAP_POLICY_BUFFER_ONE" | "SCHEDULE_OVERLAP_POLICY_BUFFER_ALL" | "SCHEDULE_OVERLAP_POLICY_CANCEL_OTHER" | "SCHEDULE_OVERLAP_POLICY_TERMINATE_OTHER" | "SCHEDULE_OVERLAP_POLICY_ALLOW_ALL";
+      overlapPolicy?:
+        | 'SCHEDULE_OVERLAP_POLICY_UNSPECIFIED'
+        | 'SCHEDULE_OVERLAP_POLICY_SKIP'
+        | 'SCHEDULE_OVERLAP_POLICY_BUFFER_ONE'
+        | 'SCHEDULE_OVERLAP_POLICY_BUFFER_ALL'
+        | 'SCHEDULE_OVERLAP_POLICY_CANCEL_OTHER'
+        | 'SCHEDULE_OVERLAP_POLICY_TERMINATE_OTHER'
+        | 'SCHEDULE_OVERLAP_POLICY_ALLOW_ALL';
       /**
        * @description Policy for catchups:
        *  If the Temporal server misses an action due to one or more components
@@ -2212,7 +3013,7 @@ export interface components {
      */
     ScheduleSpec: {
       /** @description Calendar-based specifications of times. */
-      structuredCalendar?: components["schemas"]["StructuredCalendarSpec"][];
+      structuredCalendar?: components['schemas']['StructuredCalendarSpec'][];
       /**
        * @description cron_string holds a traditional cron specification as a string. It
        *  accepts 5, 6, or 7 fields, separated by spaces, and interprets them the
@@ -2237,12 +3038,12 @@ export interface components {
        */
       cronString?: string[];
       /** @description Calendar-based specifications of times. */
-      calendar?: components["schemas"]["CalendarSpec"][];
+      calendar?: components['schemas']['CalendarSpec'][];
       /** @description Interval-based specifications of times. */
-      interval?: components["schemas"]["IntervalSpec"][];
+      interval?: components['schemas']['IntervalSpec'][];
       /** @description Any timestamps matching any of exclude_* will be skipped. */
-      excludeCalendar?: components["schemas"]["CalendarSpec"][];
-      excludeStructuredCalendar?: components["schemas"]["StructuredCalendarSpec"][];
+      excludeCalendar?: components['schemas']['CalendarSpec'][];
+      excludeStructuredCalendar?: components['schemas']['StructuredCalendarSpec'][];
       /**
        * Format: date-time
        * @description If start_time is set, any timestamps before start_time will be skipped.
@@ -2314,7 +3115,7 @@ export interface components {
      */
     SearchAttributes: {
       indexedFields?: {
-        [key: string]: components["schemas"]["Payload"];
+        [key: string]: components['schemas']['Payload'];
       };
     };
     ServerFailureInfo: {
@@ -2325,7 +3126,11 @@ export interface components {
        * Format: enum
        * @enum {string}
        */
-      cause?: "SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_UNSPECIFIED" | "SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_EXTERNAL_WORKFLOW_EXECUTION_NOT_FOUND" | "SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_NAMESPACE_NOT_FOUND" | "SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_SIGNAL_COUNT_LIMIT_EXCEEDED";
+      cause?:
+        | 'SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_UNSPECIFIED'
+        | 'SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_EXTERNAL_WORKFLOW_EXECUTION_NOT_FOUND'
+        | 'SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_NAMESPACE_NOT_FOUND'
+        | 'SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_SIGNAL_COUNT_LIMIT_EXCEEDED';
       /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
       workflowTaskCompletedEventId?: string;
       /**
@@ -2334,7 +3139,7 @@ export interface components {
        */
       namespace?: string;
       namespaceId?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
       initiatedEventId?: string;
       /** @description Deprecated */
       control?: string;
@@ -2348,11 +3153,11 @@ export interface components {
        */
       namespace?: string;
       namespaceId?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
       /** @description name/type of the signal to fire in the external workflow */
       signalName?: string;
       /** @description Serialized arguments to provide to the signal handler */
-      input?: components["schemas"]["Payloads"];
+      input?: components['schemas']['Payloads'];
       /** @description Deprecated */
       control?: string;
       /**
@@ -2360,16 +3165,16 @@ export interface components {
        *  a child of the workflow which issued the request
        */
       childWorkflowOnly?: boolean;
-      header?: components["schemas"]["Header"];
+      header?: components['schemas']['Header'];
     };
     SignalWithStartWorkflowExecutionRequest: {
       namespace?: string;
       workflowId?: string;
-      workflowType?: components["schemas"]["WorkflowType"];
+      workflowType?: components['schemas']['WorkflowType'];
       /** @description The task queue to start this workflow on, if it will be started */
-      taskQueue?: components["schemas"]["TaskQueue"];
+      taskQueue?: components['schemas']['TaskQueue'];
       /** @description Serialized arguments to the workflow. These are passed as arguments to the workflow function. */
-      input?: components["schemas"]["Payloads"];
+      input?: components['schemas']['Payloads'];
       /** @description Total workflow execution timeout including retries and continue as new */
       workflowExecutionTimeout?: string;
       /** @description Timeout of a single workflow run */
@@ -2382,22 +3187,45 @@ export interface components {
       requestId?: string;
       /**
        * Format: enum
+       * @description Defines whether to allow re-using the workflow id from a previously *closed* workflow.
+       *  The default policy is WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE.
+       *
+       *  See `workflow_id_reuse_policy` for handling a workflow id duplication with a *running* workflow.
        * @enum {string}
        */
-      workflowIdReusePolicy?: "WORKFLOW_ID_REUSE_POLICY_UNSPECIFIED" | "WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE" | "WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY" | "WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE" | "WORKFLOW_ID_REUSE_POLICY_TERMINATE_IF_RUNNING";
+      workflowIdReusePolicy?:
+        | 'WORKFLOW_ID_REUSE_POLICY_UNSPECIFIED'
+        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE'
+        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY'
+        | 'WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE'
+        | 'WORKFLOW_ID_REUSE_POLICY_TERMINATE_IF_RUNNING';
+      /**
+       * Format: enum
+       * @description Defines how to resolve a workflow id conflict with a *running* workflow.
+       *  The default policy is WORKFLOW_ID_CONFLICT_POLICY_USE_EXISTING.
+       *  Note that WORKFLOW_ID_CONFLICT_POLICY_FAIL is an invalid option.
+       *
+       *  See `workflow_id_reuse_policy` for handling a workflow id duplication with a *closed* workflow.
+       * @enum {string}
+       */
+      workflowIdConflictPolicy?:
+        | 'WORKFLOW_ID_CONFLICT_POLICY_UNSPECIFIED'
+        | 'WORKFLOW_ID_CONFLICT_POLICY_FAIL'
+        | 'WORKFLOW_ID_CONFLICT_POLICY_USE_EXISTING'
+        | 'WORKFLOW_ID_CONFLICT_POLICY_TERMINATE_EXISTING';
       /** @description The workflow author-defined name of the signal to send to the workflow */
       signalName?: string;
       /** @description Serialized value(s) to provide with the signal */
-      signalInput?: components["schemas"]["Payloads"];
+      signalInput?: components['schemas']['Payloads'];
       /** @description Deprecated */
       control?: string;
-      /** @description Retry policy for the workflow Default: WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE. */
-      retryPolicy?: components["schemas"]["RetryPolicy"];
+      /** @description Retry policy for the workflow */
+      retryPolicy?: components['schemas']['RetryPolicy'];
       /** @description See https://docs.temporal.io/docs/content/what-is-a-temporal-cron-job/ */
       cronSchedule?: string;
-      memo?: components["schemas"]["Memo"];
-      searchAttributes?: components["schemas"]["SearchAttributes"];
-      header?: components["schemas"]["Header"];
+      memo?: components['schemas']['Memo'];
+      searchAttributes?: components['schemas']['SearchAttributes'];
+      header?: components['schemas']['Header'];
       /**
        * @description Time to wait before dispatching the first workflow task. Cannot be used with `cron_schedule`.
        *  Note that the signal will be delivered with the first workflow task. If the workflow gets
@@ -2411,15 +3239,18 @@ export interface components {
       skipGenerateWorkflowTask?: boolean;
     };
     SignalWithStartWorkflowExecutionResponse: {
+      /** @description The run id of the workflow that was started - or just signaled, if it was already running. */
       runId?: string;
+      /** @description If true, a new workflow was started. */
+      started?: boolean;
     };
     SignalWorkflowExecutionRequest: {
       namespace?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
       /** @description The workflow author-defined name of the signal to send to the workflow */
       signalName?: string;
       /** @description Serialized value(s) to provide with the signal */
-      input?: components["schemas"]["Payloads"];
+      input?: components['schemas']['Payloads'];
       /** @description The identity of the worker/client */
       identity?: string;
       /** @description Used to de-dupe sent signals */
@@ -2430,7 +3261,7 @@ export interface components {
        * @description Headers that are passed with the signal to the processing workflow.
        *  These can include things like auth or tracing tokens.
        */
-      header?: components["schemas"]["Header"];
+      header?: components['schemas']['Header'];
       /** @description Indicates that a new workflow task should not be generated when this signal is received. */
       skipGenerateWorkflowTask?: boolean;
     };
@@ -2451,7 +3282,7 @@ export interface components {
        * @description Executions to apply the batch operation
        *  This field and `visibility_query` are mutually exclusive
        */
-      executions?: components["schemas"]["WorkflowExecution"][];
+      executions?: components['schemas']['WorkflowExecution'][];
       /**
        * Format: float
        * @description Limit for the number of operations processed per second within this batch.
@@ -2462,11 +3293,11 @@ export interface components {
        *  server's configured limit.
        */
       maxOperationsPerSecond?: number;
-      terminationOperation?: components["schemas"]["BatchOperationTermination"];
-      signalOperation?: components["schemas"]["BatchOperationSignal"];
-      cancellationOperation?: components["schemas"]["BatchOperationCancellation"];
-      deletionOperation?: components["schemas"]["BatchOperationDeletion"];
-      resetOperation?: components["schemas"]["BatchOperationReset"];
+      terminationOperation?: components['schemas']['BatchOperationTermination'];
+      signalOperation?: components['schemas']['BatchOperationSignal'];
+      cancellationOperation?: components['schemas']['BatchOperationCancellation'];
+      deletionOperation?: components['schemas']['BatchOperationDeletion'];
+      resetOperation?: components['schemas']['BatchOperationReset'];
     };
     StartBatchOperationResponse: Record<string, never>;
     StartChildWorkflowExecutionFailedEventAttributes: {
@@ -2477,12 +3308,15 @@ export interface components {
       namespace?: string;
       namespaceId?: string;
       workflowId?: string;
-      workflowType?: components["schemas"]["WorkflowType"];
+      workflowType?: components['schemas']['WorkflowType'];
       /**
        * Format: enum
        * @enum {string}
        */
-      cause?: "START_CHILD_WORKFLOW_EXECUTION_FAILED_CAUSE_UNSPECIFIED" | "START_CHILD_WORKFLOW_EXECUTION_FAILED_CAUSE_WORKFLOW_ALREADY_EXISTS" | "START_CHILD_WORKFLOW_EXECUTION_FAILED_CAUSE_NAMESPACE_NOT_FOUND";
+      cause?:
+        | 'START_CHILD_WORKFLOW_EXECUTION_FAILED_CAUSE_UNSPECIFIED'
+        | 'START_CHILD_WORKFLOW_EXECUTION_FAILED_CAUSE_WORKFLOW_ALREADY_EXISTS'
+        | 'START_CHILD_WORKFLOW_EXECUTION_FAILED_CAUSE_NAMESPACE_NOT_FOUND';
       /** @description Deprecated */
       control?: string;
       /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
@@ -2498,9 +3332,9 @@ export interface components {
       namespace?: string;
       namespaceId?: string;
       workflowId?: string;
-      workflowType?: components["schemas"]["WorkflowType"];
-      taskQueue?: components["schemas"]["TaskQueue"];
-      input?: components["schemas"]["Payloads"];
+      workflowType?: components['schemas']['WorkflowType'];
+      taskQueue?: components['schemas']['TaskQueue'];
+      input?: components['schemas']['Payloads'];
       /** @description Total workflow execution timeout including retries and continue as new. */
       workflowExecutionTimeout?: string;
       /** @description Timeout of a single workflow run. */
@@ -2512,7 +3346,11 @@ export interface components {
        * @description Default: PARENT_CLOSE_POLICY_TERMINATE.
        * @enum {string}
        */
-      parentClosePolicy?: "PARENT_CLOSE_POLICY_UNSPECIFIED" | "PARENT_CLOSE_POLICY_TERMINATE" | "PARENT_CLOSE_POLICY_ABANDON" | "PARENT_CLOSE_POLICY_REQUEST_CANCEL";
+      parentClosePolicy?:
+        | 'PARENT_CLOSE_POLICY_UNSPECIFIED'
+        | 'PARENT_CLOSE_POLICY_TERMINATE'
+        | 'PARENT_CLOSE_POLICY_ABANDON'
+        | 'PARENT_CLOSE_POLICY_REQUEST_CANCEL';
       /** @description Deprecated */
       control?: string;
       /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
@@ -2522,27 +3360,31 @@ export interface components {
        * @description Default: WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE.
        * @enum {string}
        */
-      workflowIdReusePolicy?: "WORKFLOW_ID_REUSE_POLICY_UNSPECIFIED" | "WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE" | "WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY" | "WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE" | "WORKFLOW_ID_REUSE_POLICY_TERMINATE_IF_RUNNING";
-      retryPolicy?: components["schemas"]["RetryPolicy"];
+      workflowIdReusePolicy?:
+        | 'WORKFLOW_ID_REUSE_POLICY_UNSPECIFIED'
+        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE'
+        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY'
+        | 'WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE'
+        | 'WORKFLOW_ID_REUSE_POLICY_TERMINATE_IF_RUNNING';
+      retryPolicy?: components['schemas']['RetryPolicy'];
       /** @description If this child runs on a cron schedule, it will appear here */
       cronSchedule?: string;
-      header?: components["schemas"]["Header"];
-      memo?: components["schemas"]["Memo"];
-      searchAttributes?: components["schemas"]["SearchAttributes"];
+      header?: components['schemas']['Header'];
+      memo?: components['schemas']['Memo'];
+      searchAttributes?: components['schemas']['SearchAttributes'];
       /**
-       * @description If this is set, the workflow executing this command wishes to start the child workflow using
-       *  a version compatible with the version that this workflow most recently ran on, if such
-       *  behavior is possible.
+       * @description If this is set, the child workflow inherits the Build ID of the parent. Otherwise, the assignment
+       *  rules of the child's Task Queue will be used to independently assign a Build ID to it.
        */
-      useCompatibleVersion?: boolean;
+      inheritBuildId?: boolean;
     };
     StartWorkflowExecutionRequest: {
       namespace?: string;
       workflowId?: string;
-      workflowType?: components["schemas"]["WorkflowType"];
-      taskQueue?: components["schemas"]["TaskQueue"];
+      workflowType?: components['schemas']['WorkflowType'];
+      taskQueue?: components['schemas']['TaskQueue'];
       /** @description Serialized arguments to the workflow. These are passed as arguments to the workflow function. */
-      input?: components["schemas"]["Payloads"];
+      input?: components['schemas']['Payloads'];
       /** @description Total workflow execution timeout including retries and continue as new. */
       workflowExecutionTimeout?: string;
       /** @description Timeout of a single workflow run. */
@@ -2555,17 +3397,38 @@ export interface components {
       requestId?: string;
       /**
        * Format: enum
-       * @description Default: WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE.
+       * @description Defines whether to allow re-using the workflow id from a previously *closed* workflow.
+       *  The default policy is WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE.
+       *
+       *  See `workflow_id_conflict_policy` for handling a workflow id duplication with a *running* workflow.
        * @enum {string}
        */
-      workflowIdReusePolicy?: "WORKFLOW_ID_REUSE_POLICY_UNSPECIFIED" | "WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE" | "WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY" | "WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE" | "WORKFLOW_ID_REUSE_POLICY_TERMINATE_IF_RUNNING";
+      workflowIdReusePolicy?:
+        | 'WORKFLOW_ID_REUSE_POLICY_UNSPECIFIED'
+        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE'
+        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY'
+        | 'WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE'
+        | 'WORKFLOW_ID_REUSE_POLICY_TERMINATE_IF_RUNNING';
+      /**
+       * Format: enum
+       * @description Defines how to resolve a workflow id conflict with a *running* workflow.
+       *  The default policy is WORKFLOW_ID_CONFLICT_POLICY_FAIL.
+       *
+       *  See `workflow_id_reuse_policy` for handling a workflow id duplication with a *closed* workflow.
+       * @enum {string}
+       */
+      workflowIdConflictPolicy?:
+        | 'WORKFLOW_ID_CONFLICT_POLICY_UNSPECIFIED'
+        | 'WORKFLOW_ID_CONFLICT_POLICY_FAIL'
+        | 'WORKFLOW_ID_CONFLICT_POLICY_USE_EXISTING'
+        | 'WORKFLOW_ID_CONFLICT_POLICY_TERMINATE_EXISTING';
       /** @description The retry policy for the workflow. Will never exceed `workflow_execution_timeout`. */
-      retryPolicy?: components["schemas"]["RetryPolicy"];
+      retryPolicy?: components['schemas']['RetryPolicy'];
       /** @description See https://docs.temporal.io/docs/content/what-is-a-temporal-cron-job/ */
       cronSchedule?: string;
-      memo?: components["schemas"]["Memo"];
-      searchAttributes?: components["schemas"]["SearchAttributes"];
-      header?: components["schemas"]["Header"];
+      memo?: components['schemas']['Memo'];
+      searchAttributes?: components['schemas']['SearchAttributes'];
+      header?: components['schemas']['Header'];
       /**
        * @description Request to get the first workflow task inline in the response bypassing matching service and worker polling.
        *  If set to `true` the caller is expected to have a worker available and capable of processing the task.
@@ -2579,8 +3442,8 @@ export interface components {
        *  server itself (for the schedules feature) and are not intended to be exposed in
        *  StartWorkflowExecution.
        */
-      continuedFailure?: components["schemas"]["Failure"];
-      lastCompletionResult?: components["schemas"]["Payloads"];
+      continuedFailure?: components['schemas']['Failure'];
+      lastCompletionResult?: components['schemas']['Payloads'];
       /**
        * @description Time to wait before dispatching the first workflow task. Cannot be used with `cron_schedule`.
        *  If the workflow gets a signal before the delay, a workflow task will be dispatched and the rest
@@ -2592,16 +3455,19 @@ export interface components {
        *  If the workflow continues-as-new, these callbacks will be carried over to the new execution.
        *  Callback addresses must be whitelisted in the server's dynamic configuration.
        */
-      completionCallbacks?: components["schemas"]["Callback"][];
+      completionCallbacks?: components['schemas']['Callback'][];
     };
     StartWorkflowExecutionResponse: {
+      /** @description The run id of the workflow that was started - or used (via WorkflowIdConflictPolicy USE_EXISTING). */
       runId?: string;
+      /** @description If true, a new workflow was started. */
+      started?: boolean;
       /**
        * @description When `request_eager_execution` is set on the `StartWorkflowExecutionRequest`, the server - if supported - will
        *  return the first workflow task to be eagerly executed.
        *  The caller is expected to have a worker available to process the task.
        */
-      eagerWorkflowTask?: components["schemas"]["PollWorkflowTaskQueueResponse"];
+      eagerWorkflowTask?: components['schemas']['PollWorkflowTaskQueueResponse'];
     };
     /** @description The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors). */
     Status: {
@@ -2613,7 +3479,7 @@ export interface components {
       /** @description A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client. */
       message?: string;
       /** @description A list of messages that carry the error details.  There is a common set of message types for APIs to use. */
-      details?: components["schemas"]["GoogleProtobufAny"][];
+      details?: components['schemas']['GoogleProtobufAny'][];
     };
     StopBatchOperationRequest: {
       /** @description Namespace that contains the batch operation */
@@ -2639,23 +3505,23 @@ export interface components {
      */
     StructuredCalendarSpec: {
       /** @description Match seconds (0-59) */
-      second?: components["schemas"]["Range"][];
+      second?: components['schemas']['Range'][];
       /** @description Match minutes (0-59) */
-      minute?: components["schemas"]["Range"][];
+      minute?: components['schemas']['Range'][];
       /** @description Match hours (0-23) */
-      hour?: components["schemas"]["Range"][];
+      hour?: components['schemas']['Range'][];
       /**
        * @description Match days of the month (1-31)
        *  (-- api-linter: core::0140::prepositions=disabled
        *      aip.dev/not-precedent: standard name of field --)
        */
-      dayOfMonth?: components["schemas"]["Range"][];
+      dayOfMonth?: components['schemas']['Range'][];
       /** @description Match months (1-12) */
-      month?: components["schemas"]["Range"][];
+      month?: components['schemas']['Range'][];
       /** @description Match years. */
-      year?: components["schemas"]["Range"][];
+      year?: components['schemas']['Range'][];
       /** @description Match days of the week (0-6; 0 is Sunday). */
-      dayOfWeek?: components["schemas"]["Range"][];
+      dayOfWeek?: components['schemas']['Range'][];
       /** @description Free-form comment describing the intention of this spec. */
       comment?: string;
     };
@@ -2671,7 +3537,7 @@ export interface components {
        * @description Default: TASK_QUEUE_KIND_NORMAL.
        * @enum {string}
        */
-      kind?: "TASK_QUEUE_KIND_UNSPECIFIED" | "TASK_QUEUE_KIND_NORMAL" | "TASK_QUEUE_KIND_STICKY";
+      kind?: 'TASK_QUEUE_KIND_UNSPECIFIED' | 'TASK_QUEUE_KIND_NORMAL' | 'TASK_QUEUE_KIND_STICKY';
       /**
        * @description Iff kind == TASK_QUEUE_KIND_STICKY, then this field contains the name of
        *  the normal task queue that the sticky worker is running on.
@@ -2686,22 +3552,48 @@ export interface components {
        *  See the TaskReachability docstring for information about each enum variant.
        *  If reachability is empty, this worker is considered unreachable in this task queue.
        */
-      reachability?: ("TASK_REACHABILITY_UNSPECIFIED" | "TASK_REACHABILITY_NEW_WORKFLOWS" | "TASK_REACHABILITY_EXISTING_WORKFLOWS" | "TASK_REACHABILITY_OPEN_WORKFLOWS" | "TASK_REACHABILITY_CLOSED_WORKFLOWS")[];
+      reachability?: (
+        | 'TASK_REACHABILITY_UNSPECIFIED'
+        | 'TASK_REACHABILITY_NEW_WORKFLOWS'
+        | 'TASK_REACHABILITY_EXISTING_WORKFLOWS'
+        | 'TASK_REACHABILITY_OPEN_WORKFLOWS'
+        | 'TASK_REACHABILITY_CLOSED_WORKFLOWS'
+      )[];
     };
+    /** @description Deprecated. Use `InternalTaskQueueStatus`. This is kept until `DescribeTaskQueue` supports legacy behavior. */
     TaskQueueStatus: {
       backlogCountHint?: string;
       readLevel?: string;
       ackLevel?: string;
       /** Format: double */
       ratePerSecond?: number;
-      taskIdBlock?: components["schemas"]["TaskIdBlock"];
+      taskIdBlock?: components['schemas']['TaskIdBlock'];
+    };
+    TaskQueueTypeInfo: {
+      /** @description Unversioned workers (with `useVersioning=false`) are reported in unversioned result even if they set a Build ID. */
+      pollers?: components['schemas']['PollerInfo'][];
+    };
+    TaskQueueVersionInfo: {
+      /** @description Task Queue info per Task Type. Key is the numerical value of the temporal.api.enums.v1.TaskQueueType enum. */
+      typesInfo?: {
+        [key: string]: components['schemas']['TaskQueueTypeInfo'];
+      };
+      /**
+       * Format: enum
+       * @enum {string}
+       */
+      taskReachability?:
+        | 'BUILD_ID_TASK_REACHABILITY_UNSPECIFIED'
+        | 'BUILD_ID_TASK_REACHABILITY_REACHABLE'
+        | 'BUILD_ID_TASK_REACHABILITY_CLOSED_WORKFLOWS_ONLY'
+        | 'BUILD_ID_TASK_REACHABILITY_UNREACHABLE';
     };
     TerminateWorkflowExecutionRequest: {
       namespace?: string;
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
       reason?: string;
       /** @description Serialized additional information to attach to the termination event */
-      details?: components["schemas"]["Payloads"];
+      details?: components['schemas']['Payloads'];
       /** @description The identity of the worker/client */
       identity?: string;
       /**
@@ -2718,8 +3610,13 @@ export interface components {
        * Format: enum
        * @enum {string}
        */
-      timeoutType?: "TIMEOUT_TYPE_UNSPECIFIED" | "TIMEOUT_TYPE_START_TO_CLOSE" | "TIMEOUT_TYPE_SCHEDULE_TO_START" | "TIMEOUT_TYPE_SCHEDULE_TO_CLOSE" | "TIMEOUT_TYPE_HEARTBEAT";
-      lastHeartbeatDetails?: components["schemas"]["Payloads"];
+      timeoutType?:
+        | 'TIMEOUT_TYPE_UNSPECIFIED'
+        | 'TIMEOUT_TYPE_START_TO_CLOSE'
+        | 'TIMEOUT_TYPE_SCHEDULE_TO_START'
+        | 'TIMEOUT_TYPE_SCHEDULE_TO_CLOSE'
+        | 'TIMEOUT_TYPE_HEARTBEAT';
+      lastHeartbeatDetails?: components['schemas']['Payloads'];
     };
     TimerCanceledEventAttributes: {
       /** @description Will match the `timer_id` from `TIMER_STARTED` event for this timer */
@@ -2750,13 +3647,30 @@ export interface components {
       /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
       workflowTaskCompletedEventId?: string;
     };
+    TimestampedBuildIdAssignmentRule: {
+      rule?: components['schemas']['BuildIdAssignmentRule'];
+      /** Format: date-time */
+      createTime?: string;
+    };
+    TimestampedCompatibleBuildIdRedirectRule: {
+      rule?: components['schemas']['CompatibleBuildIdRedirectRule'];
+      /** Format: date-time */
+      createTime?: string;
+    };
     TriggerImmediatelyRequest: {
       /**
        * Format: enum
        * @description If set, override overlap policy for this one request.
        * @enum {string}
        */
-      overlapPolicy?: "SCHEDULE_OVERLAP_POLICY_UNSPECIFIED" | "SCHEDULE_OVERLAP_POLICY_SKIP" | "SCHEDULE_OVERLAP_POLICY_BUFFER_ONE" | "SCHEDULE_OVERLAP_POLICY_BUFFER_ALL" | "SCHEDULE_OVERLAP_POLICY_CANCEL_OTHER" | "SCHEDULE_OVERLAP_POLICY_TERMINATE_OTHER" | "SCHEDULE_OVERLAP_POLICY_ALLOW_ALL";
+      overlapPolicy?:
+        | 'SCHEDULE_OVERLAP_POLICY_UNSPECIFIED'
+        | 'SCHEDULE_OVERLAP_POLICY_SKIP'
+        | 'SCHEDULE_OVERLAP_POLICY_BUFFER_ONE'
+        | 'SCHEDULE_OVERLAP_POLICY_BUFFER_ALL'
+        | 'SCHEDULE_OVERLAP_POLICY_CANCEL_OTHER'
+        | 'SCHEDULE_OVERLAP_POLICY_TERMINATE_OTHER'
+        | 'SCHEDULE_OVERLAP_POLICY_ALLOW_ALL';
     };
     UpdateNamespaceInfo: {
       description?: string;
@@ -2778,43 +3692,62 @@ export interface components {
        *  Default is NAMESPACE_STATE_UNSPECIFIED which is do not change state.
        * @enum {string}
        */
-      state?: "NAMESPACE_STATE_UNSPECIFIED" | "NAMESPACE_STATE_REGISTERED" | "NAMESPACE_STATE_DEPRECATED" | "NAMESPACE_STATE_DELETED";
+      state?:
+        | 'NAMESPACE_STATE_UNSPECIFIED'
+        | 'NAMESPACE_STATE_REGISTERED'
+        | 'NAMESPACE_STATE_DEPRECATED'
+        | 'NAMESPACE_STATE_DELETED';
     };
-    /**
-     * @description (-- api-linter: core::0134::request-mask-required=disabled
-     *      aip.dev/not-precedent: UpdateNamespace RPC doesn't follow Google API format. --)
-     *  (-- api-linter: core::0134::request-resource-required=disabled
-     *      aip.dev/not-precedent: UpdateNamespace RPC doesn't follow Google API format. --)
-     */
     UpdateNamespaceRequest: {
       namespace?: string;
-      updateInfo?: components["schemas"]["UpdateNamespaceInfo"];
-      config?: components["schemas"]["NamespaceConfig"];
-      replicationConfig?: components["schemas"]["NamespaceReplicationConfig"];
+      updateInfo?: components['schemas']['UpdateNamespaceInfo'];
+      config?: components['schemas']['NamespaceConfig'];
+      replicationConfig?: components['schemas']['NamespaceReplicationConfig'];
       securityToken?: string;
       deleteBadBinary?: string;
       /** @description promote local namespace to global namespace. Ignored if namespace is already global namespace. */
       promoteNamespace?: boolean;
     };
     UpdateNamespaceResponse: {
-      namespaceInfo?: components["schemas"]["NamespaceInfo"];
-      config?: components["schemas"]["NamespaceConfig"];
-      replicationConfig?: components["schemas"]["NamespaceReplicationConfig"];
+      namespaceInfo?: components['schemas']['NamespaceInfo'];
+      config?: components['schemas']['NamespaceConfig'];
+      replicationConfig?: components['schemas']['NamespaceReplicationConfig'];
       failoverVersion?: string;
       isGlobalNamespace?: boolean;
+    };
+    UpdateNexusIncomingServiceRequest: {
+      /** @description Server-generated unique service ID. */
+      id?: string;
+      /** @description Data version for this service. Must match current version. */
+      version?: string;
+      spec?: components['schemas']['IncomingServiceSpec'];
+    };
+    UpdateNexusIncomingServiceResponse: {
+      /** @description Data post acceptance. Can be used to issue additional updates to this record. */
+      service?: components['schemas']['IncomingService'];
+    };
+    UpdateNexusOutgoingServiceRequest: {
+      /** @description Namespace to find and update this service definition in. */
+      namespace?: string;
+      /** @description Service name, unique for this namespace. Must match `[a-zA-Z_][a-zA-Z0-9_]*`. */
+      name?: string;
+      /** @description Version of the service definition to update. Must match the current version. */
+      version?: string;
+      /** @description What to update the service spec to. */
+      spec?: components['schemas']['OutgoingServiceSpec'];
+    };
+    UpdateNexusOutgoingServiceResponse: {
+      /** @description Data post acceptance. Can be used to issue additional updates to this record. */
+      service?: components['schemas']['OutgoingService'];
     };
     /**
      * @description The data needed by a client to refer to a previously invoked workflow
      *  execution update process.
      */
     UpdateRef: {
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
       updateId?: string;
     };
-    /**
-     * @description (-- api-linter: core::0134::request-mask-required=disabled
-     *      aip.dev/not-precedent: UpdateSchedule doesn't follow Google API format --)
-     */
     UpdateScheduleRequest: {
       /** @description The namespace of the schedule to update. */
       namespace?: string;
@@ -2824,7 +3757,7 @@ export interface components {
        * @description The new schedule. The four main fields of the schedule (spec, action,
        *  policies, state) are replaced completely by the values in this message.
        */
-      schedule?: components["schemas"]["Schedule"];
+      schedule?: components['schemas']['Schedule'];
       /**
        * Format: bytes
        * @description This can be the value of conflict_token from a DescribeScheduleResponse,
@@ -2837,6 +3770,14 @@ export interface components {
       identity?: string;
       /** @description A unique identifier for this update request for idempotence. Typically UUIDv4. */
       requestId?: string;
+      /**
+       * @description Schedule search attributes to be updated.
+       *  Do not set this field if you do not want to update the search attributes.
+       *  A non-null empty object will set the search attributes to an empty map.
+       *  Note: you cannot only update the search attributes with `UpdateScheduleRequest`,
+       *  you must also set the `schedule` field; otherwise, it will unset the schedule.
+       */
+      searchAttributes?: components['schemas']['SearchAttributes'];
     };
     UpdateScheduleResponse: Record<string, never>;
     /**
@@ -2851,7 +3792,7 @@ export interface components {
        *  (-- api-linter: core::0203::optional=disabled
        *      aip.dev/not-precedent: false positive triggered by the word "optional" --)
        */
-      workflowExecution?: components["schemas"]["WorkflowExecution"];
+      workflowExecution?: components['schemas']['WorkflowExecution'];
       /**
        * @description If set, this call will error if the most recent (if no run id is set on
        *  `workflow_execution`), or specified (if it is) workflow execution is not
@@ -2862,22 +3803,22 @@ export interface components {
        * @description Describes when this request should return - basically whether the
        *  update is synchronous, asynchronous, or somewhere in between.
        */
-      waitPolicy?: components["schemas"]["WaitPolicy"];
+      waitPolicy?: components['schemas']['WaitPolicy'];
       /**
        * @description The request information that will be delivered all the way down to the
        *  workflow execution.
        */
-      request?: components["schemas"]["Request"];
+      request?: components['schemas']['Request'];
     };
     UpdateWorkflowExecutionResponse: {
       /** @description Enough information for subsequent poll calls if needed. Never null. */
-      updateRef?: components["schemas"]["UpdateRef"];
+      updateRef?: components['schemas']['UpdateRef'];
       /**
        * @description The outcome of the update if and only if the workflow execution update
        *  has completed. If this response is being returned before the update has
        *  completed then this field will not be set.
        */
-      outcome?: components["schemas"]["Outcome"];
+      outcome?: components['schemas']['Outcome'];
       /**
        * Format: enum
        * @description The most advanced lifecycle stage that the Update is known to have
@@ -2892,19 +3833,23 @@ export interface components {
        *  may then retry the call as needed.
        * @enum {string}
        */
-      stage?: "UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_UNSPECIFIED" | "UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_ADMITTED" | "UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_ACCEPTED" | "UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_COMPLETED";
+      stage?:
+        | 'UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_UNSPECIFIED'
+        | 'UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_ADMITTED'
+        | 'UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_ACCEPTED'
+        | 'UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_COMPLETED';
     };
     UpsertWorkflowSearchAttributesEventAttributes: {
       /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
       workflowTaskCompletedEventId?: string;
-      searchAttributes?: components["schemas"]["SearchAttributes"];
+      searchAttributes?: components['schemas']['SearchAttributes'];
     };
     /** @description VersionInfo contains details about current and recommended release versions as well as alerts and upgrade instructions. */
     VersionInfo: {
-      current?: components["schemas"]["ReleaseInfo"];
-      recommended?: components["schemas"]["ReleaseInfo"];
+      current?: components['schemas']['ReleaseInfo'];
+      recommended?: components['schemas']['ReleaseInfo'];
       instructions?: string;
-      alerts?: components["schemas"]["Alert"][];
+      alerts?: components['schemas']['Alert'][];
       /** Format: date-time */
       lastUpdateTime?: string;
     };
@@ -2919,7 +3864,11 @@ export interface components {
        *  before returning.
        * @enum {string}
        */
-      lifecycleStage?: "UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_UNSPECIFIED" | "UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_ADMITTED" | "UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_ACCEPTED" | "UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_COMPLETED";
+      lifecycleStage?:
+        | 'UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_UNSPECIFIED'
+        | 'UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_ADMITTED'
+        | 'UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_ACCEPTED'
+        | 'UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_COMPLETED';
     };
     /**
      * @description Identifies the version(s) that a worker is compatible with when polling or identifying itself,
@@ -2943,11 +3892,6 @@ export interface components {
        */
       buildId?: string;
       /**
-       * @description Set if the worker used a dynamically loadable bundle to process
-       *  the task. The bundle could be a WASM blob, JS bundle, etc.
-       */
-      bundleId?: string;
-      /**
        * @description If set, the worker is opting in to worker versioning. Otherwise, this is used only as a
        *  marker for workflow reset points and the BuildIDs search attribute.
        */
@@ -2970,25 +3914,25 @@ export interface components {
       cause?: string;
       /** @description TODO: Is this the ID of the event in the workflow which initiated this cancel, if there was one? */
       externalInitiatedEventId?: string;
-      externalWorkflowExecution?: components["schemas"]["WorkflowExecution"];
+      externalWorkflowExecution?: components['schemas']['WorkflowExecution'];
       /** @description id of the worker or client who requested this cancel */
       identity?: string;
     };
     WorkflowExecutionCanceledEventAttributes: {
       /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
       workflowTaskCompletedEventId?: string;
-      details?: components["schemas"]["Payloads"];
+      details?: components['schemas']['Payloads'];
     };
     WorkflowExecutionCompletedEventAttributes: {
       /** @description Serialized result of workflow completion (ie: The return value of the workflow function) */
-      result?: components["schemas"]["Payloads"];
+      result?: components['schemas']['Payloads'];
       /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
       workflowTaskCompletedEventId?: string;
       /** @description If another run is started by cron, this contains the new run id. */
       newExecutionRunId?: string;
     };
     WorkflowExecutionConfig: {
-      taskQueue?: components["schemas"]["TaskQueue"];
+      taskQueue?: components['schemas']['TaskQueue'];
       workflowExecutionTimeout?: string;
       workflowRunTimeout?: string;
       defaultWorkflowTaskTimeout?: string;
@@ -2996,9 +3940,9 @@ export interface components {
     WorkflowExecutionContinuedAsNewEventAttributes: {
       /** @description The run ID of the new workflow started by this continue-as-new */
       newExecutionRunId?: string;
-      workflowType?: components["schemas"]["WorkflowType"];
-      taskQueue?: components["schemas"]["TaskQueue"];
-      input?: components["schemas"]["Payloads"];
+      workflowType?: components['schemas']['WorkflowType'];
+      taskQueue?: components['schemas']['TaskQueue'];
+      input?: components['schemas']['Payloads'];
       /** @description Timeout of a single workflow run. */
       workflowRunTimeout?: string;
       /** @description Timeout of a single workflow task. */
@@ -3011,41 +3955,53 @@ export interface components {
        * Format: enum
        * @enum {string}
        */
-      initiator?: "CONTINUE_AS_NEW_INITIATOR_UNSPECIFIED" | "CONTINUE_AS_NEW_INITIATOR_WORKFLOW" | "CONTINUE_AS_NEW_INITIATOR_RETRY" | "CONTINUE_AS_NEW_INITIATOR_CRON_SCHEDULE";
+      initiator?:
+        | 'CONTINUE_AS_NEW_INITIATOR_UNSPECIFIED'
+        | 'CONTINUE_AS_NEW_INITIATOR_WORKFLOW'
+        | 'CONTINUE_AS_NEW_INITIATOR_RETRY'
+        | 'CONTINUE_AS_NEW_INITIATOR_CRON_SCHEDULE';
       /**
        * @description TODO: David are these right?
        *  Deprecated. If a workflow's retry policy would cause a new run to start when the current one
        *  has failed, this field would be populated with that failure. Now (when supported by server
        *  and sdk) the final event will be `WORKFLOW_EXECUTION_FAILED` with `new_execution_run_id` set.
        */
-      failure?: components["schemas"]["Failure"];
+      failure?: components['schemas']['Failure'];
       /** @description TODO: Is this the result of *this* workflow as it continued-as-new? */
-      lastCompletionResult?: components["schemas"]["Payloads"];
-      header?: components["schemas"]["Header"];
-      memo?: components["schemas"]["Memo"];
-      searchAttributes?: components["schemas"]["SearchAttributes"];
+      lastCompletionResult?: components['schemas']['Payloads'];
+      header?: components['schemas']['Header'];
+      memo?: components['schemas']['Memo'];
+      searchAttributes?: components['schemas']['SearchAttributes'];
       /**
-       * @description If this is set, the workflow executing this command wishes to continue as new using a version
-       *  compatible with the version that this workflow most recently ran on.
+       * @description If this is set, the new execution inherits the Build ID of the current execution. Otherwise,
+       *  the assignment rules will be used to independently assign a Build ID to the new execution.
        */
-      useCompatibleVersion?: boolean;
+      inheritBuildId?: boolean;
     };
     WorkflowExecutionFailedEventAttributes: {
       /** @description Serialized result of workflow failure (ex: An exception thrown, or error returned) */
-      failure?: components["schemas"]["Failure"];
+      failure?: components['schemas']['Failure'];
       /**
        * Format: enum
        * @enum {string}
        */
-      retryState?: "RETRY_STATE_UNSPECIFIED" | "RETRY_STATE_IN_PROGRESS" | "RETRY_STATE_NON_RETRYABLE_FAILURE" | "RETRY_STATE_TIMEOUT" | "RETRY_STATE_MAXIMUM_ATTEMPTS_REACHED" | "RETRY_STATE_RETRY_POLICY_NOT_SET" | "RETRY_STATE_INTERNAL_SERVER_ERROR" | "RETRY_STATE_CANCEL_REQUESTED";
+      retryState?:
+        | 'RETRY_STATE_UNSPECIFIED'
+        | 'RETRY_STATE_IN_PROGRESS'
+        | 'RETRY_STATE_NON_RETRYABLE_FAILURE'
+        | 'RETRY_STATE_TIMEOUT'
+        | 'RETRY_STATE_MAXIMUM_ATTEMPTS_REACHED'
+        | 'RETRY_STATE_RETRY_POLICY_NOT_SET'
+        | 'RETRY_STATE_INTERNAL_SERVER_ERROR'
+        | 'RETRY_STATE_CANCEL_REQUESTED';
       /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
       workflowTaskCompletedEventId?: string;
       /** @description If another run is started by cron or retry, this contains the new run id. */
       newExecutionRunId?: string;
     };
     WorkflowExecutionInfo: {
-      execution?: components["schemas"]["WorkflowExecution"];
-      type?: components["schemas"]["WorkflowType"];
+      execution?: components['schemas']['WorkflowExecution'];
+      type?: components['schemas']['WorkflowType'];
       /** Format: date-time */
       startTime?: string;
       /** Format: date-time */
@@ -3054,41 +4010,88 @@ export interface components {
        * Format: enum
        * @enum {string}
        */
-      status?: "WORKFLOW_EXECUTION_STATUS_UNSPECIFIED" | "WORKFLOW_EXECUTION_STATUS_RUNNING" | "WORKFLOW_EXECUTION_STATUS_COMPLETED" | "WORKFLOW_EXECUTION_STATUS_FAILED" | "WORKFLOW_EXECUTION_STATUS_CANCELED" | "WORKFLOW_EXECUTION_STATUS_TERMINATED" | "WORKFLOW_EXECUTION_STATUS_CONTINUED_AS_NEW" | "WORKFLOW_EXECUTION_STATUS_TIMED_OUT";
+      status?:
+        | 'WORKFLOW_EXECUTION_STATUS_UNSPECIFIED'
+        | 'WORKFLOW_EXECUTION_STATUS_RUNNING'
+        | 'WORKFLOW_EXECUTION_STATUS_COMPLETED'
+        | 'WORKFLOW_EXECUTION_STATUS_FAILED'
+        | 'WORKFLOW_EXECUTION_STATUS_CANCELED'
+        | 'WORKFLOW_EXECUTION_STATUS_TERMINATED'
+        | 'WORKFLOW_EXECUTION_STATUS_CONTINUED_AS_NEW'
+        | 'WORKFLOW_EXECUTION_STATUS_TIMED_OUT';
       historyLength?: string;
       parentNamespaceId?: string;
-      parentExecution?: components["schemas"]["WorkflowExecution"];
+      parentExecution?: components['schemas']['WorkflowExecution'];
       /** Format: date-time */
       executionTime?: string;
-      memo?: components["schemas"]["Memo"];
-      searchAttributes?: components["schemas"]["SearchAttributes"];
-      autoResetPoints?: components["schemas"]["ResetPoints"];
+      memo?: components['schemas']['Memo'];
+      searchAttributes?: components['schemas']['SearchAttributes'];
+      autoResetPoints?: components['schemas']['ResetPoints'];
       taskQueue?: string;
       stateTransitionCount?: string;
       historySizeBytes?: string;
       /** @description If set, the most recent worker version stamp that appeared in a workflow task completion */
-      mostRecentWorkerVersionStamp?: components["schemas"]["WorkerVersionStamp"];
+      mostRecentWorkerVersionStamp?: components['schemas']['WorkerVersionStamp'];
+      /**
+       * @description Workflow execution duration is defined as difference between close time and execution time.
+       *  This field is only populated if the workflow is closed.
+       */
+      executionDuration?: string;
+      /**
+       * @description Contains information about the root workflow execution.
+       *  The root workflow execution is defined as follows:
+       *  1. A workflow without parent workflow is its own root workflow.
+       *  2. A workflow that has a parent workflow has the same root workflow as its parent workflow.
+       *  Note: workflows continued as new or reseted may or may not have parents, check examples below.
+       *
+       *  Examples:
+       *    Scenario 1: Workflow W1 starts child workflow W2, and W2 starts child workflow W3.
+       *      - The root workflow of all three workflows is W1.
+       *    Scenario 2: Workflow W1 starts child workflow W2, and W2 continued as new W3.
+       *      - The root workflow of all three workflows is W1.
+       *    Scenario 3: Workflow W1 continued as new W2.
+       *      - The root workflow of W1 is W1 and the root workflow of W2 is W2.
+       *    Scenario 4: Workflow W1 starts child workflow W2, and W2 is reseted, creating W3
+       *      - The root workflow of all three workflows is W1.
+       *    Scenario 5: Workflow W1 is reseted, creating W2.
+       *      - The root workflow of W1 is W1 and the root workflow of W2 is W2.
+       */
+      rootExecution?: components['schemas']['WorkflowExecution'];
+      /**
+       * @description The currently assigned build ID for this execution. Presence of this value means worker versioning is used
+       *  for this execution. Assigned build ID is selected based on Worker Versioning Assignment Rules
+       *  when the first workflow task of the execution is scheduled. If the first workflow task fails and is scheduled
+       *  again, the assigned build ID may change according to the latest versioning rules.
+       *  Assigned build ID can also change in the middle of a execution if Compatible Redirect Rules are applied to
+       *  this execution.
+       */
+      assignedBuildId?: string;
+      /**
+       * @description Build ID inherited from a previous/parent execution. If present, assigned_build_id will be set to this, instead
+       *  of using the assignment rules.
+       */
+      inheritedBuildId?: string;
     };
     WorkflowExecutionSignaledEventAttributes: {
       /** @description The name/type of the signal to fire */
       signalName?: string;
       /** @description Will be deserialized and provided as argument(s) to the signal handler */
-      input?: components["schemas"]["Payloads"];
+      input?: components['schemas']['Payloads'];
       /** @description id of the worker/client who sent this signal */
       identity?: string;
       /**
        * @description Headers that were passed by the sender of the signal and copied by temporal
        *  server into the workflow task.
        */
-      header?: components["schemas"]["Header"];
+      header?: components['schemas']['Header'];
       /** @description Indicates the signal did not generate a new workflow task when received. */
       skipGenerateWorkflowTask?: boolean;
       /** @description When signal origin is a workflow execution, this field is set. */
-      externalWorkflowExecution?: components["schemas"]["WorkflowExecution"];
+      externalWorkflowExecution?: components['schemas']['WorkflowExecution'];
     };
     /** @description Always the first event in workflow history */
     WorkflowExecutionStartedEventAttributes: {
-      workflowType?: components["schemas"]["WorkflowType"];
+      workflowType?: components['schemas']['WorkflowType'];
       /**
        * @description If this workflow is a child, the namespace our parent lives in.
        *  SDKs and UI tools should use `parent_workflow_namespace` field but server must use `parent_workflow_namespace_id` only.
@@ -3099,12 +4102,12 @@ export interface components {
        * @description Contains information about parent workflow execution that initiated the child workflow these attributes belong to.
        *  If the workflow these attributes belong to is not a child workflow of any other execution, this field will not be populated.
        */
-      parentWorkflowExecution?: components["schemas"]["WorkflowExecution"];
+      parentWorkflowExecution?: components['schemas']['WorkflowExecution'];
       /** @description EventID of the child execution initiated event in parent workflow */
       parentInitiatedEventId?: string;
-      taskQueue?: components["schemas"]["TaskQueue"];
+      taskQueue?: components['schemas']['TaskQueue'];
       /** @description SDK will deserialize this and provide it as arguments to the workflow function */
-      input?: components["schemas"]["Payloads"];
+      input?: components['schemas']['Payloads'];
       /** @description Total workflow execution timeout including retries and continue as new. */
       workflowExecutionTimeout?: string;
       /** @description Timeout of a single workflow run. */
@@ -3120,9 +4123,13 @@ export interface components {
        * Format: enum
        * @enum {string}
        */
-      initiator?: "CONTINUE_AS_NEW_INITIATOR_UNSPECIFIED" | "CONTINUE_AS_NEW_INITIATOR_WORKFLOW" | "CONTINUE_AS_NEW_INITIATOR_RETRY" | "CONTINUE_AS_NEW_INITIATOR_CRON_SCHEDULE";
-      continuedFailure?: components["schemas"]["Failure"];
-      lastCompletionResult?: components["schemas"]["Payloads"];
+      initiator?:
+        | 'CONTINUE_AS_NEW_INITIATOR_UNSPECIFIED'
+        | 'CONTINUE_AS_NEW_INITIATOR_WORKFLOW'
+        | 'CONTINUE_AS_NEW_INITIATOR_RETRY'
+        | 'CONTINUE_AS_NEW_INITIATOR_CRON_SCHEDULE';
+      continuedFailure?: components['schemas']['Failure'];
+      lastCompletionResult?: components['schemas']['Payloads'];
       /**
        * @description This is the run id when the WorkflowExecutionStarted event was written.
        *  A workflow reset changes the execution run_id, but preserves this field.
@@ -3135,7 +4142,7 @@ export interface components {
        *  Used to identify a chain.
        */
       firstExecutionRunId?: string;
-      retryPolicy?: components["schemas"]["RetryPolicy"];
+      retryPolicy?: components['schemas']['RetryPolicy'];
       /**
        * Format: int32
        * @description Starting at 1, the number of times we have tried to execute this workflow
@@ -3154,10 +4161,10 @@ export interface components {
        *  the cron workflow was scheduled and when it should run next per its cron_schedule.
        */
       firstWorkflowTaskBackoff?: string;
-      memo?: components["schemas"]["Memo"];
-      searchAttributes?: components["schemas"]["SearchAttributes"];
-      prevAutoResetPoints?: components["schemas"]["ResetPoints"];
-      header?: components["schemas"]["Header"];
+      memo?: components['schemas']['Memo'];
+      searchAttributes?: components['schemas']['SearchAttributes'];
+      prevAutoResetPoints?: components['schemas']['ResetPoints'];
+      header?: components['schemas']['Header'];
       /**
        * @description Version of the child execution initiated event in parent workflow
        *  It should be used together with parent_initiated_event_id to identify
@@ -3169,15 +4176,38 @@ export interface components {
       /**
        * @description If this workflow intends to use anything other than the current overall default version for
        *  the queue, then we include it here.
+       *  Deprecated. use `inherited_build_id` instead
        */
-      sourceVersionStamp?: components["schemas"]["WorkerVersionStamp"];
+      sourceVersionStamp?: components['schemas']['WorkerVersionStamp'];
       /** @description Completion callbacks attached when this workflow was started. */
-      completionCallbacks?: components["schemas"]["Callback"][];
+      completionCallbacks?: components['schemas']['Callback'][];
+      /**
+       * @description Contains information about the root workflow execution.
+       *  The root workflow execution is defined as follows:
+       *  1. A workflow without parent workflow is its own root workflow.
+       *  2. A workflow that has a parent workflow has the same root workflow as its parent workflow.
+       *  Note: workflows continued as new or reseted may or may not have parents, check examples below.
+       *
+       *  Examples:
+       *    Scenario 1: Workflow W1 starts child workflow W2, and W2 starts child workflow W3.
+       *      - The root workflow of all three workflows is W1.
+       *    Scenario 2: Workflow W1 starts child workflow W2, and W2 continued as new W3.
+       *      - The root workflow of all three workflows is W1.
+       *    Scenario 3: Workflow W1 continued as new W2.
+       *      - The root workflow of W1 is W1 and the root workflow of W2 is W2.
+       *    Scenario 4: Workflow W1 starts child workflow W2, and W2 is reseted, creating W3
+       *      - The root workflow of all three workflows is W1.
+       *    Scenario 5: Workflow W1 is reseted, creating W2.
+       *      - The root workflow of W1 is W1 and the root workflow of W2 is W2.
+       */
+      rootWorkflowExecution?: components['schemas']['WorkflowExecution'];
+      /** @description When present, this execution is assigned to the build ID of its parent or previous execution. */
+      inheritedBuildId?: string;
     };
     WorkflowExecutionTerminatedEventAttributes: {
       /** @description User/client provided reason for termination */
       reason?: string;
-      details?: components["schemas"]["Payloads"];
+      details?: components['schemas']['Payloads'];
       /** @description id of the client who requested termination */
       identity?: string;
     };
@@ -3186,7 +4216,15 @@ export interface components {
        * Format: enum
        * @enum {string}
        */
-      retryState?: "RETRY_STATE_UNSPECIFIED" | "RETRY_STATE_IN_PROGRESS" | "RETRY_STATE_NON_RETRYABLE_FAILURE" | "RETRY_STATE_TIMEOUT" | "RETRY_STATE_MAXIMUM_ATTEMPTS_REACHED" | "RETRY_STATE_RETRY_POLICY_NOT_SET" | "RETRY_STATE_INTERNAL_SERVER_ERROR" | "RETRY_STATE_CANCEL_REQUESTED";
+      retryState?:
+        | 'RETRY_STATE_UNSPECIFIED'
+        | 'RETRY_STATE_IN_PROGRESS'
+        | 'RETRY_STATE_NON_RETRYABLE_FAILURE'
+        | 'RETRY_STATE_TIMEOUT'
+        | 'RETRY_STATE_MAXIMUM_ATTEMPTS_REACHED'
+        | 'RETRY_STATE_RETRY_POLICY_NOT_SET'
+        | 'RETRY_STATE_INTERNAL_SERVER_ERROR'
+        | 'RETRY_STATE_CANCEL_REQUESTED';
       /** @description If another run is started by cron or retry, this contains the new run id. */
       newExecutionRunId?: string;
     };
@@ -3205,15 +4243,25 @@ export interface components {
        * @description The message payload of the original request message that initiated this
        *  update.
        */
-      acceptedRequest?: components["schemas"]["Request"];
+      acceptedRequest?: components['schemas']['Request'];
+    };
+    WorkflowExecutionUpdateAdmittedEventAttributes: {
+      /** @description The update request associated with this event. */
+      request?: components['schemas']['Request'];
+      /**
+       * Format: enum
+       * @description An explanation of why this event was written to history.
+       * @enum {string}
+       */
+      origin?: 'UPDATE_ADMITTED_EVENT_ORIGIN_UNSPECIFIED' | 'UPDATE_ADMITTED_EVENT_ORIGIN_REAPPLY';
     };
     WorkflowExecutionUpdateCompletedEventAttributes: {
       /** @description The metadata about this update. */
-      meta?: components["schemas"]["Meta"];
+      meta?: components['schemas']['Meta'];
       /** @description The event ID indicating the acceptance of this update. */
       acceptedEventId?: string;
       /** @description The outcome of executing the workflow update function. */
-      outcome?: components["schemas"]["Outcome"];
+      outcome?: components['schemas']['Outcome'];
     };
     WorkflowExecutionUpdateRejectedEventAttributes: {
       /** @description The instance ID of the update protocol that generated this event. */
@@ -3230,19 +4278,9 @@ export interface components {
        * @description The message payload of the original request message that initiated this
        *  update.
        */
-      rejectedRequest?: components["schemas"]["Request"];
+      rejectedRequest?: components['schemas']['Request'];
       /** @description The cause of rejection. */
-      failure?: components["schemas"]["Failure"];
-    };
-    WorkflowExecutionUpdateRequestedEventAttributes: {
-      /** @description The update request associated with this event. */
-      request?: components["schemas"]["Request"];
-      /**
-       * Format: enum
-       * @description An explanation of why this event was written to history.
-       * @enum {string}
-       */
-      origin?: "UPDATE_REQUESTED_EVENT_ORIGIN_UNSPECIFIED" | "UPDATE_REQUESTED_EVENT_ORIGIN_REAPPLY";
+      failure?: components['schemas']['Failure'];
     };
     WorkflowPropertiesModifiedEventAttributes: {
       /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
@@ -3252,7 +4290,7 @@ export interface components {
        *  the existing memo. If the user wants to delete values, a default/empty Payload should be
        *  used as the value for the key being deleted.
        */
-      upsertedMemo?: components["schemas"]["Memo"];
+      upsertedMemo?: components['schemas']['Memo'];
     };
     WorkflowPropertiesModifiedExternallyEventAttributes: {
       /**
@@ -3271,19 +4309,19 @@ export interface components {
        *  the existing memo. If the user wants to delete values, a default/empty Payload should be
        *  used as the value for the key being deleted.
        */
-      upsertedMemo?: components["schemas"]["Memo"];
+      upsertedMemo?: components['schemas']['Memo'];
     };
     /** @description See https://docs.temporal.io/docs/concepts/queries/ */
     WorkflowQuery: {
       /** @description The workflow-author-defined identifier of the query. Typically a function name. */
       queryType?: string;
       /** @description Serialized arguments that will be provided to the query handler. */
-      queryArgs?: components["schemas"]["Payloads"];
+      queryArgs?: components['schemas']['Payloads'];
       /**
        * @description Headers that were passed by the caller of the query and copied by temporal
        *  server into the workflow task.
        */
-      header?: components["schemas"]["Header"];
+      header?: components['schemas']['Header'];
     };
     WorkflowTaskCompletedEventAttributes: {
       /** @description The id of the `WORKFLOW_TASK_SCHEDULED` event this task corresponds to */
@@ -3298,15 +4336,16 @@ export interface components {
        * @description Version info of the worker who processed this workflow task. If present, the `build_id` field
        *  within is also used as `binary_checksum`, which may be omitted in that case (it may also be
        *  populated to preserve compatibility).
+       *  Deprecated. Use the info inside the corresponding WorkflowTaskStartedEvent
        */
-      workerVersion?: components["schemas"]["WorkerVersionStamp"];
+      workerVersion?: components['schemas']['WorkerVersionStamp'];
       /**
        * @description Data the SDK wishes to record for itself, but server need not interpret, and does not
        *  directly impact workflow state.
        */
-      sdkMetadata?: components["schemas"]["WorkflowTaskCompletedMetadata"];
+      sdkMetadata?: components['schemas']['WorkflowTaskCompletedMetadata'];
       /** @description Local usage data sent during workflow task completion and recorded here for posterity */
-      meteringMetadata?: components["schemas"]["MeteringMetadata"];
+      meteringMetadata?: components['schemas']['MeteringMetadata'];
     };
     WorkflowTaskCompletedMetadata: {
       /**
@@ -3365,9 +4404,45 @@ export interface components {
        * Format: enum
        * @enum {string}
        */
-      cause?: "WORKFLOW_TASK_FAILED_CAUSE_UNSPECIFIED" | "WORKFLOW_TASK_FAILED_CAUSE_UNHANDLED_COMMAND" | "WORKFLOW_TASK_FAILED_CAUSE_BAD_SCHEDULE_ACTIVITY_ATTRIBUTES" | "WORKFLOW_TASK_FAILED_CAUSE_BAD_REQUEST_CANCEL_ACTIVITY_ATTRIBUTES" | "WORKFLOW_TASK_FAILED_CAUSE_BAD_START_TIMER_ATTRIBUTES" | "WORKFLOW_TASK_FAILED_CAUSE_BAD_CANCEL_TIMER_ATTRIBUTES" | "WORKFLOW_TASK_FAILED_CAUSE_BAD_RECORD_MARKER_ATTRIBUTES" | "WORKFLOW_TASK_FAILED_CAUSE_BAD_COMPLETE_WORKFLOW_EXECUTION_ATTRIBUTES" | "WORKFLOW_TASK_FAILED_CAUSE_BAD_FAIL_WORKFLOW_EXECUTION_ATTRIBUTES" | "WORKFLOW_TASK_FAILED_CAUSE_BAD_CANCEL_WORKFLOW_EXECUTION_ATTRIBUTES" | "WORKFLOW_TASK_FAILED_CAUSE_BAD_REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_ATTRIBUTES" | "WORKFLOW_TASK_FAILED_CAUSE_BAD_CONTINUE_AS_NEW_ATTRIBUTES" | "WORKFLOW_TASK_FAILED_CAUSE_START_TIMER_DUPLICATE_ID" | "WORKFLOW_TASK_FAILED_CAUSE_RESET_STICKY_TASK_QUEUE" | "WORKFLOW_TASK_FAILED_CAUSE_WORKFLOW_WORKER_UNHANDLED_FAILURE" | "WORKFLOW_TASK_FAILED_CAUSE_BAD_SIGNAL_WORKFLOW_EXECUTION_ATTRIBUTES" | "WORKFLOW_TASK_FAILED_CAUSE_BAD_START_CHILD_EXECUTION_ATTRIBUTES" | "WORKFLOW_TASK_FAILED_CAUSE_FORCE_CLOSE_COMMAND" | "WORKFLOW_TASK_FAILED_CAUSE_FAILOVER_CLOSE_COMMAND" | "WORKFLOW_TASK_FAILED_CAUSE_BAD_SIGNAL_INPUT_SIZE" | "WORKFLOW_TASK_FAILED_CAUSE_RESET_WORKFLOW" | "WORKFLOW_TASK_FAILED_CAUSE_BAD_BINARY" | "WORKFLOW_TASK_FAILED_CAUSE_SCHEDULE_ACTIVITY_DUPLICATE_ID" | "WORKFLOW_TASK_FAILED_CAUSE_BAD_SEARCH_ATTRIBUTES" | "WORKFLOW_TASK_FAILED_CAUSE_NON_DETERMINISTIC_ERROR" | "WORKFLOW_TASK_FAILED_CAUSE_BAD_MODIFY_WORKFLOW_PROPERTIES_ATTRIBUTES" | "WORKFLOW_TASK_FAILED_CAUSE_PENDING_CHILD_WORKFLOWS_LIMIT_EXCEEDED" | "WORKFLOW_TASK_FAILED_CAUSE_PENDING_ACTIVITIES_LIMIT_EXCEEDED" | "WORKFLOW_TASK_FAILED_CAUSE_PENDING_SIGNALS_LIMIT_EXCEEDED" | "WORKFLOW_TASK_FAILED_CAUSE_PENDING_REQUEST_CANCEL_LIMIT_EXCEEDED" | "WORKFLOW_TASK_FAILED_CAUSE_BAD_UPDATE_WORKFLOW_EXECUTION_MESSAGE" | "WORKFLOW_TASK_FAILED_CAUSE_UNHANDLED_UPDATE";
+      cause?:
+        | 'WORKFLOW_TASK_FAILED_CAUSE_UNSPECIFIED'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_UNHANDLED_COMMAND'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_SCHEDULE_ACTIVITY_ATTRIBUTES'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_REQUEST_CANCEL_ACTIVITY_ATTRIBUTES'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_START_TIMER_ATTRIBUTES'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_CANCEL_TIMER_ATTRIBUTES'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_RECORD_MARKER_ATTRIBUTES'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_COMPLETE_WORKFLOW_EXECUTION_ATTRIBUTES'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_FAIL_WORKFLOW_EXECUTION_ATTRIBUTES'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_CANCEL_WORKFLOW_EXECUTION_ATTRIBUTES'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_ATTRIBUTES'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_CONTINUE_AS_NEW_ATTRIBUTES'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_START_TIMER_DUPLICATE_ID'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_RESET_STICKY_TASK_QUEUE'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_WORKFLOW_WORKER_UNHANDLED_FAILURE'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_SIGNAL_WORKFLOW_EXECUTION_ATTRIBUTES'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_START_CHILD_EXECUTION_ATTRIBUTES'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_FORCE_CLOSE_COMMAND'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_FAILOVER_CLOSE_COMMAND'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_SIGNAL_INPUT_SIZE'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_RESET_WORKFLOW'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_BINARY'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_SCHEDULE_ACTIVITY_DUPLICATE_ID'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_SEARCH_ATTRIBUTES'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_NON_DETERMINISTIC_ERROR'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_MODIFY_WORKFLOW_PROPERTIES_ATTRIBUTES'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_PENDING_CHILD_WORKFLOWS_LIMIT_EXCEEDED'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_PENDING_ACTIVITIES_LIMIT_EXCEEDED'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_PENDING_SIGNALS_LIMIT_EXCEEDED'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_PENDING_REQUEST_CANCEL_LIMIT_EXCEEDED'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_UPDATE_WORKFLOW_EXECUTION_MESSAGE'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_UNHANDLED_UPDATE'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_SCHEDULE_NEXUS_OPERATION_ATTRIBUTES'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_PENDING_NEXUS_OPERATIONS_LIMIT_EXCEEDED'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_REQUEST_CANCEL_NEXUS_OPERATION_ATTRIBUTES'
+        | 'WORKFLOW_TASK_FAILED_CAUSE_FEATURE_DISABLED';
       /** @description The failure details */
-      failure?: components["schemas"]["Failure"];
+      failure?: components['schemas']['Failure'];
       /** @description If a worker explicitly failed this task, it's identity. TODO: What is this set to if server fails the task? */
       identity?: string;
       /** @description The original run id of the workflow. For reset workflow. */
@@ -3385,12 +4460,13 @@ export interface components {
        * @description Version info of the worker who processed this workflow task. If present, the `build_id` field
        *  within is also used as `binary_checksum`, which may be omitted in that case (it may also be
        *  populated to preserve compatibility).
+       *  Deprecated. Use the info inside the corresponding WorkflowTaskStartedEvent
        */
-      workerVersion?: components["schemas"]["WorkerVersionStamp"];
+      workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
     WorkflowTaskScheduledEventAttributes: {
       /** @description The task queue this workflow task was enqueued in, which could be a normal or sticky queue */
-      taskQueue?: components["schemas"]["TaskQueue"];
+      taskQueue?: components['schemas']['TaskQueue'];
       /**
        * @description How long the worker has to process this task once receiving it before it times out
        *
@@ -3422,6 +4498,13 @@ export interface components {
        *  just the event id of this event, so we don't include it explicitly here.
        */
       historySizeBytes?: string;
+      /** @description Version info of the worker to whom this task was dispatched. */
+      workerVersion?: components['schemas']['WorkerVersionStamp'];
+      /**
+       * @description Used by server internally to properly reapply build ID redirects to an execution
+       *  when rebuilding it from events.
+       */
+      buildIdRedirectCounter?: string;
     };
     WorkflowTaskTimedOutEventAttributes: {
       /** @description The id of the `WORKFLOW_TASK_SCHEDULED` event this task corresponds to */
@@ -3432,7 +4515,12 @@ export interface components {
        * Format: enum
        * @enum {string}
        */
-      timeoutType?: "TIMEOUT_TYPE_UNSPECIFIED" | "TIMEOUT_TYPE_START_TO_CLOSE" | "TIMEOUT_TYPE_SCHEDULE_TO_START" | "TIMEOUT_TYPE_SCHEDULE_TO_CLOSE" | "TIMEOUT_TYPE_HEARTBEAT";
+      timeoutType?:
+        | 'TIMEOUT_TYPE_UNSPECIFIED'
+        | 'TIMEOUT_TYPE_START_TO_CLOSE'
+        | 'TIMEOUT_TYPE_SCHEDULE_TO_START'
+        | 'TIMEOUT_TYPE_SCHEDULE_TO_CLOSE'
+        | 'TIMEOUT_TYPE_HEARTBEAT';
     };
     /**
      * @description Represents the identifier used by a workflow author to define the workflow. Typically, the
@@ -3454,20 +4542,19 @@ export type $defs = Record<string, never>;
 export type external = Record<string, never>;
 
 export interface operations {
-
   /** @description GetClusterInfo returns information about temporal cluster */
   GetClusterInfo: {
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["GetClusterInfoResponse"];
+          'application/json': components['schemas']['GetClusterInfoResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -3483,20 +4570,20 @@ export interface operations {
          *  Setting include_deleted to true will include deleted namespaces.
          *  Note: Namespace is in NAMESPACE_STATE_DELETED state when it was deleted from the system but associated data is not deleted yet.
          */
-        "namespaceFilter.includeDeleted"?: boolean;
+        'namespaceFilter.includeDeleted'?: boolean;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ListNamespacesResponse"];
+          'application/json': components['schemas']['ListNamespacesResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -3512,20 +4599,20 @@ export interface operations {
   RegisterNamespace: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["RegisterNamespaceRequest"];
+        'application/json': components['schemas']['RegisterNamespaceRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["RegisterNamespaceResponse"];
+          'application/json': components['schemas']['RegisterNamespaceResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -3544,13 +4631,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["DescribeNamespaceResponse"];
+          'application/json': components['schemas']['DescribeNamespaceResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -3570,20 +4657,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["RespondActivityTaskCanceledRequest"];
+        'application/json': components['schemas']['RespondActivityTaskCanceledRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["RespondActivityTaskCanceledResponse"];
+          'application/json': components['schemas']['RespondActivityTaskCanceledResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -3604,20 +4691,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["RespondActivityTaskCanceledByIdRequest"];
+        'application/json': components['schemas']['RespondActivityTaskCanceledByIdRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["RespondActivityTaskCanceledByIdResponse"];
+          'application/json': components['schemas']['RespondActivityTaskCanceledByIdResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -3638,20 +4725,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["RespondActivityTaskCompletedRequest"];
+        'application/json': components['schemas']['RespondActivityTaskCompletedRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["RespondActivityTaskCompletedResponse"];
+          'application/json': components['schemas']['RespondActivityTaskCompletedResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -3672,20 +4759,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["RespondActivityTaskCompletedByIdRequest"];
+        'application/json': components['schemas']['RespondActivityTaskCompletedByIdRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["RespondActivityTaskCompletedByIdResponse"];
+          'application/json': components['schemas']['RespondActivityTaskCompletedByIdResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -3705,20 +4792,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["RespondActivityTaskFailedRequest"];
+        'application/json': components['schemas']['RespondActivityTaskFailedRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["RespondActivityTaskFailedResponse"];
+          'application/json': components['schemas']['RespondActivityTaskFailedResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -3739,20 +4826,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["RespondActivityTaskFailedByIdRequest"];
+        'application/json': components['schemas']['RespondActivityTaskFailedByIdRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["RespondActivityTaskFailedByIdResponse"];
+          'application/json': components['schemas']['RespondActivityTaskFailedByIdResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -3773,20 +4860,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["RecordActivityTaskHeartbeatRequest"];
+        'application/json': components['schemas']['RecordActivityTaskHeartbeatRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["RecordActivityTaskHeartbeatResponse"];
+          'application/json': components['schemas']['RecordActivityTaskHeartbeatResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -3807,20 +4894,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["RecordActivityTaskHeartbeatByIdRequest"];
+        'application/json': components['schemas']['RecordActivityTaskHeartbeatByIdRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["RecordActivityTaskHeartbeatByIdResponse"];
+          'application/json': components['schemas']['RecordActivityTaskHeartbeatByIdResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -3841,13 +4928,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ListArchivedWorkflowExecutionsResponse"];
+          'application/json': components['schemas']['ListArchivedWorkflowExecutionsResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -3870,13 +4957,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ListBatchOperationsResponse"];
+          'application/json': components['schemas']['ListBatchOperationsResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -3895,13 +4982,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["DescribeBatchOperationResponse"];
+          'application/json': components['schemas']['DescribeBatchOperationResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -3918,20 +5005,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["StartBatchOperationRequest"];
+        'application/json': components['schemas']['StartBatchOperationRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["StartBatchOperationResponse"];
+          'application/json': components['schemas']['StartBatchOperationResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -3948,20 +5035,175 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["StopBatchOperationRequest"];
+        'application/json': components['schemas']['StopBatchOperationRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["StopBatchOperationResponse"];
+          'application/json': components['schemas']['StopBatchOperationResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description List all Nexus outgoing services for a namespace, sorted by service name in ascending order. Set page_token in
+   *  the request to the next_page_token field of the previous response to get the next page of results. An empty
+   *  next_page_token indicates that there are no more results. During pagination, a newly added service with a name
+   *  lexicographically earlier than the previous page's last service name may be missed.
+   */
+  ListNexusOutgoingServices: {
+    parameters: {
+      query?: {
+        /** @description Maximum number of services to return in a single page. */
+        pageSize?: number;
+        /** @description Pass in the next_page_token from the previous response here. */
+        pageToken?: string;
+      };
+      path: {
+        /** @description Namespace to scope the list request to. */
+        namespace: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['ListNexusOutgoingServicesResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Create a Nexus service. This will fail if a service with the same name already exists in the namespace with a
+   *  status of ALREADY_EXISTS.
+   *  Returns the created service with its initial version. You may use this version for subsequent updates. You don't
+   *  need to increment the version yourself. The server will increment the version for you after each update.
+   */
+  CreateNexusOutgoingService: {
+    parameters: {
+      path: {
+        /** @description Namespace to create this service definition in. */
+        namespace: string;
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateNexusOutgoingServiceRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['CreateNexusOutgoingServiceResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Get a registered outgoing Nexus service by namespace and service name. The returned version can be used for
+   *  optimistic updates.
+   */
+  GetNexusOutgoingService: {
+    parameters: {
+      path: {
+        /** @description Namespace that contains this outgoing service definition. */
+        namespace: string;
+        /** @description Name of service to retrieve. */
+        name: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['GetNexusOutgoingServiceResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /** @description Delete an outgoing Nexus service by namespace and service name. */
+  DeleteNexusOutgoingService: {
+    parameters: {
+      path: {
+        /** @description Namespace that contains this outgoing service definition. */
+        namespace: string;
+        /** @description Name of service to delete. */
+        name: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['DeleteNexusOutgoingServiceResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Update an outgoing Nexus service by namespace and service name. The version in the request should match the
+   *  current version of the service. This will fail with a status of FAILED_PRECONDITION if the version does not match.
+   *  Returns the updated service with the updated version, which can be used for subsequent updates. You don't need
+   *  to increment the version yourself. The server will increment the version for you.
+   */
+  UpdateNexusOutgoingService: {
+    parameters: {
+      path: {
+        /** @description Namespace to find and update this service definition in. */
+        namespace: string;
+        /** @description Service name, unique for this namespace. Must match `[a-zA-Z_][a-zA-Z0-9_]*`. */
+        name: string;
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateNexusOutgoingServiceRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['UpdateNexusOutgoingServiceResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -3974,6 +5216,8 @@ export interface operations {
         maximumPageSize?: number;
         /** @description Token to get the next page of results. */
         nextPageToken?: string;
+        /** @description Query to filter schedules. */
+        query?: string;
       };
       path: {
         /** @description The namespace to list schedules in. */
@@ -3984,13 +5228,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ListSchedulesResponse"];
+          'application/json': components['schemas']['ListSchedulesResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4009,13 +5253,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["DescribeScheduleResponse"];
+          'application/json': components['schemas']['DescribeScheduleResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4032,20 +5276,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["CreateScheduleRequest"];
+        'application/json': components['schemas']['CreateScheduleRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["CreateScheduleResponse"];
+          'application/json': components['schemas']['CreateScheduleResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4068,13 +5312,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["DeleteScheduleResponse"];
+          'application/json': components['schemas']['DeleteScheduleResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4098,13 +5342,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ListScheduleMatchingTimesResponse"];
+          'application/json': components['schemas']['ListScheduleMatchingTimesResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4121,20 +5365,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["PatchScheduleRequest"];
+        'application/json': components['schemas']['PatchScheduleRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["PatchScheduleResponse"];
+          'application/json': components['schemas']['PatchScheduleResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4151,20 +5395,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["UpdateScheduleRequest"];
+        'application/json': components['schemas']['UpdateScheduleRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["UpdateScheduleResponse"];
+          'application/json': components['schemas']['UpdateScheduleResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4180,18 +5424,21 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ListSearchAttributesResponse"];
+          'application/json': components['schemas']['ListSearchAttributesResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
   };
-  /** @description Fetches the worker build id versioning sets for a task queue. */
+  /**
+   * @description Deprecated. Use `GetWorkerVersioningRules`.
+   *  Fetches the worker build id versioning sets for a task queue.
+   */
   GetWorkerBuildIdCompatibility: {
     parameters: {
       query?: {
@@ -4211,49 +5458,120 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["GetWorkerBuildIdCompatibilityResponse"];
+          'application/json': components['schemas']['GetWorkerBuildIdCompatibilityResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
   };
-  /** @description DescribeTaskQueue returns information about the target task queue. */
-  DescribeTaskQueue: {
+  /**
+   * @description Fetches the Build ID assignment and redirect rules for a Task Queue.
+   *  WARNING: Worker Versioning is not yet stable and the API and behavior may change incompatibly.
+   */
+  GetWorkerVersioningRules: {
     parameters: {
-      query?: {
-        "taskQueue.name"?: string;
-        /** @description Default: TASK_QUEUE_KIND_NORMAL. */
-        "taskQueue.kind"?: "TASK_QUEUE_KIND_UNSPECIFIED" | "TASK_QUEUE_KIND_NORMAL" | "TASK_QUEUE_KIND_STICKY";
-        /**
-         * @description Iff kind == TASK_QUEUE_KIND_STICKY, then this field contains the name of
-         *  the normal task queue that the sticky worker is running on.
-         */
-        "taskQueue.normalName"?: string;
-        /** @description If unspecified (TASK_QUEUE_TYPE_UNSPECIFIED), then default value (TASK_QUEUE_TYPE_WORKFLOW) will be used. */
-        taskQueueType?: "TASK_QUEUE_TYPE_UNSPECIFIED" | "TASK_QUEUE_TYPE_WORKFLOW" | "TASK_QUEUE_TYPE_ACTIVITY" | "TASK_QUEUE_TYPE_NEXUS";
-        includeTaskQueueStatus?: boolean;
-      };
       path: {
         namespace: string;
-        "task_queue.name": string;
+        taskQueue: string;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["DescribeTaskQueueResponse"];
+          'application/json': components['schemas']['GetWorkerVersioningRulesResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description DescribeTaskQueue returns the following information about the target task queue, broken down by Build ID:
+   *    - List of pollers
+   *    - Workflow Reachability status
+   *    - Backlog info for Workflow and/or Activity tasks
+   */
+  DescribeTaskQueue: {
+    parameters: {
+      query?: {
+        'taskQueue.name'?: string;
+        /** @description Default: TASK_QUEUE_KIND_NORMAL. */
+        'taskQueue.kind'?:
+          | 'TASK_QUEUE_KIND_UNSPECIFIED'
+          | 'TASK_QUEUE_KIND_NORMAL'
+          | 'TASK_QUEUE_KIND_STICKY';
+        /**
+         * @description Iff kind == TASK_QUEUE_KIND_STICKY, then this field contains the name of
+         *  the normal task queue that the sticky worker is running on.
+         */
+        'taskQueue.normalName'?: string;
+        /**
+         * @description Deprecated. Use `ENHANCED` mode with `task_queue_types`. Ignored in `ENHANCED` mode.
+         *  If unspecified (TASK_QUEUE_TYPE_UNSPECIFIED), then default value (TASK_QUEUE_TYPE_WORKFLOW) will be used.
+         */
+        taskQueueType?:
+          | 'TASK_QUEUE_TYPE_UNSPECIFIED'
+          | 'TASK_QUEUE_TYPE_WORKFLOW'
+          | 'TASK_QUEUE_TYPE_ACTIVITY'
+          | 'TASK_QUEUE_TYPE_NEXUS';
+        /** @description Deprecated. Ignored in `ENHANCED` mode. */
+        includeTaskQueueStatus?: boolean;
+        /** @description All options except `task_queue_type` and `include_task_queue_status` are only available in the `ENHANCED` mode. */
+        apiMode?: 'DESCRIBE_TASK_QUEUE_MODE_UNSPECIFIED' | 'DESCRIBE_TASK_QUEUE_MODE_ENHANCED';
+        /** @description Include specific Build IDs. */
+        'versions.buildIds'?: string[];
+        /** @description Include the unversioned queue. */
+        'versions.unversioned'?: boolean;
+        /**
+         * @description Include all active versions. A version is considered active if it has had new
+         *  tasks or polls recently.
+         */
+        'versions.allActive'?: boolean;
+        /** @description Task queue types to report info about. If not specified, all types are considered. */
+        taskQueueTypes?: (
+          | 'TASK_QUEUE_TYPE_UNSPECIFIED'
+          | 'TASK_QUEUE_TYPE_WORKFLOW'
+          | 'TASK_QUEUE_TYPE_ACTIVITY'
+          | 'TASK_QUEUE_TYPE_NEXUS'
+        )[];
+        /**
+         * @description Report backlog info for the requested task queue types and versions
+         *  bool report_backlog_info = 8;
+         *  Report list of pollers for requested task queue types and versions
+         */
+        reportPollers?: boolean;
+        /**
+         * @description Report task reachability for the requested versions and all task types (task reachability is not reported
+         *  per task type).
+         */
+        reportTaskReachability?: boolean;
+      };
+      path: {
+        namespace: string;
+        'task_queue.name': string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['DescribeTaskQueueResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4270,26 +5588,28 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["UpdateNamespaceRequest"];
+        'application/json': components['schemas']['UpdateNamespaceRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["UpdateNamespaceResponse"];
+          'application/json': components['schemas']['UpdateNamespaceResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
   };
   /**
-   * @description Fetches task reachability to determine whether a worker may be retired.
+   * @description Deprecated. Use `DescribeTaskQueue`.
+   *
+   *  Fetches task reachability to determine whether a worker may be retired.
    *  The request may specify task queues to query for or let the server fetch all task queues mapped to the given
    *  build IDs.
    *
@@ -4328,7 +5648,12 @@ export interface operations {
          *  unspecified.
          *  See the TaskReachability docstring for information about each enum variant.
          */
-        reachability?: "TASK_REACHABILITY_UNSPECIFIED" | "TASK_REACHABILITY_NEW_WORKFLOWS" | "TASK_REACHABILITY_EXISTING_WORKFLOWS" | "TASK_REACHABILITY_OPEN_WORKFLOWS" | "TASK_REACHABILITY_CLOSED_WORKFLOWS";
+        reachability?:
+          | 'TASK_REACHABILITY_UNSPECIFIED'
+          | 'TASK_REACHABILITY_NEW_WORKFLOWS'
+          | 'TASK_REACHABILITY_EXISTING_WORKFLOWS'
+          | 'TASK_REACHABILITY_OPEN_WORKFLOWS'
+          | 'TASK_REACHABILITY_CLOSED_WORKFLOWS';
       };
       path: {
         namespace: string;
@@ -4338,13 +5663,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["GetWorkerTaskReachabilityResponse"];
+          'application/json': components['schemas']['GetWorkerTaskReachabilityResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4363,13 +5688,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["CountWorkflowExecutionsResponse"];
+          'application/json': components['schemas']['CountWorkflowExecutionsResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4390,13 +5715,50 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ListWorkflowExecutionsResponse"];
+          'application/json': components['schemas']['ListWorkflowExecutionsResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description ExecuteMultiOperation executes multiple operations within a single workflow.
+   *
+   *  Operations are started atomically, meaning if *any* operation fails to be started, none are,
+   *  and the request fails. Upon start, the API returns only when *all* operations have a response.
+   *
+   *  Upon failure, it returns `MultiOperationExecutionFailure` where the status code
+   *  equals the status code of the *first* operation that failed to be started.
+   *
+   *  NOTE: Experimental API.
+   */
+  ExecuteMultiOperation: {
+    parameters: {
+      path: {
+        namespace: string;
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ExecuteMultiOperationRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['ExecuteMultiOperationResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4405,25 +5767,25 @@ export interface operations {
   DescribeWorkflowExecution: {
     parameters: {
       query?: {
-        "execution.workflowId"?: string;
-        "execution.runId"?: string;
+        'execution.workflowId'?: string;
+        'execution.runId'?: string;
       };
       path: {
         namespace: string;
-        "execution.workflow_id": string;
+        'execution.workflow_id': string;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["DescribeWorkflowExecutionResponse"];
+          'application/json': components['schemas']['DescribeWorkflowExecutionResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4435,8 +5797,8 @@ export interface operations {
   GetWorkflowExecutionHistory: {
     parameters: {
       query?: {
-        "execution.workflowId"?: string;
-        "execution.runId"?: string;
+        'execution.workflowId'?: string;
+        'execution.runId'?: string;
         maximumPageSize?: number;
         /**
          * @description If a `GetWorkflowExecutionHistoryResponse` or a `PollWorkflowTaskQueueResponse` had one of
@@ -4452,25 +5814,28 @@ export interface operations {
          * @description Filter returned events such that they match the specified filter type.
          *  Default: HISTORY_EVENT_FILTER_TYPE_ALL_EVENT.
          */
-        historyEventFilterType?: "HISTORY_EVENT_FILTER_TYPE_UNSPECIFIED" | "HISTORY_EVENT_FILTER_TYPE_ALL_EVENT" | "HISTORY_EVENT_FILTER_TYPE_CLOSE_EVENT";
+        historyEventFilterType?:
+          | 'HISTORY_EVENT_FILTER_TYPE_UNSPECIFIED'
+          | 'HISTORY_EVENT_FILTER_TYPE_ALL_EVENT'
+          | 'HISTORY_EVENT_FILTER_TYPE_CLOSE_EVENT';
         skipArchival?: boolean;
       };
       path: {
         namespace: string;
-        "execution.workflow_id": string;
+        'execution.workflow_id': string;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["GetWorkflowExecutionHistoryResponse"];
+          'application/json': components['schemas']['GetWorkflowExecutionHistoryResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4483,27 +5848,27 @@ export interface operations {
   GetWorkflowExecutionHistoryReverse: {
     parameters: {
       query?: {
-        "execution.workflowId"?: string;
-        "execution.runId"?: string;
+        'execution.workflowId'?: string;
+        'execution.runId'?: string;
         maximumPageSize?: number;
         nextPageToken?: string;
       };
       path: {
         namespace: string;
-        "execution.workflow_id": string;
+        'execution.workflow_id': string;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["GetWorkflowExecutionHistoryReverseResponse"];
+          'application/json': components['schemas']['GetWorkflowExecutionHistoryReverseResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4513,26 +5878,26 @@ export interface operations {
     parameters: {
       path: {
         namespace: string;
-        "execution.workflow_id": string;
-        "query.query_type": string;
+        'execution.workflow_id': string;
+        'query.query_type': string;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["QueryWorkflowRequest"];
+        'application/json': components['schemas']['QueryWorkflowRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["QueryWorkflowResponse"];
+          'application/json': components['schemas']['QueryWorkflowResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4553,20 +5918,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["StartWorkflowExecutionRequest"];
+        'application/json': components['schemas']['StartWorkflowExecutionRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["StartWorkflowExecutionResponse"];
+          'application/json': components['schemas']['StartWorkflowExecutionResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4596,20 +5961,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["SignalWithStartWorkflowExecutionRequest"];
+        'application/json': components['schemas']['SignalWithStartWorkflowExecutionRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["SignalWithStartWorkflowExecutionResponse"];
+          'application/json': components['schemas']['SignalWithStartWorkflowExecutionResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4626,25 +5991,25 @@ export interface operations {
     parameters: {
       path: {
         namespace: string;
-        "workflow_execution.workflow_id": string;
+        'workflow_execution.workflow_id': string;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["RequestCancelWorkflowExecutionRequest"];
+        'application/json': components['schemas']['RequestCancelWorkflowExecutionRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["RequestCancelWorkflowExecutionResponse"];
+          'application/json': components['schemas']['RequestCancelWorkflowExecutionResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4659,25 +6024,25 @@ export interface operations {
     parameters: {
       path: {
         namespace: string;
-        "workflow_execution.workflow_id": string;
+        'workflow_execution.workflow_id': string;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["ResetWorkflowExecutionRequest"];
+        'application/json': components['schemas']['ResetWorkflowExecutionRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ResetWorkflowExecutionResponse"];
+          'application/json': components['schemas']['ResetWorkflowExecutionResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4692,27 +6057,27 @@ export interface operations {
     parameters: {
       path: {
         namespace: string;
-        "workflow_execution.workflow_id": string;
+        'workflow_execution.workflow_id': string;
         /** @description The workflow author-defined name of the signal to send to the workflow */
         signalName: string;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["SignalWorkflowExecutionRequest"];
+        'application/json': components['schemas']['SignalWorkflowExecutionRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["SignalWorkflowExecutionResponse"];
+          'application/json': components['schemas']['SignalWorkflowExecutionResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4726,25 +6091,25 @@ export interface operations {
     parameters: {
       path: {
         namespace: string;
-        "workflow_execution.workflow_id": string;
+        'workflow_execution.workflow_id': string;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["TerminateWorkflowExecutionRequest"];
+        'application/json': components['schemas']['TerminateWorkflowExecutionRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["TerminateWorkflowExecutionResponse"];
+          'application/json': components['schemas']['TerminateWorkflowExecutionResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4755,26 +6120,175 @@ export interface operations {
       path: {
         /** @description The namespace name of the target workflow */
         namespace: string;
-        "workflow_execution.workflow_id": string;
-        "request.input.name": string;
+        'workflow_execution.workflow_id': string;
+        'request.input.name': string;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["UpdateWorkflowExecutionRequest"];
+        'application/json': components['schemas']['UpdateWorkflowExecutionRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["UpdateWorkflowExecutionResponse"];
+          'application/json': components['schemas']['UpdateWorkflowExecutionResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description List all Nexus incoming services for the cluster, sorted by service ID in ascending order. Set page_token in the
+   *  request to the next_page_token field of the previous response to get the next page of results. An empty
+   *  next_page_token indicates that there are no more results. During pagination, a newly added service with an ID
+   *  lexicographically earlier than the previous page's last service name may be missed.
+   */
+  ListNexusIncomingServices: {
+    parameters: {
+      query?: {
+        pageSize?: number;
+        /**
+         * @description To get the next page, pass in `ListNexusIncomingServicesResponse.next_page_token` from the previous page's
+         *  response, the token will be empty if there's no other page.
+         *  Note: the last page may be empty if the total number of services registered is a multiple of the page size.
+         */
+        nextPageToken?: string;
+        /**
+         * @description Name of the incoming service to filter on - optional. Specifying this will result in zero or one results.
+         *  (-- api-linter: core::203::field-behavior-required=disabled
+         *      aip.dev/not-precedent: Not following linter rules. --)
+         */
+        name?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['ListNexusIncomingServicesResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Create a Nexus service. This will fail if a service with the same name already exists in the namespace with a
+   *  status of ALREADY_EXISTS.
+   *  Returns the created service with its initial version. You may use this version for subsequent updates.
+   */
+  CreateNexusIncomingService: {
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateNexusIncomingServiceRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['CreateNexusIncomingServiceResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /** @description Get a registered incoming Nexus service by ID. The returned version can be used for optimistic updates. */
+  GetNexusIncomingService: {
+    parameters: {
+      path: {
+        /** @description Server-generated unique service ID. */
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['GetNexusIncomingServiceResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /** @description Delete an incoming Nexus service by ID. */
+  DeleteNexusIncomingService: {
+    parameters: {
+      query?: {
+        /** @description Data version for this service. Must match current version. */
+        version?: string;
+      };
+      path: {
+        /** @description Server-generated unique service ID. */
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['DeleteNexusIncomingServiceResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Optimistically update a Nexus service based on provided version as obtained via the
+   *  `GetNexusIncomingService` or `ListNexusOutgoingServicesResponse` APIs. This will fail with a status of
+   *  FAILED_PRECONDITION if the version does not match.
+   *  Returns the updated service with its updated version. You may use this version for subsequent updates. You don't
+   *  need to increment the version yourself. The server will increment the version for you after each update.
+   */
+  UpdateNexusIncomingService: {
+    parameters: {
+      path: {
+        /** @description Server-generated unique service ID. */
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateNexusIncomingServiceRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['UpdateNexusIncomingServiceResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -4785,13 +6299,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["GetSystemInfoResponse"];
+          'application/json': components['schemas']['GetSystemInfoResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          "application/json": components["schemas"]["Status"];
+          'application/json': components['schemas']['Status'];
         };
       };
     };

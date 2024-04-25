@@ -40,3 +40,4 @@ emitter.on('error', (error) => {
 await emitter.clone(openAPIDefinitionsDirectory);
 
 await $`npx openapi-typescript ${openApiDefinitions} -o ${schema}`;
+await $`npm run format`;

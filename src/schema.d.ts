@@ -2618,7 +2618,8 @@ export interface components {
       buildId?: string;
       /**
        * Format: enum
-       * @description History event reapply options.
+       * @description Event types to be reapplied (deprecated)
+       *  Default: RESET_REAPPLY_TYPE_SIGNAL
        * @enum {string}
        */
       resetReapplyType?:
@@ -2631,6 +2632,12 @@ export interface components {
        *  possibly others in the future.)
        */
       currentRunOnly?: boolean;
+      /** @description Event types not to be reapplied */
+      resetReapplyExcludeTypes?: (
+        | 'RESET_REAPPLY_EXCLUDE_TYPE_UNSPECIFIED'
+        | 'RESET_REAPPLY_EXCLUDE_TYPE_SIGNAL'
+        | 'RESET_REAPPLY_EXCLUDE_TYPE_UPDATE'
+      )[];
     };
     /**
      * @description ResetPointInfo records the workflow event id that is the first one processed by a given
@@ -2675,7 +2682,7 @@ export interface components {
       /**
        * Format: enum
        * @description Event types to be reapplied (deprecated)
-       *  Default: RESET_REAPPLY_TYPE_ALL_ELIGIBLE
+       *  Default: RESET_REAPPLY_TYPE_SIGNAL
        * @enum {string}
        */
       resetReapplyType?:

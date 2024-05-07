@@ -247,12 +247,98 @@ export type StopBatchOperationResponse = Promise<
   >
 >;
 
+export type ListNexusOutgoingServicesRequestParameters = {
+  query?: {
+    /** @description Maximum number of services to return in a single page. */
+    pageSize?: number;
+    /** @description Pass in the next_page_token from the previous response here. */
+    pageToken?: string;
+  };
+  path: {
+    /** @description Namespace to scope the list request to. */
+    namespace: string;
+  };
+};
+
+export type ListNexusOutgoingServicesResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/nexus/outgoing-services']['get'],
+    operations['ListNexusOutgoingServices']
+  >
+>;
+
+export type CreateNexusOutgoingServiceRequestParameters = {
+  path: {
+    /** @description Namespace to create this service definition in. */
+    namespace: string;
+  };
+  body: components['schemas']['CreateNexusOutgoingServiceRequest'];
+};
+
+export type CreateNexusOutgoingServiceResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/nexus/outgoing-services']['post'],
+    operations['CreateNexusOutgoingService']
+  >
+>;
+
+export type GetNexusOutgoingServiceRequestParameters = {
+  path: {
+    /** @description Namespace that contains this outgoing service definition. */
+    namespace: string;
+    /** @description Name of service to retrieve. */
+    name: string;
+  };
+};
+
+export type GetNexusOutgoingServiceResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}']['get'],
+    operations['GetNexusOutgoingService']
+  >
+>;
+
+export type DeleteNexusOutgoingServiceRequestParameters = {
+  path: {
+    /** @description Namespace that contains this outgoing service definition. */
+    namespace: string;
+    /** @description Name of service to delete. */
+    name: string;
+  };
+};
+
+export type DeleteNexusOutgoingServiceResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}']['delete'],
+    operations['DeleteNexusOutgoingService']
+  >
+>;
+
+export type UpdateNexusOutgoingServiceRequestParameters = {
+  path: {
+    /** @description Namespace to find and update this service definition in. */
+    namespace: string;
+    /** @description Service name, unique for this namespace. Must match `[a-zA-Z_][a-zA-Z0-9_]*`. */
+    name: string;
+  };
+  body: components['schemas']['UpdateNexusOutgoingServiceRequest'];
+};
+
+export type UpdateNexusOutgoingServiceResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}/update']['post'],
+    operations['UpdateNexusOutgoingService']
+  >
+>;
+
 export type ListSchedulesRequestParameters = {
   query?: {
     /** @description How many to return at once. */
     maximumPageSize?: number;
     /** @description Token to get the next page of results. */
     nextPageToken?: string;
+    /** @description Query to filter schedules. */
+    query?: string;
   };
   path: {
     /** @description The namespace to list schedules in. */
@@ -410,6 +496,20 @@ export type GetWorkerBuildIdCompatibilityResponse = Promise<
   >
 >;
 
+export type GetWorkerVersioningRulesRequestParameters = {
+  path: {
+    namespace: string;
+    taskQueue: string;
+  };
+};
+
+export type GetWorkerVersioningRulesResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/task-queues/{taskQueue}/worker-versioning-rules']['get'],
+    operations['GetWorkerVersioningRules']
+  >
+>;
+
 export type DescribeTaskQueueRequestParameters = {
   query?: {
     'taskQueue.name'?: string;
@@ -423,13 +523,46 @@ export type DescribeTaskQueueRequestParameters = {
      *  the normal task queue that the sticky worker is running on.
      */
     'taskQueue.normalName'?: string;
-    /** @description If unspecified (TASK_QUEUE_TYPE_UNSPECIFIED), then default value (TASK_QUEUE_TYPE_WORKFLOW) will be used. */
+    /**
+     * @description Deprecated. Use `ENHANCED` mode with `task_queue_types`. Ignored in `ENHANCED` mode.
+     *  If unspecified (TASK_QUEUE_TYPE_UNSPECIFIED), then default value (TASK_QUEUE_TYPE_WORKFLOW) will be used.
+     */
     taskQueueType?:
       | 'TASK_QUEUE_TYPE_UNSPECIFIED'
       | 'TASK_QUEUE_TYPE_WORKFLOW'
       | 'TASK_QUEUE_TYPE_ACTIVITY'
       | 'TASK_QUEUE_TYPE_NEXUS';
+    /** @description Deprecated. Ignored in `ENHANCED` mode. */
     includeTaskQueueStatus?: boolean;
+    /** @description All options except `task_queue_type` and `include_task_queue_status` are only available in the `ENHANCED` mode. */
+    apiMode?: 'DESCRIBE_TASK_QUEUE_MODE_UNSPECIFIED' | 'DESCRIBE_TASK_QUEUE_MODE_ENHANCED';
+    /** @description Include specific Build IDs. */
+    'versions.buildIds'?: string[];
+    /** @description Include the unversioned queue. */
+    'versions.unversioned'?: boolean;
+    /**
+     * @description Include all active versions. A version is considered active if it has had new
+     *  tasks or polls recently.
+     */
+    'versions.allActive'?: boolean;
+    /** @description Task queue types to report info about. If not specified, all types are considered. */
+    taskQueueTypes?: (
+      | 'TASK_QUEUE_TYPE_UNSPECIFIED'
+      | 'TASK_QUEUE_TYPE_WORKFLOW'
+      | 'TASK_QUEUE_TYPE_ACTIVITY'
+      | 'TASK_QUEUE_TYPE_NEXUS'
+    )[];
+    /**
+     * @description Report backlog info for the requested task queue types and versions
+     *  bool report_backlog_info = 8;
+     *  Report list of pollers for requested task queue types and versions
+     */
+    reportPollers?: boolean;
+    /**
+     * @description Report task reachability for the requested versions and all task types (task reachability is not reported
+     *  per task type).
+     */
+    reportTaskReachability?: boolean;
   };
   path: {
     namespace: string;
@@ -533,6 +666,20 @@ export type ListWorkflowExecutionsResponse = Promise<
   FetchResponse<
     paths['/api/v1/namespaces/{namespace}/workflows']['get'],
     operations['ListWorkflowExecutions']
+  >
+>;
+
+export type ExecuteMultiOperationRequestParameters = {
+  path: {
+    namespace: string;
+  };
+  body: components['schemas']['ExecuteMultiOperationRequest'];
+};
+
+export type ExecuteMultiOperationResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/namespaces/{namespace}/workflows/execute-multi-operation']['post'],
+    operations['ExecuteMultiOperation']
   >
 >;
 
@@ -736,6 +883,89 @@ export type UpdateWorkflowExecutionResponse = Promise<
   FetchResponse<
     paths['/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update/{request.input.name}']['post'],
     operations['UpdateWorkflowExecution']
+  >
+>;
+
+export type ListNexusIncomingServicesRequestParameters = {
+  query?: {
+    pageSize?: number;
+    /**
+     * @description To get the next page, pass in `ListNexusIncomingServicesResponse.next_page_token` from the previous page's
+     *  response, the token will be empty if there's no other page.
+     *  Note: the last page may be empty if the total number of services registered is a multiple of the page size.
+     */
+    nextPageToken?: string;
+    /**
+     * @description Name of the incoming service to filter on - optional. Specifying this will result in zero or one results.
+     *  (-- api-linter: core::203::field-behavior-required=disabled
+     *      aip.dev/not-precedent: Not following linter rules. --)
+     */
+    name?: string;
+  };
+};
+
+export type ListNexusIncomingServicesResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/nexus/incoming-services']['get'],
+    operations['ListNexusIncomingServices']
+  >
+>;
+
+export type CreateNexusIncomingServiceRequestParameters = {
+  body: components['schemas']['CreateNexusIncomingServiceRequest'];
+};
+
+export type CreateNexusIncomingServiceResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/nexus/incoming-services']['post'],
+    operations['CreateNexusIncomingService']
+  >
+>;
+
+export type GetNexusIncomingServiceRequestParameters = {
+  path: {
+    /** @description Server-generated unique service ID. */
+    id: string;
+  };
+};
+
+export type GetNexusIncomingServiceResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/nexus/incoming-services/{id}']['get'],
+    operations['GetNexusIncomingService']
+  >
+>;
+
+export type DeleteNexusIncomingServiceRequestParameters = {
+  query?: {
+    /** @description Data version for this service. Must match current version. */
+    version?: string;
+  };
+  path: {
+    /** @description Server-generated unique service ID. */
+    id: string;
+  };
+};
+
+export type DeleteNexusIncomingServiceResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/nexus/incoming-services/{id}']['delete'],
+    operations['DeleteNexusIncomingService']
+  >
+>;
+
+export type UpdateNexusIncomingServiceRequestParameters = {
+  path: {
+    /** @description Server-generated unique service ID. */
+    id: string;
+  };
+  body: components['schemas']['UpdateNexusIncomingServiceRequest'];
+};
+
+export type UpdateNexusIncomingServiceResponse = Promise<
+  FetchResponse<
+    paths['/api/v1/nexus/incoming-services/{id}/update']['post'],
+    operations['UpdateNexusIncomingService']
   >
 >;
 
@@ -996,6 +1226,74 @@ export class Client {
     });
   }
 
+  /**
+   * @description List all Nexus outgoing services for a namespace, sorted by service name in ascending order. Set page_token in
+   *  the request to the next_page_token field of the previous response to get the next page of results. An empty
+   *  next_page_token indicates that there are no more results. During pagination, a newly added service with a name
+   *  lexicographically earlier than the previous page's last service name may be missed.
+   */
+  listNexusOutgoingServices({
+    query,
+    path,
+  }: ListNexusOutgoingServicesRequestParameters): ListNexusOutgoingServicesResponse {
+    return this.client.GET('/api/v1/namespaces/{namespace}/nexus/outgoing-services', {
+      params: { query, path },
+    });
+  }
+
+  /**
+   * @description Create a Nexus service. This will fail if a service with the same name already exists in the namespace with a
+   *  status of ALREADY_EXISTS.
+   *  Returns the created service with its initial version. You may use this version for subsequent updates. You don't
+   *  need to increment the version yourself. The server will increment the version for you after each update.
+   */
+  createNexusOutgoingService({
+    path,
+    body,
+  }: CreateNexusOutgoingServiceRequestParameters): CreateNexusOutgoingServiceResponse {
+    return this.client.POST('/api/v1/namespaces/{namespace}/nexus/outgoing-services', {
+      params: { path },
+      body,
+    });
+  }
+
+  /**
+   * @description Get a registered outgoing Nexus service by namespace and service name. The returned version can be used for
+   *  optimistic updates.
+   */
+  getNexusOutgoingService({
+    path,
+  }: GetNexusOutgoingServiceRequestParameters): GetNexusOutgoingServiceResponse {
+    return this.client.GET('/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}', {
+      params: { path },
+    });
+  }
+
+  /** @description Delete an outgoing Nexus service by namespace and service name. */
+  deleteNexusOutgoingService({
+    path,
+  }: DeleteNexusOutgoingServiceRequestParameters): DeleteNexusOutgoingServiceResponse {
+    return this.client.DELETE('/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}', {
+      params: { path },
+    });
+  }
+
+  /**
+   * @description Update an outgoing Nexus service by namespace and service name. The version in the request should match the
+   *  current version of the service. This will fail with a status of FAILED_PRECONDITION if the version does not match.
+   *  Returns the updated service with the updated version, which can be used for subsequent updates. You don't need
+   *  to increment the version yourself. The server will increment the version for you.
+   */
+  updateNexusOutgoingService({
+    path,
+    body,
+  }: UpdateNexusOutgoingServiceRequestParameters): UpdateNexusOutgoingServiceResponse {
+    return this.client.POST(
+      '/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}/update',
+      { params: { path }, body },
+    );
+  }
+
   /** @description List all schedules in a namespace. */
   listSchedules({ query, path }: ListSchedulesRequestParameters): ListSchedulesResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/schedules', { params: { query, path } });
@@ -1058,7 +1356,10 @@ export class Client {
     });
   }
 
-  /** @description Fetches the worker build id versioning sets for a task queue. */
+  /**
+   * @description Deprecated. Use `GetWorkerVersioningRules`.
+   *  Fetches the worker build id versioning sets for a task queue.
+   */
   getWorkerBuildIdCompatibility({
     query,
     path,
@@ -1069,7 +1370,25 @@ export class Client {
     );
   }
 
-  /** @description DescribeTaskQueue returns information about the target task queue. */
+  /**
+   * @description Fetches the Build ID assignment and redirect rules for a Task Queue.
+   *  WARNING: Worker Versioning is not yet stable and the API and behavior may change incompatibly.
+   */
+  getWorkerVersioningRules({
+    path,
+  }: GetWorkerVersioningRulesRequestParameters): GetWorkerVersioningRulesResponse {
+    return this.client.GET(
+      '/api/v1/namespaces/{namespace}/task-queues/{taskQueue}/worker-versioning-rules',
+      { params: { path } },
+    );
+  }
+
+  /**
+   * @description DescribeTaskQueue returns the following information about the target task queue, broken down by Build ID:
+   *    - List of pollers
+   *    - Workflow Reachability status
+   *    - Backlog info for Workflow and/or Activity tasks
+   */
   describeTaskQueue({
     query,
     path,
@@ -1088,7 +1407,9 @@ export class Client {
   }
 
   /**
-   * @description Fetches task reachability to determine whether a worker may be retired.
+   * @description Deprecated. Use `DescribeTaskQueue`.
+   *
+   *  Fetches task reachability to determine whether a worker may be retired.
    *  The request may specify task queues to query for or let the server fetch all task queues mapped to the given
    *  build IDs.
    *
@@ -1126,6 +1447,27 @@ export class Client {
     path,
   }: ListWorkflowExecutionsRequestParameters): ListWorkflowExecutionsResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/workflows', { params: { query, path } });
+  }
+
+  /**
+   * @description ExecuteMultiOperation executes multiple operations within a single workflow.
+   *
+   *  Operations are started atomically, meaning if *any* operation fails to be started, none are,
+   *  and the request fails. Upon start, the API returns only when *all* operations have a response.
+   *
+   *  Upon failure, it returns `MultiOperationExecutionFailure` where the status code
+   *  equals the status code of the *first* operation that failed to be started.
+   *
+   *  NOTE: Experimental API.
+   */
+  executeMultiOperation({
+    path,
+    body,
+  }: ExecuteMultiOperationRequestParameters): ExecuteMultiOperationResponse {
+    return this.client.POST('/api/v1/namespaces/{namespace}/workflows/execute-multi-operation', {
+      params: { path },
+      body,
+    });
   }
 
   /** @description DescribeWorkflowExecution returns information about the specified workflow execution. */
@@ -1290,6 +1632,61 @@ export class Client {
       '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update/{request.input.name}',
       { params: { path }, body },
     );
+  }
+
+  /**
+   * @description List all Nexus incoming services for the cluster, sorted by service ID in ascending order. Set page_token in the
+   *  request to the next_page_token field of the previous response to get the next page of results. An empty
+   *  next_page_token indicates that there are no more results. During pagination, a newly added service with an ID
+   *  lexicographically earlier than the previous page's last service name may be missed.
+   */
+  listNexusIncomingServices({
+    query,
+  }: ListNexusIncomingServicesRequestParameters = {}): ListNexusIncomingServicesResponse {
+    return this.client.GET('/api/v1/nexus/incoming-services', { params: { query } });
+  }
+
+  /**
+   * @description Create a Nexus service. This will fail if a service with the same name already exists in the namespace with a
+   *  status of ALREADY_EXISTS.
+   *  Returns the created service with its initial version. You may use this version for subsequent updates.
+   */
+  createNexusIncomingService({
+    body,
+  }: CreateNexusIncomingServiceRequestParameters): CreateNexusIncomingServiceResponse {
+    return this.client.POST('/api/v1/nexus/incoming-services', { body });
+  }
+
+  /** @description Get a registered incoming Nexus service by ID. The returned version can be used for optimistic updates. */
+  getNexusIncomingService({
+    path,
+  }: GetNexusIncomingServiceRequestParameters): GetNexusIncomingServiceResponse {
+    return this.client.GET('/api/v1/nexus/incoming-services/{id}', { params: { path } });
+  }
+
+  /** @description Delete an incoming Nexus service by ID. */
+  deleteNexusIncomingService({
+    query,
+    path,
+  }: DeleteNexusIncomingServiceRequestParameters): DeleteNexusIncomingServiceResponse {
+    return this.client.DELETE('/api/v1/nexus/incoming-services/{id}', { params: { query, path } });
+  }
+
+  /**
+   * @description Optimistically update a Nexus service based on provided version as obtained via the
+   *  `GetNexusIncomingService` or `ListNexusOutgoingServicesResponse` APIs. This will fail with a status of
+   *  FAILED_PRECONDITION if the version does not match.
+   *  Returns the updated service with its updated version. You may use this version for subsequent updates. You don't
+   *  need to increment the version yourself. The server will increment the version for you after each update.
+   */
+  updateNexusIncomingService({
+    path,
+    body,
+  }: UpdateNexusIncomingServiceRequestParameters): UpdateNexusIncomingServiceResponse {
+    return this.client.POST('/api/v1/nexus/incoming-services/{id}/update', {
+      params: { path },
+      body,
+    });
   }
 
   /** @description GetSystemInfo returns information about the system. */

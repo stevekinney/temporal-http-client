@@ -64,6 +64,7 @@ async function generateOperations(filePath = inputFilePath) {
 async function writeClient(operations) {
   /** @type {string[]} */
   const types = [];
+
   const methods = Object.entries(operations)
     .map(([operation, config]) => formatMethod(operation, config, types))
     .join('\n\n');
@@ -112,12 +113,12 @@ function processPathsMember(member, result, sourceFile, name) {
     if (!ts.isPropertySignature(typeMember) || !typeMember.type) return;
 
     const methodName = typeMember.name.getText(sourceFile).toUpperCase();
-    const operationName = typeMember.type.getText(sourceFile).match(/operations\["(.*?)"\]/)?.[1];
+    const operationName = typeMember.type.getText(sourceFile).match(/operations\['(.*?)'\]/)?.[1];
 
     if (!operationName) return;
     if (!result[operationName]) result[operationName] = {};
 
-    result[operationName].route = name.replace(/"/g, '');
+    result[operationName].route = name.replace(/'/g, '');
     result[operationName].method = methodName;
   });
 }

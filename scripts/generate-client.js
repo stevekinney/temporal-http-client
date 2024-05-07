@@ -243,6 +243,7 @@ function formatMethod(operation, config, types) {
       for (let [key, value] of Object.entries(config.params)) {
         paramsList.push(key);
         if (key === 'query') key = 'query?';
+        if (key === 'path') key = 'params';
         paramsSignature.push(`${key}: ${value}`);
       }
     }
@@ -306,7 +307,7 @@ function getClientTemplate(methods, types) {
       private client: ReturnType<typeof createClient<paths>>;
       private _options: ClientOptions;
 
-      constructor(options: ClientOptions) {
+      constructor(options: ClientOptions = {}) {
         this._options = options;
         this.client = createClient(options);
       }

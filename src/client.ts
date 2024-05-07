@@ -34,7 +34,7 @@ export type DescribeNamespaceRequestParameters = {
   query?: {
     id?: string;
   };
-  path: {
+  params: {
     namespace: string;
   };
 };
@@ -44,7 +44,7 @@ export type DescribeNamespaceResponse = Promise<
 >;
 
 export type RespondActivityTaskCanceledRequestParameters = {
-  path: {
+  params: {
     namespace: string;
   };
   body: components['schemas']['RespondActivityTaskCanceledRequest'];
@@ -58,7 +58,7 @@ export type RespondActivityTaskCanceledResponse = Promise<
 >;
 
 export type RespondActivityTaskCanceledByIdRequestParameters = {
-  path: {
+  params: {
     /** @description Namespace of the workflow which scheduled this activity */
     namespace: string;
   };
@@ -73,7 +73,7 @@ export type RespondActivityTaskCanceledByIdResponse = Promise<
 >;
 
 export type RespondActivityTaskCompletedRequestParameters = {
-  path: {
+  params: {
     namespace: string;
   };
   body: components['schemas']['RespondActivityTaskCompletedRequest'];
@@ -87,7 +87,7 @@ export type RespondActivityTaskCompletedResponse = Promise<
 >;
 
 export type RespondActivityTaskCompletedByIdRequestParameters = {
-  path: {
+  params: {
     /** @description Namespace of the workflow which scheduled this activity */
     namespace: string;
   };
@@ -102,7 +102,7 @@ export type RespondActivityTaskCompletedByIdResponse = Promise<
 >;
 
 export type RespondActivityTaskFailedRequestParameters = {
-  path: {
+  params: {
     namespace: string;
   };
   body: components['schemas']['RespondActivityTaskFailedRequest'];
@@ -116,7 +116,7 @@ export type RespondActivityTaskFailedResponse = Promise<
 >;
 
 export type RespondActivityTaskFailedByIdRequestParameters = {
-  path: {
+  params: {
     /** @description Namespace of the workflow which scheduled this activity */
     namespace: string;
   };
@@ -131,7 +131,7 @@ export type RespondActivityTaskFailedByIdResponse = Promise<
 >;
 
 export type RecordActivityTaskHeartbeatRequestParameters = {
-  path: {
+  params: {
     namespace: string;
   };
   body: components['schemas']['RecordActivityTaskHeartbeatRequest'];
@@ -145,7 +145,7 @@ export type RecordActivityTaskHeartbeatResponse = Promise<
 >;
 
 export type RecordActivityTaskHeartbeatByIdRequestParameters = {
-  path: {
+  params: {
     /** @description Namespace of the workflow which scheduled this activity */
     namespace: string;
   };
@@ -165,7 +165,7 @@ export type ListArchivedWorkflowExecutionsRequestParameters = {
     nextPageToken?: string;
     query?: string;
   };
-  path: {
+  params: {
     namespace: string;
   };
 };
@@ -184,7 +184,7 @@ export type ListBatchOperationsRequestParameters = {
     /** @description Next page token */
     nextPageToken?: string;
   };
-  path: {
+  params: {
     /** @description Namespace that contains the batch operation */
     namespace: string;
   };
@@ -198,7 +198,7 @@ export type ListBatchOperationsResponse = Promise<
 >;
 
 export type DescribeBatchOperationRequestParameters = {
-  path: {
+  params: {
     /** @description Namespace that contains the batch operation */
     namespace: string;
     /** @description Batch job id */
@@ -214,7 +214,7 @@ export type DescribeBatchOperationResponse = Promise<
 >;
 
 export type StartBatchOperationRequestParameters = {
-  path: {
+  params: {
     /** @description Namespace that contains the batch operation */
     namespace: string;
     /** @description Job ID defines the unique ID for the batch job */
@@ -231,7 +231,7 @@ export type StartBatchOperationResponse = Promise<
 >;
 
 export type StopBatchOperationRequestParameters = {
-  path: {
+  params: {
     /** @description Namespace that contains the batch operation */
     namespace: string;
     /** @description Batch job id */
@@ -254,7 +254,7 @@ export type ListNexusOutgoingServicesRequestParameters = {
     /** @description Pass in the next_page_token from the previous response here. */
     pageToken?: string;
   };
-  path: {
+  params: {
     /** @description Namespace to scope the list request to. */
     namespace: string;
   };
@@ -268,7 +268,7 @@ export type ListNexusOutgoingServicesResponse = Promise<
 >;
 
 export type CreateNexusOutgoingServiceRequestParameters = {
-  path: {
+  params: {
     /** @description Namespace to create this service definition in. */
     namespace: string;
   };
@@ -283,7 +283,7 @@ export type CreateNexusOutgoingServiceResponse = Promise<
 >;
 
 export type GetNexusOutgoingServiceRequestParameters = {
-  path: {
+  params: {
     /** @description Namespace that contains this outgoing service definition. */
     namespace: string;
     /** @description Name of service to retrieve. */
@@ -299,7 +299,7 @@ export type GetNexusOutgoingServiceResponse = Promise<
 >;
 
 export type DeleteNexusOutgoingServiceRequestParameters = {
-  path: {
+  params: {
     /** @description Namespace that contains this outgoing service definition. */
     namespace: string;
     /** @description Name of service to delete. */
@@ -315,7 +315,7 @@ export type DeleteNexusOutgoingServiceResponse = Promise<
 >;
 
 export type UpdateNexusOutgoingServiceRequestParameters = {
-  path: {
+  params: {
     /** @description Namespace to find and update this service definition in. */
     namespace: string;
     /** @description Service name, unique for this namespace. Must match `[a-zA-Z_][a-zA-Z0-9_]*`. */
@@ -340,7 +340,7 @@ export type ListSchedulesRequestParameters = {
     /** @description Query to filter schedules. */
     query?: string;
   };
-  path: {
+  params: {
     /** @description The namespace to list schedules in. */
     namespace: string;
   };
@@ -354,7 +354,7 @@ export type ListSchedulesResponse = Promise<
 >;
 
 export type DescribeScheduleRequestParameters = {
-  path: {
+  params: {
     /** @description The namespace of the schedule to describe. */
     namespace: string;
     /** @description The id of the schedule to describe. */
@@ -370,7 +370,7 @@ export type DescribeScheduleResponse = Promise<
 >;
 
 export type CreateScheduleRequestParameters = {
-  path: {
+  params: {
     /** @description The namespace the schedule should be created in. */
     namespace: string;
     /** @description The id of the new schedule. */
@@ -391,7 +391,7 @@ export type DeleteScheduleRequestParameters = {
     /** @description The identity of the client who initiated this request. */
     identity?: string;
   };
-  path: {
+  params: {
     /** @description The namespace of the schedule to delete. */
     namespace: string;
     /** @description The id of the schedule to delete. */
@@ -412,7 +412,7 @@ export type ListScheduleMatchingTimesRequestParameters = {
     startTime?: string;
     endTime?: string;
   };
-  path: {
+  params: {
     /** @description The namespace of the schedule to query. */
     namespace: string;
     /** @description The id of the schedule to query. */
@@ -428,7 +428,7 @@ export type ListScheduleMatchingTimesResponse = Promise<
 >;
 
 export type PatchScheduleRequestParameters = {
-  path: {
+  params: {
     /** @description The namespace of the schedule to patch. */
     namespace: string;
     /** @description The id of the schedule to patch. */
@@ -445,7 +445,7 @@ export type PatchScheduleResponse = Promise<
 >;
 
 export type UpdateScheduleRequestParameters = {
-  path: {
+  params: {
     /** @description The namespace of the schedule to update. */
     namespace: string;
     /** @description The id of the schedule to update. */
@@ -462,7 +462,7 @@ export type UpdateScheduleResponse = Promise<
 >;
 
 export type ListSearchAttributesRequestParameters = {
-  path: {
+  params: {
     namespace: string;
   };
 };
@@ -482,7 +482,7 @@ export type GetWorkerBuildIdCompatibilityRequestParameters = {
      */
     maxSets?: number;
   };
-  path: {
+  params: {
     namespace: string;
     /** @description Must be set, the task queue to interrogate about worker id compatibility. */
     taskQueue: string;
@@ -497,7 +497,7 @@ export type GetWorkerBuildIdCompatibilityResponse = Promise<
 >;
 
 export type GetWorkerVersioningRulesRequestParameters = {
-  path: {
+  params: {
     namespace: string;
     taskQueue: string;
   };
@@ -564,7 +564,7 @@ export type DescribeTaskQueueRequestParameters = {
      */
     reportTaskReachability?: boolean;
   };
-  path: {
+  params: {
     namespace: string;
     'task_queue.name': string;
   };
@@ -578,7 +578,7 @@ export type DescribeTaskQueueResponse = Promise<
 >;
 
 export type UpdateNamespaceRequestParameters = {
-  path: {
+  params: {
     namespace: string;
   };
   body: components['schemas']['UpdateNamespaceRequest'];
@@ -623,7 +623,7 @@ export type GetWorkerTaskReachabilityRequestParameters = {
       | 'TASK_REACHABILITY_OPEN_WORKFLOWS'
       | 'TASK_REACHABILITY_CLOSED_WORKFLOWS';
   };
-  path: {
+  params: {
     namespace: string;
   };
 };
@@ -639,7 +639,7 @@ export type CountWorkflowExecutionsRequestParameters = {
   query?: {
     query?: string;
   };
-  path: {
+  params: {
     namespace: string;
   };
 };
@@ -657,7 +657,7 @@ export type ListWorkflowExecutionsRequestParameters = {
     nextPageToken?: string;
     query?: string;
   };
-  path: {
+  params: {
     namespace: string;
   };
 };
@@ -670,7 +670,7 @@ export type ListWorkflowExecutionsResponse = Promise<
 >;
 
 export type ExecuteMultiOperationRequestParameters = {
-  path: {
+  params: {
     namespace: string;
   };
   body: components['schemas']['ExecuteMultiOperationRequest'];
@@ -688,7 +688,7 @@ export type DescribeWorkflowExecutionRequestParameters = {
     'execution.workflowId'?: string;
     'execution.runId'?: string;
   };
-  path: {
+  params: {
     namespace: string;
     'execution.workflow_id': string;
   };
@@ -726,7 +726,7 @@ export type GetWorkflowExecutionHistoryRequestParameters = {
       | 'HISTORY_EVENT_FILTER_TYPE_CLOSE_EVENT';
     skipArchival?: boolean;
   };
-  path: {
+  params: {
     namespace: string;
     'execution.workflow_id': string;
   };
@@ -746,7 +746,7 @@ export type GetWorkflowExecutionHistoryReverseRequestParameters = {
     maximumPageSize?: number;
     nextPageToken?: string;
   };
-  path: {
+  params: {
     namespace: string;
     'execution.workflow_id': string;
   };
@@ -760,7 +760,7 @@ export type GetWorkflowExecutionHistoryReverseResponse = Promise<
 >;
 
 export type QueryWorkflowRequestParameters = {
-  path: {
+  params: {
     namespace: string;
     'execution.workflow_id': string;
     'query.query_type': string;
@@ -776,7 +776,7 @@ export type QueryWorkflowResponse = Promise<
 >;
 
 export type StartWorkflowExecutionRequestParameters = {
-  path: {
+  params: {
     namespace: string;
     workflowId: string;
   };
@@ -791,7 +791,7 @@ export type StartWorkflowExecutionResponse = Promise<
 >;
 
 export type SignalWithStartWorkflowExecutionRequestParameters = {
-  path: {
+  params: {
     namespace: string;
     workflowId: string;
     /** @description The workflow author-defined name of the signal to send to the workflow */
@@ -808,7 +808,7 @@ export type SignalWithStartWorkflowExecutionResponse = Promise<
 >;
 
 export type RequestCancelWorkflowExecutionRequestParameters = {
-  path: {
+  params: {
     namespace: string;
     'workflow_execution.workflow_id': string;
   };
@@ -823,7 +823,7 @@ export type RequestCancelWorkflowExecutionResponse = Promise<
 >;
 
 export type ResetWorkflowExecutionRequestParameters = {
-  path: {
+  params: {
     namespace: string;
     'workflow_execution.workflow_id': string;
   };
@@ -838,7 +838,7 @@ export type ResetWorkflowExecutionResponse = Promise<
 >;
 
 export type SignalWorkflowExecutionRequestParameters = {
-  path: {
+  params: {
     namespace: string;
     'workflow_execution.workflow_id': string;
     /** @description The workflow author-defined name of the signal to send to the workflow */
@@ -855,7 +855,7 @@ export type SignalWorkflowExecutionResponse = Promise<
 >;
 
 export type TerminateWorkflowExecutionRequestParameters = {
-  path: {
+  params: {
     namespace: string;
     'workflow_execution.workflow_id': string;
   };
@@ -870,7 +870,7 @@ export type TerminateWorkflowExecutionResponse = Promise<
 >;
 
 export type UpdateWorkflowExecutionRequestParameters = {
-  path: {
+  params: {
     /** @description The namespace name of the target workflow */
     namespace: string;
     'workflow_execution.workflow_id': string;
@@ -923,7 +923,7 @@ export type CreateNexusIncomingServiceResponse = Promise<
 >;
 
 export type GetNexusIncomingServiceRequestParameters = {
-  path: {
+  params: {
     /** @description Server-generated unique service ID. */
     id: string;
   };
@@ -941,7 +941,7 @@ export type DeleteNexusIncomingServiceRequestParameters = {
     /** @description Data version for this service. Must match current version. */
     version?: string;
   };
-  path: {
+  params: {
     /** @description Server-generated unique service ID. */
     id: string;
   };
@@ -955,7 +955,7 @@ export type DeleteNexusIncomingServiceResponse = Promise<
 >;
 
 export type UpdateNexusIncomingServiceRequestParameters = {
-  path: {
+  params: {
     /** @description Server-generated unique service ID. */
     id: string;
   };
@@ -980,7 +980,7 @@ export class Client {
   private client: ReturnType<typeof createClient<paths>>;
   private _options: ClientOptions;
 
-  constructor(options: ClientOptions) {
+  constructor(options: ClientOptions = {}) {
     this._options = options;
     this.client = createClient(options);
   }

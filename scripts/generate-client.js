@@ -239,11 +239,15 @@ function formatMethod(operation, config, types) {
     let paramsSignature = [];
     let methodParams = `{ `;
 
+    const params = Object.keys(config.params || {}).map((key) =>
+      key === 'path' ? 'path: params' : key,
+    );
+
     if (config.params) {
       for (let [key, value] of Object.entries(config.params)) {
+        if (key === 'path') key = 'params';
         paramsList.push(key);
         if (key === 'query') key = 'query?';
-        if (key === 'path') key = 'params';
         paramsSignature.push(`${key}: ${value}`);
       }
     }
@@ -265,7 +269,7 @@ function formatMethod(operation, config, types) {
       methodSignature += ` = {}`;
     }
 
-    methodParams += hasParams ? `params: { ${Object.keys(config.params).join(', ')} }` : '';
+    methodParams += hasParams ? `params: { ${params.join(', ')} }` : '';
 
     if (hasBody) {
       methodParams += hasParams ? `, body` : `body`;

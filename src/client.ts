@@ -1032,9 +1032,9 @@ export class Client {
   /** @description DescribeNamespace returns the information and configuration for a registered namespace. */
   describeNamespace({
     query,
-    path,
+    params,
   }: DescribeNamespaceRequestParameters): DescribeNamespaceResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}', { params: { query, path } });
+    return this.client.GET('/api/v1/namespaces/{namespace}', { params: { query, path: params } });
   }
 
   /**
@@ -1045,11 +1045,11 @@ export class Client {
    *  no longer valid due to activity timeout, already being completed, or never having existed.
    */
   respondActivityTaskCanceled({
-    path,
+    params,
     body,
   }: RespondActivityTaskCanceledRequestParameters): RespondActivityTaskCanceledResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/activities/cancel', {
-      params: { path },
+      params: { path: params },
       body,
     });
   }
@@ -1062,11 +1062,11 @@ export class Client {
    *      aip.dev/not-precedent: "By" is used to indicate request type. --)
    */
   respondActivityTaskCanceledById({
-    path,
+    params,
     body,
   }: RespondActivityTaskCanceledByIdRequestParameters): RespondActivityTaskCanceledByIdResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/activities/cancel-by-id', {
-      params: { path },
+      params: { path: params },
       body,
     });
   }
@@ -1080,11 +1080,11 @@ export class Client {
    *  no longer valid due to activity timeout, already being completed, or never having existed.
    */
   respondActivityTaskCompleted({
-    path,
+    params,
     body,
   }: RespondActivityTaskCompletedRequestParameters): RespondActivityTaskCompletedResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/activities/complete', {
-      params: { path },
+      params: { path: params },
       body,
     });
   }
@@ -1097,11 +1097,11 @@ export class Client {
    *      aip.dev/not-precedent: "By" is used to indicate request type. --)
    */
   respondActivityTaskCompletedById({
-    path,
+    params,
     body,
   }: RespondActivityTaskCompletedByIdRequestParameters): RespondActivityTaskCompletedByIdResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/activities/complete-by-id', {
-      params: { path },
+      params: { path: params },
       body,
     });
   }
@@ -1114,11 +1114,11 @@ export class Client {
    *  longer valid due to activity timeout, already being completed, or never having existed.
    */
   respondActivityTaskFailed({
-    path,
+    params,
     body,
   }: RespondActivityTaskFailedRequestParameters): RespondActivityTaskFailedResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/activities/fail', {
-      params: { path },
+      params: { path: params },
       body,
     });
   }
@@ -1131,11 +1131,11 @@ export class Client {
    *      aip.dev/not-precedent: "By" is used to indicate request type. --)
    */
   respondActivityTaskFailedById({
-    path,
+    params,
     body,
   }: RespondActivityTaskFailedByIdRequestParameters): RespondActivityTaskFailedByIdResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/activities/fail-by-id', {
-      params: { path },
+      params: { path: params },
       body,
     });
   }
@@ -1149,11 +1149,11 @@ export class Client {
    *  such situations, in that event, the SDK should request cancellation of the activity.
    */
   recordActivityTaskHeartbeat({
-    path,
+    params,
     body,
   }: RecordActivityTaskHeartbeatRequestParameters): RecordActivityTaskHeartbeatResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/activities/heartbeat', {
-      params: { path },
+      params: { path: params },
       body,
     });
   }
@@ -1166,11 +1166,11 @@ export class Client {
    *      aip.dev/not-precedent: "By" is used to indicate request type. --)
    */
   recordActivityTaskHeartbeatById({
-    path,
+    params,
     body,
   }: RecordActivityTaskHeartbeatByIdRequestParameters): RecordActivityTaskHeartbeatByIdResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/activities/heartbeat-by-id', {
-      params: { path },
+      params: { path: params },
       body,
     });
   }
@@ -1178,50 +1178,50 @@ export class Client {
   /** @description ListArchivedWorkflowExecutions is a visibility API to list archived workflow executions in a specific namespace. */
   listArchivedWorkflowExecutions({
     query,
-    path,
+    params,
   }: ListArchivedWorkflowExecutionsRequestParameters): ListArchivedWorkflowExecutionsResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/archived-workflows', {
-      params: { query, path },
+      params: { query, path: params },
     });
   }
 
   /** @description ListBatchOperations returns a list of batch operations */
   listBatchOperations({
     query,
-    path,
+    params,
   }: ListBatchOperationsRequestParameters): ListBatchOperationsResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/batch-operations', {
-      params: { query, path },
+      params: { query, path: params },
     });
   }
 
   /** @description DescribeBatchOperation returns the information about a batch operation */
   describeBatchOperation({
-    path,
+    params,
   }: DescribeBatchOperationRequestParameters): DescribeBatchOperationResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/batch-operations/{jobId}', {
-      params: { path },
+      params: { path: params },
     });
   }
 
   /** @description StartBatchOperation starts a new batch operation */
   startBatchOperation({
-    path,
+    params,
     body,
   }: StartBatchOperationRequestParameters): StartBatchOperationResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/batch-operations/{jobId}', {
-      params: { path },
+      params: { path: params },
       body,
     });
   }
 
   /** @description StopBatchOperation stops a batch operation */
   stopBatchOperation({
-    path,
+    params,
     body,
   }: StopBatchOperationRequestParameters): StopBatchOperationResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/batch-operations/{jobId}/stop', {
-      params: { path },
+      params: { path: params },
       body,
     });
   }
@@ -1234,10 +1234,10 @@ export class Client {
    */
   listNexusOutgoingServices({
     query,
-    path,
+    params,
   }: ListNexusOutgoingServicesRequestParameters): ListNexusOutgoingServicesResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/nexus/outgoing-services', {
-      params: { query, path },
+      params: { query, path: params },
     });
   }
 
@@ -1248,11 +1248,11 @@ export class Client {
    *  need to increment the version yourself. The server will increment the version for you after each update.
    */
   createNexusOutgoingService({
-    path,
+    params,
     body,
   }: CreateNexusOutgoingServiceRequestParameters): CreateNexusOutgoingServiceResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/nexus/outgoing-services', {
-      params: { path },
+      params: { path: params },
       body,
     });
   }
@@ -1262,19 +1262,19 @@ export class Client {
    *  optimistic updates.
    */
   getNexusOutgoingService({
-    path,
+    params,
   }: GetNexusOutgoingServiceRequestParameters): GetNexusOutgoingServiceResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}', {
-      params: { path },
+      params: { path: params },
     });
   }
 
   /** @description Delete an outgoing Nexus service by namespace and service name. */
   deleteNexusOutgoingService({
-    path,
+    params,
   }: DeleteNexusOutgoingServiceRequestParameters): DeleteNexusOutgoingServiceResponse {
     return this.client.DELETE('/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}', {
-      params: { path },
+      params: { path: params },
     });
   }
 
@@ -1285,74 +1285,76 @@ export class Client {
    *  to increment the version yourself. The server will increment the version for you.
    */
   updateNexusOutgoingService({
-    path,
+    params,
     body,
   }: UpdateNexusOutgoingServiceRequestParameters): UpdateNexusOutgoingServiceResponse {
     return this.client.POST(
       '/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}/update',
-      { params: { path }, body },
+      { params: { path: params }, body },
     );
   }
 
   /** @description List all schedules in a namespace. */
-  listSchedules({ query, path }: ListSchedulesRequestParameters): ListSchedulesResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}/schedules', { params: { query, path } });
+  listSchedules({ query, params }: ListSchedulesRequestParameters): ListSchedulesResponse {
+    return this.client.GET('/api/v1/namespaces/{namespace}/schedules', {
+      params: { query, path: params },
+    });
   }
 
   /** @description Returns the schedule description and current state of an existing schedule. */
-  describeSchedule({ path }: DescribeScheduleRequestParameters): DescribeScheduleResponse {
+  describeSchedule({ params }: DescribeScheduleRequestParameters): DescribeScheduleResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/schedules/{scheduleId}', {
-      params: { path },
+      params: { path: params },
     });
   }
 
   /** @description Creates a new schedule. */
-  createSchedule({ path, body }: CreateScheduleRequestParameters): CreateScheduleResponse {
+  createSchedule({ params, body }: CreateScheduleRequestParameters): CreateScheduleResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/schedules/{scheduleId}', {
-      params: { path },
+      params: { path: params },
       body,
     });
   }
 
   /** @description Deletes a schedule, removing it from the system. */
-  deleteSchedule({ query, path }: DeleteScheduleRequestParameters): DeleteScheduleResponse {
+  deleteSchedule({ query, params }: DeleteScheduleRequestParameters): DeleteScheduleResponse {
     return this.client.DELETE('/api/v1/namespaces/{namespace}/schedules/{scheduleId}', {
-      params: { query, path },
+      params: { query, path: params },
     });
   }
 
   /** @description Lists matching times within a range. */
   listScheduleMatchingTimes({
     query,
-    path,
+    params,
   }: ListScheduleMatchingTimesRequestParameters): ListScheduleMatchingTimesResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/schedules/{scheduleId}/matching-times', {
-      params: { query, path },
+      params: { query, path: params },
     });
   }
 
   /** @description Makes a specific change to a schedule or triggers an immediate action. */
-  patchSchedule({ path, body }: PatchScheduleRequestParameters): PatchScheduleResponse {
+  patchSchedule({ params, body }: PatchScheduleRequestParameters): PatchScheduleResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/schedules/{scheduleId}/patch', {
-      params: { path },
+      params: { path: params },
       body,
     });
   }
 
   /** @description Changes the configuration or state of an existing schedule. */
-  updateSchedule({ path, body }: UpdateScheduleRequestParameters): UpdateScheduleResponse {
+  updateSchedule({ params, body }: UpdateScheduleRequestParameters): UpdateScheduleResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/schedules/{scheduleId}/update', {
-      params: { path },
+      params: { path: params },
       body,
     });
   }
 
   /** @description ListSearchAttributes returns comprehensive information about search attributes. */
   listSearchAttributes({
-    path,
+    params,
   }: ListSearchAttributesRequestParameters): ListSearchAttributesResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/search-attributes', {
-      params: { path },
+      params: { path: params },
     });
   }
 
@@ -1362,11 +1364,11 @@ export class Client {
    */
   getWorkerBuildIdCompatibility({
     query,
-    path,
+    params,
   }: GetWorkerBuildIdCompatibilityRequestParameters): GetWorkerBuildIdCompatibilityResponse {
     return this.client.GET(
       '/api/v1/namespaces/{namespace}/task-queues/{taskQueue}/worker-build-id-compatibility',
-      { params: { query, path } },
+      { params: { query, path: params } },
     );
   }
 
@@ -1375,11 +1377,11 @@ export class Client {
    *  WARNING: Worker Versioning is not yet stable and the API and behavior may change incompatibly.
    */
   getWorkerVersioningRules({
-    path,
+    params,
   }: GetWorkerVersioningRulesRequestParameters): GetWorkerVersioningRulesResponse {
     return this.client.GET(
       '/api/v1/namespaces/{namespace}/task-queues/{taskQueue}/worker-versioning-rules',
-      { params: { path } },
+      { params: { path: params } },
     );
   }
 
@@ -1391,10 +1393,10 @@ export class Client {
    */
   describeTaskQueue({
     query,
-    path,
+    params,
   }: DescribeTaskQueueRequestParameters): DescribeTaskQueueResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/task-queues/{task_queue.name}', {
-      params: { query, path },
+      params: { query, path: params },
     });
   }
 
@@ -1402,8 +1404,11 @@ export class Client {
    * @description UpdateNamespace is used to update the information and configuration of a registered
    *  namespace.
    */
-  updateNamespace({ path, body }: UpdateNamespaceRequestParameters): UpdateNamespaceResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/update', { params: { path }, body });
+  updateNamespace({ params, body }: UpdateNamespaceRequestParameters): UpdateNamespaceResponse {
+    return this.client.POST('/api/v1/namespaces/{namespace}/update', {
+      params: { path: params },
+      body,
+    });
   }
 
   /**
@@ -1424,29 +1429,31 @@ export class Client {
    */
   getWorkerTaskReachability({
     query,
-    path,
+    params,
   }: GetWorkerTaskReachabilityRequestParameters): GetWorkerTaskReachabilityResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/worker-task-reachability', {
-      params: { query, path },
+      params: { query, path: params },
     });
   }
 
   /** @description CountWorkflowExecutions is a visibility API to count of workflow executions in a specific namespace. */
   countWorkflowExecutions({
     query,
-    path,
+    params,
   }: CountWorkflowExecutionsRequestParameters): CountWorkflowExecutionsResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/workflow-count', {
-      params: { query, path },
+      params: { query, path: params },
     });
   }
 
   /** @description ListWorkflowExecutions is a visibility API to list workflow executions in a specific namespace. */
   listWorkflowExecutions({
     query,
-    path,
+    params,
   }: ListWorkflowExecutionsRequestParameters): ListWorkflowExecutionsResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}/workflows', { params: { query, path } });
+    return this.client.GET('/api/v1/namespaces/{namespace}/workflows', {
+      params: { query, path: params },
+    });
   }
 
   /**
@@ -1461,11 +1468,11 @@ export class Client {
    *  NOTE: Experimental API.
    */
   executeMultiOperation({
-    path,
+    params,
     body,
   }: ExecuteMultiOperationRequestParameters): ExecuteMultiOperationResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/workflows/execute-multi-operation', {
-      params: { path },
+      params: { path: params },
       body,
     });
   }
@@ -1473,10 +1480,10 @@ export class Client {
   /** @description DescribeWorkflowExecution returns information about the specified workflow execution. */
   describeWorkflowExecution({
     query,
-    path,
+    params,
   }: DescribeWorkflowExecutionRequestParameters): DescribeWorkflowExecutionResponse {
     return this.client.GET('/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}', {
-      params: { query, path },
+      params: { query, path: params },
     });
   }
 
@@ -1486,11 +1493,11 @@ export class Client {
    */
   getWorkflowExecutionHistory({
     query,
-    path,
+    params,
   }: GetWorkflowExecutionHistoryRequestParameters): GetWorkflowExecutionHistoryResponse {
     return this.client.GET(
       '/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history',
-      { params: { query, path } },
+      { params: { query, path: params } },
     );
   }
 
@@ -1501,19 +1508,19 @@ export class Client {
    */
   getWorkflowExecutionHistoryReverse({
     query,
-    path,
+    params,
   }: GetWorkflowExecutionHistoryReverseRequestParameters): GetWorkflowExecutionHistoryReverseResponse {
     return this.client.GET(
       '/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history-reverse',
-      { params: { query, path } },
+      { params: { query, path: params } },
     );
   }
 
   /** @description QueryWorkflow requests a query be executed for a specified workflow execution. */
-  queryWorkflow({ path, body }: QueryWorkflowRequestParameters): QueryWorkflowResponse {
+  queryWorkflow({ params, body }: QueryWorkflowRequestParameters): QueryWorkflowResponse {
     return this.client.POST(
       '/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/query/{query.query_type}',
-      { params: { path }, body },
+      { params: { path: params }, body },
     );
   }
 
@@ -1525,11 +1532,11 @@ export class Client {
    *  instance already exists with same workflow id.
    */
   startWorkflowExecution({
-    path,
+    params,
     body,
   }: StartWorkflowExecutionRequestParameters): StartWorkflowExecutionResponse {
     return this.client.POST('/api/v1/namespaces/{namespace}/workflows/{workflowId}', {
-      params: { path },
+      params: { path: params },
       body,
     });
   }
@@ -1549,12 +1556,12 @@ export class Client {
    *      aip.dev/not-precedent: "With" is used to indicate combined operation. --)
    */
   signalWithStartWorkflowExecution({
-    path,
+    params,
     body,
   }: SignalWithStartWorkflowExecutionRequestParameters): SignalWithStartWorkflowExecutionResponse {
     return this.client.POST(
       '/api/v1/namespaces/{namespace}/workflows/{workflowId}/signal-with-start/{signalName}',
-      { params: { path }, body },
+      { params: { path: params }, body },
     );
   }
 
@@ -1567,12 +1574,12 @@ export class Client {
    *  workflow is already closed. It fails with 'NotFound' if the requested workflow doesn't exist.
    */
   requestCancelWorkflowExecution({
-    path,
+    params,
     body,
   }: RequestCancelWorkflowExecutionRequestParameters): RequestCancelWorkflowExecutionResponse {
     return this.client.POST(
       '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/cancel',
-      { params: { path }, body },
+      { params: { path: params }, body },
     );
   }
 
@@ -1583,12 +1590,12 @@ export class Client {
    *  TODO: Does exclusive here mean *just* the completed event, or also WFT started? Otherwise the task is doomed to time out?
    */
   resetWorkflowExecution({
-    path,
+    params,
     body,
   }: ResetWorkflowExecutionRequestParameters): ResetWorkflowExecutionResponse {
     return this.client.POST(
       '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/reset',
-      { params: { path }, body },
+      { params: { path: params }, body },
     );
   }
 
@@ -1599,12 +1606,12 @@ export class Client {
    *  task being created for the execution.
    */
   signalWorkflowExecution({
-    path,
+    params,
     body,
   }: SignalWorkflowExecutionRequestParameters): SignalWorkflowExecutionResponse {
     return this.client.POST(
       '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/signal/{signalName}',
-      { params: { path }, body },
+      { params: { path: params }, body },
     );
   }
 
@@ -1614,23 +1621,23 @@ export class Client {
    *  execution instance.
    */
   terminateWorkflowExecution({
-    path,
+    params,
     body,
   }: TerminateWorkflowExecutionRequestParameters): TerminateWorkflowExecutionResponse {
     return this.client.POST(
       '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/terminate',
-      { params: { path }, body },
+      { params: { path: params }, body },
     );
   }
 
   /** @description Invokes the specified update function on user workflow code. */
   updateWorkflowExecution({
-    path,
+    params,
     body,
   }: UpdateWorkflowExecutionRequestParameters): UpdateWorkflowExecutionResponse {
     return this.client.POST(
       '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update/{request.input.name}',
-      { params: { path }, body },
+      { params: { path: params }, body },
     );
   }
 
@@ -1659,17 +1666,19 @@ export class Client {
 
   /** @description Get a registered incoming Nexus service by ID. The returned version can be used for optimistic updates. */
   getNexusIncomingService({
-    path,
+    params,
   }: GetNexusIncomingServiceRequestParameters): GetNexusIncomingServiceResponse {
-    return this.client.GET('/api/v1/nexus/incoming-services/{id}', { params: { path } });
+    return this.client.GET('/api/v1/nexus/incoming-services/{id}', { params: { path: params } });
   }
 
   /** @description Delete an incoming Nexus service by ID. */
   deleteNexusIncomingService({
     query,
-    path,
+    params,
   }: DeleteNexusIncomingServiceRequestParameters): DeleteNexusIncomingServiceResponse {
-    return this.client.DELETE('/api/v1/nexus/incoming-services/{id}', { params: { query, path } });
+    return this.client.DELETE('/api/v1/nexus/incoming-services/{id}', {
+      params: { query, path: params },
+    });
   }
 
   /**
@@ -1680,11 +1689,11 @@ export class Client {
    *  need to increment the version yourself. The server will increment the version for you after each update.
    */
   updateNexusIncomingService({
-    path,
+    params,
     body,
   }: UpdateNexusIncomingServiceRequestParameters): UpdateNexusIncomingServiceResponse {
     return this.client.POST('/api/v1/nexus/incoming-services/{id}/update', {
-      params: { path },
+      params: { path: params },
       body,
     });
   }

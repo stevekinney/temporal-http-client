@@ -300,8 +300,8 @@ function formatMethod(operation, config, types) {
 function getClientTemplate(methods, types) {
   return `
     import createClient, { type ClientOptions, type FetchResponse } from 'openapi-fetch';
-    import type { components, operations, paths } from './schema.js';
-    
+    import type { components, operations, paths } from './schema.ts';
+
 		${types.join('\n\n')}
 
     /**

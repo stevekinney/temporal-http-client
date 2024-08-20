@@ -7,7 +7,7 @@ import { $ } from 'zx';
 
 const openAPIDefinitionsDirectory = './tmp/api';
 const openApiDefinitions = join(openAPIDefinitionsDirectory, 'openapi', 'openapiv3.yaml');
-const schema = join('src', 'schema.d.ts');
+const schema = join('src', 'schema.ts');
 
 const directoryExists = await stat(openAPIDefinitionsDirectory)
   .then(() => true)

@@ -1,5 +1,5 @@
 import createClient, { type ClientOptions, type FetchResponse } from 'openapi-fetch';
-import type { components, operations, paths } from './schema.js';
+import type { components, operations, paths } from './schema.ts';
 
 export type GetClusterInfoResponse = Promise<
   FetchResponse<paths['/api/v1/cluster-info']['get'], operations['GetClusterInfo']>

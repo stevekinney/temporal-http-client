@@ -45,10 +45,6 @@ emitter.on('warn', (warning) => {
   console.warn(chalk.bgYellow(' WARN '), warning.message);
 });
 
-emitter.on('error', (error) => {
-  console.error(chalk.bgRed(' ERROR '), error.message);
-});
-
 await emitter.clone(openAPIDefinitionsDirectory);
 
 await $`npx openapi-typescript ${openApiDefinitions} -o ${schema}`.quiet();

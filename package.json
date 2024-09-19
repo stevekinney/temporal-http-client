@@ -5,7 +5,7 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/stevekinney/ui-sdk.git"
+    "url": "https://github.com/stevekinney/temporal-http-client.git"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",

@@ -1,1705 +1,1348 @@
-import createClient, { type ClientOptions, type FetchResponse } from 'openapi-fetch';
-import type { components, operations, paths } from './schema.ts';
+import type { components } from './schema.js';
 
-export type GetClusterInfoResponse = Promise<
-  FetchResponse<paths['/api/v1/cluster-info']['get'], operations['GetClusterInfo']>
->;
-
-export type ListNamespacesRequestParameters = {
-  query?: {
-    pageSize?: number;
-    nextPageToken?: string;
-    /**
-     * @description By default namespaces in NAMESPACE_STATE_DELETED state are not included.
-     *  Setting include_deleted to true will include deleted namespaces.
-     *  Note: Namespace is in NAMESPACE_STATE_DELETED state when it was deleted from the system but associated data is not deleted yet.
-     */
-    'namespaceFilter.includeDeleted'?: boolean;
-  };
+type RequestOptions = {
+  onError?: (response: Response) => void;
+  baseUrl?: string;
 };
 
-export type ListNamespacesResponse = Promise<
-  FetchResponse<paths['/api/v1/namespaces']['get'], operations['ListNamespaces']>
->;
+export async function getClusterInfo({
+  onError,
+  baseUrl = window.location.origin,
+}: RequestOptions = {}): Promise<components['schemas']['GetClusterInfoResponse']> {
+  const url = new URL(`/api/v1/cluster-info`, baseUrl);
 
-export type RegisterNamespaceRequestParameters = {
-  body: components['schemas']['RegisterNamespaceRequest'];
-};
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`getClusterInfo request failed.`);
+    }
+    return response.json();
+  });
+}
 
-export type RegisterNamespaceResponse = Promise<
-  FetchResponse<paths['/api/v1/namespaces']['post'], operations['RegisterNamespace']>
->;
+export async function listNamespaces(
+  {
+    pageSize,
+    nextPageToken,
+    includeDeleted,
+  }: { pageSize?: number; nextPageToken?: string; includeDeleted?: boolean },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['ListNamespacesResponse']> {
+  const url = new URL(`/api/v1/namespaces`, baseUrl);
 
-export type DescribeNamespaceRequestParameters = {
-  query?: {
-    id?: string;
-  };
-  params: {
+  if (pageSize) url.searchParams.append('pageSize', String(pageSize));
+
+  if (nextPageToken) url.searchParams.append('nextPageToken', String(nextPageToken));
+
+  if (includeDeleted)
+    url.searchParams.append('namespaceFilter.includeDeleted', String(includeDeleted));
+
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`listNamespaces request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function registerNamespace(
+  { body }: { body: components['schemas']['RegisterNamespaceRequest'] },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['RegisterNamespaceResponse']> {
+  const url = new URL(`/api/v1/namespaces`, baseUrl);
+
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`registerNamespace request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function describeNamespace(
+  { id, namespace }: { namespace: string; id?: string },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['DescribeNamespaceResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}`, baseUrl);
+
+  if (id) url.searchParams.append('id', String(id));
+
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`describeNamespace request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function respondActivityTaskCanceled(
+  {
+    namespace,
+    body,
+  }: { namespace: string; body: components['schemas']['RespondActivityTaskCanceledRequest'] },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['RespondActivityTaskCanceledResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/activities/cancel`, baseUrl);
+
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`respondActivityTaskCanceled request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function respondActivityTaskCanceledById(
+  {
+    namespace,
+    body,
+  }: { namespace: string; body: components['schemas']['RespondActivityTaskCanceledByIdRequest'] },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['RespondActivityTaskCanceledByIdResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/activities/cancel-by-id`, baseUrl);
+
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`respondActivityTaskCanceledById request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function respondActivityTaskCompleted(
+  {
+    namespace,
+    body,
+  }: { namespace: string; body: components['schemas']['RespondActivityTaskCompletedRequest'] },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['RespondActivityTaskCompletedResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/activities/complete`, baseUrl);
+
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`respondActivityTaskCompleted request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function respondActivityTaskCompletedById(
+  {
+    namespace,
+    body,
+  }: { namespace: string; body: components['schemas']['RespondActivityTaskCompletedByIdRequest'] },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['RespondActivityTaskCompletedByIdResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/activities/complete-by-id`, baseUrl);
+
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`respondActivityTaskCompletedById request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function respondActivityTaskFailed(
+  {
+    namespace,
+    body,
+  }: { namespace: string; body: components['schemas']['RespondActivityTaskFailedRequest'] },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['RespondActivityTaskFailedResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/activities/fail`, baseUrl);
+
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`respondActivityTaskFailed request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function respondActivityTaskFailedById(
+  {
+    namespace,
+    body,
+  }: { namespace: string; body: components['schemas']['RespondActivityTaskFailedByIdRequest'] },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['RespondActivityTaskFailedByIdResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/activities/fail-by-id`, baseUrl);
+
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`respondActivityTaskFailedById request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function recordActivityTaskHeartbeat(
+  {
+    namespace,
+    body,
+  }: { namespace: string; body: components['schemas']['RecordActivityTaskHeartbeatRequest'] },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['RecordActivityTaskHeartbeatResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/activities/heartbeat`, baseUrl);
+
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`recordActivityTaskHeartbeat request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function recordActivityTaskHeartbeatById(
+  {
+    namespace,
+    body,
+  }: { namespace: string; body: components['schemas']['RecordActivityTaskHeartbeatByIdRequest'] },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['RecordActivityTaskHeartbeatByIdResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/activities/heartbeat-by-id`, baseUrl);
+
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`recordActivityTaskHeartbeatById request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function updateActivityOptionsById(
+  {
+    namespace,
+    body,
+  }: { namespace: string; body: components['schemas']['UpdateActivityOptionsByIdRequest'] },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['UpdateActivityOptionsByIdResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/activities/update-options-by-id`, baseUrl);
+
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`updateActivityOptionsById request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function listArchivedWorkflowExecutions(
+  {
+    pageSize,
+    nextPageToken,
+    query,
+    namespace,
+  }: { namespace: string; pageSize?: number; nextPageToken?: string; query?: string },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['ListArchivedWorkflowExecutionsResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/archived-workflows`, baseUrl);
+
+  if (pageSize) url.searchParams.append('pageSize', String(pageSize));
+
+  if (nextPageToken) url.searchParams.append('nextPageToken', String(nextPageToken));
+
+  if (query) url.searchParams.append('query', String(query));
+
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`listArchivedWorkflowExecutions request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function listBatchOperations(
+  {
+    pageSize,
+    nextPageToken,
+    namespace,
+  }: { namespace: string; pageSize?: number; nextPageToken?: string },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['ListBatchOperationsResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/batch-operations`, baseUrl);
+
+  if (pageSize) url.searchParams.append('pageSize', String(pageSize));
+
+  if (nextPageToken) url.searchParams.append('nextPageToken', String(nextPageToken));
+
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`listBatchOperations request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function describeBatchOperation(
+  { namespace, jobId }: { namespace: string; jobId: string },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['DescribeBatchOperationResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/batch-operations/${jobId}`, baseUrl);
+
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`describeBatchOperation request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function startBatchOperation(
+  {
+    namespace,
+    jobId,
+    body,
+  }: {
     namespace: string;
-  };
-};
-
-export type DescribeNamespaceResponse = Promise<
-  FetchResponse<paths['/api/v1/namespaces/{namespace}']['get'], operations['DescribeNamespace']>
->;
-
-export type RespondActivityTaskCanceledRequestParameters = {
-  params: {
-    namespace: string;
-  };
-  body: components['schemas']['RespondActivityTaskCanceledRequest'];
-};
-
-export type RespondActivityTaskCanceledResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/activities/cancel']['post'],
-    operations['RespondActivityTaskCanceled']
-  >
->;
-
-export type RespondActivityTaskCanceledByIdRequestParameters = {
-  params: {
-    /** @description Namespace of the workflow which scheduled this activity */
-    namespace: string;
-  };
-  body: components['schemas']['RespondActivityTaskCanceledByIdRequest'];
-};
-
-export type RespondActivityTaskCanceledByIdResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/activities/cancel-by-id']['post'],
-    operations['RespondActivityTaskCanceledById']
-  >
->;
-
-export type RespondActivityTaskCompletedRequestParameters = {
-  params: {
-    namespace: string;
-  };
-  body: components['schemas']['RespondActivityTaskCompletedRequest'];
-};
-
-export type RespondActivityTaskCompletedResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/activities/complete']['post'],
-    operations['RespondActivityTaskCompleted']
-  >
->;
-
-export type RespondActivityTaskCompletedByIdRequestParameters = {
-  params: {
-    /** @description Namespace of the workflow which scheduled this activity */
-    namespace: string;
-  };
-  body: components['schemas']['RespondActivityTaskCompletedByIdRequest'];
-};
-
-export type RespondActivityTaskCompletedByIdResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/activities/complete-by-id']['post'],
-    operations['RespondActivityTaskCompletedById']
-  >
->;
-
-export type RespondActivityTaskFailedRequestParameters = {
-  params: {
-    namespace: string;
-  };
-  body: components['schemas']['RespondActivityTaskFailedRequest'];
-};
-
-export type RespondActivityTaskFailedResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/activities/fail']['post'],
-    operations['RespondActivityTaskFailed']
-  >
->;
-
-export type RespondActivityTaskFailedByIdRequestParameters = {
-  params: {
-    /** @description Namespace of the workflow which scheduled this activity */
-    namespace: string;
-  };
-  body: components['schemas']['RespondActivityTaskFailedByIdRequest'];
-};
-
-export type RespondActivityTaskFailedByIdResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/activities/fail-by-id']['post'],
-    operations['RespondActivityTaskFailedById']
-  >
->;
-
-export type RecordActivityTaskHeartbeatRequestParameters = {
-  params: {
-    namespace: string;
-  };
-  body: components['schemas']['RecordActivityTaskHeartbeatRequest'];
-};
-
-export type RecordActivityTaskHeartbeatResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/activities/heartbeat']['post'],
-    operations['RecordActivityTaskHeartbeat']
-  >
->;
-
-export type RecordActivityTaskHeartbeatByIdRequestParameters = {
-  params: {
-    /** @description Namespace of the workflow which scheduled this activity */
-    namespace: string;
-  };
-  body: components['schemas']['RecordActivityTaskHeartbeatByIdRequest'];
-};
-
-export type RecordActivityTaskHeartbeatByIdResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/activities/heartbeat-by-id']['post'],
-    operations['RecordActivityTaskHeartbeatById']
-  >
->;
-
-export type ListArchivedWorkflowExecutionsRequestParameters = {
-  query?: {
-    pageSize?: number;
-    nextPageToken?: string;
-    query?: string;
-  };
-  params: {
-    namespace: string;
-  };
-};
-
-export type ListArchivedWorkflowExecutionsResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/archived-workflows']['get'],
-    operations['ListArchivedWorkflowExecutions']
-  >
->;
-
-export type ListBatchOperationsRequestParameters = {
-  query?: {
-    /** @description List page size */
-    pageSize?: number;
-    /** @description Next page token */
-    nextPageToken?: string;
-  };
-  params: {
-    /** @description Namespace that contains the batch operation */
-    namespace: string;
-  };
-};
-
-export type ListBatchOperationsResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/batch-operations']['get'],
-    operations['ListBatchOperations']
-  >
->;
-
-export type DescribeBatchOperationRequestParameters = {
-  params: {
-    /** @description Namespace that contains the batch operation */
-    namespace: string;
-    /** @description Batch job id */
     jobId: string;
-  };
-};
+    body: components['schemas']['StartBatchOperationRequest'];
+  },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['StartBatchOperationResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/batch-operations/${jobId}`, baseUrl);
 
-export type DescribeBatchOperationResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/batch-operations/{jobId}']['get'],
-    operations['DescribeBatchOperation']
-  >
->;
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`startBatchOperation request failed.`);
+    }
+    return response.json();
+  });
+}
 
-export type StartBatchOperationRequestParameters = {
-  params: {
-    /** @description Namespace that contains the batch operation */
+export async function stopBatchOperation(
+  {
+    namespace,
+    jobId,
+    body,
+  }: { namespace: string; jobId: string; body: components['schemas']['StopBatchOperationRequest'] },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['StopBatchOperationResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/batch-operations/${jobId}/stop`, baseUrl);
+
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`stopBatchOperation request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function listSchedules(
+  {
+    maximumPageSize,
+    nextPageToken,
+    query,
+    namespace,
+  }: { namespace: string; maximumPageSize?: number; nextPageToken?: string; query?: string },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['ListSchedulesResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/schedules`, baseUrl);
+
+  if (maximumPageSize) url.searchParams.append('maximumPageSize', String(maximumPageSize));
+
+  if (nextPageToken) url.searchParams.append('nextPageToken', String(nextPageToken));
+
+  if (query) url.searchParams.append('query', String(query));
+
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`listSchedules request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function describeSchedule(
+  { namespace, scheduleId }: { namespace: string; scheduleId: string },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['DescribeScheduleResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/schedules/${scheduleId}`, baseUrl);
+
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`describeSchedule request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function createSchedule(
+  {
+    namespace,
+    scheduleId,
+    body,
+  }: {
     namespace: string;
-    /** @description Job ID defines the unique ID for the batch job */
-    jobId: string;
-  };
-  body: components['schemas']['StartBatchOperationRequest'];
-};
+    scheduleId: string;
+    body: components['schemas']['CreateScheduleRequest'];
+  },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['CreateScheduleResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/schedules/${scheduleId}`, baseUrl);
 
-export type StartBatchOperationResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/batch-operations/{jobId}']['post'],
-    operations['StartBatchOperation']
-  >
->;
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`createSchedule request failed.`);
+    }
+    return response.json();
+  });
+}
 
-export type StopBatchOperationRequestParameters = {
-  params: {
-    /** @description Namespace that contains the batch operation */
+export async function deleteSchedule(
+  { identity, namespace, scheduleId }: { namespace: string; scheduleId: string; identity?: string },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['DeleteScheduleResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/schedules/${scheduleId}`, baseUrl);
+
+  if (identity) url.searchParams.append('identity', String(identity));
+
+  return fetch(url, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`deleteSchedule request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function listScheduleMatchingTimes(
+  {
+    startTime,
+    endTime,
+    namespace,
+    scheduleId,
+  }: { namespace: string; scheduleId: string; startTime?: string; endTime?: string },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['ListScheduleMatchingTimesResponse']> {
+  const url = new URL(
+    `/api/v1/namespaces/${namespace}/schedules/${scheduleId}/matching-times`,
+    baseUrl,
+  );
+
+  if (startTime) url.searchParams.append('startTime', String(startTime));
+
+  if (endTime) url.searchParams.append('endTime', String(endTime));
+
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`listScheduleMatchingTimes request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function patchSchedule(
+  {
+    namespace,
+    scheduleId,
+    body,
+  }: { namespace: string; scheduleId: string; body: components['schemas']['PatchScheduleRequest'] },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['PatchScheduleResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/schedules/${scheduleId}/patch`, baseUrl);
+
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`patchSchedule request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function updateSchedule(
+  {
+    namespace,
+    scheduleId,
+    body,
+  }: {
     namespace: string;
-    /** @description Batch job id */
-    jobId: string;
-  };
-  body: components['schemas']['StopBatchOperationRequest'];
-};
+    scheduleId: string;
+    body: components['schemas']['UpdateScheduleRequest'];
+  },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['UpdateScheduleResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/schedules/${scheduleId}/update`, baseUrl);
 
-export type StopBatchOperationResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/batch-operations/{jobId}/stop']['post'],
-    operations['StopBatchOperation']
-  >
->;
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`updateSchedule request failed.`);
+    }
+    return response.json();
+  });
+}
 
-export type ListNexusOutgoingServicesRequestParameters = {
-  query?: {
-    /** @description Maximum number of services to return in a single page. */
-    pageSize?: number;
-    /** @description Pass in the next_page_token from the previous response here. */
-    pageToken?: string;
-  };
-  params: {
-    /** @description Namespace to scope the list request to. */
+export async function listSearchAttributes(
+  { namespace }: { namespace: string },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['ListSearchAttributesResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/search-attributes`, baseUrl);
+
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`listSearchAttributes request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function describeTaskQueue(
+  {
+    taskQueueName,
+    kind,
+    normalName,
+    taskQueueType,
+    includeTaskQueueStatus,
+    apiMode,
+    buildIds,
+    unversioned,
+    allActive,
+    taskQueueTypes,
+    reportStats,
+    reportPollers,
+    reportTaskReachability,
+    namespace,
+    name,
+  }: {
     namespace: string;
-  };
-};
-
-export type ListNexusOutgoingServicesResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/nexus/outgoing-services']['get'],
-    operations['ListNexusOutgoingServices']
-  >
->;
-
-export type CreateNexusOutgoingServiceRequestParameters = {
-  params: {
-    /** @description Namespace to create this service definition in. */
-    namespace: string;
-  };
-  body: components['schemas']['CreateNexusOutgoingServiceRequest'];
-};
-
-export type CreateNexusOutgoingServiceResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/nexus/outgoing-services']['post'],
-    operations['CreateNexusOutgoingService']
-  >
->;
-
-export type GetNexusOutgoingServiceRequestParameters = {
-  params: {
-    /** @description Namespace that contains this outgoing service definition. */
-    namespace: string;
-    /** @description Name of service to retrieve. */
     name: string;
-  };
-};
-
-export type GetNexusOutgoingServiceResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}']['get'],
-    operations['GetNexusOutgoingService']
-  >
->;
-
-export type DeleteNexusOutgoingServiceRequestParameters = {
-  params: {
-    /** @description Namespace that contains this outgoing service definition. */
-    namespace: string;
-    /** @description Name of service to delete. */
-    name: string;
-  };
-};
-
-export type DeleteNexusOutgoingServiceResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}']['delete'],
-    operations['DeleteNexusOutgoingService']
-  >
->;
-
-export type UpdateNexusOutgoingServiceRequestParameters = {
-  params: {
-    /** @description Namespace to find and update this service definition in. */
-    namespace: string;
-    /** @description Service name, unique for this namespace. Must match `[a-zA-Z_][a-zA-Z0-9_]*`. */
-    name: string;
-  };
-  body: components['schemas']['UpdateNexusOutgoingServiceRequest'];
-};
-
-export type UpdateNexusOutgoingServiceResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}/update']['post'],
-    operations['UpdateNexusOutgoingService']
-  >
->;
-
-export type ListSchedulesRequestParameters = {
-  query?: {
-    /** @description How many to return at once. */
-    maximumPageSize?: number;
-    /** @description Token to get the next page of results. */
-    nextPageToken?: string;
-    /** @description Query to filter schedules. */
-    query?: string;
-  };
-  params: {
-    /** @description The namespace to list schedules in. */
-    namespace: string;
-  };
-};
-
-export type ListSchedulesResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/schedules']['get'],
-    operations['ListSchedules']
-  >
->;
-
-export type DescribeScheduleRequestParameters = {
-  params: {
-    /** @description The namespace of the schedule to describe. */
-    namespace: string;
-    /** @description The id of the schedule to describe. */
-    scheduleId: string;
-  };
-};
-
-export type DescribeScheduleResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/schedules/{scheduleId}']['get'],
-    operations['DescribeSchedule']
-  >
->;
-
-export type CreateScheduleRequestParameters = {
-  params: {
-    /** @description The namespace the schedule should be created in. */
-    namespace: string;
-    /** @description The id of the new schedule. */
-    scheduleId: string;
-  };
-  body: components['schemas']['CreateScheduleRequest'];
-};
-
-export type CreateScheduleResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/schedules/{scheduleId}']['post'],
-    operations['CreateSchedule']
-  >
->;
-
-export type DeleteScheduleRequestParameters = {
-  query?: {
-    /** @description The identity of the client who initiated this request. */
-    identity?: string;
-  };
-  params: {
-    /** @description The namespace of the schedule to delete. */
-    namespace: string;
-    /** @description The id of the schedule to delete. */
-    scheduleId: string;
-  };
-};
-
-export type DeleteScheduleResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/schedules/{scheduleId}']['delete'],
-    operations['DeleteSchedule']
-  >
->;
-
-export type ListScheduleMatchingTimesRequestParameters = {
-  query?: {
-    /** @description Time range to query. */
-    startTime?: string;
-    endTime?: string;
-  };
-  params: {
-    /** @description The namespace of the schedule to query. */
-    namespace: string;
-    /** @description The id of the schedule to query. */
-    scheduleId: string;
-  };
-};
-
-export type ListScheduleMatchingTimesResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/schedules/{scheduleId}/matching-times']['get'],
-    operations['ListScheduleMatchingTimes']
-  >
->;
-
-export type PatchScheduleRequestParameters = {
-  params: {
-    /** @description The namespace of the schedule to patch. */
-    namespace: string;
-    /** @description The id of the schedule to patch. */
-    scheduleId: string;
-  };
-  body: components['schemas']['PatchScheduleRequest'];
-};
-
-export type PatchScheduleResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/schedules/{scheduleId}/patch']['post'],
-    operations['PatchSchedule']
-  >
->;
-
-export type UpdateScheduleRequestParameters = {
-  params: {
-    /** @description The namespace of the schedule to update. */
-    namespace: string;
-    /** @description The id of the schedule to update. */
-    scheduleId: string;
-  };
-  body: components['schemas']['UpdateScheduleRequest'];
-};
-
-export type UpdateScheduleResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/schedules/{scheduleId}/update']['post'],
-    operations['UpdateSchedule']
-  >
->;
-
-export type ListSearchAttributesRequestParameters = {
-  params: {
-    namespace: string;
-  };
-};
-
-export type ListSearchAttributesResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/search-attributes']['get'],
-    operations['ListSearchAttributes']
-  >
->;
-
-export type GetWorkerBuildIdCompatibilityRequestParameters = {
-  query?: {
-    /**
-     * @description Limits how many compatible sets will be returned. Specify 1 to only return the current
-     *  default major version set. 0 returns all sets.
-     */
-    maxSets?: number;
-  };
-  params: {
-    namespace: string;
-    /** @description Must be set, the task queue to interrogate about worker id compatibility. */
-    taskQueue: string;
-  };
-};
-
-export type GetWorkerBuildIdCompatibilityResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/task-queues/{taskQueue}/worker-build-id-compatibility']['get'],
-    operations['GetWorkerBuildIdCompatibility']
-  >
->;
-
-export type GetWorkerVersioningRulesRequestParameters = {
-  params: {
-    namespace: string;
-    taskQueue: string;
-  };
-};
-
-export type GetWorkerVersioningRulesResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/task-queues/{taskQueue}/worker-versioning-rules']['get'],
-    operations['GetWorkerVersioningRules']
-  >
->;
-
-export type DescribeTaskQueueRequestParameters = {
-  query?: {
-    'taskQueue.name'?: string;
-    /** @description Default: TASK_QUEUE_KIND_NORMAL. */
-    'taskQueue.kind'?:
-      | 'TASK_QUEUE_KIND_UNSPECIFIED'
-      | 'TASK_QUEUE_KIND_NORMAL'
-      | 'TASK_QUEUE_KIND_STICKY';
-    /**
-     * @description Iff kind == TASK_QUEUE_KIND_STICKY, then this field contains the name of
-     *  the normal task queue that the sticky worker is running on.
-     */
-    'taskQueue.normalName'?: string;
-    /**
-     * @description Deprecated. Use `ENHANCED` mode with `task_queue_types`. Ignored in `ENHANCED` mode.
-     *  If unspecified (TASK_QUEUE_TYPE_UNSPECIFIED), then default value (TASK_QUEUE_TYPE_WORKFLOW) will be used.
-     */
+    taskQueueName: string;
+    kind?: 'TASK_QUEUE_KIND_UNSPECIFIED' | 'TASK_QUEUE_KIND_NORMAL' | 'TASK_QUEUE_KIND_STICKY';
+    normalName?: string;
     taskQueueType?:
       | 'TASK_QUEUE_TYPE_UNSPECIFIED'
       | 'TASK_QUEUE_TYPE_WORKFLOW'
       | 'TASK_QUEUE_TYPE_ACTIVITY'
       | 'TASK_QUEUE_TYPE_NEXUS';
-    /** @description Deprecated. Ignored in `ENHANCED` mode. */
     includeTaskQueueStatus?: boolean;
-    /** @description All options except `task_queue_type` and `include_task_queue_status` are only available in the `ENHANCED` mode. */
     apiMode?: 'DESCRIBE_TASK_QUEUE_MODE_UNSPECIFIED' | 'DESCRIBE_TASK_QUEUE_MODE_ENHANCED';
-    /** @description Include specific Build IDs. */
-    'versions.buildIds'?: string[];
-    /** @description Include the unversioned queue. */
-    'versions.unversioned'?: boolean;
-    /**
-     * @description Include all active versions. A version is considered active if it has had new
-     *  tasks or polls recently.
-     */
-    'versions.allActive'?: boolean;
-    /** @description Task queue types to report info about. If not specified, all types are considered. */
-    taskQueueTypes?: (
+    buildIds?: readonly string[];
+    unversioned?: boolean;
+    allActive?: boolean;
+    taskQueueTypes?: readonly (
       | 'TASK_QUEUE_TYPE_UNSPECIFIED'
       | 'TASK_QUEUE_TYPE_WORKFLOW'
       | 'TASK_QUEUE_TYPE_ACTIVITY'
       | 'TASK_QUEUE_TYPE_NEXUS'
     )[];
-    /**
-     * @description Report backlog info for the requested task queue types and versions
-     *  bool report_backlog_info = 8;
-     *  Report list of pollers for requested task queue types and versions
-     */
+    reportStats?: boolean;
     reportPollers?: boolean;
-    /**
-     * @description Report task reachability for the requested versions and all task types (task reachability is not reported
-     *  per task type).
-     */
     reportTaskReachability?: boolean;
-  };
-  params: {
+  },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['DescribeTaskQueueResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/task-queues/${name}`, baseUrl);
+
+  if (taskQueueName) url.searchParams.append('taskQueue.name', String(taskQueueName));
+
+  if (kind) url.searchParams.append('taskQueue.kind', String(kind));
+
+  if (normalName) url.searchParams.append('taskQueue.normalName', String(normalName));
+
+  if (taskQueueType) url.searchParams.append('taskQueueType', String(taskQueueType));
+
+  if (includeTaskQueueStatus)
+    url.searchParams.append('includeTaskQueueStatus', String(includeTaskQueueStatus));
+
+  if (apiMode) url.searchParams.append('apiMode', String(apiMode));
+
+  if (buildIds) url.searchParams.append('versions.buildIds', String(buildIds));
+
+  if (unversioned) url.searchParams.append('versions.unversioned', String(unversioned));
+
+  if (allActive) url.searchParams.append('versions.allActive', String(allActive));
+
+  if (taskQueueTypes) url.searchParams.append('taskQueueTypes', String(taskQueueTypes));
+
+  if (reportStats) url.searchParams.append('reportStats', String(reportStats));
+
+  if (reportPollers) url.searchParams.append('reportPollers', String(reportPollers));
+
+  if (reportTaskReachability)
+    url.searchParams.append('reportTaskReachability', String(reportTaskReachability));
+
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`describeTaskQueue request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function getWorkerBuildIdCompatibility(
+  { maxSets, namespace, taskQueue }: { namespace: string; taskQueue: string; maxSets?: number },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['GetWorkerBuildIdCompatibilityResponse']> {
+  const url = new URL(
+    `/api/v1/namespaces/${namespace}/task-queues/${taskQueue}/worker-build-id-compatibility`,
+    baseUrl,
+  );
+
+  if (maxSets) url.searchParams.append('maxSets', String(maxSets));
+
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`getWorkerBuildIdCompatibility request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function getWorkerVersioningRules(
+  { namespace, taskQueue }: { namespace: string; taskQueue: string },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['GetWorkerVersioningRulesResponse']> {
+  const url = new URL(
+    `/api/v1/namespaces/${namespace}/task-queues/${taskQueue}/worker-versioning-rules`,
+    baseUrl,
+  );
+
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`getWorkerVersioningRules request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function updateNamespace(
+  { namespace, body }: { namespace: string; body: components['schemas']['UpdateNamespaceRequest'] },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['UpdateNamespaceResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/update`, baseUrl);
+
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`updateNamespace request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function getWorkerTaskReachability(
+  {
+    buildIds,
+    taskQueues,
+    reachability,
+    namespace,
+  }: {
     namespace: string;
-    'task_queue.name': string;
-  };
-};
-
-export type DescribeTaskQueueResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/task-queues/{task_queue.name}']['get'],
-    operations['DescribeTaskQueue']
-  >
->;
-
-export type UpdateNamespaceRequestParameters = {
-  params: {
-    namespace: string;
-  };
-  body: components['schemas']['UpdateNamespaceRequest'];
-};
-
-export type UpdateNamespaceResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/update']['post'],
-    operations['UpdateNamespace']
-  >
->;
-
-export type GetWorkerTaskReachabilityRequestParameters = {
-  query?: {
-    /**
-     * @description Build ids to retrieve reachability for. An empty string will be interpreted as an unversioned worker.
-     *  The number of build ids that can be queried in a single API call is limited.
-     *  Open source users can adjust this limit by setting the server's dynamic config value for
-     *  `limit.reachabilityQueryBuildIds` with the caveat that this call can strain the visibility store.
-     */
-    buildIds?: string[];
-    /**
-     * @description Task queues to retrieve reachability for. Leave this empty to query for all task queues associated with given
-     *  build ids in the namespace.
-     *  Must specify at least one task queue if querying for an unversioned worker.
-     *  The number of task queues that the server will fetch reachability information for is limited.
-     *  See the `GetWorkerTaskReachabilityResponse` documentation for more information.
-     */
-    taskQueues?: string[];
-    /**
-     * @description Type of reachability to query for.
-     *  `TASK_REACHABILITY_NEW_WORKFLOWS` is always returned in the response.
-     *  Use `TASK_REACHABILITY_EXISTING_WORKFLOWS` if your application needs to respond to queries on closed workflows.
-     *  Otherwise, use `TASK_REACHABILITY_OPEN_WORKFLOWS`. Default is `TASK_REACHABILITY_EXISTING_WORKFLOWS` if left
-     *  unspecified.
-     *  See the TaskReachability docstring for information about each enum variant.
-     */
+    buildIds?: readonly string[];
+    taskQueues?: readonly string[];
     reachability?:
       | 'TASK_REACHABILITY_UNSPECIFIED'
       | 'TASK_REACHABILITY_NEW_WORKFLOWS'
       | 'TASK_REACHABILITY_EXISTING_WORKFLOWS'
       | 'TASK_REACHABILITY_OPEN_WORKFLOWS'
       | 'TASK_REACHABILITY_CLOSED_WORKFLOWS';
-  };
-  params: {
+  },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['GetWorkerTaskReachabilityResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/worker-task-reachability`, baseUrl);
+
+  if (buildIds) url.searchParams.append('buildIds', String(buildIds));
+
+  if (taskQueues) url.searchParams.append('taskQueues', String(taskQueues));
+
+  if (reachability) url.searchParams.append('reachability', String(reachability));
+
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`getWorkerTaskReachability request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function countWorkflowExecutions(
+  { query, namespace }: { namespace: string; query?: string },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['CountWorkflowExecutionsResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/workflow-count`, baseUrl);
+
+  if (query) url.searchParams.append('query', String(query));
+
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`countWorkflowExecutions request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function listWorkflowExecutions(
+  {
+    pageSize,
+    nextPageToken,
+    query,
+    namespace,
+  }: { namespace: string; pageSize?: number; nextPageToken?: string; query?: string },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['ListWorkflowExecutionsResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/workflows`, baseUrl);
+
+  if (pageSize) url.searchParams.append('pageSize', String(pageSize));
+
+  if (nextPageToken) url.searchParams.append('nextPageToken', String(nextPageToken));
+
+  if (query) url.searchParams.append('query', String(query));
+
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`listWorkflowExecutions request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function describeWorkflowExecution(
+  {
+    executionWorkflowId,
+    runId,
+    namespace,
+    workflowId,
+  }: { namespace: string; workflowId: string; executionWorkflowId: string; runId?: string },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['DescribeWorkflowExecutionResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/workflows/${workflowId}`, baseUrl);
+
+  if (executionWorkflowId)
+    url.searchParams.append('execution.workflowId', String(executionWorkflowId));
+
+  if (runId) url.searchParams.append('execution.runId', String(runId));
+
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`describeWorkflowExecution request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function getWorkflowExecutionHistory(
+  {
+    executionWorkflowId,
+    runId,
+    maximumPageSize,
+    nextPageToken,
+    waitNewEvent,
+    historyEventFilterType,
+    skipArchival,
+    namespace,
+    workflowId,
+  }: {
     namespace: string;
-  };
-};
-
-export type GetWorkerTaskReachabilityResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/worker-task-reachability']['get'],
-    operations['GetWorkerTaskReachability']
-  >
->;
-
-export type CountWorkflowExecutionsRequestParameters = {
-  query?: {
-    query?: string;
-  };
-  params: {
-    namespace: string;
-  };
-};
-
-export type CountWorkflowExecutionsResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/workflow-count']['get'],
-    operations['CountWorkflowExecutions']
-  >
->;
-
-export type ListWorkflowExecutionsRequestParameters = {
-  query?: {
-    pageSize?: number;
-    nextPageToken?: string;
-    query?: string;
-  };
-  params: {
-    namespace: string;
-  };
-};
-
-export type ListWorkflowExecutionsResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/workflows']['get'],
-    operations['ListWorkflowExecutions']
-  >
->;
-
-export type ExecuteMultiOperationRequestParameters = {
-  params: {
-    namespace: string;
-  };
-  body: components['schemas']['ExecuteMultiOperationRequest'];
-};
-
-export type ExecuteMultiOperationResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/workflows/execute-multi-operation']['post'],
-    operations['ExecuteMultiOperation']
-  >
->;
-
-export type DescribeWorkflowExecutionRequestParameters = {
-  query?: {
-    'execution.workflowId'?: string;
-    'execution.runId'?: string;
-  };
-  params: {
-    namespace: string;
-    'execution.workflow_id': string;
-  };
-};
-
-export type DescribeWorkflowExecutionResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}']['get'],
-    operations['DescribeWorkflowExecution']
-  >
->;
-
-export type GetWorkflowExecutionHistoryRequestParameters = {
-  query?: {
-    'execution.workflowId'?: string;
-    'execution.runId'?: string;
+    workflowId: string;
+    executionWorkflowId: string;
+    runId?: string;
     maximumPageSize?: number;
-    /**
-     * @description If a `GetWorkflowExecutionHistoryResponse` or a `PollWorkflowTaskQueueResponse` had one of
-     *  these, it should be passed here to fetch the next page.
-     */
     nextPageToken?: string;
-    /**
-     * @description If set to true, the RPC call will not resolve until there is a new event which matches
-     *  the `history_event_filter_type`, or a timeout is hit.
-     */
     waitNewEvent?: boolean;
-    /**
-     * @description Filter returned events such that they match the specified filter type.
-     *  Default: HISTORY_EVENT_FILTER_TYPE_ALL_EVENT.
-     */
     historyEventFilterType?:
       | 'HISTORY_EVENT_FILTER_TYPE_UNSPECIFIED'
       | 'HISTORY_EVENT_FILTER_TYPE_ALL_EVENT'
       | 'HISTORY_EVENT_FILTER_TYPE_CLOSE_EVENT';
     skipArchival?: boolean;
-  };
-  params: {
+  },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['GetWorkflowExecutionHistoryResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/workflows/${workflowId}/history`, baseUrl);
+
+  if (executionWorkflowId)
+    url.searchParams.append('execution.workflowId', String(executionWorkflowId));
+
+  if (runId) url.searchParams.append('execution.runId', String(runId));
+
+  if (maximumPageSize) url.searchParams.append('maximumPageSize', String(maximumPageSize));
+
+  if (nextPageToken) url.searchParams.append('nextPageToken', String(nextPageToken));
+
+  if (waitNewEvent) url.searchParams.append('waitNewEvent', String(waitNewEvent));
+
+  if (historyEventFilterType)
+    url.searchParams.append('historyEventFilterType', String(historyEventFilterType));
+
+  if (skipArchival) url.searchParams.append('skipArchival', String(skipArchival));
+
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`getWorkflowExecutionHistory request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function getWorkflowExecutionHistoryReverse(
+  {
+    executionWorkflowId,
+    runId,
+    maximumPageSize,
+    nextPageToken,
+    namespace,
+    workflowId,
+  }: {
     namespace: string;
-    'execution.workflow_id': string;
-  };
-};
-
-export type GetWorkflowExecutionHistoryResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history']['get'],
-    operations['GetWorkflowExecutionHistory']
-  >
->;
-
-export type GetWorkflowExecutionHistoryReverseRequestParameters = {
-  query?: {
-    'execution.workflowId'?: string;
-    'execution.runId'?: string;
+    workflowId: string;
+    executionWorkflowId: string;
+    runId?: string;
     maximumPageSize?: number;
     nextPageToken?: string;
-  };
-  params: {
-    namespace: string;
-    'execution.workflow_id': string;
-  };
-};
+  },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['GetWorkflowExecutionHistoryReverseResponse']> {
+  const url = new URL(
+    `/api/v1/namespaces/${namespace}/workflows/${workflowId}/history-reverse`,
+    baseUrl,
+  );
 
-export type GetWorkflowExecutionHistoryReverseResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history-reverse']['get'],
-    operations['GetWorkflowExecutionHistoryReverse']
-  >
->;
+  if (executionWorkflowId)
+    url.searchParams.append('execution.workflowId', String(executionWorkflowId));
 
-export type QueryWorkflowRequestParameters = {
-  params: {
-    namespace: string;
-    'execution.workflow_id': string;
-    'query.query_type': string;
-  };
-  body: components['schemas']['QueryWorkflowRequest'];
-};
+  if (runId) url.searchParams.append('execution.runId', String(runId));
 
-export type QueryWorkflowResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/query/{query.query_type}']['post'],
-    operations['QueryWorkflow']
-  >
->;
+  if (maximumPageSize) url.searchParams.append('maximumPageSize', String(maximumPageSize));
 
-export type StartWorkflowExecutionRequestParameters = {
-  params: {
-    namespace: string;
-    workflowId: string;
-  };
-  body: components['schemas']['StartWorkflowExecutionRequest'];
-};
+  if (nextPageToken) url.searchParams.append('nextPageToken', String(nextPageToken));
 
-export type StartWorkflowExecutionResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/workflows/{workflowId}']['post'],
-    operations['StartWorkflowExecution']
-  >
->;
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`getWorkflowExecutionHistoryReverse request failed.`);
+    }
+    return response.json();
+  });
+}
 
-export type SignalWithStartWorkflowExecutionRequestParameters = {
-  params: {
+export async function queryWorkflow(
+  {
+    namespace,
+    workflowId,
+    queryType,
+    body,
+  }: {
     namespace: string;
     workflowId: string;
-    /** @description The workflow author-defined name of the signal to send to the workflow */
+    queryType: string;
+    body: components['schemas']['QueryWorkflowRequest'];
+  },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['QueryWorkflowResponse']> {
+  const url = new URL(
+    `/api/v1/namespaces/${namespace}/workflows/${workflowId}/query/${queryType}`,
+    baseUrl,
+  );
+
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`queryWorkflow request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function requestCancelWorkflowExecution(
+  {
+    namespace,
+    workflowId,
+    body,
+  }: {
+    namespace: string;
+    workflowId: string;
+    body: components['schemas']['RequestCancelWorkflowExecutionRequest'];
+  },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['RequestCancelWorkflowExecutionResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/workflows/${workflowId}/cancel`, baseUrl);
+
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`requestCancelWorkflowExecution request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function resetWorkflowExecution(
+  {
+    namespace,
+    workflowId,
+    body,
+  }: {
+    namespace: string;
+    workflowId: string;
+    body: components['schemas']['ResetWorkflowExecutionRequest'];
+  },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['ResetWorkflowExecutionResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/workflows/${workflowId}/reset`, baseUrl);
+
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`resetWorkflowExecution request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function signalWorkflowExecution(
+  {
+    namespace,
+    workflowId,
+    signalName,
+    body,
+  }: {
+    namespace: string;
+    workflowId: string;
     signalName: string;
-  };
-  body: components['schemas']['SignalWithStartWorkflowExecutionRequest'];
-};
+    body: components['schemas']['SignalWorkflowExecutionRequest'];
+  },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['SignalWorkflowExecutionResponse']> {
+  const url = new URL(
+    `/api/v1/namespaces/${namespace}/workflows/${workflowId}/signal/${signalName}`,
+    baseUrl,
+  );
 
-export type SignalWithStartWorkflowExecutionResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/workflows/{workflowId}/signal-with-start/{signalName}']['post'],
-    operations['SignalWithStartWorkflowExecution']
-  >
->;
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`signalWorkflowExecution request failed.`);
+    }
+    return response.json();
+  });
+}
 
-export type RequestCancelWorkflowExecutionRequestParameters = {
-  params: {
+export async function terminateWorkflowExecution(
+  {
+    namespace,
+    workflowId,
+    body,
+  }: {
     namespace: string;
-    'workflow_execution.workflow_id': string;
-  };
-  body: components['schemas']['RequestCancelWorkflowExecutionRequest'];
-};
+    workflowId: string;
+    body: components['schemas']['TerminateWorkflowExecutionRequest'];
+  },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['TerminateWorkflowExecutionResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/workflows/${workflowId}/terminate`, baseUrl);
 
-export type RequestCancelWorkflowExecutionResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/cancel']['post'],
-    operations['RequestCancelWorkflowExecution']
-  >
->;
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`terminateWorkflowExecution request failed.`);
+    }
+    return response.json();
+  });
+}
 
-export type ResetWorkflowExecutionRequestParameters = {
-  params: {
+export async function updateWorkflowExecution(
+  {
+    namespace,
+    workflowId,
+    name,
+    body,
+  }: {
     namespace: string;
-    'workflow_execution.workflow_id': string;
-  };
-  body: components['schemas']['ResetWorkflowExecutionRequest'];
-};
+    workflowId: string;
+    name: string;
+    body: components['schemas']['UpdateWorkflowExecutionRequest'];
+  },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['UpdateWorkflowExecutionResponse']> {
+  const url = new URL(
+    `/api/v1/namespaces/${namespace}/workflows/${workflowId}/update/${name}`,
+    baseUrl,
+  );
 
-export type ResetWorkflowExecutionResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/reset']['post'],
-    operations['ResetWorkflowExecution']
-  >
->;
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`updateWorkflowExecution request failed.`);
+    }
+    return response.json();
+  });
+}
 
-export type SignalWorkflowExecutionRequestParameters = {
-  params: {
+export async function startWorkflowExecution(
+  {
+    namespace,
+    workflowId,
+    body,
+  }: {
     namespace: string;
-    'workflow_execution.workflow_id': string;
-    /** @description The workflow author-defined name of the signal to send to the workflow */
+    workflowId: string;
+    body: components['schemas']['StartWorkflowExecutionRequest'];
+  },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['StartWorkflowExecutionResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/workflows/${workflowId}`, baseUrl);
+
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`startWorkflowExecution request failed.`);
+    }
+    return response.json();
+  });
+}
+
+export async function signalWithStartWorkflowExecution(
+  {
+    namespace,
+    workflowId,
+    signalName,
+    body,
+  }: {
+    namespace: string;
+    workflowId: string;
     signalName: string;
-  };
-  body: components['schemas']['SignalWorkflowExecutionRequest'];
-};
+    body: components['schemas']['SignalWithStartWorkflowExecutionRequest'];
+  },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['SignalWithStartWorkflowExecutionResponse']> {
+  const url = new URL(
+    `/api/v1/namespaces/${namespace}/workflows/${workflowId}/signal-with-start/${signalName}`,
+    baseUrl,
+  );
 
-export type SignalWorkflowExecutionResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/signal/{signalName}']['post'],
-    operations['SignalWorkflowExecution']
-  >
->;
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`signalWithStartWorkflowExecution request failed.`);
+    }
+    return response.json();
+  });
+}
 
-export type TerminateWorkflowExecutionRequestParameters = {
-  params: {
-    namespace: string;
-    'workflow_execution.workflow_id': string;
-  };
-  body: components['schemas']['TerminateWorkflowExecutionRequest'];
-};
-
-export type TerminateWorkflowExecutionResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/terminate']['post'],
-    operations['TerminateWorkflowExecution']
-  >
->;
-
-export type UpdateWorkflowExecutionRequestParameters = {
-  params: {
-    /** @description The namespace name of the target workflow */
-    namespace: string;
-    'workflow_execution.workflow_id': string;
-    'request.input.name': string;
-  };
-  body: components['schemas']['UpdateWorkflowExecutionRequest'];
-};
-
-export type UpdateWorkflowExecutionResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update/{request.input.name}']['post'],
-    operations['UpdateWorkflowExecution']
-  >
->;
-
-export type ListNexusIncomingServicesRequestParameters = {
-  query?: {
-    pageSize?: number;
-    /**
-     * @description To get the next page, pass in `ListNexusIncomingServicesResponse.next_page_token` from the previous page's
-     *  response, the token will be empty if there's no other page.
-     *  Note: the last page may be empty if the total number of services registered is a multiple of the page size.
-     */
-    nextPageToken?: string;
-    /**
-     * @description Name of the incoming service to filter on - optional. Specifying this will result in zero or one results.
-     *  (-- api-linter: core::203::field-behavior-required=disabled
-     *      aip.dev/not-precedent: Not following linter rules. --)
-     */
-    name?: string;
-  };
-};
-
-export type ListNexusIncomingServicesResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/nexus/incoming-services']['get'],
-    operations['ListNexusIncomingServices']
-  >
->;
-
-export type CreateNexusIncomingServiceRequestParameters = {
-  body: components['schemas']['CreateNexusIncomingServiceRequest'];
-};
-
-export type CreateNexusIncomingServiceResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/nexus/incoming-services']['post'],
-    operations['CreateNexusIncomingService']
-  >
->;
-
-export type GetNexusIncomingServiceRequestParameters = {
-  params: {
-    /** @description Server-generated unique service ID. */
-    id: string;
-  };
-};
-
-export type GetNexusIncomingServiceResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/nexus/incoming-services/{id}']['get'],
-    operations['GetNexusIncomingService']
-  >
->;
-
-export type DeleteNexusIncomingServiceRequestParameters = {
-  query?: {
-    /** @description Data version for this service. Must match current version. */
-    version?: string;
-  };
-  params: {
-    /** @description Server-generated unique service ID. */
-    id: string;
-  };
-};
-
-export type DeleteNexusIncomingServiceResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/nexus/incoming-services/{id}']['delete'],
-    operations['DeleteNexusIncomingService']
-  >
->;
-
-export type UpdateNexusIncomingServiceRequestParameters = {
-  params: {
-    /** @description Server-generated unique service ID. */
-    id: string;
-  };
-  body: components['schemas']['UpdateNexusIncomingServiceRequest'];
-};
-
-export type UpdateNexusIncomingServiceResponse = Promise<
-  FetchResponse<
-    paths['/api/v1/nexus/incoming-services/{id}/update']['post'],
-    operations['UpdateNexusIncomingService']
-  >
->;
-
-export type GetSystemInfoResponse = Promise<
-  FetchResponse<paths['/api/v1/system-info']['get'], operations['GetSystemInfo']>
->;
-
-/**
- * The API client class encapsulating all methods for interacting with Temporal's HTTP API.
- */
-export class Client {
-  private client: ReturnType<typeof createClient<paths>>;
-  private _options: ClientOptions;
-
-  constructor(options: ClientOptions = {}) {
-    this._options = options;
-    this.client = createClient(options);
-  }
-
-  /**
-   * Generates a new client with an updated `baseUrl`.
-   */
-  set baseUrl(baseUrl: string) {
-    this.client = createClient<paths>({ ...this._options, baseUrl });
-  }
-
-  /**
-   * Gets the current options for the API client.
-   */
-  get options(): ClientOptions {
-    return this._options;
-  }
-
-  /**
-   * Sets new options for the API client.
-   */
-  set options(options: ClientOptions) {
-    this._options = options;
-    this.client = createClient({ ...this._options, ...options });
-  }
-
-  /** @description GetClusterInfo returns information about temporal cluster */
-  getClusterInfo(): GetClusterInfoResponse {
-    return this.client.GET('/api/v1/cluster-info');
-  }
-
-  /** @description ListNamespaces returns the information and configuration for all namespaces. */
-  listNamespaces({ query }: ListNamespacesRequestParameters = {}): ListNamespacesResponse {
-    return this.client.GET('/api/v1/namespaces', { params: { query } });
-  }
-
-  /**
-   * @description RegisterNamespace creates a new namespace which can be used as a container for all resources.
-   *
-   *  A Namespace is a top level entity within Temporal, and is used as a container for resources
-   *  like workflow executions, task queues, etc. A Namespace acts as a sandbox and provides
-   *  isolation for all resources within the namespace. All resources belongs to exactly one
-   *  namespace.
-   */
-  registerNamespace({ body }: RegisterNamespaceRequestParameters): RegisterNamespaceResponse {
-    return this.client.POST('/api/v1/namespaces', { body });
-  }
-
-  /** @description DescribeNamespace returns the information and configuration for a registered namespace. */
-  describeNamespace({
-    query,
-    params,
-  }: DescribeNamespaceRequestParameters): DescribeNamespaceResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}', { params: { query, path: params } });
-  }
-
-  /**
-   * @description RespondActivityTaskFailed is called by workers when processing an activity task fails.
-   *
-   *  This results in a new `ACTIVITY_TASK_CANCELED` event being written to the workflow history
-   *  and a new workflow task created for the workflow. Fails with `NotFound` if the task token is
-   *  no longer valid due to activity timeout, already being completed, or never having existed.
-   */
-  respondActivityTaskCanceled({
-    params,
+export async function executeMultiOperation(
+  {
+    namespace,
     body,
-  }: RespondActivityTaskCanceledRequestParameters): RespondActivityTaskCanceledResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/activities/cancel', {
-      params: { path: params },
-      body,
-    });
-  }
+  }: { namespace: string; body: components['schemas']['ExecuteMultiOperationRequest'] },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['ExecuteMultiOperationResponse']> {
+  const url = new URL(`/api/v1/namespaces/${namespace}/workflows/execute-multi-operation`, baseUrl);
 
-  /**
-   * @description See `RecordActivityTaskCanceled`. This version allows clients to record failures by
-   *  namespace/workflow id/activity id instead of task token.
-   *
-   *  (-- api-linter: core::0136::prepositions=disabled
-   *      aip.dev/not-precedent: "By" is used to indicate request type. --)
-   */
-  respondActivityTaskCanceledById({
-    params,
-    body,
-  }: RespondActivityTaskCanceledByIdRequestParameters): RespondActivityTaskCanceledByIdResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/activities/cancel-by-id', {
-      params: { path: params },
-      body,
-    });
-  }
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`executeMultiOperation request failed.`);
+    }
+    return response.json();
+  });
+}
 
-  /**
-   * @description RespondActivityTaskCompleted is called by workers when they successfully complete an activity
-   *  task.
-   *
-   *  This results in a new `ACTIVITY_TASK_COMPLETED` event being written to the workflow history
-   *  and a new workflow task created for the workflow. Fails with `NotFound` if the task token is
-   *  no longer valid due to activity timeout, already being completed, or never having existed.
-   */
-  respondActivityTaskCompleted({
-    params,
-    body,
-  }: RespondActivityTaskCompletedRequestParameters): RespondActivityTaskCompletedResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/activities/complete', {
-      params: { path: params },
-      body,
-    });
-  }
+export async function listNexusEndpoints(
+  { pageSize, nextPageToken, name }: { pageSize?: number; nextPageToken?: string; name?: string },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['ListNexusEndpointsResponse']> {
+  const url = new URL(`/api/v1/nexus/endpoints`, baseUrl);
 
-  /**
-   * @description See `RecordActivityTaskCompleted`. This version allows clients to record completions by
-   *  namespace/workflow id/activity id instead of task token.
-   *
-   *  (-- api-linter: core::0136::prepositions=disabled
-   *      aip.dev/not-precedent: "By" is used to indicate request type. --)
-   */
-  respondActivityTaskCompletedById({
-    params,
-    body,
-  }: RespondActivityTaskCompletedByIdRequestParameters): RespondActivityTaskCompletedByIdResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/activities/complete-by-id', {
-      params: { path: params },
-      body,
-    });
-  }
+  if (pageSize) url.searchParams.append('pageSize', String(pageSize));
 
-  /**
-   * @description RespondActivityTaskFailed is called by workers when processing an activity task fails.
-   *
-   *  This results in a new `ACTIVITY_TASK_FAILED` event being written to the workflow history and
-   *  a new workflow task created for the workflow. Fails with `NotFound` if the task token is no
-   *  longer valid due to activity timeout, already being completed, or never having existed.
-   */
-  respondActivityTaskFailed({
-    params,
-    body,
-  }: RespondActivityTaskFailedRequestParameters): RespondActivityTaskFailedResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/activities/fail', {
-      params: { path: params },
-      body,
-    });
-  }
+  if (nextPageToken) url.searchParams.append('nextPageToken', String(nextPageToken));
 
-  /**
-   * @description See `RecordActivityTaskFailed`. This version allows clients to record failures by
-   *  namespace/workflow id/activity id instead of task token.
-   *
-   *  (-- api-linter: core::0136::prepositions=disabled
-   *      aip.dev/not-precedent: "By" is used to indicate request type. --)
-   */
-  respondActivityTaskFailedById({
-    params,
-    body,
-  }: RespondActivityTaskFailedByIdRequestParameters): RespondActivityTaskFailedByIdResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/activities/fail-by-id', {
-      params: { path: params },
-      body,
-    });
-  }
+  if (name) url.searchParams.append('name', String(name));
 
-  /**
-   * @description RecordActivityTaskHeartbeat is optionally called by workers while they execute activities.
-   *
-   *  If worker fails to heartbeat within the `heartbeat_timeout` interval for the activity task,
-   *  then it will be marked as timed out and an `ACTIVITY_TASK_TIMED_OUT` event will be written to
-   *  the workflow history. Calling `RecordActivityTaskHeartbeat` will fail with `NotFound` in
-   *  such situations, in that event, the SDK should request cancellation of the activity.
-   */
-  recordActivityTaskHeartbeat({
-    params,
-    body,
-  }: RecordActivityTaskHeartbeatRequestParameters): RecordActivityTaskHeartbeatResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/activities/heartbeat', {
-      params: { path: params },
-      body,
-    });
-  }
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`listNexusEndpoints request failed.`);
+    }
+    return response.json();
+  });
+}
 
-  /**
-   * @description See `RecordActivityTaskHeartbeat`. This version allows clients to record heartbeats by
-   *  namespace/workflow id/activity id instead of task token.
-   *
-   *  (-- api-linter: core::0136::prepositions=disabled
-   *      aip.dev/not-precedent: "By" is used to indicate request type. --)
-   */
-  recordActivityTaskHeartbeatById({
-    params,
-    body,
-  }: RecordActivityTaskHeartbeatByIdRequestParameters): RecordActivityTaskHeartbeatByIdResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/activities/heartbeat-by-id', {
-      params: { path: params },
-      body,
-    });
-  }
+export async function createNexusEndpoint(
+  { body }: { body: components['schemas']['CreateNexusEndpointRequest'] },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['CreateNexusEndpointResponse']> {
+  const url = new URL(`/api/v1/nexus/endpoints`, baseUrl);
 
-  /** @description ListArchivedWorkflowExecutions is a visibility API to list archived workflow executions in a specific namespace. */
-  listArchivedWorkflowExecutions({
-    query,
-    params,
-  }: ListArchivedWorkflowExecutionsRequestParameters): ListArchivedWorkflowExecutionsResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}/archived-workflows', {
-      params: { query, path: params },
-    });
-  }
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`createNexusEndpoint request failed.`);
+    }
+    return response.json();
+  });
+}
 
-  /** @description ListBatchOperations returns a list of batch operations */
-  listBatchOperations({
-    query,
-    params,
-  }: ListBatchOperationsRequestParameters): ListBatchOperationsResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}/batch-operations', {
-      params: { query, path: params },
-    });
-  }
+export async function getNexusEndpoint(
+  { id }: { id: string },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['GetNexusEndpointResponse']> {
+  const url = new URL(`/api/v1/nexus/endpoints/${id}`, baseUrl);
 
-  /** @description DescribeBatchOperation returns the information about a batch operation */
-  describeBatchOperation({
-    params,
-  }: DescribeBatchOperationRequestParameters): DescribeBatchOperationResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}/batch-operations/{jobId}', {
-      params: { path: params },
-    });
-  }
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`getNexusEndpoint request failed.`);
+    }
+    return response.json();
+  });
+}
 
-  /** @description StartBatchOperation starts a new batch operation */
-  startBatchOperation({
-    params,
-    body,
-  }: StartBatchOperationRequestParameters): StartBatchOperationResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/batch-operations/{jobId}', {
-      params: { path: params },
-      body,
-    });
-  }
+export async function deleteNexusEndpoint(
+  { version, id }: { id: string; version?: string },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['DeleteNexusEndpointResponse']> {
+  const url = new URL(`/api/v1/nexus/endpoints/${id}`, baseUrl);
 
-  /** @description StopBatchOperation stops a batch operation */
-  stopBatchOperation({
-    params,
-    body,
-  }: StopBatchOperationRequestParameters): StopBatchOperationResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/batch-operations/{jobId}/stop', {
-      params: { path: params },
-      body,
-    });
-  }
+  if (version) url.searchParams.append('version', String(version));
 
-  /**
-   * @description List all Nexus outgoing services for a namespace, sorted by service name in ascending order. Set page_token in
-   *  the request to the next_page_token field of the previous response to get the next page of results. An empty
-   *  next_page_token indicates that there are no more results. During pagination, a newly added service with a name
-   *  lexicographically earlier than the previous page's last service name may be missed.
-   */
-  listNexusOutgoingServices({
-    query,
-    params,
-  }: ListNexusOutgoingServicesRequestParameters): ListNexusOutgoingServicesResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}/nexus/outgoing-services', {
-      params: { query, path: params },
-    });
-  }
+  return fetch(url, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`deleteNexusEndpoint request failed.`);
+    }
+    return response.json();
+  });
+}
 
-  /**
-   * @description Create a Nexus service. This will fail if a service with the same name already exists in the namespace with a
-   *  status of ALREADY_EXISTS.
-   *  Returns the created service with its initial version. You may use this version for subsequent updates. You don't
-   *  need to increment the version yourself. The server will increment the version for you after each update.
-   */
-  createNexusOutgoingService({
-    params,
-    body,
-  }: CreateNexusOutgoingServiceRequestParameters): CreateNexusOutgoingServiceResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/nexus/outgoing-services', {
-      params: { path: params },
-      body,
-    });
-  }
+export async function updateNexusEndpoint(
+  { id, body }: { id: string; body: components['schemas']['UpdateNexusEndpointRequest'] },
+  { onError, baseUrl = window.location.origin }: RequestOptions = {},
+): Promise<components['schemas']['UpdateNexusEndpointResponse']> {
+  const url = new URL(`/api/v1/nexus/endpoints/${id}/update`, baseUrl);
 
-  /**
-   * @description Get a registered outgoing Nexus service by namespace and service name. The returned version can be used for
-   *  optimistic updates.
-   */
-  getNexusOutgoingService({
-    params,
-  }: GetNexusOutgoingServiceRequestParameters): GetNexusOutgoingServiceResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}', {
-      params: { path: params },
-    });
-  }
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`updateNexusEndpoint request failed.`);
+    }
+    return response.json();
+  });
+}
 
-  /** @description Delete an outgoing Nexus service by namespace and service name. */
-  deleteNexusOutgoingService({
-    params,
-  }: DeleteNexusOutgoingServiceRequestParameters): DeleteNexusOutgoingServiceResponse {
-    return this.client.DELETE('/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}', {
-      params: { path: params },
-    });
-  }
+export async function getSystemInfo({
+  onError,
+  baseUrl = window.location.origin,
+}: RequestOptions = {}): Promise<components['schemas']['GetSystemInfoResponse']> {
+  const url = new URL(`/api/v1/system-info`, baseUrl);
 
-  /**
-   * @description Update an outgoing Nexus service by namespace and service name. The version in the request should match the
-   *  current version of the service. This will fail with a status of FAILED_PRECONDITION if the version does not match.
-   *  Returns the updated service with the updated version, which can be used for subsequent updates. You don't need
-   *  to increment the version yourself. The server will increment the version for you.
-   */
-  updateNexusOutgoingService({
-    params,
-    body,
-  }: UpdateNexusOutgoingServiceRequestParameters): UpdateNexusOutgoingServiceResponse {
-    return this.client.POST(
-      '/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}/update',
-      { params: { path: params }, body },
-    );
-  }
-
-  /** @description List all schedules in a namespace. */
-  listSchedules({ query, params }: ListSchedulesRequestParameters): ListSchedulesResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}/schedules', {
-      params: { query, path: params },
-    });
-  }
-
-  /** @description Returns the schedule description and current state of an existing schedule. */
-  describeSchedule({ params }: DescribeScheduleRequestParameters): DescribeScheduleResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}/schedules/{scheduleId}', {
-      params: { path: params },
-    });
-  }
-
-  /** @description Creates a new schedule. */
-  createSchedule({ params, body }: CreateScheduleRequestParameters): CreateScheduleResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/schedules/{scheduleId}', {
-      params: { path: params },
-      body,
-    });
-  }
-
-  /** @description Deletes a schedule, removing it from the system. */
-  deleteSchedule({ query, params }: DeleteScheduleRequestParameters): DeleteScheduleResponse {
-    return this.client.DELETE('/api/v1/namespaces/{namespace}/schedules/{scheduleId}', {
-      params: { query, path: params },
-    });
-  }
-
-  /** @description Lists matching times within a range. */
-  listScheduleMatchingTimes({
-    query,
-    params,
-  }: ListScheduleMatchingTimesRequestParameters): ListScheduleMatchingTimesResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}/schedules/{scheduleId}/matching-times', {
-      params: { query, path: params },
-    });
-  }
-
-  /** @description Makes a specific change to a schedule or triggers an immediate action. */
-  patchSchedule({ params, body }: PatchScheduleRequestParameters): PatchScheduleResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/schedules/{scheduleId}/patch', {
-      params: { path: params },
-      body,
-    });
-  }
-
-  /** @description Changes the configuration or state of an existing schedule. */
-  updateSchedule({ params, body }: UpdateScheduleRequestParameters): UpdateScheduleResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/schedules/{scheduleId}/update', {
-      params: { path: params },
-      body,
-    });
-  }
-
-  /** @description ListSearchAttributes returns comprehensive information about search attributes. */
-  listSearchAttributes({
-    params,
-  }: ListSearchAttributesRequestParameters): ListSearchAttributesResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}/search-attributes', {
-      params: { path: params },
-    });
-  }
-
-  /**
-   * @description Deprecated. Use `GetWorkerVersioningRules`.
-   *  Fetches the worker build id versioning sets for a task queue.
-   */
-  getWorkerBuildIdCompatibility({
-    query,
-    params,
-  }: GetWorkerBuildIdCompatibilityRequestParameters): GetWorkerBuildIdCompatibilityResponse {
-    return this.client.GET(
-      '/api/v1/namespaces/{namespace}/task-queues/{taskQueue}/worker-build-id-compatibility',
-      { params: { query, path: params } },
-    );
-  }
-
-  /**
-   * @description Fetches the Build ID assignment and redirect rules for a Task Queue.
-   *  WARNING: Worker Versioning is not yet stable and the API and behavior may change incompatibly.
-   */
-  getWorkerVersioningRules({
-    params,
-  }: GetWorkerVersioningRulesRequestParameters): GetWorkerVersioningRulesResponse {
-    return this.client.GET(
-      '/api/v1/namespaces/{namespace}/task-queues/{taskQueue}/worker-versioning-rules',
-      { params: { path: params } },
-    );
-  }
-
-  /**
-   * @description DescribeTaskQueue returns the following information about the target task queue, broken down by Build ID:
-   *    - List of pollers
-   *    - Workflow Reachability status
-   *    - Backlog info for Workflow and/or Activity tasks
-   */
-  describeTaskQueue({
-    query,
-    params,
-  }: DescribeTaskQueueRequestParameters): DescribeTaskQueueResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}/task-queues/{task_queue.name}', {
-      params: { query, path: params },
-    });
-  }
-
-  /**
-   * @description UpdateNamespace is used to update the information and configuration of a registered
-   *  namespace.
-   */
-  updateNamespace({ params, body }: UpdateNamespaceRequestParameters): UpdateNamespaceResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/update', {
-      params: { path: params },
-      body,
-    });
-  }
-
-  /**
-   * @description Deprecated. Use `DescribeTaskQueue`.
-   *
-   *  Fetches task reachability to determine whether a worker may be retired.
-   *  The request may specify task queues to query for or let the server fetch all task queues mapped to the given
-   *  build IDs.
-   *
-   *  When requesting a large number of task queues or all task queues associated with the given build ids in a
-   *  namespace, all task queues will be listed in the response but some of them may not contain reachability
-   *  information due to a server enforced limit. When reaching the limit, task queues that reachability information
-   *  could not be retrieved for will be marked with a single TASK_REACHABILITY_UNSPECIFIED entry. The caller may issue
-   *  another call to get the reachability for those task queues.
-   *
-   *  Open source users can adjust this limit by setting the server's dynamic config value for
-   *  `limit.reachabilityTaskQueueScan` with the caveat that this call can strain the visibility store.
-   */
-  getWorkerTaskReachability({
-    query,
-    params,
-  }: GetWorkerTaskReachabilityRequestParameters): GetWorkerTaskReachabilityResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}/worker-task-reachability', {
-      params: { query, path: params },
-    });
-  }
-
-  /** @description CountWorkflowExecutions is a visibility API to count of workflow executions in a specific namespace. */
-  countWorkflowExecutions({
-    query,
-    params,
-  }: CountWorkflowExecutionsRequestParameters): CountWorkflowExecutionsResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}/workflow-count', {
-      params: { query, path: params },
-    });
-  }
-
-  /** @description ListWorkflowExecutions is a visibility API to list workflow executions in a specific namespace. */
-  listWorkflowExecutions({
-    query,
-    params,
-  }: ListWorkflowExecutionsRequestParameters): ListWorkflowExecutionsResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}/workflows', {
-      params: { query, path: params },
-    });
-  }
-
-  /**
-   * @description ExecuteMultiOperation executes multiple operations within a single workflow.
-   *
-   *  Operations are started atomically, meaning if *any* operation fails to be started, none are,
-   *  and the request fails. Upon start, the API returns only when *all* operations have a response.
-   *
-   *  Upon failure, it returns `MultiOperationExecutionFailure` where the status code
-   *  equals the status code of the *first* operation that failed to be started.
-   *
-   *  NOTE: Experimental API.
-   */
-  executeMultiOperation({
-    params,
-    body,
-  }: ExecuteMultiOperationRequestParameters): ExecuteMultiOperationResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/workflows/execute-multi-operation', {
-      params: { path: params },
-      body,
-    });
-  }
-
-  /** @description DescribeWorkflowExecution returns information about the specified workflow execution. */
-  describeWorkflowExecution({
-    query,
-    params,
-  }: DescribeWorkflowExecutionRequestParameters): DescribeWorkflowExecutionResponse {
-    return this.client.GET('/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}', {
-      params: { query, path: params },
-    });
-  }
-
-  /**
-   * @description GetWorkflowExecutionHistory returns the history of specified workflow execution. Fails with
-   *  `NotFound` if the specified workflow execution is unknown to the service.
-   */
-  getWorkflowExecutionHistory({
-    query,
-    params,
-  }: GetWorkflowExecutionHistoryRequestParameters): GetWorkflowExecutionHistoryResponse {
-    return this.client.GET(
-      '/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history',
-      { params: { query, path: params } },
-    );
-  }
-
-  /**
-   * @description GetWorkflowExecutionHistoryReverse returns the history of specified workflow execution in reverse
-   *  order (starting from last event). Fails with`NotFound` if the specified workflow execution is
-   *  unknown to the service.
-   */
-  getWorkflowExecutionHistoryReverse({
-    query,
-    params,
-  }: GetWorkflowExecutionHistoryReverseRequestParameters): GetWorkflowExecutionHistoryReverseResponse {
-    return this.client.GET(
-      '/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/history-reverse',
-      { params: { query, path: params } },
-    );
-  }
-
-  /** @description QueryWorkflow requests a query be executed for a specified workflow execution. */
-  queryWorkflow({ params, body }: QueryWorkflowRequestParameters): QueryWorkflowResponse {
-    return this.client.POST(
-      '/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/query/{query.query_type}',
-      { params: { path: params }, body },
-    );
-  }
-
-  /**
-   * @description StartWorkflowExecution starts a new workflow execution.
-   *
-   *  It will create the execution with a `WORKFLOW_EXECUTION_STARTED` event in its history and
-   *  also schedule the first workflow task. Returns `WorkflowExecutionAlreadyStarted`, if an
-   *  instance already exists with same workflow id.
-   */
-  startWorkflowExecution({
-    params,
-    body,
-  }: StartWorkflowExecutionRequestParameters): StartWorkflowExecutionResponse {
-    return this.client.POST('/api/v1/namespaces/{namespace}/workflows/{workflowId}', {
-      params: { path: params },
-      body,
-    });
-  }
-
-  /**
-   * @description SignalWithStartWorkflowExecution is used to ensure a signal is sent to a workflow, even if
-   *  it isn't yet started.
-   *
-   *  If the workflow is running, a `WORKFLOW_EXECUTION_SIGNALED` event is recorded in the history
-   *  and a workflow task is generated.
-   *
-   *  If the workflow is not running or not found, then the workflow is created with
-   *  `WORKFLOW_EXECUTION_STARTED` and `WORKFLOW_EXECUTION_SIGNALED` events in its history, and a
-   *  workflow task is generated.
-   *
-   *  (-- api-linter: core::0136::prepositions=disabled
-   *      aip.dev/not-precedent: "With" is used to indicate combined operation. --)
-   */
-  signalWithStartWorkflowExecution({
-    params,
-    body,
-  }: SignalWithStartWorkflowExecutionRequestParameters): SignalWithStartWorkflowExecutionResponse {
-    return this.client.POST(
-      '/api/v1/namespaces/{namespace}/workflows/{workflowId}/signal-with-start/{signalName}',
-      { params: { path: params }, body },
-    );
-  }
-
-  /**
-   * @description RequestCancelWorkflowExecution is called by workers when they want to request cancellation of
-   *  a workflow execution.
-   *
-   *  This results in a new `WORKFLOW_EXECUTION_CANCEL_REQUESTED` event being written to the
-   *  workflow history and a new workflow task created for the workflow. It returns success if the requested
-   *  workflow is already closed. It fails with 'NotFound' if the requested workflow doesn't exist.
-   */
-  requestCancelWorkflowExecution({
-    params,
-    body,
-  }: RequestCancelWorkflowExecutionRequestParameters): RequestCancelWorkflowExecutionResponse {
-    return this.client.POST(
-      '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/cancel',
-      { params: { path: params }, body },
-    );
-  }
-
-  /**
-   * @description ResetWorkflowExecution will reset an existing workflow execution to a specified
-   *  `WORKFLOW_TASK_COMPLETED` event (exclusive). It will immediately terminate the current
-   *  execution instance.
-   *  TODO: Does exclusive here mean *just* the completed event, or also WFT started? Otherwise the task is doomed to time out?
-   */
-  resetWorkflowExecution({
-    params,
-    body,
-  }: ResetWorkflowExecutionRequestParameters): ResetWorkflowExecutionResponse {
-    return this.client.POST(
-      '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/reset',
-      { params: { path: params }, body },
-    );
-  }
-
-  /**
-   * @description SignalWorkflowExecution is used to send a signal to a running workflow execution.
-   *
-   *  This results in a `WORKFLOW_EXECUTION_SIGNALED` event recorded in the history and a workflow
-   *  task being created for the execution.
-   */
-  signalWorkflowExecution({
-    params,
-    body,
-  }: SignalWorkflowExecutionRequestParameters): SignalWorkflowExecutionResponse {
-    return this.client.POST(
-      '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/signal/{signalName}',
-      { params: { path: params }, body },
-    );
-  }
-
-  /**
-   * @description TerminateWorkflowExecution terminates an existing workflow execution by recording a
-   *  `WORKFLOW_EXECUTION_TERMINATED` event in the history and immediately terminating the
-   *  execution instance.
-   */
-  terminateWorkflowExecution({
-    params,
-    body,
-  }: TerminateWorkflowExecutionRequestParameters): TerminateWorkflowExecutionResponse {
-    return this.client.POST(
-      '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/terminate',
-      { params: { path: params }, body },
-    );
-  }
-
-  /** @description Invokes the specified update function on user workflow code. */
-  updateWorkflowExecution({
-    params,
-    body,
-  }: UpdateWorkflowExecutionRequestParameters): UpdateWorkflowExecutionResponse {
-    return this.client.POST(
-      '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update/{request.input.name}',
-      { params: { path: params }, body },
-    );
-  }
-
-  /**
-   * @description List all Nexus incoming services for the cluster, sorted by service ID in ascending order. Set page_token in the
-   *  request to the next_page_token field of the previous response to get the next page of results. An empty
-   *  next_page_token indicates that there are no more results. During pagination, a newly added service with an ID
-   *  lexicographically earlier than the previous page's last service name may be missed.
-   */
-  listNexusIncomingServices({
-    query,
-  }: ListNexusIncomingServicesRequestParameters = {}): ListNexusIncomingServicesResponse {
-    return this.client.GET('/api/v1/nexus/incoming-services', { params: { query } });
-  }
-
-  /**
-   * @description Create a Nexus service. This will fail if a service with the same name already exists in the namespace with a
-   *  status of ALREADY_EXISTS.
-   *  Returns the created service with its initial version. You may use this version for subsequent updates.
-   */
-  createNexusIncomingService({
-    body,
-  }: CreateNexusIncomingServiceRequestParameters): CreateNexusIncomingServiceResponse {
-    return this.client.POST('/api/v1/nexus/incoming-services', { body });
-  }
-
-  /** @description Get a registered incoming Nexus service by ID. The returned version can be used for optimistic updates. */
-  getNexusIncomingService({
-    params,
-  }: GetNexusIncomingServiceRequestParameters): GetNexusIncomingServiceResponse {
-    return this.client.GET('/api/v1/nexus/incoming-services/{id}', { params: { path: params } });
-  }
-
-  /** @description Delete an incoming Nexus service by ID. */
-  deleteNexusIncomingService({
-    query,
-    params,
-  }: DeleteNexusIncomingServiceRequestParameters): DeleteNexusIncomingServiceResponse {
-    return this.client.DELETE('/api/v1/nexus/incoming-services/{id}', {
-      params: { query, path: params },
-    });
-  }
-
-  /**
-   * @description Optimistically update a Nexus service based on provided version as obtained via the
-   *  `GetNexusIncomingService` or `ListNexusOutgoingServicesResponse` APIs. This will fail with a status of
-   *  FAILED_PRECONDITION if the version does not match.
-   *  Returns the updated service with its updated version. You may use this version for subsequent updates. You don't
-   *  need to increment the version yourself. The server will increment the version for you after each update.
-   */
-  updateNexusIncomingService({
-    params,
-    body,
-  }: UpdateNexusIncomingServiceRequestParameters): UpdateNexusIncomingServiceResponse {
-    return this.client.POST('/api/v1/nexus/incoming-services/{id}/update', {
-      params: { path: params },
-      body,
-    });
-  }
-
-  /** @description GetSystemInfo returns information about the system. */
-  getSystemInfo(): GetSystemInfoResponse {
-    return this.client.GET('/api/v1/system-info');
-  }
+  return fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (!response.ok) {
+      if (onError) return onError(response);
+      throw new Error(`getSystemInfo request failed.`);
+    }
+    return response.json();
+  });
 }

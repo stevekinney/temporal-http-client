@@ -47,7 +47,7 @@ emitter.on('warn', (warning) => {
 
 await emitter.clone(openAPIDefinitionsDirectory);
 
-await $`npx openapi-typescript ${openApiDefinitions} -o ${schema}`.quiet();
+await $`npx openapi-typescript ${openApiDefinitions} -o ${schema} --immutable-types --alphabetize --support-array-length --empty-objects-unknown -default-non-nullable`.quiet();
 await $`npm run format -- --log-level=error`.quiet();
 
 console.log(chalk.green('Schema generated successfully:'), chalk.blue(schema));

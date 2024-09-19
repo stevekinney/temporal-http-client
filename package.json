@@ -7,24 +7,24 @@
     "type": "git",
     "url": "https://github.com/stevekinney/ui-sdk.git"
   },
-  "main": "./src/index.ts",
-  "module": "./src/index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "exports": {
     ".": {
-      "types": "./dist/temporal-http-client.d.ts",
-      "import": "./dist/temporal-http-client.js",
-      "require": "./dist/temporal-http-client.umd.cjs"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/indext.js"
     }
   },
   "scripts": {
-    "build": "bunx --bun vite build && npm run package",
+    "build": "bunx --bun ",
+    "types": "tsc src/**/*.ts  --declaration --emitDeclarationOnly --skipLibCheck --outdir dist --module esnext",
     "package": "publint",
     "prepublishOnly": "npm run package",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "generate": "npm run generate:schema && npm run generate:client",
-    "generate:client": "bun ./scripts/generate-client.js",
-    "generate:schema": "bun ./scripts/generate-schema.ts"
+    "generate:client": "bun ./scripts/generate-client",
+    "generate:schema": "bun ./scripts/generate-schema"
   },
   "files": [
     "dist",
@@ -39,7 +39,7 @@
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
     "chalk": "^5.3.0",
-    "change-case": "^5.4.3",
+    "change-case": "^5.4.4",
     "degit": "^2.8.4",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",

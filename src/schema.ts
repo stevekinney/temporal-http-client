@@ -161,6 +161,15 @@ export interface paths {
     /** @description ListSearchAttributes returns comprehensive information about search attributes. */
     get: operations['ListSearchAttributes'];
   };
+  '/api/v1/namespaces/{namespace}/task-queues/{task_queue.name}': {
+    /**
+     * @description DescribeTaskQueue returns the following information about the target task queue, broken down by Build ID:
+     *    - List of pollers
+     *    - Workflow Reachability status
+     *    - Backlog info for Workflow and/or Activity tasks
+     */
+    get: operations['DescribeTaskQueue'];
+  };
   '/api/v1/namespaces/{namespace}/task-queues/{taskQueue}/worker-build-id-compatibility': {
     /**
      * @description Deprecated. Use `GetWorkerVersioningRules`.
@@ -174,15 +183,6 @@ export interface paths {
      *  WARNING: Worker Versioning is not yet stable and the API and behavior may change incompatibly.
      */
     get: operations['GetWorkerVersioningRules'];
-  };
-  '/api/v1/namespaces/{namespace}/task-queues/{task_queue.name}': {
-    /**
-     * @description DescribeTaskQueue returns the following information about the target task queue, broken down by Build ID:
-     *    - List of pollers
-     *    - Workflow Reachability status
-     *    - Backlog info for Workflow and/or Activity tasks
-     */
-    get: operations['DescribeTaskQueue'];
   };
   '/api/v1/namespaces/{namespace}/update': {
     /**
@@ -218,20 +218,6 @@ export interface paths {
     /** @description ListWorkflowExecutions is a visibility API to list workflow executions in a specific namespace. */
     get: operations['ListWorkflowExecutions'];
   };
-  '/api/v1/namespaces/{namespace}/workflows/execute-multi-operation': {
-    /**
-     * @description ExecuteMultiOperation executes multiple operations within a single workflow.
-     *
-     *  Operations are started atomically, meaning if *any* operation fails to be started, none are,
-     *  and the request fails. Upon start, the API returns only when *all* operations have a response.
-     *
-     *  Upon failure, it returns `MultiOperationExecutionFailure` where the status code
-     *  equals the status code of the *first* operation that failed to be started.
-     *
-     *  NOTE: Experimental API.
-     */
-    post: operations['ExecuteMultiOperation'];
-  };
   '/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}': {
     /** @description DescribeWorkflowExecution returns information about the specified workflow execution. */
     get: operations['DescribeWorkflowExecution'];
@@ -254,33 +240,6 @@ export interface paths {
   '/api/v1/namespaces/{namespace}/workflows/{execution.workflow_id}/query/{query.query_type}': {
     /** @description QueryWorkflow requests a query be executed for a specified workflow execution. */
     post: operations['QueryWorkflow'];
-  };
-  '/api/v1/namespaces/{namespace}/workflows/{workflowId}': {
-    /**
-     * @description StartWorkflowExecution starts a new workflow execution.
-     *
-     *  It will create the execution with a `WORKFLOW_EXECUTION_STARTED` event in its history and
-     *  also schedule the first workflow task. Returns `WorkflowExecutionAlreadyStarted`, if an
-     *  instance already exists with same workflow id.
-     */
-    post: operations['StartWorkflowExecution'];
-  };
-  '/api/v1/namespaces/{namespace}/workflows/{workflowId}/signal-with-start/{signalName}': {
-    /**
-     * @description SignalWithStartWorkflowExecution is used to ensure a signal is sent to a workflow, even if
-     *  it isn't yet started.
-     *
-     *  If the workflow is running, a `WORKFLOW_EXECUTION_SIGNALED` event is recorded in the history
-     *  and a workflow task is generated.
-     *
-     *  If the workflow is not running or not found, then the workflow is created with
-     *  `WORKFLOW_EXECUTION_STARTED` and `WORKFLOW_EXECUTION_SIGNALED` events in its history, and a
-     *  workflow task is generated.
-     *
-     *  (-- api-linter: core::0136::prepositions=disabled
-     *      aip.dev/not-precedent: "With" is used to indicate combined operation. --)
-     */
-    post: operations['SignalWithStartWorkflowExecution'];
   };
   '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/cancel': {
     /**
@@ -322,6 +281,47 @@ export interface paths {
   '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update/{request.input.name}': {
     /** @description Invokes the specified Update function on user Workflow code. */
     post: operations['UpdateWorkflowExecution'];
+  };
+  '/api/v1/namespaces/{namespace}/workflows/{workflowId}': {
+    /**
+     * @description StartWorkflowExecution starts a new workflow execution.
+     *
+     *  It will create the execution with a `WORKFLOW_EXECUTION_STARTED` event in its history and
+     *  also schedule the first workflow task. Returns `WorkflowExecutionAlreadyStarted`, if an
+     *  instance already exists with same workflow id.
+     */
+    post: operations['StartWorkflowExecution'];
+  };
+  '/api/v1/namespaces/{namespace}/workflows/{workflowId}/signal-with-start/{signalName}': {
+    /**
+     * @description SignalWithStartWorkflowExecution is used to ensure a signal is sent to a workflow, even if
+     *  it isn't yet started.
+     *
+     *  If the workflow is running, a `WORKFLOW_EXECUTION_SIGNALED` event is recorded in the history
+     *  and a workflow task is generated.
+     *
+     *  If the workflow is not running or not found, then the workflow is created with
+     *  `WORKFLOW_EXECUTION_STARTED` and `WORKFLOW_EXECUTION_SIGNALED` events in its history, and a
+     *  workflow task is generated.
+     *
+     *  (-- api-linter: core::0136::prepositions=disabled
+     *      aip.dev/not-precedent: "With" is used to indicate combined operation. --)
+     */
+    post: operations['SignalWithStartWorkflowExecution'];
+  };
+  '/api/v1/namespaces/{namespace}/workflows/execute-multi-operation': {
+    /**
+     * @description ExecuteMultiOperation executes multiple operations within a single workflow.
+     *
+     *  Operations are started atomically, meaning if *any* operation fails to be started, none are,
+     *  and the request fails. Upon start, the API returns only when *all* operations have a response.
+     *
+     *  Upon failure, it returns `MultiOperationExecutionFailure` where the status code
+     *  equals the status code of the *first* operation that failed to be started.
+     *
+     *  NOTE: Experimental API.
+     */
+    post: operations['ExecuteMultiOperation'];
   };
   '/api/v1/nexus/endpoints': {
     /**
@@ -553,6 +553,15 @@ export interface paths {
     /** @description Changes the configuration or state of an existing schedule. */
     post: operations['UpdateSchedule'];
   };
+  '/namespaces/{namespace}/task-queues/{task_queue.name}': {
+    /**
+     * @description DescribeTaskQueue returns the following information about the target task queue, broken down by Build ID:
+     *    - List of pollers
+     *    - Workflow Reachability status
+     *    - Backlog info for Workflow and/or Activity tasks
+     */
+    get: operations['DescribeTaskQueue'];
+  };
   '/namespaces/{namespace}/task-queues/{taskQueue}/worker-build-id-compatibility': {
     /**
      * @description Deprecated. Use `GetWorkerVersioningRules`.
@@ -566,15 +575,6 @@ export interface paths {
      *  WARNING: Worker Versioning is not yet stable and the API and behavior may change incompatibly.
      */
     get: operations['GetWorkerVersioningRules'];
-  };
-  '/namespaces/{namespace}/task-queues/{task_queue.name}': {
-    /**
-     * @description DescribeTaskQueue returns the following information about the target task queue, broken down by Build ID:
-     *    - List of pollers
-     *    - Workflow Reachability status
-     *    - Backlog info for Workflow and/or Activity tasks
-     */
-    get: operations['DescribeTaskQueue'];
   };
   '/namespaces/{namespace}/worker-task-reachability': {
     /**
@@ -603,20 +603,6 @@ export interface paths {
     /** @description ListWorkflowExecutions is a visibility API to list workflow executions in a specific namespace. */
     get: operations['ListWorkflowExecutions'];
   };
-  '/namespaces/{namespace}/workflows/execute-multi-operation': {
-    /**
-     * @description ExecuteMultiOperation executes multiple operations within a single workflow.
-     *
-     *  Operations are started atomically, meaning if *any* operation fails to be started, none are,
-     *  and the request fails. Upon start, the API returns only when *all* operations have a response.
-     *
-     *  Upon failure, it returns `MultiOperationExecutionFailure` where the status code
-     *  equals the status code of the *first* operation that failed to be started.
-     *
-     *  NOTE: Experimental API.
-     */
-    post: operations['ExecuteMultiOperation'];
-  };
   '/namespaces/{namespace}/workflows/{execution.workflow_id}': {
     /** @description DescribeWorkflowExecution returns information about the specified workflow execution. */
     get: operations['DescribeWorkflowExecution'];
@@ -639,33 +625,6 @@ export interface paths {
   '/namespaces/{namespace}/workflows/{execution.workflow_id}/query/{query.query_type}': {
     /** @description QueryWorkflow requests a query be executed for a specified workflow execution. */
     post: operations['QueryWorkflow'];
-  };
-  '/namespaces/{namespace}/workflows/{workflowId}': {
-    /**
-     * @description StartWorkflowExecution starts a new workflow execution.
-     *
-     *  It will create the execution with a `WORKFLOW_EXECUTION_STARTED` event in its history and
-     *  also schedule the first workflow task. Returns `WorkflowExecutionAlreadyStarted`, if an
-     *  instance already exists with same workflow id.
-     */
-    post: operations['StartWorkflowExecution'];
-  };
-  '/namespaces/{namespace}/workflows/{workflowId}/signal-with-start/{signalName}': {
-    /**
-     * @description SignalWithStartWorkflowExecution is used to ensure a signal is sent to a workflow, even if
-     *  it isn't yet started.
-     *
-     *  If the workflow is running, a `WORKFLOW_EXECUTION_SIGNALED` event is recorded in the history
-     *  and a workflow task is generated.
-     *
-     *  If the workflow is not running or not found, then the workflow is created with
-     *  `WORKFLOW_EXECUTION_STARTED` and `WORKFLOW_EXECUTION_SIGNALED` events in its history, and a
-     *  workflow task is generated.
-     *
-     *  (-- api-linter: core::0136::prepositions=disabled
-     *      aip.dev/not-precedent: "With" is used to indicate combined operation. --)
-     */
-    post: operations['SignalWithStartWorkflowExecution'];
   };
   '/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/cancel': {
     /**
@@ -708,6 +667,47 @@ export interface paths {
     /** @description Invokes the specified Update function on user Workflow code. */
     post: operations['UpdateWorkflowExecution'];
   };
+  '/namespaces/{namespace}/workflows/{workflowId}': {
+    /**
+     * @description StartWorkflowExecution starts a new workflow execution.
+     *
+     *  It will create the execution with a `WORKFLOW_EXECUTION_STARTED` event in its history and
+     *  also schedule the first workflow task. Returns `WorkflowExecutionAlreadyStarted`, if an
+     *  instance already exists with same workflow id.
+     */
+    post: operations['StartWorkflowExecution'];
+  };
+  '/namespaces/{namespace}/workflows/{workflowId}/signal-with-start/{signalName}': {
+    /**
+     * @description SignalWithStartWorkflowExecution is used to ensure a signal is sent to a workflow, even if
+     *  it isn't yet started.
+     *
+     *  If the workflow is running, a `WORKFLOW_EXECUTION_SIGNALED` event is recorded in the history
+     *  and a workflow task is generated.
+     *
+     *  If the workflow is not running or not found, then the workflow is created with
+     *  `WORKFLOW_EXECUTION_STARTED` and `WORKFLOW_EXECUTION_SIGNALED` events in its history, and a
+     *  workflow task is generated.
+     *
+     *  (-- api-linter: core::0136::prepositions=disabled
+     *      aip.dev/not-precedent: "With" is used to indicate combined operation. --)
+     */
+    post: operations['SignalWithStartWorkflowExecution'];
+  };
+  '/namespaces/{namespace}/workflows/execute-multi-operation': {
+    /**
+     * @description ExecuteMultiOperation executes multiple operations within a single workflow.
+     *
+     *  Operations are started atomically, meaning if *any* operation fails to be started, none are,
+     *  and the request fails. Upon start, the API returns only when *all* operations have a response.
+     *
+     *  Upon failure, it returns `MultiOperationExecutionFailure` where the status code
+     *  equals the status code of the *first* operation that failed to be started.
+     *
+     *  NOTE: Experimental API.
+     */
+    post: operations['ExecuteMultiOperation'];
+  };
   '/system-info': {
     /** @description GetSystemInfo returns information about the system. */
     get: operations['GetSystemInfo'];
@@ -718,17 +718,15 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
-    ActivityFailureInfo: {
-      scheduledEventId?: string;
-      startedEventId?: string;
-      identity?: string;
-      activityType?: components['schemas']['ActivityType'];
-      activityId?: string;
+    readonly ActivityFailureInfo: {
+      readonly activityId?: string;
+      readonly activityType?: components['schemas']['ActivityType'];
+      readonly identity?: string;
       /**
        * Format: enum
        * @enum {string}
        */
-      retryState?:
+      readonly retryState?:
         | 'RETRY_STATE_UNSPECIFIED'
         | 'RETRY_STATE_IN_PROGRESS'
         | 'RETRY_STATE_NON_RETRYABLE_FAILURE'
@@ -737,9 +735,13 @@ export interface components {
         | 'RETRY_STATE_RETRY_POLICY_NOT_SET'
         | 'RETRY_STATE_INTERNAL_SERVER_ERROR'
         | 'RETRY_STATE_CANCEL_REQUESTED';
+      readonly scheduledEventId?: string;
+      readonly startedEventId?: string;
     };
-    ActivityOptions: {
-      taskQueue?: components['schemas']['TaskQueue'];
+    readonly ActivityOptions: {
+      /** @description Maximum permitted time between successful worker heartbeats. */
+      readonly heartbeatTimeout?: string;
+      readonly retryPolicy?: components['schemas']['RetryPolicy'];
       /**
        * @description Indicates how long the caller is willing to wait for an activity completion. Limits how long
        *  retries will be attempted. Either this or `start_to_close_timeout` must be specified.
@@ -747,7 +749,7 @@ export interface components {
        *  (-- api-linter: core::0140::prepositions=disabled
        *      aip.dev/not-precedent: "to" is used to indicate interval. --)
        */
-      scheduleToCloseTimeout?: string;
+      readonly scheduleToCloseTimeout?: string;
       /**
        * @description Limits time an activity task can stay in a task queue before a worker picks it up. This
        *  timeout is always non retryable, as all a retry would achieve is to put it back into the same
@@ -757,7 +759,7 @@ export interface components {
        *  (-- api-linter: core::0140::prepositions=disabled
        *      aip.dev/not-precedent: "to" is used to indicate interval. --)
        */
-      scheduleToStartTimeout?: string;
+      readonly scheduleToStartTimeout?: string;
       /**
        * @description Maximum time an activity is allowed to execute after being picked up by a worker. This
        *  timeout is always retryable. Either this or `schedule_to_close_timeout` must be
@@ -766,75 +768,69 @@ export interface components {
        *  (-- api-linter: core::0140::prepositions=disabled
        *      aip.dev/not-precedent: "to" is used to indicate interval. --)
        */
-      startToCloseTimeout?: string;
-      /** @description Maximum permitted time between successful worker heartbeats. */
-      heartbeatTimeout?: string;
-      retryPolicy?: components['schemas']['RetryPolicy'];
+      readonly startToCloseTimeout?: string;
+      readonly taskQueue?: components['schemas']['TaskQueue'];
     };
-    ActivityPropertiesModifiedExternallyEventAttributes: {
-      /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this modification corresponds to. */
-      scheduledEventId?: string;
+    readonly ActivityPropertiesModifiedExternallyEventAttributes: {
       /**
        * @description If set, update the retry policy of the activity, replacing it with the specified one.
        *  The number of attempts at the activity is preserved.
        */
-      newRetryPolicy?: components['schemas']['RetryPolicy'];
+      readonly newRetryPolicy?: components['schemas']['RetryPolicy'];
+      /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this modification corresponds to. */
+      readonly scheduledEventId?: string;
     };
-    ActivityTaskCancelRequestedEventAttributes: {
-      /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this cancel request corresponds to */
-      scheduledEventId?: string;
-      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
-      workflowTaskCompletedEventId?: string;
-    };
-    ActivityTaskCanceledEventAttributes: {
+    readonly ActivityTaskCanceledEventAttributes: {
       /** @description Additional information that the activity reported upon confirming cancellation */
-      details?: components['schemas']['Payloads'];
+      readonly details?: components['schemas']['Payloads'];
+      /** @description id of the worker who canceled this activity */
+      readonly identity?: string;
       /**
        * @description id of the most recent `ACTIVITY_TASK_CANCEL_REQUESTED` event which refers to the same
        *  activity
        */
-      latestCancelRequestedEventId?: string;
+      readonly latestCancelRequestedEventId?: string;
       /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this cancel confirmation corresponds to */
-      scheduledEventId?: string;
+      readonly scheduledEventId?: string;
       /** @description The id of the `ACTIVITY_TASK_STARTED` event this cancel confirmation corresponds to */
-      startedEventId?: string;
-      /** @description id of the worker who canceled this activity */
-      identity?: string;
+      readonly startedEventId?: string;
       /**
        * @description Version info of the worker who processed this workflow task.
        *  Deprecated. Use the info inside the corresponding ActivityTaskStartedEvent
        */
-      workerVersion?: components['schemas']['WorkerVersionStamp'];
+      readonly workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
-    ActivityTaskCompletedEventAttributes: {
-      /** @description Serialized results of the activity. IE: The return value of the activity function */
-      result?: components['schemas']['Payloads'];
-      /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this completion corresponds to */
-      scheduledEventId?: string;
-      /** @description The id of the `ACTIVITY_TASK_STARTED` event this completion corresponds to */
-      startedEventId?: string;
+    readonly ActivityTaskCancelRequestedEventAttributes: {
+      /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this cancel request corresponds to */
+      readonly scheduledEventId?: string;
+      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
+      readonly workflowTaskCompletedEventId?: string;
+    };
+    readonly ActivityTaskCompletedEventAttributes: {
       /** @description id of the worker that completed this task */
-      identity?: string;
+      readonly identity?: string;
+      /** @description Serialized results of the activity. IE: The return value of the activity function */
+      readonly result?: components['schemas']['Payloads'];
+      /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this completion corresponds to */
+      readonly scheduledEventId?: string;
+      /** @description The id of the `ACTIVITY_TASK_STARTED` event this completion corresponds to */
+      readonly startedEventId?: string;
       /**
        * @description Version info of the worker who processed this workflow task.
        *  Deprecated. Use the info inside the corresponding ActivityTaskStartedEvent
        */
-      workerVersion?: components['schemas']['WorkerVersionStamp'];
+      readonly workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
-    ActivityTaskFailedEventAttributes: {
+    readonly ActivityTaskFailedEventAttributes: {
       /** @description Failure details */
-      failure?: components['schemas']['Failure'];
-      /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this failure corresponds to */
-      scheduledEventId?: string;
-      /** @description The id of the `ACTIVITY_TASK_STARTED` event this failure corresponds to */
-      startedEventId?: string;
+      readonly failure?: components['schemas']['Failure'];
       /** @description id of the worker that failed this task */
-      identity?: string;
+      readonly identity?: string;
       /**
        * Format: enum
        * @enum {string}
        */
-      retryState?:
+      readonly retryState?:
         | 'RETRY_STATE_UNSPECIFIED'
         | 'RETRY_STATE_IN_PROGRESS'
         | 'RETRY_STATE_NON_RETRYABLE_FAILURE'
@@ -843,102 +839,102 @@ export interface components {
         | 'RETRY_STATE_RETRY_POLICY_NOT_SET'
         | 'RETRY_STATE_INTERNAL_SERVER_ERROR'
         | 'RETRY_STATE_CANCEL_REQUESTED';
+      /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this failure corresponds to */
+      readonly scheduledEventId?: string;
+      /** @description The id of the `ACTIVITY_TASK_STARTED` event this failure corresponds to */
+      readonly startedEventId?: string;
       /**
        * @description Version info of the worker who processed this workflow task.
        *  Deprecated. Use the info inside the corresponding ActivityTaskStartedEvent
        */
-      workerVersion?: components['schemas']['WorkerVersionStamp'];
+      readonly workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
-    ActivityTaskScheduledEventAttributes: {
+    readonly ActivityTaskScheduledEventAttributes: {
       /** @description The worker/user assigned identifier for the activity */
-      activityId?: string;
-      activityType?: components['schemas']['ActivityType'];
-      taskQueue?: components['schemas']['TaskQueue'];
-      header?: components['schemas']['Header'];
-      input?: components['schemas']['Payloads'];
-      /**
-       * @description Indicates how long the caller is willing to wait for an activity completion. Limits how long
-       *  retries will be attempted. Either this or `start_to_close_timeout` must be specified.
-       *
-       *  (-- api-linter: core::0140::prepositions=disabled
-       *      aip.dev/not-precedent: "to" is used to indicate interval. --)
-       */
-      scheduleToCloseTimeout?: string;
-      /**
-       * @description Limits time an activity task can stay in a task queue before a worker picks it up. This
-       *  timeout is always non retryable, as all a retry would achieve is to put it back into the same
-       *  queue. Defaults to `schedule_to_close_timeout` or workflow execution timeout if not
-       *  specified.
-       *
-       *  (-- api-linter: core::0140::prepositions=disabled
-       *      aip.dev/not-precedent: "to" is used to indicate interval. --)
-       */
-      scheduleToStartTimeout?: string;
-      /**
-       * @description Maximum time an activity is allowed to execute after being picked up by a worker. This
-       *  timeout is always retryable. Either this or `schedule_to_close_timeout` must be
-       *  specified.
-       *
-       *  (-- api-linter: core::0140::prepositions=disabled
-       *      aip.dev/not-precedent: "to" is used to indicate interval. --)
-       */
-      startToCloseTimeout?: string;
+      readonly activityId?: string;
+      readonly activityType?: components['schemas']['ActivityType'];
+      readonly header?: components['schemas']['Header'];
       /** @description Maximum permitted time between successful worker heartbeats. */
-      heartbeatTimeout?: string;
-      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
-      workflowTaskCompletedEventId?: string;
+      readonly heartbeatTimeout?: string;
+      readonly input?: components['schemas']['Payloads'];
       /**
        * @description Activities are assigned a default retry policy controlled by the service's dynamic
        *  configuration. Retries will happen up to `schedule_to_close_timeout`. To disable retries set
        *  retry_policy.maximum_attempts to 1.
        */
-      retryPolicy?: components['schemas']['RetryPolicy'];
+      readonly retryPolicy?: components['schemas']['RetryPolicy'];
+      /**
+       * @description Indicates how long the caller is willing to wait for an activity completion. Limits how long
+       *  retries will be attempted. Either this or `start_to_close_timeout` must be specified.
+       *
+       *  (-- api-linter: core::0140::prepositions=disabled
+       *      aip.dev/not-precedent: "to" is used to indicate interval. --)
+       */
+      readonly scheduleToCloseTimeout?: string;
+      /**
+       * @description Limits time an activity task can stay in a task queue before a worker picks it up. This
+       *  timeout is always non retryable, as all a retry would achieve is to put it back into the same
+       *  queue. Defaults to `schedule_to_close_timeout` or workflow execution timeout if not
+       *  specified.
+       *
+       *  (-- api-linter: core::0140::prepositions=disabled
+       *      aip.dev/not-precedent: "to" is used to indicate interval. --)
+       */
+      readonly scheduleToStartTimeout?: string;
+      /**
+       * @description Maximum time an activity is allowed to execute after being picked up by a worker. This
+       *  timeout is always retryable. Either this or `schedule_to_close_timeout` must be
+       *  specified.
+       *
+       *  (-- api-linter: core::0140::prepositions=disabled
+       *      aip.dev/not-precedent: "to" is used to indicate interval. --)
+       */
+      readonly startToCloseTimeout?: string;
+      readonly taskQueue?: components['schemas']['TaskQueue'];
       /**
        * @description If this is set, the activity would be assigned to the Build ID of the workflow. Otherwise,
        *  Assignment rules of the activity's Task Queue will be used to determine the Build ID.
        */
-      useWorkflowBuildId?: boolean;
+      readonly useWorkflowBuildId?: boolean;
+      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
+      readonly workflowTaskCompletedEventId?: string;
     };
-    ActivityTaskStartedEventAttributes: {
-      /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this task corresponds to */
-      scheduledEventId?: string;
-      /** @description id of the worker that picked up this task */
-      identity?: string;
-      /** @description TODO ?? */
-      requestId?: string;
+    readonly ActivityTaskStartedEventAttributes: {
       /**
        * Format: int32
        * @description Starting at 1, the number of times this task has been attempted
        */
-      attempt?: number;
-      /**
-       * @description Will be set to the most recent failure details, if this task has previously failed and then
-       *  been retried.
-       */
-      lastFailure?: components['schemas']['Failure'];
-      /** @description Version info of the worker to whom this task was dispatched. */
-      workerVersion?: components['schemas']['WorkerVersionStamp'];
+      readonly attempt?: number;
       /**
        * @description Used by server internally to properly reapply build ID redirects to an execution
        *  when rebuilding it from events.
        */
-      buildIdRedirectCounter?: string;
+      readonly buildIdRedirectCounter?: string;
+      /** @description id of the worker that picked up this task */
+      readonly identity?: string;
+      /**
+       * @description Will be set to the most recent failure details, if this task has previously failed and then
+       *  been retried.
+       */
+      readonly lastFailure?: components['schemas']['Failure'];
+      /** @description TODO ?? */
+      readonly requestId?: string;
+      /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this task corresponds to */
+      readonly scheduledEventId?: string;
+      /** @description Version info of the worker to whom this task was dispatched. */
+      readonly workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
-    ActivityTaskTimedOutEventAttributes: {
+    readonly ActivityTaskTimedOutEventAttributes: {
       /**
        * @description If this activity had failed, was retried, and then timed out, that failure is stored as the
        *  `cause` in here.
        */
-      failure?: components['schemas']['Failure'];
-      /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this timeout corresponds to */
-      scheduledEventId?: string;
-      /** @description The id of the `ACTIVITY_TASK_STARTED` event this timeout corresponds to */
-      startedEventId?: string;
+      readonly failure?: components['schemas']['Failure'];
       /**
        * Format: enum
        * @enum {string}
        */
-      retryState?:
+      readonly retryState?:
         | 'RETRY_STATE_UNSPECIFIED'
         | 'RETRY_STATE_IN_PROGRESS'
         | 'RETRY_STATE_NON_RETRYABLE_FAILURE'
@@ -947,36 +943,59 @@ export interface components {
         | 'RETRY_STATE_RETRY_POLICY_NOT_SET'
         | 'RETRY_STATE_INTERNAL_SERVER_ERROR'
         | 'RETRY_STATE_CANCEL_REQUESTED';
+      /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this timeout corresponds to */
+      readonly scheduledEventId?: string;
+      /** @description The id of the `ACTIVITY_TASK_STARTED` event this timeout corresponds to */
+      readonly startedEventId?: string;
     };
     /**
      * @description Represents the identifier used by a activity author to define the activity. Typically, the
      *  name of a function. This is sometimes referred to as the activity's "name"
      */
-    ActivityType: {
-      name?: string;
+    readonly ActivityType: {
+      readonly name?: string;
     };
     /** @description Alert contains notification and severity. */
-    Alert: {
-      message?: string;
+    readonly Alert: {
+      readonly message?: string;
       /**
        * Format: enum
        * @enum {string}
        */
-      severity?: 'SEVERITY_UNSPECIFIED' | 'SEVERITY_HIGH' | 'SEVERITY_MEDIUM' | 'SEVERITY_LOW';
+      readonly severity?:
+        | 'SEVERITY_UNSPECIFIED'
+        | 'SEVERITY_HIGH'
+        | 'SEVERITY_MEDIUM'
+        | 'SEVERITY_LOW';
     };
-    ApplicationFailureInfo: {
-      type?: string;
-      nonRetryable?: boolean;
-      details?: components['schemas']['Payloads'];
+    readonly ApplicationFailureInfo: {
+      readonly details?: components['schemas']['Payloads'];
       /**
        * @description next_retry_delay can be used by the client to override the activity
        *  retry interval calculated by the retry policy. Retry attempts will
        *  still be subject to the maximum retries limit and total time limit
        *  defined by the policy.
        */
-      nextRetryDelay?: string;
+      readonly nextRetryDelay?: string;
+      readonly nonRetryable?: boolean;
+      readonly type?: string;
     };
-    BackfillRequest: {
+    readonly BackfillRequest: {
+      /** Format: date-time */
+      readonly endTime?: string;
+      /**
+       * Format: enum
+       * @description If set, override overlap policy for this request.
+       * @enum {string}
+       */
+      readonly overlapPolicy?:
+        | 'SCHEDULE_OVERLAP_POLICY_UNSPECIFIED'
+        | 'SCHEDULE_OVERLAP_POLICY_SKIP'
+        | 'SCHEDULE_OVERLAP_POLICY_BUFFER_ONE'
+        | 'SCHEDULE_OVERLAP_POLICY_BUFFER_ALL'
+        | 'SCHEDULE_OVERLAP_POLICY_CANCEL_OTHER'
+        | 'SCHEDULE_OVERLAP_POLICY_TERMINATE_OTHER'
+        | 'SCHEDULE_OVERLAP_POLICY_ALLOW_ALL';
       /**
        * Format: date-time
        * @description Time range to evaluate schedule in. Currently, this time range is
@@ -986,131 +1005,116 @@ export interface components {
        *  nominally scheduled in the interval but with jitter that pushes it after
        *  end_time will not be included.
        */
-      startTime?: string;
-      /** Format: date-time */
-      endTime?: string;
-      /**
-       * Format: enum
-       * @description If set, override overlap policy for this request.
-       * @enum {string}
-       */
-      overlapPolicy?:
-        | 'SCHEDULE_OVERLAP_POLICY_UNSPECIFIED'
-        | 'SCHEDULE_OVERLAP_POLICY_SKIP'
-        | 'SCHEDULE_OVERLAP_POLICY_BUFFER_ONE'
-        | 'SCHEDULE_OVERLAP_POLICY_BUFFER_ALL'
-        | 'SCHEDULE_OVERLAP_POLICY_CANCEL_OTHER'
-        | 'SCHEDULE_OVERLAP_POLICY_TERMINATE_OTHER'
-        | 'SCHEDULE_OVERLAP_POLICY_ALLOW_ALL';
+      readonly startTime?: string;
     };
-    BadBinaries: {
-      binaries?: {
+    readonly BadBinaries: {
+      readonly binaries?: {
         [key: string]: components['schemas']['BadBinaryInfo'];
       };
     };
-    BadBinaryInfo: {
-      reason?: string;
-      operator?: string;
+    readonly BadBinaryInfo: {
       /** Format: date-time */
-      createTime?: string;
+      readonly createTime?: string;
+      readonly operator?: string;
+      readonly reason?: string;
     };
     /**
      * @description BatchOperationCancellation sends cancel requests to batch workflows.
      *  Keep the parameter in sync with temporal.api.workflowservice.v1.RequestCancelWorkflowExecutionRequest.
      *  Ignore first_execution_run_id because this is used for single workflow operation.
      */
-    BatchOperationCancellation: {
+    readonly BatchOperationCancellation: {
       /** @description The identity of the worker/client */
-      identity?: string;
+      readonly identity?: string;
     };
     /**
      * @description BatchOperationDeletion sends deletion requests to batch workflows.
      *  Keep the parameter in sync with temporal.api.workflowservice.v1.DeleteWorkflowExecutionRequest.
      */
-    BatchOperationDeletion: {
+    readonly BatchOperationDeletion: {
       /** @description The identity of the worker/client */
-      identity?: string;
+      readonly identity?: string;
     };
-    BatchOperationInfo: {
+    readonly BatchOperationInfo: {
+      /**
+       * Format: date-time
+       * @description Batch operation close time
+       */
+      readonly closeTime?: string;
       /** @description Batch job ID */
-      jobId?: string;
+      readonly jobId?: string;
+      /**
+       * Format: date-time
+       * @description Batch operation start time
+       */
+      readonly startTime?: string;
       /**
        * Format: enum
        * @description Batch operation state
        * @enum {string}
        */
-      state?:
+      readonly state?:
         | 'BATCH_OPERATION_STATE_UNSPECIFIED'
         | 'BATCH_OPERATION_STATE_RUNNING'
         | 'BATCH_OPERATION_STATE_COMPLETED'
         | 'BATCH_OPERATION_STATE_FAILED';
-      /**
-       * Format: date-time
-       * @description Batch operation start time
-       */
-      startTime?: string;
-      /**
-       * Format: date-time
-       * @description Batch operation close time
-       */
-      closeTime?: string;
     };
     /**
      * @description BatchOperationReset sends reset requests to batch workflows.
      *  Keep the parameter in sync with temporal.api.workflowservice.v1.ResetWorkflowExecutionRequest.
      */
-    BatchOperationReset: {
+    readonly BatchOperationReset: {
       /** @description The identity of the worker/client. */
-      identity?: string;
+      readonly identity?: string;
       /** @description Describes what to reset to and how. If set, `reset_type` and `reset_reapply_type` are ignored. */
-      options?: components['schemas']['ResetOptions'];
-      /**
-       * Format: enum
-       * @description Reset type (deprecated, use `options`).
-       * @enum {string}
-       */
-      resetType?:
-        | 'RESET_TYPE_UNSPECIFIED'
-        | 'RESET_TYPE_FIRST_WORKFLOW_TASK'
-        | 'RESET_TYPE_LAST_WORKFLOW_TASK';
+      readonly options?: components['schemas']['ResetOptions'];
       /**
        * Format: enum
        * @description History event reapply options (deprecated, use `options`).
        * @enum {string}
        */
-      resetReapplyType?:
+      readonly resetReapplyType?:
         | 'RESET_REAPPLY_TYPE_UNSPECIFIED'
         | 'RESET_REAPPLY_TYPE_SIGNAL'
         | 'RESET_REAPPLY_TYPE_NONE'
         | 'RESET_REAPPLY_TYPE_ALL_ELIGIBLE';
+      /**
+       * Format: enum
+       * @description Reset type (deprecated, use `options`).
+       * @enum {string}
+       */
+      readonly resetType?:
+        | 'RESET_TYPE_UNSPECIFIED'
+        | 'RESET_TYPE_FIRST_WORKFLOW_TASK'
+        | 'RESET_TYPE_LAST_WORKFLOW_TASK';
     };
     /**
      * @description BatchOperationSignal sends signals to batch workflows.
      *  Keep the parameter in sync with temporal.api.workflowservice.v1.SignalWorkflowExecutionRequest.
      */
-    BatchOperationSignal: {
-      /** @description The workflow author-defined name of the signal to send to the workflow */
-      signal?: string;
-      /** @description Serialized value(s) to provide with the signal */
-      input?: components['schemas']['Payloads'];
+    readonly BatchOperationSignal: {
       /**
        * @description Headers that are passed with the signal to the processing workflow.
        *  These can include things like auth or tracing tokens.
        */
-      header?: components['schemas']['Header'];
+      readonly header?: components['schemas']['Header'];
       /** @description The identity of the worker/client */
-      identity?: string;
+      readonly identity?: string;
+      /** @description Serialized value(s) to provide with the signal */
+      readonly input?: components['schemas']['Payloads'];
+      /** @description The workflow author-defined name of the signal to send to the workflow */
+      readonly signal?: string;
     };
     /**
      * @description BatchOperationTermination sends terminate requests to batch workflows.
      *  Keep the parameter in sync with temporal.api.workflowservice.v1.TerminateWorkflowExecutionRequest.
      *  Ignore first_execution_run_id because this is used for single workflow operation.
      */
-    BatchOperationTermination: {
+    readonly BatchOperationTermination: {
       /** @description Serialized value(s) to provide to the termination event */
-      details?: components['schemas']['Payloads'];
+      readonly details?: components['schemas']['Payloads'];
       /** @description The identity of the worker/client */
-      identity?: string;
+      readonly identity?: string;
     };
     /**
      * @description Assignment rules are applied to *new* Workflow and Activity executions at
@@ -1151,21 +1155,21 @@ export interface components {
      *  Queue is simply not versioned), the tasks will be dispatched to an
      *  unversioned Worker.
      */
-    BuildIdAssignmentRule: {
-      targetBuildId?: string;
+    readonly BuildIdAssignmentRule: {
       /**
        * @description This ramp is useful for gradual Blue/Green deployments (and similar)
        *  where you want to send a certain portion of the traffic to the target
        *  Build ID.
        */
-      percentageRamp?: components['schemas']['RampByPercentage'];
+      readonly percentageRamp?: components['schemas']['RampByPercentage'];
+      readonly targetBuildId?: string;
     };
     /** @description Reachability of tasks for a worker by build id, in one or more task queues. */
-    BuildIdReachability: {
+    readonly BuildIdReachability: {
       /** @description A build id or empty if unversioned. */
-      buildId?: string;
+      readonly buildId?: string;
       /** @description Reachability per task queue. */
-      taskQueueReachability?: components['schemas']['TaskQueueReachability'][];
+      readonly taskQueueReachability?: readonly components['schemas']['TaskQueueReachability'][];
     };
     /**
      * @description CalendarSpec describes an event specification relative to the calendar,
@@ -1187,152 +1191,148 @@ export interface components {
      *  CalendarSpec gets compiled into StructuredCalendarSpec, which is what will be
      *  returned if you describe the schedule.
      */
-    CalendarSpec: {
-      /** @description Expression to match seconds. Default: 0 */
-      second?: string;
-      /** @description Expression to match minutes. Default: 0 */
-      minute?: string;
-      /** @description Expression to match hours. Default: 0 */
-      hour?: string;
+    readonly CalendarSpec: {
+      /** @description Free-form comment describing the intention of this spec. */
+      readonly comment?: string;
       /**
        * @description Expression to match days of the month. Default: *
        *  (-- api-linter: core::0140::prepositions=disabled
        *      aip.dev/not-precedent: standard name of field --)
        */
-      dayOfMonth?: string;
-      /** @description Expression to match months. Default: * */
-      month?: string;
-      /** @description Expression to match years. Default: * */
-      year?: string;
+      readonly dayOfMonth?: string;
       /** @description Expression to match days of the week. Default: * */
-      dayOfWeek?: string;
-      /** @description Free-form comment describing the intention of this spec. */
-      comment?: string;
+      readonly dayOfWeek?: string;
+      /** @description Expression to match hours. Default: 0 */
+      readonly hour?: string;
+      /** @description Expression to match minutes. Default: 0 */
+      readonly minute?: string;
+      /** @description Expression to match months. Default: * */
+      readonly month?: string;
+      /** @description Expression to match seconds. Default: 0 */
+      readonly second?: string;
+      /** @description Expression to match years. Default: * */
+      readonly year?: string;
     };
     /** @description Callback to attach to various events in the system, e.g. workflow run completion. */
-    Callback: {
-      nexus?: components['schemas']['Callback_Nexus'];
-      internal?: components['schemas']['Callback_Internal'];
+    readonly Callback: {
+      readonly internal?: components['schemas']['Callback_Internal'];
+      readonly nexus?: components['schemas']['Callback_Nexus'];
     };
-    /** @description CallbackInfo contains the state of an attached workflow callback. */
-    CallbackInfo: {
-      /** @description Information on how this callback should be invoked (e.g. its URL and type). */
-      callback?: components['schemas']['Callback'];
-      /** @description Trigger for this callback. */
-      trigger?: components['schemas']['CallbackInfo_Trigger'];
-      /**
-       * Format: date-time
-       * @description The time when the callback was registered.
-       */
-      registrationTime?: string;
-      /**
-       * Format: enum
-       * @enum {string}
-       */
-      state?:
-        | 'CALLBACK_STATE_UNSPECIFIED'
-        | 'CALLBACK_STATE_STANDBY'
-        | 'CALLBACK_STATE_SCHEDULED'
-        | 'CALLBACK_STATE_BACKING_OFF'
-        | 'CALLBACK_STATE_FAILED'
-        | 'CALLBACK_STATE_SUCCEEDED';
-      /**
-       * Format: int32
-       * @description The number of attempts made to deliver the callback.
-       *  This number represents a minimum bound since the attempt is incremented after the callback request completes.
-       */
-      attempt?: number;
-      /**
-       * Format: date-time
-       * @description The time when the last attempt completed.
-       */
-      lastAttemptCompleteTime?: string;
-      /** @description The last attempt's failure, if any. */
-      lastAttemptFailure?: components['schemas']['Failure'];
-      /**
-       * Format: date-time
-       * @description The time when the next attempt is scheduled.
-       */
-      nextAttemptScheduleTime?: string;
-    };
-    CallbackInfo_Trigger: {
-      workflowClosed?: components['schemas']['CallbackInfo_WorkflowClosed'];
-    };
-    /** @description Trigger for when the workflow is closed. */
-    CallbackInfo_WorkflowClosed: Record<string, never>;
     /**
      * @description Callbacks to be delivered internally within the system.
      *  This variant is not settable in the API and will be rejected by the service with an INVALID_ARGUMENT error.
      *  The only reason that this is exposed is because callbacks are replicated across clusters via the
      *  WorkflowExecutionStarted event, which is defined in the public API.
      */
-    Callback_Internal: {
+    readonly Callback_Internal: {
       /**
        * Format: bytes
        * @description Opaque internal data.
        */
-      data?: string;
+      readonly data?: string;
     };
-    Callback_Nexus: {
-      /** @description Callback URL. */
-      url?: string;
+    readonly Callback_Nexus: {
       /** @description Header to attach to callback request. */
-      header?: {
+      readonly header?: {
         [key: string]: string;
       };
+      /** @description Callback URL. */
+      readonly url?: string;
     };
-    CanceledFailureInfo: {
-      details?: components['schemas']['Payloads'];
-    };
-    ChildWorkflowExecutionCanceledEventAttributes: {
-      details?: components['schemas']['Payloads'];
+    /** @description CallbackInfo contains the state of an attached workflow callback. */
+    readonly CallbackInfo: {
       /**
-       * @description Namespace of the child workflow.
-       *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
+       * Format: int32
+       * @description The number of attempts made to deliver the callback.
+       *  This number represents a minimum bound since the attempt is incremented after the callback request completes.
        */
-      namespace?: string;
-      namespaceId?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
-      workflowType?: components['schemas']['WorkflowType'];
-      /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
-      initiatedEventId?: string;
-      /** @description Id of the `CHILD_WORKFLOW_EXECUTION_STARTED` event which this event corresponds to */
-      startedEventId?: string;
-    };
-    ChildWorkflowExecutionCompletedEventAttributes: {
-      result?: components['schemas']['Payloads'];
+      readonly attempt?: number;
+      /** @description Information on how this callback should be invoked (e.g. its URL and type). */
+      readonly callback?: components['schemas']['Callback'];
       /**
-       * @description Namespace of the child workflow.
-       *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
+       * Format: date-time
+       * @description The time when the last attempt completed.
        */
-      namespace?: string;
-      namespaceId?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
-      workflowType?: components['schemas']['WorkflowType'];
-      /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
-      initiatedEventId?: string;
-      /** @description Id of the `CHILD_WORKFLOW_EXECUTION_STARTED` event which this event corresponds to */
-      startedEventId?: string;
-    };
-    ChildWorkflowExecutionFailedEventAttributes: {
-      failure?: components['schemas']['Failure'];
+      readonly lastAttemptCompleteTime?: string;
+      /** @description The last attempt's failure, if any. */
+      readonly lastAttemptFailure?: components['schemas']['Failure'];
       /**
-       * @description Namespace of the child workflow.
-       *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
+       * Format: date-time
+       * @description The time when the next attempt is scheduled.
        */
-      namespace?: string;
-      namespaceId?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
-      workflowType?: components['schemas']['WorkflowType'];
-      /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
-      initiatedEventId?: string;
-      /** @description Id of the `CHILD_WORKFLOW_EXECUTION_STARTED` event which this event corresponds to */
-      startedEventId?: string;
+      readonly nextAttemptScheduleTime?: string;
+      /**
+       * Format: date-time
+       * @description The time when the callback was registered.
+       */
+      readonly registrationTime?: string;
       /**
        * Format: enum
        * @enum {string}
        */
-      retryState?:
+      readonly state?:
+        | 'CALLBACK_STATE_UNSPECIFIED'
+        | 'CALLBACK_STATE_STANDBY'
+        | 'CALLBACK_STATE_SCHEDULED'
+        | 'CALLBACK_STATE_BACKING_OFF'
+        | 'CALLBACK_STATE_FAILED'
+        | 'CALLBACK_STATE_SUCCEEDED';
+      /** @description Trigger for this callback. */
+      readonly trigger?: components['schemas']['CallbackInfo_Trigger'];
+    };
+    readonly CallbackInfo_Trigger: {
+      readonly workflowClosed?: components['schemas']['CallbackInfo_WorkflowClosed'];
+    };
+    /** @description Trigger for when the workflow is closed. */
+    readonly CallbackInfo_WorkflowClosed: Record<string, unknown>;
+    readonly CanceledFailureInfo: {
+      readonly details?: components['schemas']['Payloads'];
+    };
+    readonly ChildWorkflowExecutionCanceledEventAttributes: {
+      readonly details?: components['schemas']['Payloads'];
+      /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
+      readonly initiatedEventId?: string;
+      /**
+       * @description Namespace of the child workflow.
+       *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
+       */
+      readonly namespace?: string;
+      readonly namespaceId?: string;
+      /** @description Id of the `CHILD_WORKFLOW_EXECUTION_STARTED` event which this event corresponds to */
+      readonly startedEventId?: string;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
+      readonly workflowType?: components['schemas']['WorkflowType'];
+    };
+    readonly ChildWorkflowExecutionCompletedEventAttributes: {
+      /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
+      readonly initiatedEventId?: string;
+      /**
+       * @description Namespace of the child workflow.
+       *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
+       */
+      readonly namespace?: string;
+      readonly namespaceId?: string;
+      readonly result?: components['schemas']['Payloads'];
+      /** @description Id of the `CHILD_WORKFLOW_EXECUTION_STARTED` event which this event corresponds to */
+      readonly startedEventId?: string;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
+      readonly workflowType?: components['schemas']['WorkflowType'];
+    };
+    readonly ChildWorkflowExecutionFailedEventAttributes: {
+      readonly failure?: components['schemas']['Failure'];
+      /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
+      readonly initiatedEventId?: string;
+      /**
+       * @description Namespace of the child workflow.
+       *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
+       */
+      readonly namespace?: string;
+      readonly namespaceId?: string;
+      /**
+       * Format: enum
+       * @enum {string}
+       */
+      readonly retryState?:
         | 'RETRY_STATE_UNSPECIFIED'
         | 'RETRY_STATE_IN_PROGRESS'
         | 'RETRY_STATE_NON_RETRYABLE_FAILURE'
@@ -1341,18 +1341,19 @@ export interface components {
         | 'RETRY_STATE_RETRY_POLICY_NOT_SET'
         | 'RETRY_STATE_INTERNAL_SERVER_ERROR'
         | 'RETRY_STATE_CANCEL_REQUESTED';
+      /** @description Id of the `CHILD_WORKFLOW_EXECUTION_STARTED` event which this event corresponds to */
+      readonly startedEventId?: string;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
+      readonly workflowType?: components['schemas']['WorkflowType'];
     };
-    ChildWorkflowExecutionFailureInfo: {
-      namespace?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
-      workflowType?: components['schemas']['WorkflowType'];
-      initiatedEventId?: string;
-      startedEventId?: string;
+    readonly ChildWorkflowExecutionFailureInfo: {
+      readonly initiatedEventId?: string;
+      readonly namespace?: string;
       /**
        * Format: enum
        * @enum {string}
        */
-      retryState?:
+      readonly retryState?:
         | 'RETRY_STATE_UNSPECIFIED'
         | 'RETRY_STATE_IN_PROGRESS'
         | 'RETRY_STATE_NON_RETRYABLE_FAILURE'
@@ -1361,52 +1362,51 @@ export interface components {
         | 'RETRY_STATE_RETRY_POLICY_NOT_SET'
         | 'RETRY_STATE_INTERNAL_SERVER_ERROR'
         | 'RETRY_STATE_CANCEL_REQUESTED';
+      readonly startedEventId?: string;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
+      readonly workflowType?: components['schemas']['WorkflowType'];
     };
-    ChildWorkflowExecutionStartedEventAttributes: {
+    readonly ChildWorkflowExecutionStartedEventAttributes: {
+      readonly header?: components['schemas']['Header'];
+      /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
+      readonly initiatedEventId?: string;
       /**
        * @description Namespace of the child workflow.
        *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
        */
-      namespace?: string;
-      namespaceId?: string;
-      /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
-      initiatedEventId?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
-      workflowType?: components['schemas']['WorkflowType'];
-      header?: components['schemas']['Header'];
+      readonly namespace?: string;
+      readonly namespaceId?: string;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
+      readonly workflowType?: components['schemas']['WorkflowType'];
     };
-    ChildWorkflowExecutionTerminatedEventAttributes: {
+    readonly ChildWorkflowExecutionTerminatedEventAttributes: {
+      /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
+      readonly initiatedEventId?: string;
       /**
        * @description Namespace of the child workflow.
        *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
        */
-      namespace?: string;
-      namespaceId?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
-      workflowType?: components['schemas']['WorkflowType'];
-      /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
-      initiatedEventId?: string;
+      readonly namespace?: string;
+      readonly namespaceId?: string;
       /** @description Id of the `CHILD_WORKFLOW_EXECUTION_STARTED` event which this event corresponds to */
-      startedEventId?: string;
+      readonly startedEventId?: string;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
+      readonly workflowType?: components['schemas']['WorkflowType'];
     };
-    ChildWorkflowExecutionTimedOutEventAttributes: {
+    readonly ChildWorkflowExecutionTimedOutEventAttributes: {
+      /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
+      readonly initiatedEventId?: string;
       /**
        * @description Namespace of the child workflow.
        *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
        */
-      namespace?: string;
-      namespaceId?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
-      workflowType?: components['schemas']['WorkflowType'];
-      /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
-      initiatedEventId?: string;
-      /** @description Id of the `CHILD_WORKFLOW_EXECUTION_STARTED` event which this event corresponds to */
-      startedEventId?: string;
+      readonly namespace?: string;
+      readonly namespaceId?: string;
       /**
        * Format: enum
        * @enum {string}
        */
-      retryState?:
+      readonly retryState?:
         | 'RETRY_STATE_UNSPECIFIED'
         | 'RETRY_STATE_IN_PROGRESS'
         | 'RETRY_STATE_NON_RETRYABLE_FAILURE'
@@ -1415,9 +1415,13 @@ export interface components {
         | 'RETRY_STATE_RETRY_POLICY_NOT_SET'
         | 'RETRY_STATE_INTERNAL_SERVER_ERROR'
         | 'RETRY_STATE_CANCEL_REQUESTED';
+      /** @description Id of the `CHILD_WORKFLOW_EXECUTION_STARTED` event which this event corresponds to */
+      readonly startedEventId?: string;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
+      readonly workflowType?: components['schemas']['WorkflowType'];
     };
-    ClusterReplicationConfig: {
-      clusterName?: string;
+    readonly ClusterReplicationConfig: {
+      readonly clusterName?: string;
     };
     /**
      * @description These rules apply to tasks assigned to a particular Build ID
@@ -1441,25 +1445,25 @@ export interface components {
      *
      *  Redirect rules can be chained.
      */
-    CompatibleBuildIdRedirectRule: {
-      sourceBuildId?: string;
+    readonly CompatibleBuildIdRedirectRule: {
+      readonly sourceBuildId?: string;
       /**
        * @description Target Build ID must be compatible with the Source Build ID; that is it
        *  must be able to process event histories made by the Source Build ID by
        *  using [Patching](https://docs.temporal.io/workflows#patching) or other
        *  means.
        */
-      targetBuildId?: string;
+      readonly targetBuildId?: string;
     };
     /**
      * @description Used by the worker versioning APIs, represents an unordered set of one or more versions which are
      *  considered to be compatible with each other. Currently the versions are always worker build IDs.
      */
-    CompatibleVersionSet: {
+    readonly CompatibleVersionSet: {
       /** @description All the compatible versions, unordered, except for the last element, which is considered the set "default". */
-      buildIds?: string[];
+      readonly buildIds?: readonly string[];
     };
-    CountWorkflowExecutionsResponse: {
+    readonly CountWorkflowExecutionsResponse: {
       /**
        * @description If `query` is not grouping by any field, the count is an approximate number
        *  of workflows that matches the query.
@@ -1467,120 +1471,134 @@ export interface components {
        *  of the groups returned in the response. This number can be smaller than the
        *  total number of workflows matching the query.
        */
-      count?: string;
+      readonly count?: string;
       /**
        * @description `groups` contains the groups if the request is grouping by a field.
        *  The list might not be complete, and the counts of each group is approximate.
        */
-      groups?: components['schemas']['CountWorkflowExecutionsResponse_AggregationGroup'][];
+      readonly groups?: readonly components['schemas']['CountWorkflowExecutionsResponse_AggregationGroup'][];
     };
-    CountWorkflowExecutionsResponse_AggregationGroup: {
-      groupValues?: components['schemas']['Payload'][];
-      count?: string;
+    readonly CountWorkflowExecutionsResponse_AggregationGroup: {
+      readonly count?: string;
+      readonly groupValues?: readonly components['schemas']['Payload'][];
     };
-    CreateNexusEndpointRequest: {
+    readonly CreateNexusEndpointRequest: {
       /** @description Endpoint definition to create. */
-      spec?: components['schemas']['EndpointSpec'];
+      readonly spec?: components['schemas']['EndpointSpec'];
     };
-    CreateNexusEndpointResponse: {
+    readonly CreateNexusEndpointResponse: {
       /** @description Data post acceptance. Can be used to issue additional updates to this record. */
-      endpoint?: components['schemas']['Endpoint'];
+      readonly endpoint?: components['schemas']['Endpoint'];
     };
     /**
      * @description (-- api-linter: core::0203::optional=disabled
      *      aip.dev/not-precedent: field_behavior annotation not available in our gogo fork --)
      */
-    CreateScheduleRequest: {
-      /** @description The namespace the schedule should be created in. */
-      namespace?: string;
-      /** @description The id of the new schedule. */
-      scheduleId?: string;
-      /** @description The schedule spec, policies, action, and initial state. */
-      schedule?: components['schemas']['Schedule'];
-      /** @description Optional initial patch (e.g. to run the action once immediately). */
-      initialPatch?: components['schemas']['SchedulePatch'];
+    readonly CreateScheduleRequest: {
       /** @description The identity of the client who initiated this request. */
-      identity?: string;
-      /** @description A unique identifier for this create request for idempotence. Typically UUIDv4. */
-      requestId?: string;
+      readonly identity?: string;
+      /** @description Optional initial patch (e.g. to run the action once immediately). */
+      readonly initialPatch?: components['schemas']['SchedulePatch'];
       /** @description Memo and search attributes to attach to the schedule itself. */
-      memo?: components['schemas']['Memo'];
-      searchAttributes?: components['schemas']['SearchAttributes'];
+      readonly memo?: components['schemas']['Memo'];
+      /** @description The namespace the schedule should be created in. */
+      readonly namespace?: string;
+      /** @description A unique identifier for this create request for idempotence. Typically UUIDv4. */
+      readonly requestId?: string;
+      /** @description The schedule spec, policies, action, and initial state. */
+      readonly schedule?: components['schemas']['Schedule'];
+      /** @description The id of the new schedule. */
+      readonly scheduleId?: string;
+      readonly searchAttributes?: components['schemas']['SearchAttributes'];
     };
-    CreateScheduleResponse: {
+    readonly CreateScheduleResponse: {
       /** Format: bytes */
-      conflictToken?: string;
+      readonly conflictToken?: string;
     };
-    DataBlob: {
+    readonly DataBlob: {
+      /** Format: bytes */
+      readonly data?: string;
       /**
        * Format: enum
        * @enum {string}
        */
-      encodingType?: 'ENCODING_TYPE_UNSPECIFIED' | 'ENCODING_TYPE_PROTO3' | 'ENCODING_TYPE_JSON';
-      /** Format: bytes */
-      data?: string;
+      readonly encodingType?:
+        | 'ENCODING_TYPE_UNSPECIFIED'
+        | 'ENCODING_TYPE_PROTO3'
+        | 'ENCODING_TYPE_JSON';
     };
-    DeleteNexusEndpointResponse: Record<string, never>;
-    DeleteScheduleResponse: Record<string, never>;
-    DescribeBatchOperationResponse: {
+    readonly DeleteNexusEndpointResponse: Record<string, unknown>;
+    readonly DeleteScheduleResponse: Record<string, unknown>;
+    readonly DescribeBatchOperationResponse: {
+      /**
+       * Format: date-time
+       * @description Batch operation close time
+       */
+      readonly closeTime?: string;
+      /** @description Complete operation count */
+      readonly completeOperationCount?: string;
+      /** @description Failure operation count */
+      readonly failureOperationCount?: string;
+      /** @description Identity indicates the operator identity */
+      readonly identity?: string;
+      /** @description Batch job ID */
+      readonly jobId?: string;
       /**
        * Format: enum
        * @description Batch operation type
        * @enum {string}
        */
-      operationType?:
+      readonly operationType?:
         | 'BATCH_OPERATION_TYPE_UNSPECIFIED'
         | 'BATCH_OPERATION_TYPE_TERMINATE'
         | 'BATCH_OPERATION_TYPE_CANCEL'
         | 'BATCH_OPERATION_TYPE_SIGNAL'
         | 'BATCH_OPERATION_TYPE_DELETE'
         | 'BATCH_OPERATION_TYPE_RESET';
-      /** @description Batch job ID */
-      jobId?: string;
+      /** @description Reason indicates the reason to stop a operation */
+      readonly reason?: string;
+      /**
+       * Format: date-time
+       * @description Batch operation start time
+       */
+      readonly startTime?: string;
       /**
        * Format: enum
        * @description Batch operation state
        * @enum {string}
        */
-      state?:
+      readonly state?:
         | 'BATCH_OPERATION_STATE_UNSPECIFIED'
         | 'BATCH_OPERATION_STATE_RUNNING'
         | 'BATCH_OPERATION_STATE_COMPLETED'
         | 'BATCH_OPERATION_STATE_FAILED';
-      /**
-       * Format: date-time
-       * @description Batch operation start time
-       */
-      startTime?: string;
-      /**
-       * Format: date-time
-       * @description Batch operation close time
-       */
-      closeTime?: string;
       /** @description Total operation count */
-      totalOperationCount?: string;
-      /** @description Complete operation count */
-      completeOperationCount?: string;
-      /** @description Failure operation count */
-      failureOperationCount?: string;
-      /** @description Identity indicates the operator identity */
-      identity?: string;
-      /** @description Reason indicates the reason to stop a operation */
-      reason?: string;
+      readonly totalOperationCount?: string;
     };
-    DescribeNamespaceResponse: {
-      namespaceInfo?: components['schemas']['NamespaceInfo'];
-      config?: components['schemas']['NamespaceConfig'];
-      replicationConfig?: components['schemas']['NamespaceReplicationConfig'];
-      failoverVersion?: string;
-      isGlobalNamespace?: boolean;
+    readonly DescribeNamespaceResponse: {
+      readonly config?: components['schemas']['NamespaceConfig'];
       /**
        * @description Contains the historical state of failover_versions for the cluster, truncated to contain only the last N
        *  states to ensure that the list does not grow unbounded.
        */
-      failoverHistory?: components['schemas']['FailoverStatus'][];
+      readonly failoverHistory?: readonly components['schemas']['FailoverStatus'][];
+      readonly failoverVersion?: string;
+      readonly isGlobalNamespace?: boolean;
+      readonly namespaceInfo?: components['schemas']['NamespaceInfo'];
+      readonly replicationConfig?: components['schemas']['NamespaceReplicationConfig'];
     };
-    DescribeScheduleResponse: {
+    readonly DescribeScheduleResponse: {
+      /**
+       * Format: bytes
+       * @description This value can be passed back to UpdateSchedule to ensure that the
+       *  schedule was not modified between a Describe and an Update, which could
+       *  lead to lost updates and other confusion.
+       */
+      readonly conflictToken?: string;
+      /** @description Extra schedule state info. */
+      readonly info?: components['schemas']['ScheduleInfo'];
+      /** @description The memo and search attributes that the schedule was created with. */
+      readonly memo?: components['schemas']['Memo'];
       /**
        * @description The complete current schedule details. This may not match the schedule as
        *  created because:
@@ -1590,60 +1608,45 @@ export interface components {
        *  - some fields in the state are modified automatically
        *  - the schedule may have been modified by UpdateSchedule or PatchSchedule
        */
-      schedule?: components['schemas']['Schedule'];
-      /** @description Extra schedule state info. */
-      info?: components['schemas']['ScheduleInfo'];
-      /** @description The memo and search attributes that the schedule was created with. */
-      memo?: components['schemas']['Memo'];
-      searchAttributes?: components['schemas']['SearchAttributes'];
-      /**
-       * Format: bytes
-       * @description This value can be passed back to UpdateSchedule to ensure that the
-       *  schedule was not modified between a Describe and an Update, which could
-       *  lead to lost updates and other confusion.
-       */
-      conflictToken?: string;
+      readonly schedule?: components['schemas']['Schedule'];
+      readonly searchAttributes?: components['schemas']['SearchAttributes'];
     };
-    DescribeTaskQueueResponse: {
+    readonly DescribeTaskQueueResponse: {
       /**
        * @description Deprecated. Use `versions_info.types_info.pollers` with `ENHANCED` mode instead.
        *  Not set in `ENHANCED` mode.
        */
-      pollers?: components['schemas']['PollerInfo'][];
+      readonly pollers?: readonly components['schemas']['PollerInfo'][];
       /** @description Deprecated. Not set in `ENHANCED` mode. */
-      taskQueueStatus?: components['schemas']['TaskQueueStatus'];
+      readonly taskQueueStatus?: components['schemas']['TaskQueueStatus'];
       /**
        * @description This map contains Task Queue information for each Build ID. Empty string as key value means unversioned.
        *  Only set in `ENHANCED` mode.
        */
-      versionsInfo?: {
+      readonly versionsInfo?: {
         [key: string]: components['schemas']['TaskQueueVersionInfo'];
       };
     };
-    DescribeWorkflowExecutionResponse: {
-      executionConfig?: components['schemas']['WorkflowExecutionConfig'];
-      workflowExecutionInfo?: components['schemas']['WorkflowExecutionInfo'];
-      pendingActivities?: components['schemas']['PendingActivityInfo'][];
-      pendingChildren?: components['schemas']['PendingChildExecutionInfo'][];
-      pendingWorkflowTask?: components['schemas']['PendingWorkflowTaskInfo'];
-      callbacks?: components['schemas']['CallbackInfo'][];
-      pendingNexusOperations?: components['schemas']['PendingNexusOperationInfo'][];
+    readonly DescribeWorkflowExecutionResponse: {
+      readonly callbacks?: readonly components['schemas']['CallbackInfo'][];
+      readonly executionConfig?: components['schemas']['WorkflowExecutionConfig'];
+      readonly pendingActivities?: readonly components['schemas']['PendingActivityInfo'][];
+      readonly pendingChildren?: readonly components['schemas']['PendingChildExecutionInfo'][];
+      readonly pendingNexusOperations?: readonly components['schemas']['PendingNexusOperationInfo'][];
+      readonly pendingWorkflowTask?: components['schemas']['PendingWorkflowTaskInfo'];
+      readonly workflowExecutionInfo?: components['schemas']['WorkflowExecutionInfo'];
     };
     /** @description A cluster-global binding from an endpoint ID to a target for dispatching incoming Nexus requests. */
-    Endpoint: {
-      /** @description Data version for this endpoint, incremented for every update issued via the UpdateNexusEndpoint API. */
-      version?: string;
-      /** @description Unique server-generated endpoint ID. */
-      id?: string;
-      /** @description Spec for the endpoint. */
-      spec?: components['schemas']['EndpointSpec'];
+    readonly Endpoint: {
       /**
        * Format: date-time
        * @description The date and time when the endpoint was created.
        *  (-- api-linter: core::0142::time-field-names=disabled
        *      aip.dev/not-precedent: Not following linter rules. --)
        */
-      createdTime?: string;
+      readonly createdTime?: string;
+      /** @description Unique server-generated endpoint ID. */
+      readonly id?: string;
       /**
        * Format: date-time
        * @description The date and time when the endpoint was last modified.
@@ -1651,53 +1654,57 @@ export interface components {
        *  (-- api-linter: core::0142::time-field-names=disabled
        *      aip.dev/not-precedent: Not following linter rules. --)
        */
-      lastModifiedTime?: string;
+      readonly lastModifiedTime?: string;
+      /** @description Spec for the endpoint. */
+      readonly spec?: components['schemas']['EndpointSpec'];
       /**
        * @description Server exposed URL prefix for invocation of operations on this endpoint.
        *  This doesn't include the protocol, hostname or port as the server does not know how it should be accessed
        *  publicly. The URL is stable in the face of endpoint renames.
        */
-      urlPrefix?: string;
+      readonly urlPrefix?: string;
+      /** @description Data version for this endpoint, incremented for every update issued via the UpdateNexusEndpoint API. */
+      readonly version?: string;
     };
     /** @description Contains mutable fields for an Endpoint. */
-    EndpointSpec: {
-      /**
-       * @description Endpoint name, unique for this cluster. Must match `[a-zA-Z_][a-zA-Z0-9_]*`.
-       *  Renaming an endpoint breaks all workflow callers that reference this endpoint, causing operations to fail.
-       */
-      name?: string;
+    readonly EndpointSpec: {
       /**
        * @description Markdown description serialized as a single JSON string.
        *  If the Payload is encrypted, the UI and CLI may decrypt with the configured codec server endpoint.
        *  By default, the server enforces a limit of 20,000 bytes for this entire payload.
        */
-      description?: components['schemas']['Payload'];
+      readonly description?: components['schemas']['Payload'];
+      /**
+       * @description Endpoint name, unique for this cluster. Must match `[a-zA-Z_][a-zA-Z0-9_]*`.
+       *  Renaming an endpoint breaks all workflow callers that reference this endpoint, causing operations to fail.
+       */
+      readonly name?: string;
       /** @description Target to route requests to. */
-      target?: components['schemas']['EndpointTarget'];
+      readonly target?: components['schemas']['EndpointTarget'];
     };
     /** @description Target to route requests to. */
-    EndpointTarget: {
-      worker?: components['schemas']['EndpointTarget_Worker'];
-      external?: components['schemas']['EndpointTarget_External'];
+    readonly EndpointTarget: {
+      readonly external?: components['schemas']['EndpointTarget_External'];
+      readonly worker?: components['schemas']['EndpointTarget_Worker'];
     };
     /**
      * @description Target an external server by URL.
      *  At a later point, this will support providing credentials, in the meantime, an http.RoundTripper can be injected
      *  into the server to modify the request.
      */
-    EndpointTarget_External: {
+    readonly EndpointTarget_External: {
       /** @description URL to call. */
-      url?: string;
+      readonly url?: string;
     };
     /** @description Target a worker polling on a Nexus task queue in a specific namespace. */
-    EndpointTarget_Worker: {
+    readonly EndpointTarget_Worker: {
       /** @description Namespace to route requests to. */
-      namespace?: string;
+      readonly namespace?: string;
       /** @description Nexus task queue to route requests to. */
-      taskQueue?: string;
+      readonly taskQueue?: string;
     };
-    ExecuteMultiOperationRequest: {
-      namespace?: string;
+    readonly ExecuteMultiOperationRequest: {
+      readonly namespace?: string;
       /**
        * @description List of operations to execute within a single workflow.
        *
@@ -1708,74 +1715,72 @@ export interface components {
        *
        *  Note that additional operation-specific restrictions have to be considered.
        */
-      operations?: components['schemas']['ExecuteMultiOperationRequest_Operation'][];
+      readonly operations?: readonly components['schemas']['ExecuteMultiOperationRequest_Operation'][];
     };
-    ExecuteMultiOperationRequest_Operation: {
+    readonly ExecuteMultiOperationRequest_Operation: {
       /**
        * @description Additional restrictions:
        *  - setting `cron_schedule` is invalid
        *  - setting `request_eager_execution` is invalid
        *  - setting `workflow_start_delay` is invalid
        */
-      startWorkflow?: components['schemas']['StartWorkflowExecutionRequest'];
+      readonly startWorkflow?: components['schemas']['StartWorkflowExecutionRequest'];
       /**
        * @description Additional restrictions:
        *  - setting `first_execution_run_id` is invalid
        *  - setting `workflow_execution.run_id` is invalid
        */
-      updateWorkflow?: components['schemas']['UpdateWorkflowExecutionRequest'];
+      readonly updateWorkflow?: components['schemas']['UpdateWorkflowExecutionRequest'];
     };
-    ExecuteMultiOperationResponse: {
-      responses?: components['schemas']['ExecuteMultiOperationResponse_Response'][];
+    readonly ExecuteMultiOperationResponse: {
+      readonly responses?: readonly components['schemas']['ExecuteMultiOperationResponse_Response'][];
     };
-    ExecuteMultiOperationResponse_Response: {
-      startWorkflow?: components['schemas']['StartWorkflowExecutionResponse'];
-      updateWorkflow?: components['schemas']['UpdateWorkflowExecutionResponse'];
+    readonly ExecuteMultiOperationResponse_Response: {
+      readonly startWorkflow?: components['schemas']['StartWorkflowExecutionResponse'];
+      readonly updateWorkflow?: components['schemas']['UpdateWorkflowExecutionResponse'];
     };
-    ExternalWorkflowExecutionCancelRequestedEventAttributes: {
+    readonly ExternalWorkflowExecutionCancelRequestedEventAttributes: {
       /**
        * @description id of the `REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_INITIATED` event this event corresponds
        *  to
        */
-      initiatedEventId?: string;
+      readonly initiatedEventId?: string;
       /**
        * @description Namespace of the to-be-cancelled workflow.
        *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
        */
-      namespace?: string;
-      namespaceId?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
+      readonly namespace?: string;
+      readonly namespaceId?: string;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
     };
-    ExternalWorkflowExecutionSignaledEventAttributes: {
+    readonly ExternalWorkflowExecutionSignaledEventAttributes: {
+      /** @description Deprecated */
+      readonly control?: string;
       /** @description id of the `SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_INITIATED` event this event corresponds to */
-      initiatedEventId?: string;
+      readonly initiatedEventId?: string;
       /**
        * @description Namespace of the workflow which was signaled.
        *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
        */
-      namespace?: string;
-      namespaceId?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
-      /** @description Deprecated */
-      control?: string;
+      readonly namespace?: string;
+      readonly namespaceId?: string;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
     };
     /** @description Represents a historical replication status of a Namespace */
-    FailoverStatus: {
+    readonly FailoverStatus: {
       /**
        * Format: date-time
        * @description Timestamp when the Cluster switched to the following failover_version
        */
-      failoverTime?: string;
-      failoverVersion?: string;
+      readonly failoverTime?: string;
+      readonly failoverVersion?: string;
     };
-    Failure: {
-      message?: string;
-      /**
-       * @description The source this Failure originated in, e.g. TypeScriptSDK / JavaSDK
-       *  In some SDKs this is used to rehydrate the stack trace into an exception object.
-       */
-      source?: string;
-      stackTrace?: string;
+    readonly Failure: {
+      readonly activityFailureInfo?: components['schemas']['ActivityFailureInfo'];
+      readonly applicationFailureInfo?: components['schemas']['ApplicationFailureInfo'];
+      readonly canceledFailureInfo?: components['schemas']['CanceledFailureInfo'];
+      readonly cause?: components['schemas']['Failure'];
+      readonly childWorkflowExecutionFailureInfo?: components['schemas']['ChildWorkflowExecutionFailureInfo'];
       /**
        * @description Alternative way to supply `message` and `stack_trace` and possibly other attributes, used for encryption of
        *  errors originating in user code which might contain sensitive information.
@@ -1792,49 +1797,63 @@ export interface components {
        *
        *  - If there's demand, we could allow overriding the default SDK implementation to encode other opaque Failure attributes.
        */
-      encodedAttributes?: components['schemas']['Payload'];
-      cause?: components['schemas']['Failure'];
-      applicationFailureInfo?: components['schemas']['ApplicationFailureInfo'];
-      timeoutFailureInfo?: components['schemas']['TimeoutFailureInfo'];
-      canceledFailureInfo?: components['schemas']['CanceledFailureInfo'];
-      terminatedFailureInfo?: components['schemas']['TerminatedFailureInfo'];
-      serverFailureInfo?: components['schemas']['ServerFailureInfo'];
-      resetWorkflowFailureInfo?: components['schemas']['ResetWorkflowFailureInfo'];
-      activityFailureInfo?: components['schemas']['ActivityFailureInfo'];
-      childWorkflowExecutionFailureInfo?: components['schemas']['ChildWorkflowExecutionFailureInfo'];
-      nexusOperationExecutionFailureInfo?: components['schemas']['NexusOperationFailureInfo'];
+      readonly encodedAttributes?: components['schemas']['Payload'];
+      readonly message?: string;
+      readonly nexusOperationExecutionFailureInfo?: components['schemas']['NexusOperationFailureInfo'];
+      readonly resetWorkflowFailureInfo?: components['schemas']['ResetWorkflowFailureInfo'];
+      readonly serverFailureInfo?: components['schemas']['ServerFailureInfo'];
+      /**
+       * @description The source this Failure originated in, e.g. TypeScriptSDK / JavaSDK
+       *  In some SDKs this is used to rehydrate the stack trace into an exception object.
+       */
+      readonly source?: string;
+      readonly stackTrace?: string;
+      readonly terminatedFailureInfo?: components['schemas']['TerminatedFailureInfo'];
+      readonly timeoutFailureInfo?: components['schemas']['TimeoutFailureInfo'];
     };
     /** @description GetClusterInfoResponse contains information about Temporal cluster. */
-    GetClusterInfoResponse: {
+    readonly GetClusterInfoResponse: {
+      readonly clusterId?: string;
+      readonly clusterName?: string;
+      /** Format: int32 */
+      readonly historyShardCount?: number;
+      readonly persistenceStore?: string;
+      readonly serverVersion?: string;
       /**
        * @description Key is client name i.e "temporal-go", "temporal-java", or "temporal-cli".
        *  Value is ranges of supported versions of this client i.e ">1.1.1 <=1.4.0 || ^5.0.0".
        */
-      supportedClients?: {
+      readonly supportedClients?: {
         [key: string]: string;
       };
-      serverVersion?: string;
-      clusterId?: string;
-      versionInfo?: components['schemas']['VersionInfo'];
-      clusterName?: string;
-      /** Format: int32 */
-      historyShardCount?: number;
-      persistenceStore?: string;
-      visibilityStore?: string;
+      readonly versionInfo?: components['schemas']['VersionInfo'];
+      readonly visibilityStore?: string;
     };
-    GetNexusEndpointResponse: {
-      endpoint?: components['schemas']['Endpoint'];
+    readonly GetNexusEndpointResponse: {
+      readonly endpoint?: components['schemas']['Endpoint'];
     };
-    GetSystemInfoResponse: {
-      /** @description Version of the server. */
-      serverVersion?: string;
+    readonly GetSystemInfoResponse: {
       /** @description All capabilities the system supports. */
-      capabilities?: components['schemas']['GetSystemInfoResponse_Capabilities'];
+      readonly capabilities?: components['schemas']['GetSystemInfoResponse_Capabilities'];
+      /** @description Version of the server. */
+      readonly serverVersion?: string;
     };
     /** @description System capability details. */
-    GetSystemInfoResponse_Capabilities: {
-      /** @description True if signal and query headers are supported. */
-      signalAndQueryHeader?: boolean;
+    readonly GetSystemInfoResponse_Capabilities: {
+      /** @description True if RespondActivityTaskFailed API supports including heartbeat details */
+      readonly activityFailureIncludeHeartbeat?: boolean;
+      /**
+       * @description True if server supports dispatching Workflow and Activity tasks based on a worker's build_id
+       *  (see:
+       *  https://github.com/temporalio/proposals/blob/a123af3b559f43db16ea6dd31870bfb754c4dc5e/versioning/worker-versions.md)
+       */
+      readonly buildIdBasedVersioning?: boolean;
+      /** @description True if the server supports count group by execution status */
+      readonly countGroupByExecutionStatus?: boolean;
+      /** @description True if server supports eager workflow task dispatching for the StartWorkflowExecution API */
+      readonly eagerWorkflowStart?: boolean;
+      /** @description True if server uses protos that include temporal.api.failure.v1.Failure.encoded_attributes */
+      readonly encodedFailureAttributes?: boolean;
       /**
        * @description True if internal errors are differentiated from other types of errors for purposes of
        *  retrying non-internal errors.
@@ -1842,37 +1861,25 @@ export interface components {
        *  When unset/false, clients retry all failures. When true, clients should only retry
        *  non-internal errors.
        */
-      internalErrorDifferentiation?: boolean;
-      /** @description True if RespondActivityTaskFailed API supports including heartbeat details */
-      activityFailureIncludeHeartbeat?: boolean;
-      /** @description Supports scheduled workflow features. */
-      supportsSchedules?: boolean;
-      /** @description True if server uses protos that include temporal.api.failure.v1.Failure.encoded_attributes */
-      encodedFailureAttributes?: boolean;
-      /**
-       * @description True if server supports dispatching Workflow and Activity tasks based on a worker's build_id
-       *  (see:
-       *  https://github.com/temporalio/proposals/blob/a123af3b559f43db16ea6dd31870bfb754c4dc5e/versioning/worker-versions.md)
-       */
-      buildIdBasedVersioning?: boolean;
-      /** @description True if server supports upserting workflow memo */
-      upsertMemo?: boolean;
-      /** @description True if server supports eager workflow task dispatching for the StartWorkflowExecution API */
-      eagerWorkflowStart?: boolean;
-      /**
-       * @description True if the server knows about the sdk metadata field on WFT completions and will record
-       *  it in history
-       */
-      sdkMetadata?: boolean;
-      /** @description True if the server supports count group by execution status */
-      countGroupByExecutionStatus?: boolean;
+      readonly internalErrorDifferentiation?: boolean;
       /**
        * @description True if the server supports Nexus operations.
        *  This flag is dependent both on server version and for Nexus to be enabled via server configuration.
        */
-      nexus?: boolean;
+      readonly nexus?: boolean;
+      /**
+       * @description True if the server knows about the sdk metadata field on WFT completions and will record
+       *  it in history
+       */
+      readonly sdkMetadata?: boolean;
+      /** @description True if signal and query headers are supported. */
+      readonly signalAndQueryHeader?: boolean;
+      /** @description Supports scheduled workflow features. */
+      readonly supportsSchedules?: boolean;
+      /** @description True if server supports upserting workflow memo */
+      readonly upsertMemo?: boolean;
     };
-    GetWorkerBuildIdCompatibilityResponse: {
+    readonly GetWorkerBuildIdCompatibilityResponse: {
       /**
        * @description Major version sets, in order from oldest to newest. The last element of the list will always
        *  be the current default major version. IE: New workflows will target the most recent version
@@ -1880,10 +1887,10 @@ export interface components {
        *
        *  There may be fewer sets returned than exist, if the request chose to limit this response.
        */
-      majorVersionSets?: components['schemas']['CompatibleVersionSet'][];
+      readonly majorVersionSets?: readonly components['schemas']['CompatibleVersionSet'][];
     };
     /** @description Deprecated. Use `DescribeTaskQueue`. */
-    GetWorkerTaskReachabilityResponse: {
+    readonly GetWorkerTaskReachabilityResponse: {
       /**
        * @description Task reachability, broken down by build id and then task queue.
        *  When requesting a large number of task queues or all task queues associated with the given build ids in a
@@ -1895,73 +1902,87 @@ export interface components {
        *  Open source users can adjust this limit by setting the server's dynamic config value for
        *  `limit.reachabilityTaskQueueScan` with the caveat that this call can strain the visibility store.
        */
-      buildIdReachability?: components['schemas']['BuildIdReachability'][];
+      readonly buildIdReachability?: readonly components['schemas']['BuildIdReachability'][];
     };
-    GetWorkerVersioningRulesResponse: {
-      assignmentRules?: components['schemas']['TimestampedBuildIdAssignmentRule'][];
-      compatibleRedirectRules?: components['schemas']['TimestampedCompatibleBuildIdRedirectRule'][];
+    readonly GetWorkerVersioningRulesResponse: {
+      readonly assignmentRules?: readonly components['schemas']['TimestampedBuildIdAssignmentRule'][];
+      readonly compatibleRedirectRules?: readonly components['schemas']['TimestampedCompatibleBuildIdRedirectRule'][];
       /**
        * Format: bytes
        * @description This value can be passed back to UpdateWorkerVersioningRulesRequest to
        *  ensure that the rules were not modified between this List and the Update,
        *  which could lead to lost updates and other confusion.
        */
-      conflictToken?: string;
+      readonly conflictToken?: string;
     };
-    GetWorkflowExecutionHistoryResponse: {
-      history?: components['schemas']['History'];
+    readonly GetWorkflowExecutionHistoryResponse: {
+      readonly archived?: boolean;
+      readonly history?: components['schemas']['History'];
+      /**
+       * Format: bytes
+       * @description Will be set if there are more history events than were included in this response
+       */
+      readonly nextPageToken?: string;
       /**
        * @description Raw history is an alternate representation of history that may be returned if configured on
        *  the frontend. This is not supported by all SDKs. Either this or `history` will be set.
        */
-      rawHistory?: components['schemas']['DataBlob'][];
-      /**
-       * Format: bytes
-       * @description Will be set if there are more history events than were included in this response
-       */
-      nextPageToken?: string;
-      archived?: boolean;
+      readonly rawHistory?: readonly components['schemas']['DataBlob'][];
     };
-    GetWorkflowExecutionHistoryReverseResponse: {
-      history?: components['schemas']['History'];
+    readonly GetWorkflowExecutionHistoryReverseResponse: {
+      readonly history?: components['schemas']['History'];
       /**
        * Format: bytes
        * @description Will be set if there are more history events than were included in this response
        */
-      nextPageToken?: string;
+      readonly nextPageToken?: string;
     };
     /** @description Contains an arbitrary serialized message along with a @type that describes the type of the serialized message. */
-    GoogleProtobufAny: {
+    readonly GoogleProtobufAny: {
       /** @description The type of the serialized message. */
-      '@type'?: string;
+      readonly '@type'?: string;
       [key: string]: unknown;
     };
     /**
      * @description Contains metadata that can be attached to a variety of requests, like starting a workflow, and
      *  can be propagated between, for example, workflows and activities.
      */
-    Header: {
-      fields?: {
+    readonly Header: {
+      readonly fields?: {
         [key: string]: components['schemas']['Payload'];
       };
     };
-    History: {
-      events?: components['schemas']['HistoryEvent'][];
+    readonly History: {
+      readonly events?: readonly components['schemas']['HistoryEvent'][];
     };
     /**
      * @description History events are the method by which Temporal SDKs advance (or recreate) workflow state.
      *  See the `EventType` enum for more info about what each event is for.
      */
-    HistoryEvent: {
+    readonly HistoryEvent: {
+      readonly activityPropertiesModifiedExternallyEventAttributes?: components['schemas']['ActivityPropertiesModifiedExternallyEventAttributes'];
+      readonly activityTaskCanceledEventAttributes?: components['schemas']['ActivityTaskCanceledEventAttributes'];
+      readonly activityTaskCancelRequestedEventAttributes?: components['schemas']['ActivityTaskCancelRequestedEventAttributes'];
+      readonly activityTaskCompletedEventAttributes?: components['schemas']['ActivityTaskCompletedEventAttributes'];
+      readonly activityTaskFailedEventAttributes?: components['schemas']['ActivityTaskFailedEventAttributes'];
+      readonly activityTaskScheduledEventAttributes?: components['schemas']['ActivityTaskScheduledEventAttributes'];
+      readonly activityTaskStartedEventAttributes?: components['schemas']['ActivityTaskStartedEventAttributes'];
+      readonly activityTaskTimedOutEventAttributes?: components['schemas']['ActivityTaskTimedOutEventAttributes'];
+      readonly childWorkflowExecutionCanceledEventAttributes?: components['schemas']['ChildWorkflowExecutionCanceledEventAttributes'];
+      readonly childWorkflowExecutionCompletedEventAttributes?: components['schemas']['ChildWorkflowExecutionCompletedEventAttributes'];
+      readonly childWorkflowExecutionFailedEventAttributes?: components['schemas']['ChildWorkflowExecutionFailedEventAttributes'];
+      readonly childWorkflowExecutionStartedEventAttributes?: components['schemas']['ChildWorkflowExecutionStartedEventAttributes'];
+      readonly childWorkflowExecutionTerminatedEventAttributes?: components['schemas']['ChildWorkflowExecutionTerminatedEventAttributes'];
+      readonly childWorkflowExecutionTimedOutEventAttributes?: components['schemas']['ChildWorkflowExecutionTimedOutEventAttributes'];
       /** @description Monotonically increasing event number, starts at 1. */
-      eventId?: string;
+      readonly eventId?: string;
       /** Format: date-time */
-      eventTime?: string;
+      readonly eventTime?: string;
       /**
        * Format: enum
        * @enum {string}
        */
-      eventType?:
+      readonly eventType?:
         | 'EVENT_TYPE_UNSPECIFIED'
         | 'EVENT_TYPE_WORKFLOW_EXECUTION_STARTED'
         | 'EVENT_TYPE_WORKFLOW_EXECUTION_COMPLETED'
@@ -2017,17 +2038,30 @@ export interface components {
         | 'EVENT_TYPE_NEXUS_OPERATION_CANCELED'
         | 'EVENT_TYPE_NEXUS_OPERATION_TIMED_OUT'
         | 'EVENT_TYPE_NEXUS_OPERATION_CANCEL_REQUESTED';
+      readonly externalWorkflowExecutionCancelRequestedEventAttributes?: components['schemas']['ExternalWorkflowExecutionCancelRequestedEventAttributes'];
+      readonly externalWorkflowExecutionSignaledEventAttributes?: components['schemas']['ExternalWorkflowExecutionSignaledEventAttributes'];
+      /** @description Links associated with the event. */
+      readonly links?: readonly components['schemas']['Link'][];
+      readonly markerRecordedEventAttributes?: components['schemas']['MarkerRecordedEventAttributes'];
+      readonly nexusOperationCanceledEventAttributes?: components['schemas']['NexusOperationCanceledEventAttributes'];
+      readonly nexusOperationCancelRequestedEventAttributes?: components['schemas']['NexusOperationCancelRequestedEventAttributes'];
+      readonly nexusOperationCompletedEventAttributes?: components['schemas']['NexusOperationCompletedEventAttributes'];
+      readonly nexusOperationFailedEventAttributes?: components['schemas']['NexusOperationFailedEventAttributes'];
+      readonly nexusOperationScheduledEventAttributes?: components['schemas']['NexusOperationScheduledEventAttributes'];
+      readonly nexusOperationStartedEventAttributes?: components['schemas']['NexusOperationStartedEventAttributes'];
+      readonly nexusOperationTimedOutEventAttributes?: components['schemas']['NexusOperationTimedOutEventAttributes'];
+      readonly requestCancelExternalWorkflowExecutionFailedEventAttributes?: components['schemas']['RequestCancelExternalWorkflowExecutionFailedEventAttributes'];
+      readonly requestCancelExternalWorkflowExecutionInitiatedEventAttributes?: components['schemas']['RequestCancelExternalWorkflowExecutionInitiatedEventAttributes'];
+      readonly signalExternalWorkflowExecutionFailedEventAttributes?: components['schemas']['SignalExternalWorkflowExecutionFailedEventAttributes'];
+      readonly signalExternalWorkflowExecutionInitiatedEventAttributes?: components['schemas']['SignalExternalWorkflowExecutionInitiatedEventAttributes'];
+      readonly startChildWorkflowExecutionFailedEventAttributes?: components['schemas']['StartChildWorkflowExecutionFailedEventAttributes'];
+      readonly startChildWorkflowExecutionInitiatedEventAttributes?: components['schemas']['StartChildWorkflowExecutionInitiatedEventAttributes'];
       /** @description TODO: What is this? Appears unused by SDKs */
-      version?: string;
-      /** @description TODO: What is this? Appears unused by SDKs */
-      taskId?: string;
-      /**
-       * @description Set to true when the SDK may ignore the event as it does not impact workflow state or
-       *  information in any way that the SDK need be concerned with. If an SDK encounters an event
-       *  type which it does not understand, it must error unless this is true. If it is true, it's
-       *  acceptable for the event type and/or attributes to be uninterpretable.
-       */
-      workerMayIgnore?: boolean;
+      readonly taskId?: string;
+      readonly timerCanceledEventAttributes?: components['schemas']['TimerCanceledEventAttributes'];
+      readonly timerFiredEventAttributes?: components['schemas']['TimerFiredEventAttributes'];
+      readonly timerStartedEventAttributes?: components['schemas']['TimerStartedEventAttributes'];
+      readonly upsertWorkflowSearchAttributesEventAttributes?: components['schemas']['UpsertWorkflowSearchAttributesEventAttributes'];
       /**
        * @description Metadata on the event. This is often carried over from commands and client calls. Most events
        *  won't have this information, and how this information is used is dependent upon the interface
@@ -2038,74 +2072,47 @@ export interface components {
        *   * timer_started_event_attributes - summary represents an identifier for the timer for use by
        *     user interfaces.
        */
-      userMetadata?: components['schemas']['UserMetadata'];
-      /** @description Links associated with the event. */
-      links?: components['schemas']['Link'][];
-      workflowExecutionStartedEventAttributes?: components['schemas']['WorkflowExecutionStartedEventAttributes'];
-      workflowExecutionCompletedEventAttributes?: components['schemas']['WorkflowExecutionCompletedEventAttributes'];
-      workflowExecutionFailedEventAttributes?: components['schemas']['WorkflowExecutionFailedEventAttributes'];
-      workflowExecutionTimedOutEventAttributes?: components['schemas']['WorkflowExecutionTimedOutEventAttributes'];
-      workflowTaskScheduledEventAttributes?: components['schemas']['WorkflowTaskScheduledEventAttributes'];
-      workflowTaskStartedEventAttributes?: components['schemas']['WorkflowTaskStartedEventAttributes'];
-      workflowTaskCompletedEventAttributes?: components['schemas']['WorkflowTaskCompletedEventAttributes'];
-      workflowTaskTimedOutEventAttributes?: components['schemas']['WorkflowTaskTimedOutEventAttributes'];
-      workflowTaskFailedEventAttributes?: components['schemas']['WorkflowTaskFailedEventAttributes'];
-      activityTaskScheduledEventAttributes?: components['schemas']['ActivityTaskScheduledEventAttributes'];
-      activityTaskStartedEventAttributes?: components['schemas']['ActivityTaskStartedEventAttributes'];
-      activityTaskCompletedEventAttributes?: components['schemas']['ActivityTaskCompletedEventAttributes'];
-      activityTaskFailedEventAttributes?: components['schemas']['ActivityTaskFailedEventAttributes'];
-      activityTaskTimedOutEventAttributes?: components['schemas']['ActivityTaskTimedOutEventAttributes'];
-      timerStartedEventAttributes?: components['schemas']['TimerStartedEventAttributes'];
-      timerFiredEventAttributes?: components['schemas']['TimerFiredEventAttributes'];
-      activityTaskCancelRequestedEventAttributes?: components['schemas']['ActivityTaskCancelRequestedEventAttributes'];
-      activityTaskCanceledEventAttributes?: components['schemas']['ActivityTaskCanceledEventAttributes'];
-      timerCanceledEventAttributes?: components['schemas']['TimerCanceledEventAttributes'];
-      markerRecordedEventAttributes?: components['schemas']['MarkerRecordedEventAttributes'];
-      workflowExecutionSignaledEventAttributes?: components['schemas']['WorkflowExecutionSignaledEventAttributes'];
-      workflowExecutionTerminatedEventAttributes?: components['schemas']['WorkflowExecutionTerminatedEventAttributes'];
-      workflowExecutionCancelRequestedEventAttributes?: components['schemas']['WorkflowExecutionCancelRequestedEventAttributes'];
-      workflowExecutionCanceledEventAttributes?: components['schemas']['WorkflowExecutionCanceledEventAttributes'];
-      requestCancelExternalWorkflowExecutionInitiatedEventAttributes?: components['schemas']['RequestCancelExternalWorkflowExecutionInitiatedEventAttributes'];
-      requestCancelExternalWorkflowExecutionFailedEventAttributes?: components['schemas']['RequestCancelExternalWorkflowExecutionFailedEventAttributes'];
-      externalWorkflowExecutionCancelRequestedEventAttributes?: components['schemas']['ExternalWorkflowExecutionCancelRequestedEventAttributes'];
-      workflowExecutionContinuedAsNewEventAttributes?: components['schemas']['WorkflowExecutionContinuedAsNewEventAttributes'];
-      startChildWorkflowExecutionInitiatedEventAttributes?: components['schemas']['StartChildWorkflowExecutionInitiatedEventAttributes'];
-      startChildWorkflowExecutionFailedEventAttributes?: components['schemas']['StartChildWorkflowExecutionFailedEventAttributes'];
-      childWorkflowExecutionStartedEventAttributes?: components['schemas']['ChildWorkflowExecutionStartedEventAttributes'];
-      childWorkflowExecutionCompletedEventAttributes?: components['schemas']['ChildWorkflowExecutionCompletedEventAttributes'];
-      childWorkflowExecutionFailedEventAttributes?: components['schemas']['ChildWorkflowExecutionFailedEventAttributes'];
-      childWorkflowExecutionCanceledEventAttributes?: components['schemas']['ChildWorkflowExecutionCanceledEventAttributes'];
-      childWorkflowExecutionTimedOutEventAttributes?: components['schemas']['ChildWorkflowExecutionTimedOutEventAttributes'];
-      childWorkflowExecutionTerminatedEventAttributes?: components['schemas']['ChildWorkflowExecutionTerminatedEventAttributes'];
-      signalExternalWorkflowExecutionInitiatedEventAttributes?: components['schemas']['SignalExternalWorkflowExecutionInitiatedEventAttributes'];
-      signalExternalWorkflowExecutionFailedEventAttributes?: components['schemas']['SignalExternalWorkflowExecutionFailedEventAttributes'];
-      externalWorkflowExecutionSignaledEventAttributes?: components['schemas']['ExternalWorkflowExecutionSignaledEventAttributes'];
-      upsertWorkflowSearchAttributesEventAttributes?: components['schemas']['UpsertWorkflowSearchAttributesEventAttributes'];
-      workflowExecutionUpdateAcceptedEventAttributes?: components['schemas']['WorkflowExecutionUpdateAcceptedEventAttributes'];
-      workflowExecutionUpdateRejectedEventAttributes?: components['schemas']['WorkflowExecutionUpdateRejectedEventAttributes'];
-      workflowExecutionUpdateCompletedEventAttributes?: components['schemas']['WorkflowExecutionUpdateCompletedEventAttributes'];
-      workflowPropertiesModifiedExternallyEventAttributes?: components['schemas']['WorkflowPropertiesModifiedExternallyEventAttributes'];
-      activityPropertiesModifiedExternallyEventAttributes?: components['schemas']['ActivityPropertiesModifiedExternallyEventAttributes'];
-      workflowPropertiesModifiedEventAttributes?: components['schemas']['WorkflowPropertiesModifiedEventAttributes'];
-      workflowExecutionUpdateAdmittedEventAttributes?: components['schemas']['WorkflowExecutionUpdateAdmittedEventAttributes'];
-      nexusOperationScheduledEventAttributes?: components['schemas']['NexusOperationScheduledEventAttributes'];
-      nexusOperationStartedEventAttributes?: components['schemas']['NexusOperationStartedEventAttributes'];
-      nexusOperationCompletedEventAttributes?: components['schemas']['NexusOperationCompletedEventAttributes'];
-      nexusOperationFailedEventAttributes?: components['schemas']['NexusOperationFailedEventAttributes'];
-      nexusOperationCanceledEventAttributes?: components['schemas']['NexusOperationCanceledEventAttributes'];
-      nexusOperationTimedOutEventAttributes?: components['schemas']['NexusOperationTimedOutEventAttributes'];
-      nexusOperationCancelRequestedEventAttributes?: components['schemas']['NexusOperationCancelRequestedEventAttributes'];
+      readonly userMetadata?: components['schemas']['UserMetadata'];
+      /** @description TODO: What is this? Appears unused by SDKs */
+      readonly version?: string;
+      /**
+       * @description Set to true when the SDK may ignore the event as it does not impact workflow state or
+       *  information in any way that the SDK need be concerned with. If an SDK encounters an event
+       *  type which it does not understand, it must error unless this is true. If it is true, it's
+       *  acceptable for the event type and/or attributes to be uninterpretable.
+       */
+      readonly workerMayIgnore?: boolean;
+      readonly workflowExecutionCanceledEventAttributes?: components['schemas']['WorkflowExecutionCanceledEventAttributes'];
+      readonly workflowExecutionCancelRequestedEventAttributes?: components['schemas']['WorkflowExecutionCancelRequestedEventAttributes'];
+      readonly workflowExecutionCompletedEventAttributes?: components['schemas']['WorkflowExecutionCompletedEventAttributes'];
+      readonly workflowExecutionContinuedAsNewEventAttributes?: components['schemas']['WorkflowExecutionContinuedAsNewEventAttributes'];
+      readonly workflowExecutionFailedEventAttributes?: components['schemas']['WorkflowExecutionFailedEventAttributes'];
+      readonly workflowExecutionSignaledEventAttributes?: components['schemas']['WorkflowExecutionSignaledEventAttributes'];
+      readonly workflowExecutionStartedEventAttributes?: components['schemas']['WorkflowExecutionStartedEventAttributes'];
+      readonly workflowExecutionTerminatedEventAttributes?: components['schemas']['WorkflowExecutionTerminatedEventAttributes'];
+      readonly workflowExecutionTimedOutEventAttributes?: components['schemas']['WorkflowExecutionTimedOutEventAttributes'];
+      readonly workflowExecutionUpdateAcceptedEventAttributes?: components['schemas']['WorkflowExecutionUpdateAcceptedEventAttributes'];
+      readonly workflowExecutionUpdateAdmittedEventAttributes?: components['schemas']['WorkflowExecutionUpdateAdmittedEventAttributes'];
+      readonly workflowExecutionUpdateCompletedEventAttributes?: components['schemas']['WorkflowExecutionUpdateCompletedEventAttributes'];
+      readonly workflowExecutionUpdateRejectedEventAttributes?: components['schemas']['WorkflowExecutionUpdateRejectedEventAttributes'];
+      readonly workflowPropertiesModifiedEventAttributes?: components['schemas']['WorkflowPropertiesModifiedEventAttributes'];
+      readonly workflowPropertiesModifiedExternallyEventAttributes?: components['schemas']['WorkflowPropertiesModifiedExternallyEventAttributes'];
+      readonly workflowTaskCompletedEventAttributes?: components['schemas']['WorkflowTaskCompletedEventAttributes'];
+      readonly workflowTaskFailedEventAttributes?: components['schemas']['WorkflowTaskFailedEventAttributes'];
+      readonly workflowTaskScheduledEventAttributes?: components['schemas']['WorkflowTaskScheduledEventAttributes'];
+      readonly workflowTaskStartedEventAttributes?: components['schemas']['WorkflowTaskStartedEventAttributes'];
+      readonly workflowTaskTimedOutEventAttributes?: components['schemas']['WorkflowTaskTimedOutEventAttributes'];
     };
-    Input: {
+    readonly Input: {
+      /** @description The arguments to pass to the named Update handler. */
+      readonly args?: components['schemas']['Payloads'];
       /**
        * @description Headers that are passed with the Update from the requesting entity.
        *  These can include things like auth or tracing tokens.
        */
-      header?: components['schemas']['Header'];
+      readonly header?: components['schemas']['Header'];
       /** @description The name of the Update handler to invoke on the target Workflow. */
-      name?: string;
-      /** @description The arguments to pass to the named Update handler. */
-      args?: components['schemas']['Payloads'];
+      readonly name?: string;
     };
     /**
      * @description IntervalSpec matches times that can be expressed as:
@@ -2120,9 +2127,9 @@ export interface components {
      *  2022-02-17T00:00:00Z (among other times). The same interval with a phase of 3
      *  days, 5 hours, and 23 minutes would match 2022-02-20T05:23:00Z instead.
      */
-    IntervalSpec: {
-      interval?: string;
-      phase?: string;
+    readonly IntervalSpec: {
+      readonly interval?: string;
+      readonly phase?: string;
     };
     /**
      * @description Link can be associated with history events. It might contain information about an external entity
@@ -2130,62 +2137,50 @@ export interface components {
      *  in this case, a history event in workflow A could contain a Link to the workflow started event in
      *  workflow B, and vice-versa.
      */
-    Link: {
-      workflowEvent?: components['schemas']['Link_WorkflowEvent'];
+    readonly Link: {
+      readonly workflowEvent?: components['schemas']['Link_WorkflowEvent'];
     };
-    Link_WorkflowEvent: {
-      namespace?: string;
-      workflowId?: string;
-      runId?: string;
-      eventRef?: components['schemas']['WorkflowEvent_EventReference'];
+    readonly Link_WorkflowEvent: {
+      readonly eventRef?: components['schemas']['WorkflowEvent_EventReference'];
+      readonly namespace?: string;
+      readonly runId?: string;
+      readonly workflowId?: string;
     };
-    ListArchivedWorkflowExecutionsResponse: {
-      executions?: components['schemas']['WorkflowExecutionInfo'][];
+    readonly ListArchivedWorkflowExecutionsResponse: {
+      readonly executions?: readonly components['schemas']['WorkflowExecutionInfo'][];
       /** Format: bytes */
-      nextPageToken?: string;
+      readonly nextPageToken?: string;
     };
-    ListBatchOperationsResponse: {
+    readonly ListBatchOperationsResponse: {
+      /** Format: bytes */
+      readonly nextPageToken?: string;
       /** @description BatchOperationInfo contains the basic info about batch operation */
-      operationInfo?: components['schemas']['BatchOperationInfo'][];
-      /** Format: bytes */
-      nextPageToken?: string;
+      readonly operationInfo?: readonly components['schemas']['BatchOperationInfo'][];
     };
-    ListNamespacesResponse: {
-      namespaces?: components['schemas']['DescribeNamespaceResponse'][];
+    readonly ListNamespacesResponse: {
+      readonly namespaces?: readonly components['schemas']['DescribeNamespaceResponse'][];
       /** Format: bytes */
-      nextPageToken?: string;
+      readonly nextPageToken?: string;
     };
-    ListNexusEndpointsResponse: {
+    readonly ListNexusEndpointsResponse: {
+      readonly endpoints?: readonly components['schemas']['Endpoint'][];
       /**
        * Format: bytes
        * @description Token for getting the next page.
        */
-      nextPageToken?: string;
-      endpoints?: components['schemas']['Endpoint'][];
+      readonly nextPageToken?: string;
     };
-    ListScheduleMatchingTimesResponse: {
-      startTime?: string[];
+    readonly ListScheduleMatchingTimesResponse: {
+      readonly startTime?: readonly string[];
     };
-    ListSchedulesResponse: {
-      schedules?: components['schemas']['ScheduleListEntry'][];
+    readonly ListSchedulesResponse: {
       /** Format: bytes */
-      nextPageToken?: string;
+      readonly nextPageToken?: string;
+      readonly schedules?: readonly components['schemas']['ScheduleListEntry'][];
     };
-    ListSearchAttributesResponse: {
+    readonly ListSearchAttributesResponse: {
       /** @description Mapping between custom (user-registered) search attribute name to its IndexedValueType. */
-      customAttributes?: {
-        [key: string]:
-          | 'INDEXED_VALUE_TYPE_UNSPECIFIED'
-          | 'INDEXED_VALUE_TYPE_TEXT'
-          | 'INDEXED_VALUE_TYPE_KEYWORD'
-          | 'INDEXED_VALUE_TYPE_INT'
-          | 'INDEXED_VALUE_TYPE_DOUBLE'
-          | 'INDEXED_VALUE_TYPE_BOOL'
-          | 'INDEXED_VALUE_TYPE_DATETIME'
-          | 'INDEXED_VALUE_TYPE_KEYWORD_LIST';
-      };
-      /** @description Mapping between system (predefined) search attribute name to its IndexedValueType. */
-      systemAttributes?: {
+      readonly customAttributes?: {
         [key: string]:
           | 'INDEXED_VALUE_TYPE_UNSPECIFIED'
           | 'INDEXED_VALUE_TYPE_TEXT'
@@ -2197,31 +2192,43 @@ export interface components {
           | 'INDEXED_VALUE_TYPE_KEYWORD_LIST';
       };
       /** @description Mapping from the attribute name to the visibility storage native type. */
-      storageSchema?: {
+      readonly storageSchema?: {
         [key: string]: string;
       };
+      /** @description Mapping between system (predefined) search attribute name to its IndexedValueType. */
+      readonly systemAttributes?: {
+        [key: string]:
+          | 'INDEXED_VALUE_TYPE_UNSPECIFIED'
+          | 'INDEXED_VALUE_TYPE_TEXT'
+          | 'INDEXED_VALUE_TYPE_KEYWORD'
+          | 'INDEXED_VALUE_TYPE_INT'
+          | 'INDEXED_VALUE_TYPE_DOUBLE'
+          | 'INDEXED_VALUE_TYPE_BOOL'
+          | 'INDEXED_VALUE_TYPE_DATETIME'
+          | 'INDEXED_VALUE_TYPE_KEYWORD_LIST';
+      };
     };
-    ListWorkflowExecutionsResponse: {
-      executions?: components['schemas']['WorkflowExecutionInfo'][];
+    readonly ListWorkflowExecutionsResponse: {
+      readonly executions?: readonly components['schemas']['WorkflowExecutionInfo'][];
       /** Format: bytes */
-      nextPageToken?: string;
+      readonly nextPageToken?: string;
     };
-    MarkerRecordedEventAttributes: {
-      /** @description Workers use this to identify the "types" of various markers. Ex: Local activity, side effect. */
-      markerName?: string;
+    readonly MarkerRecordedEventAttributes: {
       /** @description Serialized information recorded in the marker */
-      details?: {
+      readonly details?: {
         [key: string]: components['schemas']['Payloads'];
       };
-      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
-      workflowTaskCompletedEventId?: string;
-      header?: components['schemas']['Header'];
       /** @description Some uses of markers, like a local activity, could "fail". If they did that is recorded here. */
-      failure?: components['schemas']['Failure'];
+      readonly failure?: components['schemas']['Failure'];
+      readonly header?: components['schemas']['Header'];
+      /** @description Workers use this to identify the "types" of various markers. Ex: Local activity, side effect. */
+      readonly markerName?: string;
+      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
+      readonly workflowTaskCompletedEventId?: string;
     };
     /** @description A user-defined set of *unindexed* fields that are exposed when listing/searching workflows */
-    Memo: {
-      fields?: {
+    readonly Memo: {
+      readonly fields?: {
         [key: string]: components['schemas']['Payload'];
       };
     };
@@ -2229,31 +2236,31 @@ export interface components {
      * @description (-- api-linter: core::0146::any=disabled
      *      aip.dev/not-precedent: We want runtime extensibility for the body field --)
      */
-    Message: {
-      /** @description An ID for this specific message. */
-      id?: string;
-      /**
-       * @description Identifies the specific instance of a protocol to which this message
-       *  belongs.
-       */
-      protocolInstanceId?: string;
-      eventId?: string;
-      commandIndex?: string;
+    readonly Message: {
       /**
        * @description The opaque data carried by this message. The protocol type can be
        *  extracted from the package name of the message carried inside the Any.
        */
-      body?: components['schemas']['GoogleProtobufAny'];
+      readonly body?: components['schemas']['GoogleProtobufAny'];
+      readonly commandIndex?: string;
+      readonly eventId?: string;
+      /** @description An ID for this specific message. */
+      readonly id?: string;
+      /**
+       * @description Identifies the specific instance of a protocol to which this message
+       *  belongs.
+       */
+      readonly protocolInstanceId?: string;
     };
     /** @description Metadata about a Workflow Update. */
-    Meta: {
-      /** @description An ID with workflow-scoped uniqueness for this Update. */
-      updateId?: string;
+    readonly Meta: {
       /** @description A string identifying the agent that requested this Update. */
-      identity?: string;
+      readonly identity?: string;
+      /** @description An ID with workflow-scoped uniqueness for this Update. */
+      readonly updateId?: string;
     };
     /** @description Metadata relevant for metering purposes */
-    MeteringMetadata: {
+    readonly MeteringMetadata: {
       /**
        * Format: uint32
        * @description Count of local activities which have begun an execution attempt during this workflow task,
@@ -2263,79 +2270,79 @@ export interface components {
        *  (-- api-linter: core::0141::forbidden-types=disabled
        *      aip.dev/not-precedent: Negative values make no sense to represent. --)
        */
-      nonfirstLocalActivityExecutionAttempts?: number;
+      readonly nonfirstLocalActivityExecutionAttempts?: number;
     };
-    NamespaceConfig: {
-      workflowExecutionRetentionTtl?: string;
-      badBinaries?: components['schemas']['BadBinaries'];
-      /**
-       * Format: enum
-       * @description If unspecified (ARCHIVAL_STATE_UNSPECIFIED) then default server configuration is used.
-       * @enum {string}
-       */
-      historyArchivalState?:
-        | 'ARCHIVAL_STATE_UNSPECIFIED'
-        | 'ARCHIVAL_STATE_DISABLED'
-        | 'ARCHIVAL_STATE_ENABLED';
-      historyArchivalUri?: string;
-      /**
-       * Format: enum
-       * @description If unspecified (ARCHIVAL_STATE_UNSPECIFIED) then default server configuration is used.
-       * @enum {string}
-       */
-      visibilityArchivalState?:
-        | 'ARCHIVAL_STATE_UNSPECIFIED'
-        | 'ARCHIVAL_STATE_DISABLED'
-        | 'ARCHIVAL_STATE_ENABLED';
-      visibilityArchivalUri?: string;
+    readonly NamespaceConfig: {
+      readonly badBinaries?: components['schemas']['BadBinaries'];
       /** @description Map from field name to alias. */
-      customSearchAttributeAliases?: {
+      readonly customSearchAttributeAliases?: {
         [key: string]: string;
       };
+      /**
+       * Format: enum
+       * @description If unspecified (ARCHIVAL_STATE_UNSPECIFIED) then default server configuration is used.
+       * @enum {string}
+       */
+      readonly historyArchivalState?:
+        | 'ARCHIVAL_STATE_UNSPECIFIED'
+        | 'ARCHIVAL_STATE_DISABLED'
+        | 'ARCHIVAL_STATE_ENABLED';
+      readonly historyArchivalUri?: string;
+      /**
+       * Format: enum
+       * @description If unspecified (ARCHIVAL_STATE_UNSPECIFIED) then default server configuration is used.
+       * @enum {string}
+       */
+      readonly visibilityArchivalState?:
+        | 'ARCHIVAL_STATE_UNSPECIFIED'
+        | 'ARCHIVAL_STATE_DISABLED'
+        | 'ARCHIVAL_STATE_ENABLED';
+      readonly visibilityArchivalUri?: string;
+      readonly workflowExecutionRetentionTtl?: string;
     };
-    NamespaceInfo: {
-      name?: string;
+    readonly NamespaceInfo: {
+      /** @description All capabilities the namespace supports. */
+      readonly capabilities?: components['schemas']['NamespaceInfo_Capabilities'];
+      /** @description A key-value map for any customized purpose. */
+      readonly data?: {
+        [key: string]: string;
+      };
+      readonly description?: string;
+      readonly id?: string;
+      readonly name?: string;
+      readonly ownerEmail?: string;
       /**
        * Format: enum
        * @enum {string}
        */
-      state?:
+      readonly state?:
         | 'NAMESPACE_STATE_UNSPECIFIED'
         | 'NAMESPACE_STATE_REGISTERED'
         | 'NAMESPACE_STATE_DEPRECATED'
         | 'NAMESPACE_STATE_DELETED';
-      description?: string;
-      ownerEmail?: string;
-      /** @description A key-value map for any customized purpose. */
-      data?: {
-        [key: string]: string;
-      };
-      id?: string;
-      /** @description All capabilities the namespace supports. */
-      capabilities?: components['schemas']['NamespaceInfo_Capabilities'];
       /**
        * @description Whether scheduled workflows are supported on this namespace. This is only needed
        *  temporarily while the feature is experimental, so we can give it a high tag.
        */
-      supportsSchedules?: boolean;
+      readonly supportsSchedules?: boolean;
     };
     /** @description Namespace capability details. Should contain what features are enabled in a namespace. */
-    NamespaceInfo_Capabilities: {
-      /** @description True if the namespace supports eager workflow start. */
-      eagerWorkflowStart?: boolean;
-      /** @description True if the namespace supports sync update */
-      syncUpdate?: boolean;
+    readonly NamespaceInfo_Capabilities: {
       /** @description True if the namespace supports async update */
-      asyncUpdate?: boolean;
+      readonly asyncUpdate?: boolean;
+      /** @description True if the namespace supports eager workflow start. */
+      readonly eagerWorkflowStart?: boolean;
+      /** @description True if the namespace supports sync update */
+      readonly syncUpdate?: boolean;
     };
-    NamespaceReplicationConfig: {
-      activeClusterName?: string;
-      clusters?: components['schemas']['ClusterReplicationConfig'][];
+    readonly NamespaceReplicationConfig: {
+      readonly activeClusterName?: string;
+      readonly clusters?: readonly components['schemas']['ClusterReplicationConfig'][];
       /**
        * Format: enum
        * @enum {string}
        */
-      state?:
+      readonly state?:
         | 'REPLICATION_STATE_UNSPECIFIED'
         | 'REPLICATION_STATE_NORMAL'
         | 'REPLICATION_STATE_HANDOVER';
@@ -2344,145 +2351,162 @@ export interface components {
      * @description NewWorkflowExecutionInfo is a shared message that encapsulates all the
      *  required arguments to starting a workflow in different contexts.
      */
-    NewWorkflowExecutionInfo: {
-      workflowId?: string;
-      workflowType?: components['schemas']['WorkflowType'];
-      taskQueue?: components['schemas']['TaskQueue'];
-      /** @description Serialized arguments to the workflow. */
-      input?: components['schemas']['Payloads'];
-      /** @description Total workflow execution timeout including retries and continue as new. */
-      workflowExecutionTimeout?: string;
-      /** @description Timeout of a single workflow run. */
-      workflowRunTimeout?: string;
-      /** @description Timeout of a single workflow task. */
-      workflowTaskTimeout?: string;
-      /**
-       * Format: enum
-       * @description Default: WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE.
-       * @enum {string}
-       */
-      workflowIdReusePolicy?:
-        | 'WORKFLOW_ID_REUSE_POLICY_UNSPECIFIED'
-        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE'
-        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY'
-        | 'WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE'
-        | 'WORKFLOW_ID_REUSE_POLICY_TERMINATE_IF_RUNNING';
-      /** @description The retry policy for the workflow. Will never exceed `workflow_execution_timeout`. */
-      retryPolicy?: components['schemas']['RetryPolicy'];
+    readonly NewWorkflowExecutionInfo: {
       /** @description See https://docs.temporal.io/docs/content/what-is-a-temporal-cron-job/ */
-      cronSchedule?: string;
-      memo?: components['schemas']['Memo'];
-      searchAttributes?: components['schemas']['SearchAttributes'];
-      header?: components['schemas']['Header'];
+      readonly cronSchedule?: string;
+      readonly header?: components['schemas']['Header'];
+      /** @description Serialized arguments to the workflow. */
+      readonly input?: components['schemas']['Payloads'];
+      readonly memo?: components['schemas']['Memo'];
+      /** @description The retry policy for the workflow. Will never exceed `workflow_execution_timeout`. */
+      readonly retryPolicy?: components['schemas']['RetryPolicy'];
+      readonly searchAttributes?: components['schemas']['SearchAttributes'];
+      readonly taskQueue?: components['schemas']['TaskQueue'];
       /**
        * @description Metadata on the workflow if it is started. This is carried over to the WorkflowExecutionConfig
        *  for use by user interfaces to display the fixed as-of-start summary and details of the
        *  workflow.
        */
-      userMetadata?: components['schemas']['UserMetadata'];
-    };
-    NexusOperationCancelRequestedEventAttributes: {
-      /** @description The id of the `NEXUS_OPERATION_SCHEDULED` event this cancel request corresponds to. */
-      scheduledEventId?: string;
+      readonly userMetadata?: components['schemas']['UserMetadata'];
+      /** @description Total workflow execution timeout including retries and continue as new. */
+      readonly workflowExecutionTimeout?: string;
+      readonly workflowId?: string;
       /**
-       * @description The `WORKFLOW_TASK_COMPLETED` event that the corresponding RequestCancelNexusOperation command was reported
-       *  with.
+       * Format: enum
+       * @description Default: WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE.
+       * @enum {string}
        */
-      workflowTaskCompletedEventId?: string;
+      readonly workflowIdReusePolicy?:
+        | 'WORKFLOW_ID_REUSE_POLICY_UNSPECIFIED'
+        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE'
+        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY'
+        | 'WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE'
+        | 'WORKFLOW_ID_REUSE_POLICY_TERMINATE_IF_RUNNING';
+      /** @description Timeout of a single workflow run. */
+      readonly workflowRunTimeout?: string;
+      /** @description Timeout of a single workflow task. */
+      readonly workflowTaskTimeout?: string;
+      readonly workflowType?: components['schemas']['WorkflowType'];
     };
     /** @description Nexus operation completed as canceled. May or may not have been due to a cancellation request by the workflow. */
-    NexusOperationCanceledEventAttributes: {
-      /** @description The ID of the `NEXUS_OPERATION_SCHEDULED` event. Uniquely identifies this operation. */
-      scheduledEventId?: string;
+    readonly NexusOperationCanceledEventAttributes: {
       /** @description Cancellation details. */
-      failure?: components['schemas']['Failure'];
+      readonly failure?: components['schemas']['Failure'];
       /** @description The request ID allocated at schedule time. */
-      requestId?: string;
+      readonly requestId?: string;
+      /** @description The ID of the `NEXUS_OPERATION_SCHEDULED` event. Uniquely identifies this operation. */
+      readonly scheduledEventId?: string;
     };
     /** @description NexusOperationCancellationInfo contains the state of a nexus operation cancellation. */
-    NexusOperationCancellationInfo: {
+    readonly NexusOperationCancellationInfo: {
+      /**
+       * Format: int32
+       * @description The number of attempts made to deliver the cancel operation request.
+       *  This number represents a minimum bound since the attempt is incremented after the request completes.
+       */
+      readonly attempt?: number;
+      /**
+       * Format: date-time
+       * @description The time when the last attempt completed.
+       */
+      readonly lastAttemptCompleteTime?: string;
+      /** @description The last attempt's failure, if any. */
+      readonly lastAttemptFailure?: components['schemas']['Failure'];
+      /**
+       * Format: date-time
+       * @description The time when the next attempt is scheduled.
+       */
+      readonly nextAttemptScheduleTime?: string;
       /**
        * Format: date-time
        * @description The time when cancellation was requested.
        */
-      requestedTime?: string;
+      readonly requestedTime?: string;
       /**
        * Format: enum
        * @enum {string}
        */
-      state?:
+      readonly state?:
         | 'NEXUS_OPERATION_CANCELLATION_STATE_UNSPECIFIED'
         | 'NEXUS_OPERATION_CANCELLATION_STATE_SCHEDULED'
         | 'NEXUS_OPERATION_CANCELLATION_STATE_BACKING_OFF'
         | 'NEXUS_OPERATION_CANCELLATION_STATE_SUCCEEDED'
         | 'NEXUS_OPERATION_CANCELLATION_STATE_FAILED'
         | 'NEXUS_OPERATION_CANCELLATION_STATE_TIMED_OUT';
+    };
+    readonly NexusOperationCancelRequestedEventAttributes: {
+      /** @description The id of the `NEXUS_OPERATION_SCHEDULED` event this cancel request corresponds to. */
+      readonly scheduledEventId?: string;
       /**
-       * Format: int32
-       * @description The number of attempts made to deliver the cancel operation request.
-       *  This number represents a minimum bound since the attempt is incremented after the request completes.
+       * @description The `WORKFLOW_TASK_COMPLETED` event that the corresponding RequestCancelNexusOperation command was reported
+       *  with.
        */
-      attempt?: number;
-      /**
-       * Format: date-time
-       * @description The time when the last attempt completed.
-       */
-      lastAttemptCompleteTime?: string;
-      /** @description The last attempt's failure, if any. */
-      lastAttemptFailure?: components['schemas']['Failure'];
-      /**
-       * Format: date-time
-       * @description The time when the next attempt is scheduled.
-       */
-      nextAttemptScheduleTime?: string;
+      readonly workflowTaskCompletedEventId?: string;
     };
     /** @description Nexus operation completed successfully. */
-    NexusOperationCompletedEventAttributes: {
-      /** @description The ID of the `NEXUS_OPERATION_SCHEDULED` event. Uniquely identifies this operation. */
-      scheduledEventId?: string;
+    readonly NexusOperationCompletedEventAttributes: {
+      /** @description The request ID allocated at schedule time. */
+      readonly requestId?: string;
       /**
        * @description Serialized result of the Nexus operation. The response of the Nexus handler.
        *  Delivered either via a completion callback or as a response to a synchronous operation.
        */
-      result?: components['schemas']['Payload'];
-      /** @description The request ID allocated at schedule time. */
-      requestId?: string;
+      readonly result?: components['schemas']['Payload'];
+      /** @description The ID of the `NEXUS_OPERATION_SCHEDULED` event. Uniquely identifies this operation. */
+      readonly scheduledEventId?: string;
     };
     /** @description Nexus operation failed. */
-    NexusOperationFailedEventAttributes: {
-      /** @description The ID of the `NEXUS_OPERATION_SCHEDULED` event. Uniquely identifies this operation. */
-      scheduledEventId?: string;
+    readonly NexusOperationFailedEventAttributes: {
       /** @description Failure details. A NexusOperationFailureInfo wrapping an ApplicationFailureInfo. */
-      failure?: components['schemas']['Failure'];
+      readonly failure?: components['schemas']['Failure'];
       /** @description The request ID allocated at schedule time. */
-      requestId?: string;
+      readonly requestId?: string;
+      /** @description The ID of the `NEXUS_OPERATION_SCHEDULED` event. Uniquely identifies this operation. */
+      readonly scheduledEventId?: string;
     };
-    NexusOperationFailureInfo: {
-      /** @description The NexusOperationScheduled event ID. */
-      scheduledEventId?: string;
+    readonly NexusOperationFailureInfo: {
       /** @description Endpoint name. */
-      endpoint?: string;
-      /** @description Service name. */
-      service?: string;
+      readonly endpoint?: string;
       /** @description Operation name. */
-      operation?: string;
+      readonly operation?: string;
       /** @description Operation ID - may be empty if the operation completed synchronously. */
-      operationId?: string;
+      readonly operationId?: string;
+      /** @description The NexusOperationScheduled event ID. */
+      readonly scheduledEventId?: string;
+      /** @description Service name. */
+      readonly service?: string;
     };
     /** @description Event marking that an operation was scheduled by a workflow via the ScheduleNexusOperation command. */
-    NexusOperationScheduledEventAttributes: {
+    readonly NexusOperationScheduledEventAttributes: {
       /** @description Endpoint name, must exist in the endpoint registry. */
-      endpoint?: string;
-      /** @description Service name. */
-      service?: string;
-      /** @description Operation name. */
-      operation?: string;
+      readonly endpoint?: string;
+      /**
+       * @description Endpoint ID as resolved in the endpoint registry at the time this event was generated.
+       *  This is stored on the event and used internally by the server in case the endpoint is renamed from the time the
+       *  event was originally scheduled.
+       */
+      readonly endpointId?: string;
       /**
        * @description Input for the operation. The server converts this into Nexus request content and the appropriate content headers
        *  internally when sending the StartOperation request. On the handler side, if it is also backed by Temporal, the
        *  content is transformed back to the original Payload stored in this event.
        */
-      input?: components['schemas']['Payload'];
+      readonly input?: components['schemas']['Payload'];
+      /**
+       * @description Header to attach to the Nexus request. Note these headers are not the same as Temporal headers on internal
+       *  activities and child workflows, these are transmitted to Nexus operations that may be external and are not
+       *  traditional payloads.
+       */
+      readonly nexusHeader?: {
+        [key: string]: string;
+      };
+      /** @description Operation name. */
+      readonly operation?: string;
+      /**
+       * @description A unique ID generated by the history service upon creation of this event.
+       *  The ID will be transmitted with all nexus StartOperation requests and is used as an idempotentency key.
+       */
+      readonly requestId?: string;
       /**
        * @description Schedule-to-close timeout for this operation.
        *  Indicates how long the caller is willing to wait for operation completion.
@@ -2490,28 +2514,11 @@ export interface components {
        *  (-- api-linter: core::0140::prepositions=disabled
        *      aip.dev/not-precedent: "to" is used to indicate interval. --)
        */
-      scheduleToCloseTimeout?: string;
-      /**
-       * @description Header to attach to the Nexus request. Note these headers are not the same as Temporal headers on internal
-       *  activities and child workflows, these are transmitted to Nexus operations that may be external and are not
-       *  traditional payloads.
-       */
-      nexusHeader?: {
-        [key: string]: string;
-      };
+      readonly scheduleToCloseTimeout?: string;
+      /** @description Service name. */
+      readonly service?: string;
       /** @description The `WORKFLOW_TASK_COMPLETED` event that the corresponding ScheduleNexusOperation command was reported with. */
-      workflowTaskCompletedEventId?: string;
-      /**
-       * @description A unique ID generated by the history service upon creation of this event.
-       *  The ID will be transmitted with all nexus StartOperation requests and is used as an idempotentency key.
-       */
-      requestId?: string;
-      /**
-       * @description Endpoint ID as resolved in the endpoint registry at the time this event was generated.
-       *  This is stored on the event and used internally by the server in case the endpoint is renamed from the time the
-       *  event was originally scheduled.
-       */
-      endpointId?: string;
+      readonly workflowTaskCompletedEventId?: string;
     };
     /**
      * @description Event marking an asynchronous operation was started by the responding Nexus handler.
@@ -2519,176 +2526,168 @@ export interface components {
      *  In rare situations, such as request timeouts, the service may fail to record the actual start time and will fabricate
      *  this event upon receiving the operation completion via callback.
      */
-    NexusOperationStartedEventAttributes: {
-      /** @description The ID of the `NEXUS_OPERATION_SCHEDULED` event this task corresponds to. */
-      scheduledEventId?: string;
+    readonly NexusOperationStartedEventAttributes: {
       /**
        * @description The operation ID returned by the Nexus handler in the response to the StartOperation request.
        *  This ID is used when canceling the operation.
        */
-      operationId?: string;
+      readonly operationId?: string;
       /** @description The request ID allocated at schedule time. */
-      requestId?: string;
+      readonly requestId?: string;
+      /** @description The ID of the `NEXUS_OPERATION_SCHEDULED` event this task corresponds to. */
+      readonly scheduledEventId?: string;
     };
     /** @description Nexus operation timed out. */
-    NexusOperationTimedOutEventAttributes: {
-      /** @description The ID of the `NEXUS_OPERATION_SCHEDULED` event. Uniquely identifies this operation. */
-      scheduledEventId?: string;
+    readonly NexusOperationTimedOutEventAttributes: {
       /** @description Failure details. A NexusOperationFailureInfo wrapping a CanceledFailureInfo. */
-      failure?: components['schemas']['Failure'];
+      readonly failure?: components['schemas']['Failure'];
       /** @description The request ID allocated at schedule time. */
-      requestId?: string;
+      readonly requestId?: string;
+      /** @description The ID of the `NEXUS_OPERATION_SCHEDULED` event. Uniquely identifies this operation. */
+      readonly scheduledEventId?: string;
     };
     /** @description The outcome of a Workflow Update: success or failure. */
-    Outcome: {
-      success?: components['schemas']['Payloads'];
-      failure?: components['schemas']['Failure'];
+    readonly Outcome: {
+      readonly failure?: components['schemas']['Failure'];
+      readonly success?: components['schemas']['Payloads'];
     };
-    PatchScheduleRequest: {
-      /** @description The namespace of the schedule to patch. */
-      namespace?: string;
-      /** @description The id of the schedule to patch. */
-      scheduleId?: string;
-      patch?: components['schemas']['SchedulePatch'];
+    readonly PatchScheduleRequest: {
       /** @description The identity of the client who initiated this request. */
-      identity?: string;
+      readonly identity?: string;
+      /** @description The namespace of the schedule to patch. */
+      readonly namespace?: string;
+      readonly patch?: components['schemas']['SchedulePatch'];
       /** @description A unique identifier for this update request for idempotence. Typically UUIDv4. */
-      requestId?: string;
+      readonly requestId?: string;
+      /** @description The id of the schedule to patch. */
+      readonly scheduleId?: string;
     };
-    PatchScheduleResponse: Record<string, never>;
+    readonly PatchScheduleResponse: Record<string, unknown>;
     /**
      * @description Represents some binary (byte array) data (ex: activity input parameters or workflow result) with
      *  metadata which describes this binary data (format, encoding, encryption, etc). Serialization
      *  of the data may be user-defined.
      */
-    Payload: unknown;
+    readonly Payload: unknown;
     /** @description See `Payload` */
-    Payloads: {
-      payloads?: components['schemas']['Payload'][];
+    readonly Payloads: {
+      readonly payloads?: readonly components['schemas']['Payload'][];
     };
-    PendingActivityInfo: {
-      activityId?: string;
-      activityType?: components['schemas']['ActivityType'];
-      /**
-       * Format: enum
-       * @enum {string}
-       */
-      state?:
-        | 'PENDING_ACTIVITY_STATE_UNSPECIFIED'
-        | 'PENDING_ACTIVITY_STATE_SCHEDULED'
-        | 'PENDING_ACTIVITY_STATE_STARTED'
-        | 'PENDING_ACTIVITY_STATE_CANCEL_REQUESTED';
-      heartbeatDetails?: components['schemas']['Payloads'];
-      /** Format: date-time */
-      lastHeartbeatTime?: string;
-      /** Format: date-time */
-      lastStartedTime?: string;
+    readonly PendingActivityInfo: {
+      readonly activityId?: string;
+      readonly activityType?: components['schemas']['ActivityType'];
       /** Format: int32 */
-      attempt?: number;
-      /** Format: int32 */
-      maximumAttempts?: number;
+      readonly attempt?: number;
       /** Format: date-time */
-      scheduledTime?: string;
+      readonly expirationTime?: string;
+      readonly heartbeatDetails?: components['schemas']['Payloads'];
+      readonly lastFailure?: components['schemas']['Failure'];
       /** Format: date-time */
-      expirationTime?: string;
-      lastFailure?: components['schemas']['Failure'];
-      lastWorkerIdentity?: string;
+      readonly lastHeartbeatTime?: string;
       /**
        * @description This means the activity is independently versioned and not bound to the build ID of its workflow.
        *  The activity will use the build id in this field instead.
        *  If the task fails and is scheduled again, the assigned build ID may change according to the latest versioning
        *  rules.
        */
-      lastIndependentlyAssignedBuildId?: string;
+      readonly lastIndependentlyAssignedBuildId?: string;
+      /** Format: date-time */
+      readonly lastStartedTime?: string;
+      readonly lastWorkerIdentity?: string;
       /** @description The version stamp of the worker to whom this activity was most recently dispatched */
-      lastWorkerVersionStamp?: components['schemas']['WorkerVersionStamp'];
+      readonly lastWorkerVersionStamp?: components['schemas']['WorkerVersionStamp'];
+      /** Format: int32 */
+      readonly maximumAttempts?: number;
+      /** Format: date-time */
+      readonly scheduledTime?: string;
+      /**
+       * Format: enum
+       * @enum {string}
+       */
+      readonly state?:
+        | 'PENDING_ACTIVITY_STATE_UNSPECIFIED'
+        | 'PENDING_ACTIVITY_STATE_SCHEDULED'
+        | 'PENDING_ACTIVITY_STATE_STARTED'
+        | 'PENDING_ACTIVITY_STATE_CANCEL_REQUESTED';
     };
-    PendingChildExecutionInfo: {
-      workflowId?: string;
-      runId?: string;
-      workflowTypeName?: string;
-      initiatedId?: string;
+    readonly PendingChildExecutionInfo: {
+      readonly initiatedId?: string;
       /**
        * Format: enum
        * @description Default: PARENT_CLOSE_POLICY_TERMINATE.
        * @enum {string}
        */
-      parentClosePolicy?:
+      readonly parentClosePolicy?:
         | 'PARENT_CLOSE_POLICY_UNSPECIFIED'
         | 'PARENT_CLOSE_POLICY_TERMINATE'
         | 'PARENT_CLOSE_POLICY_ABANDON'
         | 'PARENT_CLOSE_POLICY_REQUEST_CANCEL';
+      readonly runId?: string;
+      readonly workflowId?: string;
+      readonly workflowTypeName?: string;
     };
     /** @description PendingNexusOperationInfo contains the state of a pending Nexus operation. */
-    PendingNexusOperationInfo: {
+    readonly PendingNexusOperationInfo: {
+      /**
+       * Format: int32
+       * @description The number of attempts made to deliver the start operation request.
+       *  This number represents a minimum bound since the attempt is incremented after the request completes.
+       */
+      readonly attempt?: number;
+      readonly cancellationInfo?: components['schemas']['NexusOperationCancellationInfo'];
       /**
        * @description Endpoint name.
        *  Resolved to a URL via the cluster's endpoint registry.
        */
-      endpoint?: string;
-      /** @description Service name. */
-      service?: string;
+      readonly endpoint?: string;
+      /**
+       * Format: date-time
+       * @description The time when the last attempt completed.
+       */
+      readonly lastAttemptCompleteTime?: string;
+      /** @description The last attempt's failure, if any. */
+      readonly lastAttemptFailure?: components['schemas']['Failure'];
+      /**
+       * Format: date-time
+       * @description The time when the next attempt is scheduled.
+       */
+      readonly nextAttemptScheduleTime?: string;
       /** @description Operation name. */
-      operation?: string;
+      readonly operation?: string;
       /** @description Operation ID. Only set for asynchronous operations after a successful StartOperation call. */
-      operationId?: string;
+      readonly operationId?: string;
+      /**
+       * @description The event ID of the NexusOperationScheduled event. Can be used to correlate an operation in the
+       *  DescribeWorkflowExecution response with workflow history.
+       */
+      readonly scheduledEventId?: string;
+      /**
+       * Format: date-time
+       * @description The time when the operation was scheduled.
+       */
+      readonly scheduledTime?: string;
       /**
        * @description Schedule-to-close timeout for this operation.
        *  This is the only timeout settable by a workflow.
        *  (-- api-linter: core::0140::prepositions=disabled
        *      aip.dev/not-precedent: "to" is used to indicate interval. --)
        */
-      scheduleToCloseTimeout?: string;
-      /**
-       * Format: date-time
-       * @description The time when the operation was scheduled.
-       */
-      scheduledTime?: string;
+      readonly scheduleToCloseTimeout?: string;
+      /** @description Service name. */
+      readonly service?: string;
       /**
        * Format: enum
        * @enum {string}
        */
-      state?:
+      readonly state?:
         | 'PENDING_NEXUS_OPERATION_STATE_UNSPECIFIED'
         | 'PENDING_NEXUS_OPERATION_STATE_SCHEDULED'
         | 'PENDING_NEXUS_OPERATION_STATE_BACKING_OFF'
         | 'PENDING_NEXUS_OPERATION_STATE_STARTED';
-      /**
-       * Format: int32
-       * @description The number of attempts made to deliver the start operation request.
-       *  This number represents a minimum bound since the attempt is incremented after the request completes.
-       */
-      attempt?: number;
-      /**
-       * Format: date-time
-       * @description The time when the last attempt completed.
-       */
-      lastAttemptCompleteTime?: string;
-      /** @description The last attempt's failure, if any. */
-      lastAttemptFailure?: components['schemas']['Failure'];
-      /**
-       * Format: date-time
-       * @description The time when the next attempt is scheduled.
-       */
-      nextAttemptScheduleTime?: string;
-      cancellationInfo?: components['schemas']['NexusOperationCancellationInfo'];
-      /**
-       * @description The event ID of the NexusOperationScheduled event. Can be used to correlate an operation in the
-       *  DescribeWorkflowExecution response with workflow history.
-       */
-      scheduledEventId?: string;
     };
-    PendingWorkflowTaskInfo: {
-      /**
-       * Format: enum
-       * @enum {string}
-       */
-      state?:
-        | 'PENDING_WORKFLOW_TASK_STATE_UNSPECIFIED'
-        | 'PENDING_WORKFLOW_TASK_STATE_SCHEDULED'
-        | 'PENDING_WORKFLOW_TASK_STATE_STARTED';
-      /** Format: date-time */
-      scheduledTime?: string;
+    readonly PendingWorkflowTaskInfo: {
+      /** Format: int32 */
+      readonly attempt?: number;
       /**
        * Format: date-time
        * @description original_scheduled_time is the scheduled time of the first workflow task during workflow task heartbeat.
@@ -2696,37 +2695,38 @@ export interface components {
        *  In this case, OriginalScheduledTime won't change. Then when current time - original_scheduled_time exceeds
        *  some threshold, the workflow task will be forced timeout.
        */
-      originalScheduledTime?: string;
+      readonly originalScheduledTime?: string;
       /** Format: date-time */
-      startedTime?: string;
-      /** Format: int32 */
-      attempt?: number;
+      readonly scheduledTime?: string;
+      /** Format: date-time */
+      readonly startedTime?: string;
+      /**
+       * Format: enum
+       * @enum {string}
+       */
+      readonly state?:
+        | 'PENDING_WORKFLOW_TASK_STATE_UNSPECIFIED'
+        | 'PENDING_WORKFLOW_TASK_STATE_SCHEDULED'
+        | 'PENDING_WORKFLOW_TASK_STATE_STARTED';
     };
-    PollWorkflowTaskQueueResponse: {
+    readonly PollerInfo: {
+      readonly identity?: string;
+      /** Format: date-time */
+      readonly lastAccessTime?: string;
+      /** Format: double */
+      readonly ratePerSecond?: number;
       /**
-       * Format: bytes
-       * @description A unique identifier for this task
+       * @description If a worker has opted into the worker versioning feature while polling, its capabilities will
+       *  appear here.
        */
-      taskToken?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
-      workflowType?: components['schemas']['WorkflowType'];
-      /**
-       * @description The last workflow task started event which was processed by some worker for this execution.
-       *  Will be zero if no task has ever started.
-       */
-      previousStartedEventId?: string;
-      /**
-       * @description The id of the most recent workflow task started event, which will have been generated as a
-       *  result of this poll request being served. Will be zero if the task
-       *  does not contain any events which would advance history (no new WFT started).
-       *  Currently this can happen for queries.
-       */
-      startedEventId?: string;
+      readonly workerVersionCapabilities?: components['schemas']['WorkerVersionCapabilities'];
+    };
+    readonly PollWorkflowTaskQueueResponse: {
       /**
        * Format: int32
        * @description Starting at 1, the number of attempts to complete this task by any worker.
        */
-      attempt?: number;
+      readonly attempt?: number;
       /**
        * @description A hint that there are more tasks already present in this task queue
        *  partition. Can be used to prioritize draining a sticky queue.
@@ -2739,69 +2739,76 @@ export interface components {
        *  overall backlog. Subsequent RPCs may not hit the same partition as
        *  this call.
        */
-      backlogCountHint?: string;
+      readonly backlogCountHint?: string;
       /**
        * @description The history for this workflow, which will either be complete or partial. Partial histories
        *  are sent to workers who have signaled that they are using a sticky queue when completing
        *  a workflow task.
        */
-      history?: components['schemas']['History'];
+      readonly history?: components['schemas']['History'];
+      /** @description Protocol messages piggybacking on a WFT as a transport */
+      readonly messages?: readonly components['schemas']['Message'][];
       /**
        * Format: bytes
        * @description Will be set if there are more history events than were included in this response. Such events
        *  should be fetched via `GetWorkflowExecutionHistory`.
        */
-      nextPageToken?: string;
+      readonly nextPageToken?: string;
+      /**
+       * @description The last workflow task started event which was processed by some worker for this execution.
+       *  Will be zero if no task has ever started.
+       */
+      readonly previousStartedEventId?: string;
+      /**
+       * @description Queries that should be executed after applying the history in this task. Responses should be
+       *  attached to `RespondWorkflowTaskCompletedRequest::query_results`
+       */
+      readonly queries?: {
+        [key: string]: components['schemas']['WorkflowQuery'];
+      };
       /**
        * @description Legacy queries appear in this field. The query must be responded to via
        *  `RespondQueryTaskCompleted`. If the workflow is already closed (queries are permitted on
        *  closed workflows) then the `history` field will be populated with the entire history. It
        *  may also be populated if this task originates on a non-sticky queue.
        */
-      query?: components['schemas']['WorkflowQuery'];
-      /**
-       * @description The task queue this task originated from, which will always be the original non-sticky name
-       *  for the queue, even if this response came from polling a sticky queue.
-       */
-      workflowExecutionTaskQueue?: components['schemas']['TaskQueue'];
+      readonly query?: components['schemas']['WorkflowQuery'];
       /**
        * Format: date-time
        * @description When this task was scheduled by the server
        */
-      scheduledTime?: string;
+      readonly scheduledTime?: string;
+      /**
+       * @description The id of the most recent workflow task started event, which will have been generated as a
+       *  result of this poll request being served. Will be zero if the task
+       *  does not contain any events which would advance history (no new WFT started).
+       *  Currently this can happen for queries.
+       */
+      readonly startedEventId?: string;
       /**
        * Format: date-time
        * @description When the current workflow task started event was generated, meaning the current attempt.
        */
-      startedTime?: string;
+      readonly startedTime?: string;
       /**
-       * @description Queries that should be executed after applying the history in this task. Responses should be
-       *  attached to `RespondWorkflowTaskCompletedRequest::query_results`
+       * Format: bytes
+       * @description A unique identifier for this task
        */
-      queries?: {
-        [key: string]: components['schemas']['WorkflowQuery'];
-      };
-      /** @description Protocol messages piggybacking on a WFT as a transport */
-      messages?: components['schemas']['Message'][];
-    };
-    PollerInfo: {
-      /** Format: date-time */
-      lastAccessTime?: string;
-      identity?: string;
-      /** Format: double */
-      ratePerSecond?: number;
+      readonly taskToken?: string;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
       /**
-       * @description If a worker has opted into the worker versioning feature while polling, its capabilities will
-       *  appear here.
+       * @description The task queue this task originated from, which will always be the original non-sticky name
+       *  for the queue, even if this response came from polling a sticky queue.
        */
-      workerVersionCapabilities?: components['schemas']['WorkerVersionCapabilities'];
+      readonly workflowExecutionTaskQueue?: components['schemas']['TaskQueue'];
+      readonly workflowType?: components['schemas']['WorkflowType'];
     };
-    QueryRejected: {
+    readonly QueryRejected: {
       /**
        * Format: enum
        * @enum {string}
        */
-      status?:
+      readonly status?:
         | 'WORKFLOW_EXECUTION_STATUS_UNSPECIFIED'
         | 'WORKFLOW_EXECUTION_STATUS_RUNNING'
         | 'WORKFLOW_EXECUTION_STATUS_COMPLETED'
@@ -2811,32 +2818,32 @@ export interface components {
         | 'WORKFLOW_EXECUTION_STATUS_CONTINUED_AS_NEW'
         | 'WORKFLOW_EXECUTION_STATUS_TIMED_OUT';
     };
-    QueryWorkflowRequest: {
-      namespace?: string;
-      execution?: components['schemas']['WorkflowExecution'];
-      query?: components['schemas']['WorkflowQuery'];
+    readonly QueryWorkflowRequest: {
+      readonly execution?: components['schemas']['WorkflowExecution'];
+      readonly namespace?: string;
+      readonly query?: components['schemas']['WorkflowQuery'];
       /**
        * Format: enum
        * @description QueryRejectCondition can used to reject the query if workflow state does not satisfy condition.
        *  Default: QUERY_REJECT_CONDITION_NONE.
        * @enum {string}
        */
-      queryRejectCondition?:
+      readonly queryRejectCondition?:
         | 'QUERY_REJECT_CONDITION_UNSPECIFIED'
         | 'QUERY_REJECT_CONDITION_NONE'
         | 'QUERY_REJECT_CONDITION_NOT_OPEN'
         | 'QUERY_REJECT_CONDITION_NOT_COMPLETED_CLEANLY';
     };
-    QueryWorkflowResponse: {
-      queryResult?: components['schemas']['Payloads'];
-      queryRejected?: components['schemas']['QueryRejected'];
+    readonly QueryWorkflowResponse: {
+      readonly queryRejected?: components['schemas']['QueryRejected'];
+      readonly queryResult?: components['schemas']['Payloads'];
     };
-    RampByPercentage: {
+    readonly RampByPercentage: {
       /**
        * Format: float
        * @description Acceptable range is [0,100).
        */
-      rampPercentage?: number;
+      readonly rampPercentage?: number;
     };
     /**
      * @description Range represents a set of integer values, used to match fields of a calendar
@@ -2844,184 +2851,178 @@ export interface components {
      *  equal to start. This means you can use a Range with start set to a value, and
      *  end and step unset (defaulting to 0) to represent a single value.
      */
-    Range: {
-      /**
-       * Format: int32
-       * @description Start of range (inclusive).
-       */
-      start?: number;
+    readonly Range: {
       /**
        * Format: int32
        * @description End of range (inclusive).
        */
-      end?: number;
+      readonly end?: number;
+      /**
+       * Format: int32
+       * @description Start of range (inclusive).
+       */
+      readonly start?: number;
       /**
        * Format: int32
        * @description Step (optional, default 1).
        */
-      step?: number;
+      readonly step?: number;
     };
-    RecordActivityTaskHeartbeatByIdRequest: {
-      /** @description Namespace of the workflow which scheduled this activity */
-      namespace?: string;
-      /** @description Id of the workflow which scheduled this activity */
-      workflowId?: string;
-      /** @description Run Id of the workflow which scheduled this activity */
-      runId?: string;
+    readonly RecordActivityTaskHeartbeatByIdRequest: {
       /** @description Id of the activity we're heartbeating */
-      activityId?: string;
+      readonly activityId?: string;
       /** @description Arbitrary data, of which the most recent call is kept, to store for this activity */
-      details?: components['schemas']['Payloads'];
+      readonly details?: components['schemas']['Payloads'];
       /** @description The identity of the worker/client */
-      identity?: string;
+      readonly identity?: string;
+      /** @description Namespace of the workflow which scheduled this activity */
+      readonly namespace?: string;
+      /** @description Run Id of the workflow which scheduled this activity */
+      readonly runId?: string;
+      /** @description Id of the workflow which scheduled this activity */
+      readonly workflowId?: string;
     };
-    RecordActivityTaskHeartbeatByIdResponse: {
+    readonly RecordActivityTaskHeartbeatByIdResponse: {
       /**
        * @description Will be set to true if the activity has been asked to cancel itself. The SDK should then
        *  notify the activity of cancellation if it is still running.
        */
-      cancelRequested?: boolean;
+      readonly cancelRequested?: boolean;
     };
-    RecordActivityTaskHeartbeatRequest: {
+    readonly RecordActivityTaskHeartbeatRequest: {
+      /** @description Arbitrary data, of which the most recent call is kept, to store for this activity */
+      readonly details?: components['schemas']['Payloads'];
+      /** @description The identity of the worker/client */
+      readonly identity?: string;
+      readonly namespace?: string;
       /**
        * Format: bytes
        * @description The task token as received in `PollActivityTaskQueueResponse`
        */
-      taskToken?: string;
-      /** @description Arbitrary data, of which the most recent call is kept, to store for this activity */
-      details?: components['schemas']['Payloads'];
-      /** @description The identity of the worker/client */
-      identity?: string;
-      namespace?: string;
+      readonly taskToken?: string;
     };
-    RecordActivityTaskHeartbeatResponse: {
+    readonly RecordActivityTaskHeartbeatResponse: {
       /**
        * @description Will be set to true if the activity has been asked to cancel itself. The SDK should then
        *  notify the activity of cancellation if it is still running.
        */
-      cancelRequested?: boolean;
+      readonly cancelRequested?: boolean;
     };
-    RegisterNamespaceRequest: {
-      namespace?: string;
-      description?: string;
-      ownerEmail?: string;
-      workflowExecutionRetentionPeriod?: string;
-      clusters?: components['schemas']['ClusterReplicationConfig'][];
-      activeClusterName?: string;
+    readonly RegisterNamespaceRequest: {
+      readonly activeClusterName?: string;
+      readonly clusters?: readonly components['schemas']['ClusterReplicationConfig'][];
       /** @description A key-value map for any customized purpose. */
-      data?: {
+      readonly data?: {
         [key: string]: string;
       };
-      securityToken?: string;
-      isGlobalNamespace?: boolean;
+      readonly description?: string;
       /**
        * Format: enum
        * @description If unspecified (ARCHIVAL_STATE_UNSPECIFIED) then default server configuration is used.
        * @enum {string}
        */
-      historyArchivalState?:
+      readonly historyArchivalState?:
         | 'ARCHIVAL_STATE_UNSPECIFIED'
         | 'ARCHIVAL_STATE_DISABLED'
         | 'ARCHIVAL_STATE_ENABLED';
-      historyArchivalUri?: string;
+      readonly historyArchivalUri?: string;
+      readonly isGlobalNamespace?: boolean;
+      readonly namespace?: string;
+      readonly ownerEmail?: string;
+      readonly securityToken?: string;
       /**
        * Format: enum
        * @description If unspecified (ARCHIVAL_STATE_UNSPECIFIED) then default server configuration is used.
        * @enum {string}
        */
-      visibilityArchivalState?:
+      readonly visibilityArchivalState?:
         | 'ARCHIVAL_STATE_UNSPECIFIED'
         | 'ARCHIVAL_STATE_DISABLED'
         | 'ARCHIVAL_STATE_ENABLED';
-      visibilityArchivalUri?: string;
+      readonly visibilityArchivalUri?: string;
+      readonly workflowExecutionRetentionPeriod?: string;
     };
-    RegisterNamespaceResponse: Record<string, never>;
+    readonly RegisterNamespaceResponse: Record<string, unknown>;
     /** @description ReleaseInfo contains information about specific version of temporal. */
-    ReleaseInfo: {
-      version?: string;
+    readonly ReleaseInfo: {
+      readonly notes?: string;
       /** Format: date-time */
-      releaseTime?: string;
-      notes?: string;
+      readonly releaseTime?: string;
+      readonly version?: string;
     };
     /** @description The client request that triggers a Workflow Update. */
-    Request: {
-      meta?: components['schemas']['Meta'];
-      input?: components['schemas']['Input'];
+    readonly Request: {
+      readonly input?: components['schemas']['Input'];
+      readonly meta?: components['schemas']['Meta'];
     };
-    RequestCancelExternalWorkflowExecutionFailedEventAttributes: {
+    readonly RequestCancelExternalWorkflowExecutionFailedEventAttributes: {
       /**
        * Format: enum
        * @enum {string}
        */
-      cause?:
+      readonly cause?:
         | 'CANCEL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_UNSPECIFIED'
         | 'CANCEL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_EXTERNAL_WORKFLOW_EXECUTION_NOT_FOUND'
         | 'CANCEL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_NAMESPACE_NOT_FOUND';
-      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
-      workflowTaskCompletedEventId?: string;
-      /**
-       * @description Namespace of the workflow which failed to cancel.
-       *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
-       */
-      namespace?: string;
-      namespaceId?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
+      /** @description Deprecated */
+      readonly control?: string;
       /**
        * @description id of the `REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_INITIATED` event this failure
        *  corresponds to
        */
-      initiatedEventId?: string;
-      /** @description Deprecated */
-      control?: string;
-    };
-    RequestCancelExternalWorkflowExecutionInitiatedEventAttributes: {
-      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
-      workflowTaskCompletedEventId?: string;
+      readonly initiatedEventId?: string;
       /**
-       * @description The namespace the workflow to be cancelled lives in.
+       * @description Namespace of the workflow which failed to cancel.
        *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
        */
-      namespace?: string;
-      namespaceId?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
-      /** @description Deprecated */
-      control?: string;
+      readonly namespace?: string;
+      readonly namespaceId?: string;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
+      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
+      readonly workflowTaskCompletedEventId?: string;
+    };
+    readonly RequestCancelExternalWorkflowExecutionInitiatedEventAttributes: {
       /**
        * @description Workers are expected to set this to true if the workflow they are requesting to cancel is
        *  a child of the workflow which issued the request
        */
-      childWorkflowOnly?: boolean;
+      readonly childWorkflowOnly?: boolean;
+      /** @description Deprecated */
+      readonly control?: string;
+      /**
+       * @description The namespace the workflow to be cancelled lives in.
+       *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
+       */
+      readonly namespace?: string;
+      readonly namespaceId?: string;
       /** @description Reason for requesting the cancellation */
-      reason?: string;
+      readonly reason?: string;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
+      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
+      readonly workflowTaskCompletedEventId?: string;
     };
-    RequestCancelWorkflowExecutionRequest: {
-      namespace?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
-      /** @description The identity of the worker/client */
-      identity?: string;
-      /** @description Used to de-dupe cancellation requests */
-      requestId?: string;
+    readonly RequestCancelWorkflowExecutionRequest: {
       /**
        * @description If set, this call will error if the most recent (if no run id is set on
        *  `workflow_execution`), or specified (if it is) workflow execution is not part of the same
        *  execution chain as this id.
        */
-      firstExecutionRunId?: string;
+      readonly firstExecutionRunId?: string;
+      /** @description The identity of the worker/client */
+      readonly identity?: string;
+      readonly namespace?: string;
       /** @description Reason for requesting the cancellation */
-      reason?: string;
+      readonly reason?: string;
+      /** @description Used to de-dupe cancellation requests */
+      readonly requestId?: string;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
     };
-    RequestCancelWorkflowExecutionResponse: Record<string, never>;
+    readonly RequestCancelWorkflowExecutionResponse: Record<string, unknown>;
     /**
      * @description Describes where and how to reset a workflow, used for batch reset currently
      *  and may be used for single-workflow reset later.
      */
-    ResetOptions: {
-      /**
-       * @description The id of a specific `WORKFLOW_TASK_COMPLETED`,`WORKFLOW_TASK_TIMED_OUT`, `WORKFLOW_TASK_FAILED`, or
-       *  `WORKFLOW_TASK_STARTED` event to reset to.
-       *  Note that this option doesn't make sense when used as part of a batch request.
-       */
-      workflowTaskId?: string;
+    readonly ResetOptions: {
       /**
        * @description Resets to the first workflow task processed by this build id.
        *  If the workflow was not processed by the build id, or the workflow task can't be
@@ -3029,247 +3030,253 @@ export interface components {
        *  Note that by default, this reset is allowed to be to a prior run in a chain of
        *  continue-as-new.
        */
-      buildId?: string;
+      readonly buildId?: string;
+      /**
+       * @description If true, limit the reset to only within the current run. (Applies to build_id targets and
+       *  possibly others in the future.)
+       */
+      readonly currentRunOnly?: boolean;
+      /** @description Event types not to be reapplied */
+      readonly resetReapplyExcludeTypes?: readonly (
+        | 'RESET_REAPPLY_EXCLUDE_TYPE_UNSPECIFIED'
+        | 'RESET_REAPPLY_EXCLUDE_TYPE_SIGNAL'
+        | 'RESET_REAPPLY_EXCLUDE_TYPE_UPDATE'
+      )[];
       /**
        * Format: enum
        * @description Event types to be reapplied (deprecated)
        *  Default: RESET_REAPPLY_TYPE_SIGNAL
        * @enum {string}
        */
-      resetReapplyType?:
+      readonly resetReapplyType?:
         | 'RESET_REAPPLY_TYPE_UNSPECIFIED'
         | 'RESET_REAPPLY_TYPE_SIGNAL'
         | 'RESET_REAPPLY_TYPE_NONE'
         | 'RESET_REAPPLY_TYPE_ALL_ELIGIBLE';
       /**
-       * @description If true, limit the reset to only within the current run. (Applies to build_id targets and
-       *  possibly others in the future.)
+       * @description The id of a specific `WORKFLOW_TASK_COMPLETED`,`WORKFLOW_TASK_TIMED_OUT`, `WORKFLOW_TASK_FAILED`, or
+       *  `WORKFLOW_TASK_STARTED` event to reset to.
+       *  Note that this option doesn't make sense when used as part of a batch request.
        */
-      currentRunOnly?: boolean;
-      /** @description Event types not to be reapplied */
-      resetReapplyExcludeTypes?: (
-        | 'RESET_REAPPLY_EXCLUDE_TYPE_UNSPECIFIED'
-        | 'RESET_REAPPLY_EXCLUDE_TYPE_SIGNAL'
-        | 'RESET_REAPPLY_EXCLUDE_TYPE_UPDATE'
-      )[];
+      readonly workflowTaskId?: string;
     };
     /**
      * @description ResetPointInfo records the workflow event id that is the first one processed by a given
      *  build id or binary checksum. A new reset point will be created if either build id or binary
      *  checksum changes (although in general only one or the other will be used at a time).
      */
-    ResetPointInfo: {
-      /** @description Worker build id. */
-      buildId?: string;
+    readonly ResetPointInfo: {
       /** @description A worker binary version identifier (deprecated). */
-      binaryChecksum?: string;
-      /** @description The first run ID in the execution chain that was touched by this worker build. */
-      runId?: string;
-      /** @description Event ID of the first WorkflowTaskCompleted event processed by this worker build. */
-      firstWorkflowTaskCompletedId?: string;
+      readonly binaryChecksum?: string;
+      /** @description Worker build id. */
+      readonly buildId?: string;
       /** Format: date-time */
-      createTime?: string;
+      readonly createTime?: string;
       /**
        * Format: date-time
        * @description (-- api-linter: core::0214::resource-expiry=disabled
        *      aip.dev/not-precedent: TTL is not defined for ResetPointInfo. --)
        *  The time that the run is deleted due to retention.
        */
-      expireTime?: string;
+      readonly expireTime?: string;
+      /** @description Event ID of the first WorkflowTaskCompleted event processed by this worker build. */
+      readonly firstWorkflowTaskCompletedId?: string;
       /** @description false if the reset point has pending childWFs/reqCancels/signalExternals. */
-      resettable?: boolean;
+      readonly resettable?: boolean;
+      /** @description The first run ID in the execution chain that was touched by this worker build. */
+      readonly runId?: string;
     };
-    ResetPoints: {
-      points?: components['schemas']['ResetPointInfo'][];
+    readonly ResetPoints: {
+      readonly points?: readonly components['schemas']['ResetPointInfo'][];
     };
-    ResetWorkflowExecutionRequest: {
-      namespace?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
-      reason?: string;
-      /**
-       * @description The id of a `WORKFLOW_TASK_COMPLETED`,`WORKFLOW_TASK_TIMED_OUT`, `WORKFLOW_TASK_FAILED`, or
-       *  `WORKFLOW_TASK_STARTED` event to reset to.
-       */
-      workflowTaskFinishEventId?: string;
+    readonly ResetWorkflowExecutionRequest: {
+      readonly namespace?: string;
+      readonly reason?: string;
       /** @description Used to de-dupe reset requests */
-      requestId?: string;
+      readonly requestId?: string;
+      /** @description Event types not to be reapplied */
+      readonly resetReapplyExcludeTypes?: readonly (
+        | 'RESET_REAPPLY_EXCLUDE_TYPE_UNSPECIFIED'
+        | 'RESET_REAPPLY_EXCLUDE_TYPE_SIGNAL'
+        | 'RESET_REAPPLY_EXCLUDE_TYPE_UPDATE'
+      )[];
       /**
        * Format: enum
        * @description Event types to be reapplied (deprecated)
        *  Default: RESET_REAPPLY_TYPE_SIGNAL
        * @enum {string}
        */
-      resetReapplyType?:
+      readonly resetReapplyType?:
         | 'RESET_REAPPLY_TYPE_UNSPECIFIED'
         | 'RESET_REAPPLY_TYPE_SIGNAL'
         | 'RESET_REAPPLY_TYPE_NONE'
         | 'RESET_REAPPLY_TYPE_ALL_ELIGIBLE';
-      /** @description Event types not to be reapplied */
-      resetReapplyExcludeTypes?: (
-        | 'RESET_REAPPLY_EXCLUDE_TYPE_UNSPECIFIED'
-        | 'RESET_REAPPLY_EXCLUDE_TYPE_SIGNAL'
-        | 'RESET_REAPPLY_EXCLUDE_TYPE_UPDATE'
-      )[];
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
+      /**
+       * @description The id of a `WORKFLOW_TASK_COMPLETED`,`WORKFLOW_TASK_TIMED_OUT`, `WORKFLOW_TASK_FAILED`, or
+       *  `WORKFLOW_TASK_STARTED` event to reset to.
+       */
+      readonly workflowTaskFinishEventId?: string;
     };
-    ResetWorkflowExecutionResponse: {
-      runId?: string;
+    readonly ResetWorkflowExecutionResponse: {
+      readonly runId?: string;
     };
-    ResetWorkflowFailureInfo: {
-      lastHeartbeatDetails?: components['schemas']['Payloads'];
+    readonly ResetWorkflowFailureInfo: {
+      readonly lastHeartbeatDetails?: components['schemas']['Payloads'];
     };
-    RespondActivityTaskCanceledByIdRequest: {
-      /** @description Namespace of the workflow which scheduled this activity */
-      namespace?: string;
-      /** @description Id of the workflow which scheduled this activity */
-      workflowId?: string;
-      /** @description Run Id of the workflow which scheduled this activity */
-      runId?: string;
+    readonly RespondActivityTaskCanceledByIdRequest: {
       /** @description Id of the activity to confirm is cancelled */
-      activityId?: string;
+      readonly activityId?: string;
       /** @description Serialized additional information to attach to the cancellation */
-      details?: components['schemas']['Payloads'];
+      readonly details?: components['schemas']['Payloads'];
       /** @description The identity of the worker/client */
-      identity?: string;
+      readonly identity?: string;
+      /** @description Namespace of the workflow which scheduled this activity */
+      readonly namespace?: string;
+      /** @description Run Id of the workflow which scheduled this activity */
+      readonly runId?: string;
+      /** @description Id of the workflow which scheduled this activity */
+      readonly workflowId?: string;
     };
-    RespondActivityTaskCanceledByIdResponse: Record<string, never>;
-    RespondActivityTaskCanceledRequest: {
+    readonly RespondActivityTaskCanceledByIdResponse: Record<string, unknown>;
+    readonly RespondActivityTaskCanceledRequest: {
+      /** @description Serialized additional information to attach to the cancellation */
+      readonly details?: components['schemas']['Payloads'];
+      /** @description The identity of the worker/client */
+      readonly identity?: string;
+      readonly namespace?: string;
       /**
        * Format: bytes
        * @description The task token as received in `PollActivityTaskQueueResponse`
        */
-      taskToken?: string;
-      /** @description Serialized additional information to attach to the cancellation */
-      details?: components['schemas']['Payloads'];
-      /** @description The identity of the worker/client */
-      identity?: string;
-      namespace?: string;
+      readonly taskToken?: string;
       /**
        * @description Version info of the worker who processed this task. This message's `build_id` field should
        *  always be set by SDKs. Workers opting into versioning will also set the `use_versioning`
        *  field to true. See message docstrings for more.
        */
-      workerVersion?: components['schemas']['WorkerVersionStamp'];
+      readonly workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
-    RespondActivityTaskCanceledResponse: Record<string, never>;
-    RespondActivityTaskCompletedByIdRequest: {
-      /** @description Namespace of the workflow which scheduled this activity */
-      namespace?: string;
-      /** @description Id of the workflow which scheduled this activity */
-      workflowId?: string;
-      /** @description Run Id of the workflow which scheduled this activity */
-      runId?: string;
+    readonly RespondActivityTaskCanceledResponse: Record<string, unknown>;
+    readonly RespondActivityTaskCompletedByIdRequest: {
       /** @description Id of the activity to complete */
-      activityId?: string;
-      /** @description The serialized result of activity execution */
-      result?: components['schemas']['Payloads'];
+      readonly activityId?: string;
       /** @description The identity of the worker/client */
-      identity?: string;
-    };
-    RespondActivityTaskCompletedByIdResponse: Record<string, never>;
-    RespondActivityTaskCompletedRequest: {
-      /**
-       * Format: bytes
-       * @description The task token as received in `PollActivityTaskQueueResponse`
-       */
-      taskToken?: string;
-      /** @description The result of successfully executing the activity */
-      result?: components['schemas']['Payloads'];
-      /** @description The identity of the worker/client */
-      identity?: string;
-      namespace?: string;
-      /**
-       * @description Version info of the worker who processed this task. This message's `build_id` field should
-       *  always be set by SDKs. Workers opting into versioning will also set the `use_versioning`
-       *  field to true. See message docstrings for more.
-       */
-      workerVersion?: components['schemas']['WorkerVersionStamp'];
-    };
-    RespondActivityTaskCompletedResponse: Record<string, never>;
-    RespondActivityTaskFailedByIdRequest: {
+      readonly identity?: string;
       /** @description Namespace of the workflow which scheduled this activity */
-      namespace?: string;
-      /** @description Id of the workflow which scheduled this activity */
-      workflowId?: string;
+      readonly namespace?: string;
+      /** @description The serialized result of activity execution */
+      readonly result?: components['schemas']['Payloads'];
       /** @description Run Id of the workflow which scheduled this activity */
-      runId?: string;
-      /** @description Id of the activity to fail */
-      activityId?: string;
-      /** @description Detailed failure information */
-      failure?: components['schemas']['Failure'];
+      readonly runId?: string;
+      /** @description Id of the workflow which scheduled this activity */
+      readonly workflowId?: string;
+    };
+    readonly RespondActivityTaskCompletedByIdResponse: Record<string, unknown>;
+    readonly RespondActivityTaskCompletedRequest: {
       /** @description The identity of the worker/client */
-      identity?: string;
-      /** @description Additional details to be stored as last activity heartbeat */
-      lastHeartbeatDetails?: components['schemas']['Payloads'];
-    };
-    RespondActivityTaskFailedByIdResponse: {
-      /**
-       * @description Server validation failures could include
-       *  last_heartbeat_details payload is too large, request failure is too large
-       */
-      failures?: components['schemas']['Failure'][];
-    };
-    RespondActivityTaskFailedRequest: {
+      readonly identity?: string;
+      readonly namespace?: string;
+      /** @description The result of successfully executing the activity */
+      readonly result?: components['schemas']['Payloads'];
       /**
        * Format: bytes
        * @description The task token as received in `PollActivityTaskQueueResponse`
        */
-      taskToken?: string;
-      /** @description Detailed failure information */
-      failure?: components['schemas']['Failure'];
-      /** @description The identity of the worker/client */
-      identity?: string;
-      namespace?: string;
-      /** @description Additional details to be stored as last activity heartbeat */
-      lastHeartbeatDetails?: components['schemas']['Payloads'];
+      readonly taskToken?: string;
       /**
        * @description Version info of the worker who processed this task. This message's `build_id` field should
        *  always be set by SDKs. Workers opting into versioning will also set the `use_versioning`
        *  field to true. See message docstrings for more.
        */
-      workerVersion?: components['schemas']['WorkerVersionStamp'];
+      readonly workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
-    RespondActivityTaskFailedResponse: {
+    readonly RespondActivityTaskCompletedResponse: Record<string, unknown>;
+    readonly RespondActivityTaskFailedByIdRequest: {
+      /** @description Id of the activity to fail */
+      readonly activityId?: string;
+      /** @description Detailed failure information */
+      readonly failure?: components['schemas']['Failure'];
+      /** @description The identity of the worker/client */
+      readonly identity?: string;
+      /** @description Additional details to be stored as last activity heartbeat */
+      readonly lastHeartbeatDetails?: components['schemas']['Payloads'];
+      /** @description Namespace of the workflow which scheduled this activity */
+      readonly namespace?: string;
+      /** @description Run Id of the workflow which scheduled this activity */
+      readonly runId?: string;
+      /** @description Id of the workflow which scheduled this activity */
+      readonly workflowId?: string;
+    };
+    readonly RespondActivityTaskFailedByIdResponse: {
       /**
        * @description Server validation failures could include
        *  last_heartbeat_details payload is too large, request failure is too large
        */
-      failures?: components['schemas']['Failure'][];
+      readonly failures?: readonly components['schemas']['Failure'][];
+    };
+    readonly RespondActivityTaskFailedRequest: {
+      /** @description Detailed failure information */
+      readonly failure?: components['schemas']['Failure'];
+      /** @description The identity of the worker/client */
+      readonly identity?: string;
+      /** @description Additional details to be stored as last activity heartbeat */
+      readonly lastHeartbeatDetails?: components['schemas']['Payloads'];
+      readonly namespace?: string;
+      /**
+       * Format: bytes
+       * @description The task token as received in `PollActivityTaskQueueResponse`
+       */
+      readonly taskToken?: string;
+      /**
+       * @description Version info of the worker who processed this task. This message's `build_id` field should
+       *  always be set by SDKs. Workers opting into versioning will also set the `use_versioning`
+       *  field to true. See message docstrings for more.
+       */
+      readonly workerVersion?: components['schemas']['WorkerVersionStamp'];
+    };
+    readonly RespondActivityTaskFailedResponse: {
+      /**
+       * @description Server validation failures could include
+       *  last_heartbeat_details payload is too large, request failure is too large
+       */
+      readonly failures?: readonly components['schemas']['Failure'][];
     };
     /** @description How retries ought to be handled, usable by both workflows and activities */
-    RetryPolicy: {
-      /** @description Interval of the first retry. If retryBackoffCoefficient is 1.0 then it is used for all retries. */
-      initialInterval?: string;
+    readonly RetryPolicy: {
       /**
        * Format: double
        * @description Coefficient used to calculate the next retry interval.
        *  The next retry interval is previous interval multiplied by the coefficient.
        *  Must be 1 or larger.
        */
-      backoffCoefficient?: number;
-      /**
-       * @description Maximum interval between retries. Exponential backoff leads to interval increase.
-       *  This value is the cap of the increase. Default is 100x of the initial interval.
-       */
-      maximumInterval?: string;
+      readonly backoffCoefficient?: number;
+      /** @description Interval of the first retry. If retryBackoffCoefficient is 1.0 then it is used for all retries. */
+      readonly initialInterval?: string;
       /**
        * Format: int32
        * @description Maximum number of attempts. When exceeded the retries stop even if not expired yet.
        *  1 disables retries. 0 means unlimited (up to the timeouts)
        */
-      maximumAttempts?: number;
+      readonly maximumAttempts?: number;
+      /**
+       * @description Maximum interval between retries. Exponential backoff leads to interval increase.
+       *  This value is the cap of the increase. Default is 100x of the initial interval.
+       */
+      readonly maximumInterval?: string;
       /**
        * @description Non-Retryable errors types. Will stop retrying if the error type matches this list. Note that
        *  this is not a substring match, the error *type* (not message) must match exactly.
        */
-      nonRetryableErrorTypes?: string[];
+      readonly nonRetryableErrorTypes?: readonly string[];
     };
-    Schedule: {
-      spec?: components['schemas']['ScheduleSpec'];
-      action?: components['schemas']['ScheduleAction'];
-      policies?: components['schemas']['SchedulePolicies'];
-      state?: components['schemas']['ScheduleState'];
+    readonly Schedule: {
+      readonly action?: components['schemas']['ScheduleAction'];
+      readonly policies?: components['schemas']['SchedulePolicies'];
+      readonly spec?: components['schemas']['ScheduleSpec'];
+      readonly state?: components['schemas']['ScheduleState'];
     };
-    ScheduleAction: {
+    readonly ScheduleAction: {
       /**
        * @description All fields of NewWorkflowExecutionInfo are valid except for:
        *  - workflow_id_reuse_policy
@@ -3277,37 +3284,47 @@ export interface components {
        *  The workflow id of the started workflow may not match this exactly,
        *  it may have a timestamp appended for uniqueness.
        */
-      startWorkflow?: components['schemas']['NewWorkflowExecutionInfo'];
+      readonly startWorkflow?: components['schemas']['NewWorkflowExecutionInfo'];
     };
-    ScheduleActionResult: {
-      /**
-       * Format: date-time
-       * @description Time that the action was taken (according to the schedule, including jitter).
-       */
-      scheduleTime?: string;
+    readonly ScheduleActionResult: {
       /**
        * Format: date-time
        * @description Time that the action was taken (real time).
        */
-      actualTime?: string;
+      readonly actualTime?: string;
+      /**
+       * Format: date-time
+       * @description Time that the action was taken (according to the schedule, including jitter).
+       */
+      readonly scheduleTime?: string;
       /** @description If action was start_workflow: */
-      startWorkflowResult?: components['schemas']['WorkflowExecution'];
+      readonly startWorkflowResult?: components['schemas']['WorkflowExecution'];
     };
-    ScheduleInfo: {
+    readonly ScheduleInfo: {
       /** @description Number of actions taken so far. */
-      actionCount?: string;
-      /** @description Number of times a scheduled action was skipped due to missing the catchup window. */
-      missedCatchupWindow?: string;
-      /** @description Number of skipped actions due to overlap. */
-      overlapSkipped?: string;
+      readonly actionCount?: string;
       /** @description Number of dropped actions due to buffer limit. */
-      bufferDropped?: string;
+      readonly bufferDropped?: string;
       /**
        * @description Number of actions in the buffer. The buffer holds the actions that cannot
        *  be immediately triggered (due to the overlap policy). These actions can be a result of
        *  the normal schedule or a backfill.
        */
-      bufferSize?: string;
+      readonly bufferSize?: string;
+      /**
+       * Format: date-time
+       * @description Timestamps of schedule creation and last update.
+       */
+      readonly createTime?: string;
+      /** @description Next ten scheduled action times. */
+      readonly futureActionTimes?: readonly string[];
+      readonly invalidScheduleError?: string;
+      /** @description Number of times a scheduled action was skipped due to missing the catchup window. */
+      readonly missedCatchupWindow?: string;
+      /** @description Number of skipped actions due to overlap. */
+      readonly overlapSkipped?: string;
+      /** @description Most recent ten actual action times (including manual triggers). */
+      readonly recentActions?: readonly components['schemas']['ScheduleActionResult'][];
       /**
        * @description Currently-running workflows started by this schedule. (There might be
        *  more than one if the overlap policy allows overlaps.)
@@ -3315,67 +3332,70 @@ export interface components {
        *  started by the schedule. If the workflows retried, did continue-as-new,
        *  or were reset, they might still be running but with a different run_id.
        */
-      runningWorkflows?: components['schemas']['WorkflowExecution'][];
-      /** @description Most recent ten actual action times (including manual triggers). */
-      recentActions?: components['schemas']['ScheduleActionResult'][];
-      /** @description Next ten scheduled action times. */
-      futureActionTimes?: string[];
-      /**
-       * Format: date-time
-       * @description Timestamps of schedule creation and last update.
-       */
-      createTime?: string;
+      readonly runningWorkflows?: readonly components['schemas']['WorkflowExecution'][];
       /** Format: date-time */
-      updateTime?: string;
-      invalidScheduleError?: string;
+      readonly updateTime?: string;
     };
     /** @description ScheduleListEntry is returned by ListSchedules. */
-    ScheduleListEntry: {
-      scheduleId?: string;
-      memo?: components['schemas']['Memo'];
-      searchAttributes?: components['schemas']['SearchAttributes'];
-      info?: components['schemas']['ScheduleListInfo'];
+    readonly ScheduleListEntry: {
+      readonly info?: components['schemas']['ScheduleListInfo'];
+      readonly memo?: components['schemas']['Memo'];
+      readonly scheduleId?: string;
+      readonly searchAttributes?: components['schemas']['SearchAttributes'];
     };
     /**
      * @description ScheduleListInfo is an abbreviated set of values from Schedule and ScheduleInfo
      *  that's returned in ListSchedules.
      */
-    ScheduleListInfo: {
+    readonly ScheduleListInfo: {
+      readonly futureActionTimes?: readonly string[];
+      /** @description From state: */
+      readonly notes?: string;
+      readonly paused?: boolean;
+      /** @description From info (maybe fewer entries): */
+      readonly recentActions?: readonly components['schemas']['ScheduleActionResult'][];
       /**
        * @description From spec:
        *  Some fields are dropped from this copy of spec: timezone_data
        */
-      spec?: components['schemas']['ScheduleSpec'];
+      readonly spec?: components['schemas']['ScheduleSpec'];
       /**
        * @description From action:
        *  Action is a oneof field, but we need to encode this in JSON and oneof fields don't work
        *  well with JSON. If action is start_workflow, this is set:
        */
-      workflowType?: components['schemas']['WorkflowType'];
-      /** @description From state: */
-      notes?: string;
-      paused?: boolean;
-      /** @description From info (maybe fewer entries): */
-      recentActions?: components['schemas']['ScheduleActionResult'][];
-      futureActionTimes?: string[];
+      readonly workflowType?: components['schemas']['WorkflowType'];
     };
-    SchedulePatch: {
-      /** @description If set, trigger one action immediately. */
-      triggerImmediately?: components['schemas']['TriggerImmediatelyRequest'];
+    readonly SchedulePatch: {
       /**
        * @description If set, runs though the specified time period(s) and takes actions as if that time
        *  passed by right now, all at once. The overlap policy can be overridden for the
        *  scope of the backfill.
        */
-      backfillRequest?: components['schemas']['BackfillRequest'][];
+      readonly backfillRequest?: readonly components['schemas']['BackfillRequest'][];
       /**
        * @description If set, change the state to paused or unpaused (respectively) and set the
        *  notes field to the value of the string.
        */
-      pause?: string;
-      unpause?: string;
+      readonly pause?: string;
+      /** @description If set, trigger one action immediately. */
+      readonly triggerImmediately?: components['schemas']['TriggerImmediatelyRequest'];
+      readonly unpause?: string;
     };
-    SchedulePolicies: {
+    readonly SchedulePolicies: {
+      /**
+       * @description Policy for catchups:
+       *  If the Temporal server misses an action due to one or more components
+       *  being down, and comes back up, the action will be run if the scheduled
+       *  time is within this window from the current time.
+       *  This value defaults to one year, and can't be less than 10 seconds.
+       */
+      readonly catchupWindow?: string;
+      /**
+       * @description If true, and the action would start a workflow, a timestamp will not be
+       *  appended to the scheduled workflow id.
+       */
+      readonly keepOriginalWorkflowId?: boolean;
       /**
        * Format: enum
        * @description Policy for overlaps.
@@ -3384,7 +3404,7 @@ export interface components {
        *  policy overrides the earlier policy.
        * @enum {string}
        */
-      overlapPolicy?:
+      readonly overlapPolicy?:
         | 'SCHEDULE_OVERLAP_POLICY_UNSPECIFIED'
         | 'SCHEDULE_OVERLAP_POLICY_SKIP'
         | 'SCHEDULE_OVERLAP_POLICY_BUFFER_ONE'
@@ -3393,24 +3413,11 @@ export interface components {
         | 'SCHEDULE_OVERLAP_POLICY_TERMINATE_OTHER'
         | 'SCHEDULE_OVERLAP_POLICY_ALLOW_ALL';
       /**
-       * @description Policy for catchups:
-       *  If the Temporal server misses an action due to one or more components
-       *  being down, and comes back up, the action will be run if the scheduled
-       *  time is within this window from the current time.
-       *  This value defaults to one year, and can't be less than 10 seconds.
-       */
-      catchupWindow?: string;
-      /**
        * @description If true, and a workflow run fails or times out, turn on "paused".
        *  This applies after retry policies: the full chain of retries must fail to
        *  trigger a pause here.
        */
-      pauseOnFailure?: boolean;
-      /**
-       * @description If true, and the action would start a workflow, a timestamp will not be
-       *  appended to the scheduled workflow id.
-       */
-      keepOriginalWorkflowId?: boolean;
+      readonly pauseOnFailure?: boolean;
     };
     /**
      * @description ScheduleSpec is a complete description of a set of absolute timestamps
@@ -3432,9 +3439,9 @@ export interface components {
      *  If a spec has no matching times after the current time, then the schedule
      *  will be subject to automatic deletion (after several days).
      */
-    ScheduleSpec: {
+    readonly ScheduleSpec: {
       /** @description Calendar-based specifications of times. */
-      structuredCalendar?: components['schemas']['StructuredCalendarSpec'][];
+      readonly calendar?: readonly components['schemas']['CalendarSpec'][];
       /**
        * @description cron_string holds a traditional cron specification as a string. It
        *  accepts 5, 6, or 7 fields, separated by spaces, and interprets them the
@@ -3457,30 +3464,32 @@ export interface components {
        *  IntervalSpec instead. <interval> and <phase> should be a decimal integer
        *  with a unit suffix s, m, h, or d.
        */
-      cronString?: string[];
-      /** @description Calendar-based specifications of times. */
-      calendar?: components['schemas']['CalendarSpec'][];
-      /** @description Interval-based specifications of times. */
-      interval?: components['schemas']['IntervalSpec'][];
+      readonly cronString?: readonly string[];
+      /**
+       * Format: date-time
+       * @description If end_time is set, any timestamps after end_time will be skipped.
+       */
+      readonly endTime?: string;
       /** @description Any timestamps matching any of exclude_* will be skipped. */
-      excludeCalendar?: components['schemas']['CalendarSpec'][];
-      excludeStructuredCalendar?: components['schemas']['StructuredCalendarSpec'][];
+      readonly excludeCalendar?: readonly components['schemas']['CalendarSpec'][];
+      readonly excludeStructuredCalendar?: readonly components['schemas']['StructuredCalendarSpec'][];
+      /** @description Interval-based specifications of times. */
+      readonly interval?: readonly components['schemas']['IntervalSpec'][];
+      /**
+       * @description All timestamps will be incremented by a random value from 0 to this
+       *  amount of jitter. Default: 0
+       */
+      readonly jitter?: string;
       /**
        * Format: date-time
        * @description If start_time is set, any timestamps before start_time will be skipped.
        *  (Together, start_time and end_time make an inclusive interval.)
        */
-      startTime?: string;
-      /**
-       * Format: date-time
-       * @description If end_time is set, any timestamps after end_time will be skipped.
-       */
-      endTime?: string;
-      /**
-       * @description All timestamps will be incremented by a random value from 0 to this
-       *  amount of jitter. Default: 0
-       */
-      jitter?: string;
+      readonly startTime?: string;
+      /** @description Calendar-based specifications of times. */
+      readonly structuredCalendar?: readonly components['schemas']['StructuredCalendarSpec'][];
+      /** Format: bytes */
+      readonly timezoneData?: string;
       /**
        * @description Time zone to interpret all calendar-based specs in.
        *
@@ -3505,19 +3514,9 @@ export interface components {
        *
        *  Also note that no actions are taken on leap-seconds (e.g. 23:59:60 UTC).
        */
-      timezoneName?: string;
-      /** Format: bytes */
-      timezoneData?: string;
+      readonly timezoneName?: string;
     };
-    ScheduleState: {
-      /**
-       * @description Informative human-readable message with contextual notes, e.g. the reason
-       *  a schedule is paused. The system may overwrite this message on certain
-       *  conditions, e.g. when pause-on-failure happens.
-       */
-      notes?: string;
-      /** @description If true, do not take any actions based on the schedule spec. */
-      paused?: boolean;
+    readonly ScheduleState: {
       /**
        * @description If limited_actions is true, decrement remaining_actions after each
        *  action, and do not take any more scheduled actions if remaining_actions
@@ -3527,99 +3526,109 @@ export interface components {
        *  If a schedule has no more remaining actions, then the schedule will be
        *  subject to automatic deletion (after several days).
        */
-      limitedActions?: boolean;
-      remainingActions?: string;
+      readonly limitedActions?: boolean;
+      /**
+       * @description Informative human-readable message with contextual notes, e.g. the reason
+       *  a schedule is paused. The system may overwrite this message on certain
+       *  conditions, e.g. when pause-on-failure happens.
+       */
+      readonly notes?: string;
+      /** @description If true, do not take any actions based on the schedule spec. */
+      readonly paused?: boolean;
+      readonly remainingActions?: string;
     };
     /**
      * @description A user-defined set of *indexed* fields that are used/exposed when listing/searching workflows.
      *  The payload is not serialized in a user-defined way.
      */
-    SearchAttributes: {
-      indexedFields?: {
+    readonly SearchAttributes: {
+      readonly indexedFields?: {
         [key: string]: components['schemas']['Payload'];
       };
     };
-    ServerFailureInfo: {
-      nonRetryable?: boolean;
+    readonly ServerFailureInfo: {
+      readonly nonRetryable?: boolean;
     };
-    SignalExternalWorkflowExecutionFailedEventAttributes: {
+    readonly SignalExternalWorkflowExecutionFailedEventAttributes: {
       /**
        * Format: enum
        * @enum {string}
        */
-      cause?:
+      readonly cause?:
         | 'SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_UNSPECIFIED'
         | 'SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_EXTERNAL_WORKFLOW_EXECUTION_NOT_FOUND'
         | 'SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_NAMESPACE_NOT_FOUND'
         | 'SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_FAILED_CAUSE_SIGNAL_COUNT_LIMIT_EXCEEDED';
-      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
-      workflowTaskCompletedEventId?: string;
+      /** @description Deprecated */
+      readonly control?: string;
+      readonly initiatedEventId?: string;
       /**
        * @description Namespace of the workflow which failed the signal.
        *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
        */
-      namespace?: string;
-      namespaceId?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
-      initiatedEventId?: string;
-      /** @description Deprecated */
-      control?: string;
-    };
-    SignalExternalWorkflowExecutionInitiatedEventAttributes: {
+      readonly namespace?: string;
+      readonly namespaceId?: string;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
       /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
-      workflowTaskCompletedEventId?: string;
-      /**
-       * @description Namespace of the to-be-signalled workflow.
-       *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
-       */
-      namespace?: string;
-      namespaceId?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
-      /** @description name/type of the signal to fire in the external workflow */
-      signalName?: string;
-      /** @description Serialized arguments to provide to the signal handler */
-      input?: components['schemas']['Payloads'];
-      /** @description Deprecated */
-      control?: string;
+      readonly workflowTaskCompletedEventId?: string;
+    };
+    readonly SignalExternalWorkflowExecutionInitiatedEventAttributes: {
       /**
        * @description Workers are expected to set this to true if the workflow they are requesting to cancel is
        *  a child of the workflow which issued the request
        */
-      childWorkflowOnly?: boolean;
-      header?: components['schemas']['Header'];
-    };
-    SignalWithStartWorkflowExecutionRequest: {
-      namespace?: string;
-      workflowId?: string;
-      workflowType?: components['schemas']['WorkflowType'];
-      /** @description The task queue to start this workflow on, if it will be started */
-      taskQueue?: components['schemas']['TaskQueue'];
-      /** @description Serialized arguments to the workflow. These are passed as arguments to the workflow function. */
-      input?: components['schemas']['Payloads'];
-      /** @description Total workflow execution timeout including retries and continue as new */
-      workflowExecutionTimeout?: string;
-      /** @description Timeout of a single workflow run */
-      workflowRunTimeout?: string;
-      /** @description Timeout of a single workflow task */
-      workflowTaskTimeout?: string;
-      /** @description The identity of the worker/client */
-      identity?: string;
-      /** @description Used to de-dupe signal w/ start requests */
-      requestId?: string;
+      readonly childWorkflowOnly?: boolean;
+      /** @description Deprecated */
+      readonly control?: string;
+      readonly header?: components['schemas']['Header'];
+      /** @description Serialized arguments to provide to the signal handler */
+      readonly input?: components['schemas']['Payloads'];
       /**
-       * Format: enum
-       * @description Defines whether to allow re-using the workflow id from a previously *closed* workflow.
-       *  The default policy is WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE.
-       *
-       *  See `workflow_id_reuse_policy` for handling a workflow id duplication with a *running* workflow.
-       * @enum {string}
+       * @description Namespace of the to-be-signalled workflow.
+       *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
        */
-      workflowIdReusePolicy?:
-        | 'WORKFLOW_ID_REUSE_POLICY_UNSPECIFIED'
-        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE'
-        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY'
-        | 'WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE'
-        | 'WORKFLOW_ID_REUSE_POLICY_TERMINATE_IF_RUNNING';
+      readonly namespace?: string;
+      readonly namespaceId?: string;
+      /** @description name/type of the signal to fire in the external workflow */
+      readonly signalName?: string;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
+      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
+      readonly workflowTaskCompletedEventId?: string;
+    };
+    readonly SignalWithStartWorkflowExecutionRequest: {
+      /** @description Deprecated */
+      readonly control?: string;
+      /** @description See https://docs.temporal.io/docs/content/what-is-a-temporal-cron-job/ */
+      readonly cronSchedule?: string;
+      readonly header?: components['schemas']['Header'];
+      /** @description The identity of the worker/client */
+      readonly identity?: string;
+      /** @description Serialized arguments to the workflow. These are passed as arguments to the workflow function. */
+      readonly input?: components['schemas']['Payloads'];
+      readonly memo?: components['schemas']['Memo'];
+      readonly namespace?: string;
+      /** @description Used to de-dupe signal w/ start requests */
+      readonly requestId?: string;
+      /** @description Retry policy for the workflow */
+      readonly retryPolicy?: components['schemas']['RetryPolicy'];
+      readonly searchAttributes?: components['schemas']['SearchAttributes'];
+      /** @description Serialized value(s) to provide with the signal */
+      readonly signalInput?: components['schemas']['Payloads'];
+      /** @description The workflow author-defined name of the signal to send to the workflow */
+      readonly signalName?: string;
+      /** @description Indicates that a new workflow task should not be generated when this signal is received. */
+      readonly skipGenerateWorkflowTask?: boolean;
+      /** @description The task queue to start this workflow on, if it will be started */
+      readonly taskQueue?: components['schemas']['TaskQueue'];
+      /**
+       * @description Metadata on the workflow if it is started. This is carried over to the WorkflowExecutionInfo
+       *  for use by user interfaces to display the fixed as-of-start summary and details of the
+       *  workflow.
+       */
+      readonly userMetadata?: components['schemas']['UserMetadata'];
+      /** @description Total workflow execution timeout including retries and continue as new */
+      readonly workflowExecutionTimeout?: string;
+      readonly workflowId?: string;
       /**
        * Format: enum
        * @description Defines how to resolve a workflow id conflict with a *running* workflow.
@@ -3629,24 +3638,27 @@ export interface components {
        *  See `workflow_id_reuse_policy` for handling a workflow id duplication with a *closed* workflow.
        * @enum {string}
        */
-      workflowIdConflictPolicy?:
+      readonly workflowIdConflictPolicy?:
         | 'WORKFLOW_ID_CONFLICT_POLICY_UNSPECIFIED'
         | 'WORKFLOW_ID_CONFLICT_POLICY_FAIL'
         | 'WORKFLOW_ID_CONFLICT_POLICY_USE_EXISTING'
         | 'WORKFLOW_ID_CONFLICT_POLICY_TERMINATE_EXISTING';
-      /** @description The workflow author-defined name of the signal to send to the workflow */
-      signalName?: string;
-      /** @description Serialized value(s) to provide with the signal */
-      signalInput?: components['schemas']['Payloads'];
-      /** @description Deprecated */
-      control?: string;
-      /** @description Retry policy for the workflow */
-      retryPolicy?: components['schemas']['RetryPolicy'];
-      /** @description See https://docs.temporal.io/docs/content/what-is-a-temporal-cron-job/ */
-      cronSchedule?: string;
-      memo?: components['schemas']['Memo'];
-      searchAttributes?: components['schemas']['SearchAttributes'];
-      header?: components['schemas']['Header'];
+      /**
+       * Format: enum
+       * @description Defines whether to allow re-using the workflow id from a previously *closed* workflow.
+       *  The default policy is WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE.
+       *
+       *  See `workflow_id_reuse_policy` for handling a workflow id duplication with a *running* workflow.
+       * @enum {string}
+       */
+      readonly workflowIdReusePolicy?:
+        | 'WORKFLOW_ID_REUSE_POLICY_UNSPECIFIED'
+        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE'
+        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY'
+        | 'WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE'
+        | 'WORKFLOW_ID_REUSE_POLICY_TERMINATE_IF_RUNNING';
+      /** @description Timeout of a single workflow run */
+      readonly workflowRunTimeout?: string;
       /**
        * @description Time to wait before dispatching the first workflow task. Cannot be used with `cron_schedule`.
        *  Note that the signal will be delivered with the first workflow task. If the workflow gets
@@ -3655,61 +3667,49 @@ export interface components {
        *  will be ignored, even if that request also had a delay. Signal via SignalWorkflowExecution
        *  will not unblock the workflow.
        */
-      workflowStartDelay?: string;
-      /** @description Indicates that a new workflow task should not be generated when this signal is received. */
-      skipGenerateWorkflowTask?: boolean;
-      /**
-       * @description Metadata on the workflow if it is started. This is carried over to the WorkflowExecutionInfo
-       *  for use by user interfaces to display the fixed as-of-start summary and details of the
-       *  workflow.
-       */
-      userMetadata?: components['schemas']['UserMetadata'];
+      readonly workflowStartDelay?: string;
+      /** @description Timeout of a single workflow task */
+      readonly workflowTaskTimeout?: string;
+      readonly workflowType?: components['schemas']['WorkflowType'];
     };
-    SignalWithStartWorkflowExecutionResponse: {
+    readonly SignalWithStartWorkflowExecutionResponse: {
       /** @description The run id of the workflow that was started - or just signaled, if it was already running. */
-      runId?: string;
+      readonly runId?: string;
       /** @description If true, a new workflow was started. */
-      started?: boolean;
+      readonly started?: boolean;
     };
-    SignalWorkflowExecutionRequest: {
-      namespace?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
-      /** @description The workflow author-defined name of the signal to send to the workflow */
-      signalName?: string;
-      /** @description Serialized value(s) to provide with the signal */
-      input?: components['schemas']['Payloads'];
-      /** @description The identity of the worker/client */
-      identity?: string;
-      /** @description Used to de-dupe sent signals */
-      requestId?: string;
+    readonly SignalWorkflowExecutionRequest: {
       /** @description Deprecated */
-      control?: string;
+      readonly control?: string;
       /**
        * @description Headers that are passed with the signal to the processing workflow.
        *  These can include things like auth or tracing tokens.
        */
-      header?: components['schemas']['Header'];
+      readonly header?: components['schemas']['Header'];
+      /** @description The identity of the worker/client */
+      readonly identity?: string;
+      /** @description Serialized value(s) to provide with the signal */
+      readonly input?: components['schemas']['Payloads'];
+      readonly namespace?: string;
+      /** @description Used to de-dupe sent signals */
+      readonly requestId?: string;
+      /** @description The workflow author-defined name of the signal to send to the workflow */
+      readonly signalName?: string;
       /** @description Indicates that a new workflow task should not be generated when this signal is received. */
-      skipGenerateWorkflowTask?: boolean;
+      readonly skipGenerateWorkflowTask?: boolean;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
     };
-    SignalWorkflowExecutionResponse: Record<string, never>;
-    StartBatchOperationRequest: {
-      /** @description Namespace that contains the batch operation */
-      namespace?: string;
-      /**
-       * @description Visibility query defines the the group of workflow to apply the batch operation
-       *  This field and `executions` are mutually exclusive
-       */
-      visibilityQuery?: string;
-      /** @description Job ID defines the unique ID for the batch job */
-      jobId?: string;
-      /** @description Reason to perform the batch operation */
-      reason?: string;
+    readonly SignalWorkflowExecutionResponse: Record<string, unknown>;
+    readonly StartBatchOperationRequest: {
+      readonly cancellationOperation?: components['schemas']['BatchOperationCancellation'];
+      readonly deletionOperation?: components['schemas']['BatchOperationDeletion'];
       /**
        * @description Executions to apply the batch operation
        *  This field and `visibility_query` are mutually exclusive
        */
-      executions?: components['schemas']['WorkflowExecution'][];
+      readonly executions?: readonly components['schemas']['WorkflowExecution'][];
+      /** @description Job ID defines the unique ID for the batch job */
+      readonly jobId?: string;
       /**
        * Format: float
        * @description Limit for the number of operations processed per second within this batch.
@@ -3719,123 +3719,147 @@ export interface components {
        *  dynamic configuration key `worker.batcherRPS`. This also applies if the value in this field exceeds the
        *  server's configured limit.
        */
-      maxOperationsPerSecond?: number;
-      terminationOperation?: components['schemas']['BatchOperationTermination'];
-      signalOperation?: components['schemas']['BatchOperationSignal'];
-      cancellationOperation?: components['schemas']['BatchOperationCancellation'];
-      deletionOperation?: components['schemas']['BatchOperationDeletion'];
-      resetOperation?: components['schemas']['BatchOperationReset'];
-    };
-    StartBatchOperationResponse: Record<string, never>;
-    StartChildWorkflowExecutionFailedEventAttributes: {
+      readonly maxOperationsPerSecond?: number;
+      /** @description Namespace that contains the batch operation */
+      readonly namespace?: string;
+      /** @description Reason to perform the batch operation */
+      readonly reason?: string;
+      readonly resetOperation?: components['schemas']['BatchOperationReset'];
+      readonly signalOperation?: components['schemas']['BatchOperationSignal'];
+      readonly terminationOperation?: components['schemas']['BatchOperationTermination'];
       /**
-       * @description Namespace of the child workflow.
-       *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
+       * @description Visibility query defines the the group of workflow to apply the batch operation
+       *  This field and `executions` are mutually exclusive
        */
-      namespace?: string;
-      namespaceId?: string;
-      workflowId?: string;
-      workflowType?: components['schemas']['WorkflowType'];
+      readonly visibilityQuery?: string;
+    };
+    readonly StartBatchOperationResponse: Record<string, unknown>;
+    readonly StartChildWorkflowExecutionFailedEventAttributes: {
       /**
        * Format: enum
        * @enum {string}
        */
-      cause?:
+      readonly cause?:
         | 'START_CHILD_WORKFLOW_EXECUTION_FAILED_CAUSE_UNSPECIFIED'
         | 'START_CHILD_WORKFLOW_EXECUTION_FAILED_CAUSE_WORKFLOW_ALREADY_EXISTS'
         | 'START_CHILD_WORKFLOW_EXECUTION_FAILED_CAUSE_NAMESPACE_NOT_FOUND';
       /** @description Deprecated */
-      control?: string;
+      readonly control?: string;
       /** @description Id of the `START_CHILD_WORKFLOW_EXECUTION_INITIATED` event which this event corresponds to */
-      initiatedEventId?: string;
-      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
-      workflowTaskCompletedEventId?: string;
-    };
-    StartChildWorkflowExecutionInitiatedEventAttributes: {
+      readonly initiatedEventId?: string;
       /**
        * @description Namespace of the child workflow.
        *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
        */
-      namespace?: string;
-      namespaceId?: string;
-      workflowId?: string;
-      workflowType?: components['schemas']['WorkflowType'];
-      taskQueue?: components['schemas']['TaskQueue'];
-      input?: components['schemas']['Payloads'];
-      /** @description Total workflow execution timeout including retries and continue as new. */
-      workflowExecutionTimeout?: string;
-      /** @description Timeout of a single workflow run. */
-      workflowRunTimeout?: string;
-      /** @description Timeout of a single workflow task. */
-      workflowTaskTimeout?: string;
+      readonly namespace?: string;
+      readonly namespaceId?: string;
+      readonly workflowId?: string;
+      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
+      readonly workflowTaskCompletedEventId?: string;
+      readonly workflowType?: components['schemas']['WorkflowType'];
+    };
+    readonly StartChildWorkflowExecutionInitiatedEventAttributes: {
+      /** @description Deprecated */
+      readonly control?: string;
+      /** @description If this child runs on a cron schedule, it will appear here */
+      readonly cronSchedule?: string;
+      readonly header?: components['schemas']['Header'];
+      /**
+       * @description If this is set, the child workflow inherits the Build ID of the parent. Otherwise, the assignment
+       *  rules of the child's Task Queue will be used to independently assign a Build ID to it.
+       */
+      readonly inheritBuildId?: boolean;
+      readonly input?: components['schemas']['Payloads'];
+      readonly memo?: components['schemas']['Memo'];
+      /**
+       * @description Namespace of the child workflow.
+       *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
+       */
+      readonly namespace?: string;
+      readonly namespaceId?: string;
       /**
        * Format: enum
        * @description Default: PARENT_CLOSE_POLICY_TERMINATE.
        * @enum {string}
        */
-      parentClosePolicy?:
+      readonly parentClosePolicy?:
         | 'PARENT_CLOSE_POLICY_UNSPECIFIED'
         | 'PARENT_CLOSE_POLICY_TERMINATE'
         | 'PARENT_CLOSE_POLICY_ABANDON'
         | 'PARENT_CLOSE_POLICY_REQUEST_CANCEL';
-      /** @description Deprecated */
-      control?: string;
-      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
-      workflowTaskCompletedEventId?: string;
+      readonly retryPolicy?: components['schemas']['RetryPolicy'];
+      readonly searchAttributes?: components['schemas']['SearchAttributes'];
+      readonly taskQueue?: components['schemas']['TaskQueue'];
+      /** @description Total workflow execution timeout including retries and continue as new. */
+      readonly workflowExecutionTimeout?: string;
+      readonly workflowId?: string;
       /**
        * Format: enum
        * @description Default: WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE.
        * @enum {string}
        */
-      workflowIdReusePolicy?:
+      readonly workflowIdReusePolicy?:
         | 'WORKFLOW_ID_REUSE_POLICY_UNSPECIFIED'
         | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE'
         | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY'
         | 'WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE'
         | 'WORKFLOW_ID_REUSE_POLICY_TERMINATE_IF_RUNNING';
-      retryPolicy?: components['schemas']['RetryPolicy'];
-      /** @description If this child runs on a cron schedule, it will appear here */
-      cronSchedule?: string;
-      header?: components['schemas']['Header'];
-      memo?: components['schemas']['Memo'];
-      searchAttributes?: components['schemas']['SearchAttributes'];
-      /**
-       * @description If this is set, the child workflow inherits the Build ID of the parent. Otherwise, the assignment
-       *  rules of the child's Task Queue will be used to independently assign a Build ID to it.
-       */
-      inheritBuildId?: boolean;
-    };
-    StartWorkflowExecutionRequest: {
-      namespace?: string;
-      workflowId?: string;
-      workflowType?: components['schemas']['WorkflowType'];
-      taskQueue?: components['schemas']['TaskQueue'];
-      /** @description Serialized arguments to the workflow. These are passed as arguments to the workflow function. */
-      input?: components['schemas']['Payloads'];
-      /** @description Total workflow execution timeout including retries and continue as new. */
-      workflowExecutionTimeout?: string;
       /** @description Timeout of a single workflow run. */
-      workflowRunTimeout?: string;
+      readonly workflowRunTimeout?: string;
+      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
+      readonly workflowTaskCompletedEventId?: string;
       /** @description Timeout of a single workflow task. */
-      workflowTaskTimeout?: string;
-      /** @description The identity of the client who initiated this request */
-      identity?: string;
-      /** @description A unique identifier for this start request. Typically UUIDv4. */
-      requestId?: string;
+      readonly workflowTaskTimeout?: string;
+      readonly workflowType?: components['schemas']['WorkflowType'];
+    };
+    readonly StartWorkflowExecutionRequest: {
       /**
-       * Format: enum
-       * @description Defines whether to allow re-using the workflow id from a previously *closed* workflow.
-       *  The default policy is WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE.
-       *
-       *  See `workflow_id_conflict_policy` for handling a workflow id duplication with a *running* workflow.
-       * @enum {string}
+       * @description Callbacks to be called by the server when this workflow reaches a terminal state.
+       *  If the workflow continues-as-new, these callbacks will be carried over to the new execution.
+       *  Callback addresses must be whitelisted in the server's dynamic configuration.
        */
-      workflowIdReusePolicy?:
-        | 'WORKFLOW_ID_REUSE_POLICY_UNSPECIFIED'
-        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE'
-        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY'
-        | 'WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE'
-        | 'WORKFLOW_ID_REUSE_POLICY_TERMINATE_IF_RUNNING';
+      readonly completionCallbacks?: readonly components['schemas']['Callback'][];
+      /**
+       * @description These values will be available as ContinuedFailure and LastCompletionResult in the
+       *  WorkflowExecutionStarted event and through SDKs. The are currently only used by the
+       *  server itself (for the schedules feature) and are not intended to be exposed in
+       *  StartWorkflowExecution.
+       */
+      readonly continuedFailure?: components['schemas']['Failure'];
+      /** @description See https://docs.temporal.io/docs/content/what-is-a-temporal-cron-job/ */
+      readonly cronSchedule?: string;
+      readonly header?: components['schemas']['Header'];
+      /** @description The identity of the client who initiated this request */
+      readonly identity?: string;
+      /** @description Serialized arguments to the workflow. These are passed as arguments to the workflow function. */
+      readonly input?: components['schemas']['Payloads'];
+      readonly lastCompletionResult?: components['schemas']['Payloads'];
+      /** @description Links to be associated with the workflow. */
+      readonly links?: readonly components['schemas']['Link'][];
+      readonly memo?: components['schemas']['Memo'];
+      readonly namespace?: string;
+      /**
+       * @description Request to get the first workflow task inline in the response bypassing matching service and worker polling.
+       *  If set to `true` the caller is expected to have a worker available and capable of processing the task.
+       *  The returned task will be marked as started and is expected to be completed by the specified
+       *  `workflow_task_timeout`.
+       */
+      readonly requestEagerExecution?: boolean;
+      /** @description A unique identifier for this start request. Typically UUIDv4. */
+      readonly requestId?: string;
+      /** @description The retry policy for the workflow. Will never exceed `workflow_execution_timeout`. */
+      readonly retryPolicy?: components['schemas']['RetryPolicy'];
+      readonly searchAttributes?: components['schemas']['SearchAttributes'];
+      readonly taskQueue?: components['schemas']['TaskQueue'];
+      /**
+       * @description Metadata on the workflow if it is started. This is carried over to the WorkflowExecutionInfo
+       *  for use by user interfaces to display the fixed as-of-start summary and details of the
+       *  workflow.
+       */
+      readonly userMetadata?: components['schemas']['UserMetadata'];
+      /** @description Total workflow execution timeout including retries and continue as new. */
+      readonly workflowExecutionTimeout?: string;
+      readonly workflowId?: string;
       /**
        * Format: enum
        * @description Defines how to resolve a workflow id conflict with a *running* workflow.
@@ -3844,89 +3868,72 @@ export interface components {
        *  See `workflow_id_reuse_policy` for handling a workflow id duplication with a *closed* workflow.
        * @enum {string}
        */
-      workflowIdConflictPolicy?:
+      readonly workflowIdConflictPolicy?:
         | 'WORKFLOW_ID_CONFLICT_POLICY_UNSPECIFIED'
         | 'WORKFLOW_ID_CONFLICT_POLICY_FAIL'
         | 'WORKFLOW_ID_CONFLICT_POLICY_USE_EXISTING'
         | 'WORKFLOW_ID_CONFLICT_POLICY_TERMINATE_EXISTING';
-      /** @description The retry policy for the workflow. Will never exceed `workflow_execution_timeout`. */
-      retryPolicy?: components['schemas']['RetryPolicy'];
-      /** @description See https://docs.temporal.io/docs/content/what-is-a-temporal-cron-job/ */
-      cronSchedule?: string;
-      memo?: components['schemas']['Memo'];
-      searchAttributes?: components['schemas']['SearchAttributes'];
-      header?: components['schemas']['Header'];
       /**
-       * @description Request to get the first workflow task inline in the response bypassing matching service and worker polling.
-       *  If set to `true` the caller is expected to have a worker available and capable of processing the task.
-       *  The returned task will be marked as started and is expected to be completed by the specified
-       *  `workflow_task_timeout`.
+       * Format: enum
+       * @description Defines whether to allow re-using the workflow id from a previously *closed* workflow.
+       *  The default policy is WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE.
+       *
+       *  See `workflow_id_conflict_policy` for handling a workflow id duplication with a *running* workflow.
+       * @enum {string}
        */
-      requestEagerExecution?: boolean;
-      /**
-       * @description These values will be available as ContinuedFailure and LastCompletionResult in the
-       *  WorkflowExecutionStarted event and through SDKs. The are currently only used by the
-       *  server itself (for the schedules feature) and are not intended to be exposed in
-       *  StartWorkflowExecution.
-       */
-      continuedFailure?: components['schemas']['Failure'];
-      lastCompletionResult?: components['schemas']['Payloads'];
+      readonly workflowIdReusePolicy?:
+        | 'WORKFLOW_ID_REUSE_POLICY_UNSPECIFIED'
+        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE'
+        | 'WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY'
+        | 'WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE'
+        | 'WORKFLOW_ID_REUSE_POLICY_TERMINATE_IF_RUNNING';
+      /** @description Timeout of a single workflow run. */
+      readonly workflowRunTimeout?: string;
       /**
        * @description Time to wait before dispatching the first workflow task. Cannot be used with `cron_schedule`.
        *  If the workflow gets a signal before the delay, a workflow task will be dispatched and the rest
        *  of the delay will be ignored.
        */
-      workflowStartDelay?: string;
-      /**
-       * @description Callbacks to be called by the server when this workflow reaches a terminal state.
-       *  If the workflow continues-as-new, these callbacks will be carried over to the new execution.
-       *  Callback addresses must be whitelisted in the server's dynamic configuration.
-       */
-      completionCallbacks?: components['schemas']['Callback'][];
-      /**
-       * @description Metadata on the workflow if it is started. This is carried over to the WorkflowExecutionInfo
-       *  for use by user interfaces to display the fixed as-of-start summary and details of the
-       *  workflow.
-       */
-      userMetadata?: components['schemas']['UserMetadata'];
-      /** @description Links to be associated with the workflow. */
-      links?: components['schemas']['Link'][];
+      readonly workflowStartDelay?: string;
+      /** @description Timeout of a single workflow task. */
+      readonly workflowTaskTimeout?: string;
+      readonly workflowType?: components['schemas']['WorkflowType'];
     };
-    StartWorkflowExecutionResponse: {
-      /** @description The run id of the workflow that was started - or used (via WorkflowIdConflictPolicy USE_EXISTING). */
-      runId?: string;
-      /** @description If true, a new workflow was started. */
-      started?: boolean;
+    readonly StartWorkflowExecutionResponse: {
       /**
        * @description When `request_eager_execution` is set on the `StartWorkflowExecutionRequest`, the server - if supported - will
        *  return the first workflow task to be eagerly executed.
        *  The caller is expected to have a worker available to process the task.
        */
-      eagerWorkflowTask?: components['schemas']['PollWorkflowTaskQueueResponse'];
+      readonly eagerWorkflowTask?: components['schemas']['PollWorkflowTaskQueueResponse'];
+      /** @description The run id of the workflow that was started - or used (via WorkflowIdConflictPolicy USE_EXISTING). */
+      readonly runId?: string;
+      /** @description If true, a new workflow was started. */
+      readonly started?: boolean;
     };
     /** @description The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors). */
-    Status: {
+    readonly Status: {
       /**
        * Format: int32
        * @description The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
        */
-      code?: number;
-      /** @description A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client. */
-      message?: string;
+      readonly code?: number;
       /** @description A list of messages that carry the error details.  There is a common set of message types for APIs to use. */
-      details?: components['schemas']['GoogleProtobufAny'][];
+      readonly details?: readonly components['schemas']['GoogleProtobufAny'][];
+      /** @description A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client. */
+      readonly message?: string;
     };
-    StopBatchOperationRequest: {
-      /** @description Namespace that contains the batch operation */
-      namespace?: string;
-      /** @description Batch job id */
-      jobId?: string;
-      /** @description Reason to stop a batch operation */
-      reason?: string;
+    readonly StopBatchOperationRequest: {
       /** @description Identity of the operator */
-      identity?: string;
+      readonly identity?: string;
+      /** @description Batch job id */
+      readonly jobId?: string;
+      /** @description Namespace that contains the batch operation */
+      readonly namespace?: string;
+      /** @description Reason to stop a batch operation */
+      readonly reason?: string;
     };
-    StopBatchOperationResponse: Record<string, never>;
+    readonly StopBatchOperationResponse: Record<string, unknown>;
     /**
      * @description StructuredCalendarSpec describes an event specification relative to the
      *  calendar, in a form that's easy to work with programmatically. Each field can
@@ -3938,62 +3945,65 @@ export interface components {
      *  TODO: add relative-to-end-of-month
      *  TODO: add nth day-of-week in month
      */
-    StructuredCalendarSpec: {
-      /** @description Match seconds (0-59) */
-      second?: components['schemas']['Range'][];
-      /** @description Match minutes (0-59) */
-      minute?: components['schemas']['Range'][];
-      /** @description Match hours (0-23) */
-      hour?: components['schemas']['Range'][];
+    readonly StructuredCalendarSpec: {
+      /** @description Free-form comment describing the intention of this spec. */
+      readonly comment?: string;
       /**
        * @description Match days of the month (1-31)
        *  (-- api-linter: core::0140::prepositions=disabled
        *      aip.dev/not-precedent: standard name of field --)
        */
-      dayOfMonth?: components['schemas']['Range'][];
-      /** @description Match months (1-12) */
-      month?: components['schemas']['Range'][];
-      /** @description Match years. */
-      year?: components['schemas']['Range'][];
+      readonly dayOfMonth?: readonly components['schemas']['Range'][];
       /** @description Match days of the week (0-6; 0 is Sunday). */
-      dayOfWeek?: components['schemas']['Range'][];
-      /** @description Free-form comment describing the intention of this spec. */
-      comment?: string;
+      readonly dayOfWeek?: readonly components['schemas']['Range'][];
+      /** @description Match hours (0-23) */
+      readonly hour?: readonly components['schemas']['Range'][];
+      /** @description Match minutes (0-59) */
+      readonly minute?: readonly components['schemas']['Range'][];
+      /** @description Match months (1-12) */
+      readonly month?: readonly components['schemas']['Range'][];
+      /** @description Match seconds (0-59) */
+      readonly second?: readonly components['schemas']['Range'][];
+      /** @description Match years. */
+      readonly year?: readonly components['schemas']['Range'][];
     };
-    TaskIdBlock: {
-      startId?: string;
-      endId?: string;
+    readonly TaskIdBlock: {
+      readonly endId?: string;
+      readonly startId?: string;
     };
     /** @description See https://docs.temporal.io/docs/concepts/task-queues/ */
-    TaskQueue: {
-      name?: string;
+    readonly TaskQueue: {
       /**
        * Format: enum
        * @description Default: TASK_QUEUE_KIND_NORMAL.
        * @enum {string}
        */
-      kind?: 'TASK_QUEUE_KIND_UNSPECIFIED' | 'TASK_QUEUE_KIND_NORMAL' | 'TASK_QUEUE_KIND_STICKY';
+      readonly kind?:
+        | 'TASK_QUEUE_KIND_UNSPECIFIED'
+        | 'TASK_QUEUE_KIND_NORMAL'
+        | 'TASK_QUEUE_KIND_STICKY';
+      readonly name?: string;
       /**
        * @description Iff kind == TASK_QUEUE_KIND_STICKY, then this field contains the name of
        *  the normal task queue that the sticky worker is running on.
        */
-      normalName?: string;
+      readonly normalName?: string;
     };
     /** @description Reachability of tasks for a worker on a single task queue. */
-    TaskQueueReachability: {
-      taskQueue?: string;
+    readonly TaskQueueReachability: {
       /**
        * @description Task reachability for a worker in a single task queue.
        *  See the TaskReachability docstring for information about each enum variant.
        *  If reachability is empty, this worker is considered unreachable in this task queue.
        */
-      reachability?: (
+      readonly reachability?: readonly (
         | 'TASK_REACHABILITY_UNSPECIFIED'
         | 'TASK_REACHABILITY_NEW_WORKFLOWS'
         | 'TASK_REACHABILITY_EXISTING_WORKFLOWS'
         | 'TASK_REACHABILITY_OPEN_WORKFLOWS'
         | 'TASK_REACHABILITY_CLOSED_WORKFLOWS'
       )[];
+      readonly taskQueue?: string;
     };
     /**
      * @description TaskQueueStats contains statistics about task queue backlog and activity.
@@ -4001,16 +4011,7 @@ export interface components {
      *  For workflow task queue type, this result is partial because tasks sent to sticky queues are not included. Read
      *  comments above each metric to understand the impact of sticky queue exclusion on that metric accuracy.
      */
-    TaskQueueStats: {
-      /**
-       * @description The approximate number of tasks backlogged in this task queue. May count expired tasks but eventually
-       *  converges to the right value. Can be relied upon for scaling decisions.
-       *
-       *  Special note for workflow task queue type: this metric does not count sticky queue tasks. However, because
-       *  those tasks only remain valid for a few seconds, the inaccuracy becomes less significant as the backlog size
-       *  grows.
-       */
-      approximateBacklogCount?: string;
+    readonly TaskQueueStats: {
       /**
        * @description Approximate age of the oldest task in the backlog based on the creation time of the task at the head of
        *  the queue. Can be relied upon for scaling decisions.
@@ -4019,7 +4020,16 @@ export interface components {
        *  those tasks only remain valid for a few seconds, they should not affect the result when backlog is older than
        *  few seconds.
        */
-      approximateBacklogAge?: string;
+      readonly approximateBacklogAge?: string;
+      /**
+       * @description The approximate number of tasks backlogged in this task queue. May count expired tasks but eventually
+       *  converges to the right value. Can be relied upon for scaling decisions.
+       *
+       *  Special note for workflow task queue type: this metric does not count sticky queue tasks. However, because
+       *  those tasks only remain valid for a few seconds, the inaccuracy becomes less significant as the backlog size
+       *  grows.
+       */
+      readonly approximateBacklogCount?: string;
       /**
        * Format: float
        * @description The approximate tasks per second added to the task queue, averaging the last 30 seconds. These includes tasks
@@ -4037,7 +4047,7 @@ export interface components {
        *    workflow goes to a normal queue, and the rest workflow tasks go to the Sticky queue associated with a specific
        *    worker instance.
        */
-      tasksAddRate?: number;
+      readonly tasksAddRate?: number;
       /**
        * Format: float
        * @description The approximate tasks per second dispatched from the task queue, averaging the last 30 seconds. These includes
@@ -4055,27 +4065,23 @@ export interface components {
        *    workflow goes to a normal queue, and the rest workflow tasks go to the Sticky queue associated with a specific
        *    worker instance.
        */
-      tasksDispatchRate?: number;
+      readonly tasksDispatchRate?: number;
     };
     /** @description Deprecated. Use `InternalTaskQueueStatus`. This is kept until `DescribeTaskQueue` supports legacy behavior. */
-    TaskQueueStatus: {
-      backlogCountHint?: string;
-      readLevel?: string;
-      ackLevel?: string;
+    readonly TaskQueueStatus: {
+      readonly ackLevel?: string;
+      readonly backlogCountHint?: string;
       /** Format: double */
-      ratePerSecond?: number;
-      taskIdBlock?: components['schemas']['TaskIdBlock'];
+      readonly ratePerSecond?: number;
+      readonly readLevel?: string;
+      readonly taskIdBlock?: components['schemas']['TaskIdBlock'];
     };
-    TaskQueueTypeInfo: {
+    readonly TaskQueueTypeInfo: {
       /** @description Unversioned workers (with `useVersioning=false`) are reported in unversioned result even if they set a Build ID. */
-      pollers?: components['schemas']['PollerInfo'][];
-      stats?: components['schemas']['TaskQueueStats'];
+      readonly pollers?: readonly components['schemas']['PollerInfo'][];
+      readonly stats?: components['schemas']['TaskQueueStats'];
     };
-    TaskQueueVersionInfo: {
-      /** @description Task Queue info per Task Type. Key is the numerical value of the temporal.api.enums.v1.TaskQueueType enum. */
-      typesInfo?: {
-        [key: string]: components['schemas']['TaskQueueTypeInfo'];
-      };
+    readonly TaskQueueVersionInfo: {
       /**
        * Format: enum
        * @description Task Reachability is eventually consistent; there may be a delay until it converges to the most
@@ -4089,88 +4095,92 @@ export interface components {
        *  sure to query reachability for the parent/previous workflow's Task Queue as well.
        * @enum {string}
        */
-      taskReachability?:
+      readonly taskReachability?:
         | 'BUILD_ID_TASK_REACHABILITY_UNSPECIFIED'
         | 'BUILD_ID_TASK_REACHABILITY_REACHABLE'
         | 'BUILD_ID_TASK_REACHABILITY_CLOSED_WORKFLOWS_ONLY'
         | 'BUILD_ID_TASK_REACHABILITY_UNREACHABLE';
+      /** @description Task Queue info per Task Type. Key is the numerical value of the temporal.api.enums.v1.TaskQueueType enum. */
+      readonly typesInfo?: {
+        [key: string]: components['schemas']['TaskQueueTypeInfo'];
+      };
     };
-    TerminateWorkflowExecutionRequest: {
-      namespace?: string;
-      workflowExecution?: components['schemas']['WorkflowExecution'];
-      reason?: string;
+    readonly TerminatedFailureInfo: Record<string, unknown>;
+    readonly TerminateWorkflowExecutionRequest: {
       /** @description Serialized additional information to attach to the termination event */
-      details?: components['schemas']['Payloads'];
-      /** @description The identity of the worker/client */
-      identity?: string;
+      readonly details?: components['schemas']['Payloads'];
       /**
        * @description If set, this call will error if the most recent (if no run id is set on
        *  `workflow_execution`), or specified (if it is) workflow execution is not part of the same
        *  execution chain as this id.
        */
-      firstExecutionRunId?: string;
+      readonly firstExecutionRunId?: string;
+      /** @description The identity of the worker/client */
+      readonly identity?: string;
+      readonly namespace?: string;
+      readonly reason?: string;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
     };
-    TerminateWorkflowExecutionResponse: Record<string, never>;
-    TerminatedFailureInfo: Record<string, never>;
-    TimeoutFailureInfo: {
+    readonly TerminateWorkflowExecutionResponse: Record<string, unknown>;
+    readonly TimeoutFailureInfo: {
+      readonly lastHeartbeatDetails?: components['schemas']['Payloads'];
       /**
        * Format: enum
        * @enum {string}
        */
-      timeoutType?:
+      readonly timeoutType?:
         | 'TIMEOUT_TYPE_UNSPECIFIED'
         | 'TIMEOUT_TYPE_START_TO_CLOSE'
         | 'TIMEOUT_TYPE_SCHEDULE_TO_START'
         | 'TIMEOUT_TYPE_SCHEDULE_TO_CLOSE'
         | 'TIMEOUT_TYPE_HEARTBEAT';
-      lastHeartbeatDetails?: components['schemas']['Payloads'];
     };
-    TimerCanceledEventAttributes: {
-      /** @description Will match the `timer_id` from `TIMER_STARTED` event for this timer */
-      timerId?: string;
-      /** @description The id of the `TIMER_STARTED` event itself */
-      startedEventId?: string;
-      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
-      workflowTaskCompletedEventId?: string;
+    readonly TimerCanceledEventAttributes: {
       /** @description The id of the worker who requested this cancel */
-      identity?: string;
-    };
-    TimerFiredEventAttributes: {
-      /** @description Will match the `timer_id` from `TIMER_STARTED` event for this timer */
-      timerId?: string;
+      readonly identity?: string;
       /** @description The id of the `TIMER_STARTED` event itself */
-      startedEventId?: string;
+      readonly startedEventId?: string;
+      /** @description Will match the `timer_id` from `TIMER_STARTED` event for this timer */
+      readonly timerId?: string;
+      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
+      readonly workflowTaskCompletedEventId?: string;
     };
-    TimerStartedEventAttributes: {
-      /** @description The worker/user assigned id for this timer */
-      timerId?: string;
+    readonly TimerFiredEventAttributes: {
+      /** @description The id of the `TIMER_STARTED` event itself */
+      readonly startedEventId?: string;
+      /** @description Will match the `timer_id` from `TIMER_STARTED` event for this timer */
+      readonly timerId?: string;
+    };
+    readonly TimerStartedEventAttributes: {
       /**
        * @description How long until this timer fires
        *
        *  (-- api-linter: core::0140::prepositions=disabled
        *      aip.dev/not-precedent: "to" is used to indicate interval. --)
        */
-      startToFireTimeout?: string;
+      readonly startToFireTimeout?: string;
+      /** @description The worker/user assigned id for this timer */
+      readonly timerId?: string;
       /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
-      workflowTaskCompletedEventId?: string;
+      readonly workflowTaskCompletedEventId?: string;
     };
-    TimestampedBuildIdAssignmentRule: {
-      rule?: components['schemas']['BuildIdAssignmentRule'];
+    readonly TimestampedBuildIdAssignmentRule: {
       /** Format: date-time */
-      createTime?: string;
+      readonly createTime?: string;
+      readonly rule?: components['schemas']['BuildIdAssignmentRule'];
     };
-    TimestampedCompatibleBuildIdRedirectRule: {
-      rule?: components['schemas']['CompatibleBuildIdRedirectRule'];
+    readonly TimestampedCompatibleBuildIdRedirectRule: {
       /** Format: date-time */
-      createTime?: string;
+      readonly createTime?: string;
+      readonly rule?: components['schemas']['CompatibleBuildIdRedirectRule'];
     };
-    TriggerImmediatelyRequest: {
+    readonly TriggerImmediatelyRequest: {
       /**
        * Format: enum
        * @description If set, override overlap policy for this one request.
        * @enum {string}
        */
-      overlapPolicy?:
+      readonly overlapPolicy?:
         | 'SCHEDULE_OVERLAP_POLICY_UNSPECIFIED'
         | 'SCHEDULE_OVERLAP_POLICY_SKIP'
         | 'SCHEDULE_OVERLAP_POLICY_BUFFER_ONE'
@@ -4179,43 +4189,43 @@ export interface components {
         | 'SCHEDULE_OVERLAP_POLICY_TERMINATE_OTHER'
         | 'SCHEDULE_OVERLAP_POLICY_ALLOW_ALL';
     };
-    UpdateActivityOptionsByIdRequest: {
+    readonly UpdateActivityOptionsByIdRequest: {
+      /** @description Id of the activity we're updating */
+      readonly activityId?: string;
+      /** @description Activity options. Partial updates are accepted and controlled by update_mask */
+      readonly activityOptions?: components['schemas']['ActivityOptions'];
+      /** @description The identity of the client who initiated this request */
+      readonly identity?: string;
       /** @description Namespace of the workflow which scheduled this activity */
-      namespace?: string;
-      /** @description Id of the workflow which scheduled this activity */
-      workflowId?: string;
+      readonly namespace?: string;
       /**
        * @description Run Id of the workflow which scheduled this activity
        *  if empty - latest workflow is used
        */
-      runId?: string;
-      /** @description Id of the activity we're updating */
-      activityId?: string;
-      /** @description The identity of the client who initiated this request */
-      identity?: string;
-      /** @description Activity options. Partial updates are accepted and controlled by update_mask */
-      activityOptions?: components['schemas']['ActivityOptions'];
+      readonly runId?: string;
       /**
        * Format: field-mask
        * @description Controls which fields from `activity_options` will be applied
        */
-      updateMask?: string;
+      readonly updateMask?: string;
+      /** @description Id of the workflow which scheduled this activity */
+      readonly workflowId?: string;
     };
-    UpdateActivityOptionsByIdResponse: {
+    readonly UpdateActivityOptionsByIdResponse: {
       /** @description Activity options after an update */
-      activityOptions?: components['schemas']['ActivityOptions'];
+      readonly activityOptions?: components['schemas']['ActivityOptions'];
     };
-    UpdateNamespaceInfo: {
-      description?: string;
-      ownerEmail?: string;
+    readonly UpdateNamespaceInfo: {
       /**
        * @description A key-value map for any customized purpose.
        *  If data already exists on the namespace,
        *  this will merge with the existing key values.
        */
-      data?: {
+      readonly data?: {
         [key: string]: string;
       };
+      readonly description?: string;
+      readonly ownerEmail?: string;
       /**
        * Format: enum
        * @description New namespace state, server will reject if transition is not allowed.
@@ -4225,55 +4235,46 @@ export interface components {
        *  Default is NAMESPACE_STATE_UNSPECIFIED which is do not change state.
        * @enum {string}
        */
-      state?:
+      readonly state?:
         | 'NAMESPACE_STATE_UNSPECIFIED'
         | 'NAMESPACE_STATE_REGISTERED'
         | 'NAMESPACE_STATE_DEPRECATED'
         | 'NAMESPACE_STATE_DELETED';
     };
-    UpdateNamespaceRequest: {
-      namespace?: string;
-      updateInfo?: components['schemas']['UpdateNamespaceInfo'];
-      config?: components['schemas']['NamespaceConfig'];
-      replicationConfig?: components['schemas']['NamespaceReplicationConfig'];
-      securityToken?: string;
-      deleteBadBinary?: string;
+    readonly UpdateNamespaceRequest: {
+      readonly config?: components['schemas']['NamespaceConfig'];
+      readonly deleteBadBinary?: string;
+      readonly namespace?: string;
       /** @description promote local namespace to global namespace. Ignored if namespace is already global namespace. */
-      promoteNamespace?: boolean;
+      readonly promoteNamespace?: boolean;
+      readonly replicationConfig?: components['schemas']['NamespaceReplicationConfig'];
+      readonly securityToken?: string;
+      readonly updateInfo?: components['schemas']['UpdateNamespaceInfo'];
     };
-    UpdateNamespaceResponse: {
-      namespaceInfo?: components['schemas']['NamespaceInfo'];
-      config?: components['schemas']['NamespaceConfig'];
-      replicationConfig?: components['schemas']['NamespaceReplicationConfig'];
-      failoverVersion?: string;
-      isGlobalNamespace?: boolean;
+    readonly UpdateNamespaceResponse: {
+      readonly config?: components['schemas']['NamespaceConfig'];
+      readonly failoverVersion?: string;
+      readonly isGlobalNamespace?: boolean;
+      readonly namespaceInfo?: components['schemas']['NamespaceInfo'];
+      readonly replicationConfig?: components['schemas']['NamespaceReplicationConfig'];
     };
-    UpdateNexusEndpointRequest: {
+    readonly UpdateNexusEndpointRequest: {
       /** @description Server-generated unique endpoint ID. */
-      id?: string;
+      readonly id?: string;
+      readonly spec?: components['schemas']['EndpointSpec'];
       /** @description Data version for this endpoint. Must match current version. */
-      version?: string;
-      spec?: components['schemas']['EndpointSpec'];
+      readonly version?: string;
     };
-    UpdateNexusEndpointResponse: {
+    readonly UpdateNexusEndpointResponse: {
       /** @description Data post acceptance. Can be used to issue additional updates to this record. */
-      endpoint?: components['schemas']['Endpoint'];
+      readonly endpoint?: components['schemas']['Endpoint'];
     };
     /** @description The data needed by a client to refer to a previously invoked Workflow Update. */
-    UpdateRef: {
-      workflowExecution?: components['schemas']['WorkflowExecution'];
-      updateId?: string;
+    readonly UpdateRef: {
+      readonly updateId?: string;
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
     };
-    UpdateScheduleRequest: {
-      /** @description The namespace of the schedule to update. */
-      namespace?: string;
-      /** @description The id of the schedule to update. */
-      scheduleId?: string;
-      /**
-       * @description The new schedule. The four main fields of the schedule (spec, action,
-       *  policies, state) are replaced completely by the values in this message.
-       */
-      schedule?: components['schemas']['Schedule'];
+    readonly UpdateScheduleRequest: {
       /**
        * Format: bytes
        * @description This can be the value of conflict_token from a DescribeScheduleResponse,
@@ -4281,11 +4282,20 @@ export interface components {
        *  between the Describe and this Update.
        *  If missing, the schedule will be updated unconditionally.
        */
-      conflictToken?: string;
+      readonly conflictToken?: string;
       /** @description The identity of the client who initiated this request. */
-      identity?: string;
+      readonly identity?: string;
+      /** @description The namespace of the schedule to update. */
+      readonly namespace?: string;
       /** @description A unique identifier for this update request for idempotence. Typically UUIDv4. */
-      requestId?: string;
+      readonly requestId?: string;
+      /**
+       * @description The new schedule. The four main fields of the schedule (spec, action,
+       *  policies, state) are replaced completely by the values in this message.
+       */
+      readonly schedule?: components['schemas']['Schedule'];
+      /** @description The id of the schedule to update. */
+      readonly scheduleId?: string;
       /**
        * @description Schedule search attributes to be updated.
        *  Do not set this field if you do not want to update the search attributes.
@@ -4293,28 +4303,27 @@ export interface components {
        *  Note: you cannot only update the search attributes with `UpdateScheduleRequest`,
        *  you must also set the `schedule` field; otherwise, it will unset the schedule.
        */
-      searchAttributes?: components['schemas']['SearchAttributes'];
+      readonly searchAttributes?: components['schemas']['SearchAttributes'];
     };
-    UpdateScheduleResponse: Record<string, never>;
+    readonly UpdateScheduleResponse: Record<string, unknown>;
     /**
      * @description (-- api-linter: core::0134=disabled
      *      aip.dev/not-precedent: Update RPCs don't follow Google API format. --)
      */
-    UpdateWorkflowExecutionRequest: {
-      /** @description The namespace name of the target Workflow. */
-      namespace?: string;
-      /**
-       * @description The target Workflow Id and (optionally) a specific Run Id thereof.
-       *  (-- api-linter: core::0203::optional=disabled
-       *      aip.dev/not-precedent: false positive triggered by the word "optional" --)
-       */
-      workflowExecution?: components['schemas']['WorkflowExecution'];
+    readonly UpdateWorkflowExecutionRequest: {
       /**
        * @description If set, this call will error if the most recent (if no Run Id is set on
        *  `workflow_execution`), or specified (if it is) Workflow Execution is not
        *  part of the same execution chain as this Id.
        */
-      firstExecutionRunId?: string;
+      readonly firstExecutionRunId?: string;
+      /** @description The namespace name of the target Workflow. */
+      readonly namespace?: string;
+      /**
+       * @description The request information that will be delivered all the way down to the
+       *  Workflow Execution.
+       */
+      readonly request?: components['schemas']['Request'];
       /**
        * @description Specifies client's intent to wait for Update results.
        *  NOTE: This field works together with API call timeout which is limited by
@@ -4322,22 +4331,21 @@ export interface components {
        *  user specified timeout, API call returns even if specified stage is not reached.
        *  Actual reached stage will be included in the response.
        */
-      waitPolicy?: components['schemas']['WaitPolicy'];
+      readonly waitPolicy?: components['schemas']['WaitPolicy'];
       /**
-       * @description The request information that will be delivered all the way down to the
-       *  Workflow Execution.
+       * @description The target Workflow Id and (optionally) a specific Run Id thereof.
+       *  (-- api-linter: core::0203::optional=disabled
+       *      aip.dev/not-precedent: false positive triggered by the word "optional" --)
        */
-      request?: components['schemas']['Request'];
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
     };
-    UpdateWorkflowExecutionResponse: {
-      /** @description Enough information for subsequent poll calls if needed. Never null. */
-      updateRef?: components['schemas']['UpdateRef'];
+    readonly UpdateWorkflowExecutionResponse: {
       /**
        * @description The outcome of the Update if and only if the Workflow Update
        *  has completed. If this response is being returned before the Update has
        *  completed then this field will not be set.
        */
-      outcome?: components['schemas']['Outcome'];
+      readonly outcome?: components['schemas']['Outcome'];
       /**
        * Format: enum
        * @description The most advanced lifecycle stage that the Update is known to have
@@ -4352,44 +4360,46 @@ export interface components {
        *  may then retry the call as needed.
        * @enum {string}
        */
-      stage?:
+      readonly stage?:
         | 'UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_UNSPECIFIED'
         | 'UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_ADMITTED'
         | 'UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_ACCEPTED'
         | 'UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_COMPLETED';
+      /** @description Enough information for subsequent poll calls if needed. Never null. */
+      readonly updateRef?: components['schemas']['UpdateRef'];
     };
-    UpsertWorkflowSearchAttributesEventAttributes: {
+    readonly UpsertWorkflowSearchAttributesEventAttributes: {
+      readonly searchAttributes?: components['schemas']['SearchAttributes'];
       /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
-      workflowTaskCompletedEventId?: string;
-      searchAttributes?: components['schemas']['SearchAttributes'];
+      readonly workflowTaskCompletedEventId?: string;
     };
     /** @description Information a user can set, often for use by user interfaces. */
-    UserMetadata: {
+    readonly UserMetadata: {
+      /**
+       * @description Long-form text that provides details. This payload should be a "json/plain"-encoded payload
+       *  that is a single JSON string for use in user interfaces. User interface formatting may apply to
+       *  this text in common use. The payload data section is limited to 20000 bytes by default.
+       */
+      readonly details?: components['schemas']['Payload'];
       /**
        * @description Short-form text that provides a summary. This payload should be a "json/plain"-encoded payload
        *  that is a single JSON string for use in user interfaces. User interface formatting may not
        *  apply to this text when used in "title" situations. The payload data section is limited to 400
        *  bytes by default.
        */
-      summary?: components['schemas']['Payload'];
-      /**
-       * @description Long-form text that provides details. This payload should be a "json/plain"-encoded payload
-       *  that is a single JSON string for use in user interfaces. User interface formatting may apply to
-       *  this text in common use. The payload data section is limited to 20000 bytes by default.
-       */
-      details?: components['schemas']['Payload'];
+      readonly summary?: components['schemas']['Payload'];
     };
     /** @description VersionInfo contains details about current and recommended release versions as well as alerts and upgrade instructions. */
-    VersionInfo: {
-      current?: components['schemas']['ReleaseInfo'];
-      recommended?: components['schemas']['ReleaseInfo'];
-      instructions?: string;
-      alerts?: components['schemas']['Alert'][];
+    readonly VersionInfo: {
+      readonly alerts?: readonly components['schemas']['Alert'][];
+      readonly current?: components['schemas']['ReleaseInfo'];
+      readonly instructions?: string;
       /** Format: date-time */
-      lastUpdateTime?: string;
+      readonly lastUpdateTime?: string;
+      readonly recommended?: components['schemas']['ReleaseInfo'];
     };
     /** @description Specifies client's intent to wait for Update results. */
-    WaitPolicy: {
+    readonly WaitPolicy: {
       /**
        * Format: enum
        * @description Indicates the Update lifecycle stage that the Update must reach before
@@ -4399,7 +4409,7 @@ export interface components {
        *  user specified timeout, API call returns even if specified stage is not reached.
        * @enum {string}
        */
-      lifecycleStage?:
+      readonly lifecycleStage?:
         | 'UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_UNSPECIFIED'
         | 'UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_ADMITTED'
         | 'UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_ACCEPTED'
@@ -4410,35 +4420,35 @@ export interface components {
      *  and whether or not this worker is opting into the build-id based versioning feature. This is
      *  used by matching to determine which workers ought to receive what tasks.
      */
-    WorkerVersionCapabilities: {
+    readonly WorkerVersionCapabilities: {
       /** @description An opaque whole-worker identifier */
-      buildId?: string;
+      readonly buildId?: string;
       /**
        * @description If set, the worker is opting in to worker versioning, and wishes to only receive appropriate
        *  tasks.
        */
-      useVersioning?: boolean;
+      readonly useVersioning?: boolean;
     };
     /** @description Identifies the version(s) of a worker that processed a task */
-    WorkerVersionStamp: {
+    readonly WorkerVersionStamp: {
       /**
        * @description An opaque whole-worker identifier. Replaces the deprecated `binary_checksum` field when this
        *  message is included in requests which previously used that.
        */
-      buildId?: string;
+      readonly buildId?: string;
       /**
        * @description If set, the worker is opting in to worker versioning. Otherwise, this is used only as a
        *  marker for workflow reset points and the BuildIDs search attribute.
        */
-      useVersioning?: boolean;
+      readonly useVersioning?: boolean;
     };
-    WorkflowEvent_EventReference: {
-      eventId?: string;
+    readonly WorkflowEvent_EventReference: {
+      readonly eventId?: string;
       /**
        * Format: enum
        * @enum {string}
        */
-      eventType?:
+      readonly eventType?:
         | 'EVENT_TYPE_UNSPECIFIED'
         | 'EVENT_TYPE_WORKFLOW_EXECUTION_STARTED'
         | 'EVENT_TYPE_WORKFLOW_EXECUTION_COMPLETED'
@@ -4500,92 +4510,94 @@ export interface components {
      *  uuid, a workflow execution is globally unique. Note that many commands allow specifying an empty
      *  run id as a way of saying "target the latest run of the workflow".
      */
-    WorkflowExecution: {
-      workflowId?: string;
-      runId?: string;
+    readonly WorkflowExecution: {
+      readonly runId?: string;
+      readonly workflowId?: string;
     };
-    WorkflowExecutionCancelRequestedEventAttributes: {
+    readonly WorkflowExecutionCanceledEventAttributes: {
+      readonly details?: components['schemas']['Payloads'];
+      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
+      readonly workflowTaskCompletedEventId?: string;
+    };
+    readonly WorkflowExecutionCancelRequestedEventAttributes: {
       /**
        * @description User provided reason for requesting cancellation
        *  TODO: shall we create a new field with name "reason" and deprecate this one?
        */
-      cause?: string;
+      readonly cause?: string;
       /** @description TODO: Is this the ID of the event in the workflow which initiated this cancel, if there was one? */
-      externalInitiatedEventId?: string;
-      externalWorkflowExecution?: components['schemas']['WorkflowExecution'];
+      readonly externalInitiatedEventId?: string;
+      readonly externalWorkflowExecution?: components['schemas']['WorkflowExecution'];
       /** @description id of the worker or client who requested this cancel */
-      identity?: string;
+      readonly identity?: string;
     };
-    WorkflowExecutionCanceledEventAttributes: {
-      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
-      workflowTaskCompletedEventId?: string;
-      details?: components['schemas']['Payloads'];
-    };
-    WorkflowExecutionCompletedEventAttributes: {
-      /** @description Serialized result of workflow completion (ie: The return value of the workflow function) */
-      result?: components['schemas']['Payloads'];
-      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
-      workflowTaskCompletedEventId?: string;
+    readonly WorkflowExecutionCompletedEventAttributes: {
       /** @description If another run is started by cron, this contains the new run id. */
-      newExecutionRunId?: string;
-    };
-    WorkflowExecutionConfig: {
-      taskQueue?: components['schemas']['TaskQueue'];
-      workflowExecutionTimeout?: string;
-      workflowRunTimeout?: string;
-      defaultWorkflowTaskTimeout?: string;
-      /** @description User metadata provided on start workflow. */
-      userMetadata?: components['schemas']['UserMetadata'];
-    };
-    WorkflowExecutionContinuedAsNewEventAttributes: {
-      /** @description The run ID of the new workflow started by this continue-as-new */
-      newExecutionRunId?: string;
-      workflowType?: components['schemas']['WorkflowType'];
-      taskQueue?: components['schemas']['TaskQueue'];
-      input?: components['schemas']['Payloads'];
-      /** @description Timeout of a single workflow run. */
-      workflowRunTimeout?: string;
-      /** @description Timeout of a single workflow task. */
-      workflowTaskTimeout?: string;
+      readonly newExecutionRunId?: string;
+      /** @description Serialized result of workflow completion (ie: The return value of the workflow function) */
+      readonly result?: components['schemas']['Payloads'];
       /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
-      workflowTaskCompletedEventId?: string;
+      readonly workflowTaskCompletedEventId?: string;
+    };
+    readonly WorkflowExecutionConfig: {
+      readonly defaultWorkflowTaskTimeout?: string;
+      readonly taskQueue?: components['schemas']['TaskQueue'];
+      /** @description User metadata provided on start workflow. */
+      readonly userMetadata?: components['schemas']['UserMetadata'];
+      readonly workflowExecutionTimeout?: string;
+      readonly workflowRunTimeout?: string;
+    };
+    readonly WorkflowExecutionContinuedAsNewEventAttributes: {
       /** @description TODO: How and is this used? */
-      backoffStartInterval?: string;
-      /**
-       * Format: enum
-       * @enum {string}
-       */
-      initiator?:
-        | 'CONTINUE_AS_NEW_INITIATOR_UNSPECIFIED'
-        | 'CONTINUE_AS_NEW_INITIATOR_WORKFLOW'
-        | 'CONTINUE_AS_NEW_INITIATOR_RETRY'
-        | 'CONTINUE_AS_NEW_INITIATOR_CRON_SCHEDULE';
+      readonly backoffStartInterval?: string;
       /**
        * @description TODO: David are these right?
        *  Deprecated. If a workflow's retry policy would cause a new run to start when the current one
        *  has failed, this field would be populated with that failure. Now (when supported by server
        *  and sdk) the final event will be `WORKFLOW_EXECUTION_FAILED` with `new_execution_run_id` set.
        */
-      failure?: components['schemas']['Failure'];
-      /** @description TODO: Is this the result of *this* workflow as it continued-as-new? */
-      lastCompletionResult?: components['schemas']['Payloads'];
-      header?: components['schemas']['Header'];
-      memo?: components['schemas']['Memo'];
-      searchAttributes?: components['schemas']['SearchAttributes'];
+      readonly failure?: components['schemas']['Failure'];
+      readonly header?: components['schemas']['Header'];
       /**
        * @description If this is set, the new execution inherits the Build ID of the current execution. Otherwise,
        *  the assignment rules will be used to independently assign a Build ID to the new execution.
        */
-      inheritBuildId?: boolean;
-    };
-    WorkflowExecutionFailedEventAttributes: {
-      /** @description Serialized result of workflow failure (ex: An exception thrown, or error returned) */
-      failure?: components['schemas']['Failure'];
+      readonly inheritBuildId?: boolean;
       /**
        * Format: enum
        * @enum {string}
        */
-      retryState?:
+      readonly initiator?:
+        | 'CONTINUE_AS_NEW_INITIATOR_UNSPECIFIED'
+        | 'CONTINUE_AS_NEW_INITIATOR_WORKFLOW'
+        | 'CONTINUE_AS_NEW_INITIATOR_RETRY'
+        | 'CONTINUE_AS_NEW_INITIATOR_CRON_SCHEDULE';
+      readonly input?: components['schemas']['Payloads'];
+      /** @description TODO: Is this the result of *this* workflow as it continued-as-new? */
+      readonly lastCompletionResult?: components['schemas']['Payloads'];
+      readonly memo?: components['schemas']['Memo'];
+      /** @description The run ID of the new workflow started by this continue-as-new */
+      readonly newExecutionRunId?: string;
+      readonly searchAttributes?: components['schemas']['SearchAttributes'];
+      readonly taskQueue?: components['schemas']['TaskQueue'];
+      /** @description Timeout of a single workflow run. */
+      readonly workflowRunTimeout?: string;
+      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
+      readonly workflowTaskCompletedEventId?: string;
+      /** @description Timeout of a single workflow task. */
+      readonly workflowTaskTimeout?: string;
+      readonly workflowType?: components['schemas']['WorkflowType'];
+    };
+    readonly WorkflowExecutionFailedEventAttributes: {
+      /** @description Serialized result of workflow failure (ex: An exception thrown, or error returned) */
+      readonly failure?: components['schemas']['Failure'];
+      /** @description If another run is started by cron or retry, this contains the new run id. */
+      readonly newExecutionRunId?: string;
+      /**
+       * Format: enum
+       * @enum {string}
+       */
+      readonly retryState?:
         | 'RETRY_STATE_UNSPECIFIED'
         | 'RETRY_STATE_IN_PROGRESS'
         | 'RETRY_STATE_NON_RETRYABLE_FAILURE'
@@ -4595,68 +4607,9 @@ export interface components {
         | 'RETRY_STATE_INTERNAL_SERVER_ERROR'
         | 'RETRY_STATE_CANCEL_REQUESTED';
       /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
-      workflowTaskCompletedEventId?: string;
-      /** @description If another run is started by cron or retry, this contains the new run id. */
-      newExecutionRunId?: string;
+      readonly workflowTaskCompletedEventId?: string;
     };
-    WorkflowExecutionInfo: {
-      execution?: components['schemas']['WorkflowExecution'];
-      type?: components['schemas']['WorkflowType'];
-      /** Format: date-time */
-      startTime?: string;
-      /** Format: date-time */
-      closeTime?: string;
-      /**
-       * Format: enum
-       * @enum {string}
-       */
-      status?:
-        | 'WORKFLOW_EXECUTION_STATUS_UNSPECIFIED'
-        | 'WORKFLOW_EXECUTION_STATUS_RUNNING'
-        | 'WORKFLOW_EXECUTION_STATUS_COMPLETED'
-        | 'WORKFLOW_EXECUTION_STATUS_FAILED'
-        | 'WORKFLOW_EXECUTION_STATUS_CANCELED'
-        | 'WORKFLOW_EXECUTION_STATUS_TERMINATED'
-        | 'WORKFLOW_EXECUTION_STATUS_CONTINUED_AS_NEW'
-        | 'WORKFLOW_EXECUTION_STATUS_TIMED_OUT';
-      historyLength?: string;
-      parentNamespaceId?: string;
-      parentExecution?: components['schemas']['WorkflowExecution'];
-      /** Format: date-time */
-      executionTime?: string;
-      memo?: components['schemas']['Memo'];
-      searchAttributes?: components['schemas']['SearchAttributes'];
-      autoResetPoints?: components['schemas']['ResetPoints'];
-      taskQueue?: string;
-      stateTransitionCount?: string;
-      historySizeBytes?: string;
-      /** @description If set, the most recent worker version stamp that appeared in a workflow task completion */
-      mostRecentWorkerVersionStamp?: components['schemas']['WorkerVersionStamp'];
-      /**
-       * @description Workflow execution duration is defined as difference between close time and execution time.
-       *  This field is only populated if the workflow is closed.
-       */
-      executionDuration?: string;
-      /**
-       * @description Contains information about the root workflow execution.
-       *  The root workflow execution is defined as follows:
-       *  1. A workflow without parent workflow is its own root workflow.
-       *  2. A workflow that has a parent workflow has the same root workflow as its parent workflow.
-       *  Note: workflows continued as new or reseted may or may not have parents, check examples below.
-       *
-       *  Examples:
-       *    Scenario 1: Workflow W1 starts child workflow W2, and W2 starts child workflow W3.
-       *      - The root workflow of all three workflows is W1.
-       *    Scenario 2: Workflow W1 starts child workflow W2, and W2 continued as new W3.
-       *      - The root workflow of all three workflows is W1.
-       *    Scenario 3: Workflow W1 continued as new W2.
-       *      - The root workflow of W1 is W1 and the root workflow of W2 is W2.
-       *    Scenario 4: Workflow W1 starts child workflow W2, and W2 is reseted, creating W3
-       *      - The root workflow of all three workflows is W1.
-       *    Scenario 5: Workflow W1 is reseted, creating W2.
-       *      - The root workflow of W1 is W1 and the root workflow of W2 is W2.
-       */
-      rootExecution?: components['schemas']['WorkflowExecution'];
+    readonly WorkflowExecutionInfo: {
       /**
        * @description The currently assigned build ID for this execution. Presence of this value means worker versioning is used
        *  for this execution. Assigned build ID is selected based on Worker Versioning Assignment Rules
@@ -4665,12 +4618,18 @@ export interface components {
        *  Assigned build ID can also change in the middle of a execution if Compatible Redirect Rules are applied to
        *  this execution.
        */
-      assignedBuildId?: string;
+      readonly assignedBuildId?: string;
+      readonly autoResetPoints?: components['schemas']['ResetPoints'];
+      /** Format: date-time */
+      readonly closeTime?: string;
+      readonly execution?: components['schemas']['WorkflowExecution'];
       /**
-       * @description Build ID inherited from a previous/parent execution. If present, assigned_build_id will be set to this, instead
-       *  of using the assignment rules.
+       * @description Workflow execution duration is defined as difference between close time and execution time.
+       *  This field is only populated if the workflow is closed.
        */
-      inheritedBuildId?: string;
+      readonly executionDuration?: string;
+      /** Format: date-time */
+      readonly executionTime?: string;
       /**
        * @description The first run ID in the execution chain.
        *  Executions created via the following operations are considered to be in the same chain
@@ -4679,117 +4638,19 @@ export interface components {
        *  - Workflow Reset
        *  - Cron Schedule
        */
-      firstRunId?: string;
-    };
-    WorkflowExecutionSignaledEventAttributes: {
-      /** @description The name/type of the signal to fire */
-      signalName?: string;
-      /** @description Will be deserialized and provided as argument(s) to the signal handler */
-      input?: components['schemas']['Payloads'];
-      /** @description id of the worker/client who sent this signal */
-      identity?: string;
+      readonly firstRunId?: string;
+      readonly historyLength?: string;
+      readonly historySizeBytes?: string;
       /**
-       * @description Headers that were passed by the sender of the signal and copied by temporal
-       *  server into the workflow task.
+       * @description Build ID inherited from a previous/parent execution. If present, assigned_build_id will be set to this, instead
+       *  of using the assignment rules.
        */
-      header?: components['schemas']['Header'];
-      /** @description Indicates the signal did not generate a new workflow task when received. */
-      skipGenerateWorkflowTask?: boolean;
-      /** @description When signal origin is a workflow execution, this field is set. */
-      externalWorkflowExecution?: components['schemas']['WorkflowExecution'];
-    };
-    /** @description Always the first event in workflow history */
-    WorkflowExecutionStartedEventAttributes: {
-      workflowType?: components['schemas']['WorkflowType'];
-      /**
-       * @description If this workflow is a child, the namespace our parent lives in.
-       *  SDKs and UI tools should use `parent_workflow_namespace` field but server must use `parent_workflow_namespace_id` only.
-       */
-      parentWorkflowNamespace?: string;
-      parentWorkflowNamespaceId?: string;
-      /**
-       * @description Contains information about parent workflow execution that initiated the child workflow these attributes belong to.
-       *  If the workflow these attributes belong to is not a child workflow of any other execution, this field will not be populated.
-       */
-      parentWorkflowExecution?: components['schemas']['WorkflowExecution'];
-      /** @description EventID of the child execution initiated event in parent workflow */
-      parentInitiatedEventId?: string;
-      taskQueue?: components['schemas']['TaskQueue'];
-      /** @description SDK will deserialize this and provide it as arguments to the workflow function */
-      input?: components['schemas']['Payloads'];
-      /** @description Total workflow execution timeout including retries and continue as new. */
-      workflowExecutionTimeout?: string;
-      /** @description Timeout of a single workflow run. */
-      workflowRunTimeout?: string;
-      /** @description Timeout of a single workflow task. */
-      workflowTaskTimeout?: string;
-      /**
-       * @description Run id of the previous workflow which continued-as-new or retired or cron executed into this
-       *  workflow.
-       */
-      continuedExecutionRunId?: string;
-      /**
-       * Format: enum
-       * @enum {string}
-       */
-      initiator?:
-        | 'CONTINUE_AS_NEW_INITIATOR_UNSPECIFIED'
-        | 'CONTINUE_AS_NEW_INITIATOR_WORKFLOW'
-        | 'CONTINUE_AS_NEW_INITIATOR_RETRY'
-        | 'CONTINUE_AS_NEW_INITIATOR_CRON_SCHEDULE';
-      continuedFailure?: components['schemas']['Failure'];
-      lastCompletionResult?: components['schemas']['Payloads'];
-      /**
-       * @description This is the run id when the WorkflowExecutionStarted event was written.
-       *  A workflow reset changes the execution run_id, but preserves this field.
-       */
-      originalExecutionRunId?: string;
-      /** @description Identity of the client who requested this execution */
-      identity?: string;
-      /**
-       * @description This is the very first runId along the chain of ContinueAsNew, Retry, Cron and Reset.
-       *  Used to identify a chain.
-       */
-      firstExecutionRunId?: string;
-      retryPolicy?: components['schemas']['RetryPolicy'];
-      /**
-       * Format: int32
-       * @description Starting at 1, the number of times we have tried to execute this workflow
-       */
-      attempt?: number;
-      /**
-       * Format: date-time
-       * @description The absolute time at which the workflow will be timed out.
-       *  This is passed without change to the next run/retry of a workflow.
-       */
-      workflowExecutionExpirationTime?: string;
-      /** @description If this workflow runs on a cron schedule, it will appear here */
-      cronSchedule?: string;
-      /**
-       * @description For a cron workflow, this contains the amount of time between when this iteration of
-       *  the cron workflow was scheduled and when it should run next per its cron_schedule.
-       */
-      firstWorkflowTaskBackoff?: string;
-      memo?: components['schemas']['Memo'];
-      searchAttributes?: components['schemas']['SearchAttributes'];
-      prevAutoResetPoints?: components['schemas']['ResetPoints'];
-      header?: components['schemas']['Header'];
-      /**
-       * @description Version of the child execution initiated event in parent workflow
-       *  It should be used together with parent_initiated_event_id to identify
-       *  a child initiated event for global namespace
-       */
-      parentInitiatedEventVersion?: string;
-      /** @description This field is new in 1.21. */
-      workflowId?: string;
-      /**
-       * @description If this workflow intends to use anything other than the current overall default version for
-       *  the queue, then we include it here.
-       *  Deprecated. use `inherited_build_id` instead
-       */
-      sourceVersionStamp?: components['schemas']['WorkerVersionStamp'];
-      /** @description Completion callbacks attached when this workflow was started. */
-      completionCallbacks?: components['schemas']['Callback'][];
+      readonly inheritedBuildId?: string;
+      readonly memo?: components['schemas']['Memo'];
+      /** @description If set, the most recent worker version stamp that appeared in a workflow task completion */
+      readonly mostRecentWorkerVersionStamp?: components['schemas']['WorkerVersionStamp'];
+      readonly parentExecution?: components['schemas']['WorkflowExecution'];
+      readonly parentNamespaceId?: string;
       /**
        * @description Contains information about the root workflow execution.
        *  The root workflow execution is defined as follows:
@@ -4809,23 +4670,174 @@ export interface components {
        *    Scenario 5: Workflow W1 is reseted, creating W2.
        *      - The root workflow of W1 is W1 and the root workflow of W2 is W2.
        */
-      rootWorkflowExecution?: components['schemas']['WorkflowExecution'];
-      /** @description When present, this execution is assigned to the build ID of its parent or previous execution. */
-      inheritedBuildId?: string;
-    };
-    WorkflowExecutionTerminatedEventAttributes: {
-      /** @description User/client provided reason for termination */
-      reason?: string;
-      details?: components['schemas']['Payloads'];
-      /** @description id of the client who requested termination */
-      identity?: string;
-    };
-    WorkflowExecutionTimedOutEventAttributes: {
+      readonly rootExecution?: components['schemas']['WorkflowExecution'];
+      readonly searchAttributes?: components['schemas']['SearchAttributes'];
+      /** Format: date-time */
+      readonly startTime?: string;
+      readonly stateTransitionCount?: string;
       /**
        * Format: enum
        * @enum {string}
        */
-      retryState?:
+      readonly status?:
+        | 'WORKFLOW_EXECUTION_STATUS_UNSPECIFIED'
+        | 'WORKFLOW_EXECUTION_STATUS_RUNNING'
+        | 'WORKFLOW_EXECUTION_STATUS_COMPLETED'
+        | 'WORKFLOW_EXECUTION_STATUS_FAILED'
+        | 'WORKFLOW_EXECUTION_STATUS_CANCELED'
+        | 'WORKFLOW_EXECUTION_STATUS_TERMINATED'
+        | 'WORKFLOW_EXECUTION_STATUS_CONTINUED_AS_NEW'
+        | 'WORKFLOW_EXECUTION_STATUS_TIMED_OUT';
+      readonly taskQueue?: string;
+      readonly type?: components['schemas']['WorkflowType'];
+    };
+    readonly WorkflowExecutionSignaledEventAttributes: {
+      /** @description When signal origin is a workflow execution, this field is set. */
+      readonly externalWorkflowExecution?: components['schemas']['WorkflowExecution'];
+      /**
+       * @description Headers that were passed by the sender of the signal and copied by temporal
+       *  server into the workflow task.
+       */
+      readonly header?: components['schemas']['Header'];
+      /** @description id of the worker/client who sent this signal */
+      readonly identity?: string;
+      /** @description Will be deserialized and provided as argument(s) to the signal handler */
+      readonly input?: components['schemas']['Payloads'];
+      /** @description The name/type of the signal to fire */
+      readonly signalName?: string;
+      /** @description Indicates the signal did not generate a new workflow task when received. */
+      readonly skipGenerateWorkflowTask?: boolean;
+    };
+    /** @description Always the first event in workflow history */
+    readonly WorkflowExecutionStartedEventAttributes: {
+      /**
+       * Format: int32
+       * @description Starting at 1, the number of times we have tried to execute this workflow
+       */
+      readonly attempt?: number;
+      /** @description Completion callbacks attached when this workflow was started. */
+      readonly completionCallbacks?: readonly components['schemas']['Callback'][];
+      /**
+       * @description Run id of the previous workflow which continued-as-new or retired or cron executed into this
+       *  workflow.
+       */
+      readonly continuedExecutionRunId?: string;
+      readonly continuedFailure?: components['schemas']['Failure'];
+      /** @description If this workflow runs on a cron schedule, it will appear here */
+      readonly cronSchedule?: string;
+      /**
+       * @description This is the very first runId along the chain of ContinueAsNew, Retry, Cron and Reset.
+       *  Used to identify a chain.
+       */
+      readonly firstExecutionRunId?: string;
+      /**
+       * @description For a cron workflow, this contains the amount of time between when this iteration of
+       *  the cron workflow was scheduled and when it should run next per its cron_schedule.
+       */
+      readonly firstWorkflowTaskBackoff?: string;
+      readonly header?: components['schemas']['Header'];
+      /** @description Identity of the client who requested this execution */
+      readonly identity?: string;
+      /** @description When present, this execution is assigned to the build ID of its parent or previous execution. */
+      readonly inheritedBuildId?: string;
+      /**
+       * Format: enum
+       * @enum {string}
+       */
+      readonly initiator?:
+        | 'CONTINUE_AS_NEW_INITIATOR_UNSPECIFIED'
+        | 'CONTINUE_AS_NEW_INITIATOR_WORKFLOW'
+        | 'CONTINUE_AS_NEW_INITIATOR_RETRY'
+        | 'CONTINUE_AS_NEW_INITIATOR_CRON_SCHEDULE';
+      /** @description SDK will deserialize this and provide it as arguments to the workflow function */
+      readonly input?: components['schemas']['Payloads'];
+      readonly lastCompletionResult?: components['schemas']['Payloads'];
+      readonly memo?: components['schemas']['Memo'];
+      /**
+       * @description This is the run id when the WorkflowExecutionStarted event was written.
+       *  A workflow reset changes the execution run_id, but preserves this field.
+       */
+      readonly originalExecutionRunId?: string;
+      /** @description EventID of the child execution initiated event in parent workflow */
+      readonly parentInitiatedEventId?: string;
+      /**
+       * @description Version of the child execution initiated event in parent workflow
+       *  It should be used together with parent_initiated_event_id to identify
+       *  a child initiated event for global namespace
+       */
+      readonly parentInitiatedEventVersion?: string;
+      /**
+       * @description Contains information about parent workflow execution that initiated the child workflow these attributes belong to.
+       *  If the workflow these attributes belong to is not a child workflow of any other execution, this field will not be populated.
+       */
+      readonly parentWorkflowExecution?: components['schemas']['WorkflowExecution'];
+      /**
+       * @description If this workflow is a child, the namespace our parent lives in.
+       *  SDKs and UI tools should use `parent_workflow_namespace` field but server must use `parent_workflow_namespace_id` only.
+       */
+      readonly parentWorkflowNamespace?: string;
+      readonly parentWorkflowNamespaceId?: string;
+      readonly prevAutoResetPoints?: components['schemas']['ResetPoints'];
+      readonly retryPolicy?: components['schemas']['RetryPolicy'];
+      /**
+       * @description Contains information about the root workflow execution.
+       *  The root workflow execution is defined as follows:
+       *  1. A workflow without parent workflow is its own root workflow.
+       *  2. A workflow that has a parent workflow has the same root workflow as its parent workflow.
+       *  Note: workflows continued as new or reseted may or may not have parents, check examples below.
+       *
+       *  Examples:
+       *    Scenario 1: Workflow W1 starts child workflow W2, and W2 starts child workflow W3.
+       *      - The root workflow of all three workflows is W1.
+       *    Scenario 2: Workflow W1 starts child workflow W2, and W2 continued as new W3.
+       *      - The root workflow of all three workflows is W1.
+       *    Scenario 3: Workflow W1 continued as new W2.
+       *      - The root workflow of W1 is W1 and the root workflow of W2 is W2.
+       *    Scenario 4: Workflow W1 starts child workflow W2, and W2 is reseted, creating W3
+       *      - The root workflow of all three workflows is W1.
+       *    Scenario 5: Workflow W1 is reseted, creating W2.
+       *      - The root workflow of W1 is W1 and the root workflow of W2 is W2.
+       */
+      readonly rootWorkflowExecution?: components['schemas']['WorkflowExecution'];
+      readonly searchAttributes?: components['schemas']['SearchAttributes'];
+      /**
+       * @description If this workflow intends to use anything other than the current overall default version for
+       *  the queue, then we include it here.
+       *  Deprecated. use `inherited_build_id` instead
+       */
+      readonly sourceVersionStamp?: components['schemas']['WorkerVersionStamp'];
+      readonly taskQueue?: components['schemas']['TaskQueue'];
+      /**
+       * Format: date-time
+       * @description The absolute time at which the workflow will be timed out.
+       *  This is passed without change to the next run/retry of a workflow.
+       */
+      readonly workflowExecutionExpirationTime?: string;
+      /** @description Total workflow execution timeout including retries and continue as new. */
+      readonly workflowExecutionTimeout?: string;
+      /** @description This field is new in 1.21. */
+      readonly workflowId?: string;
+      /** @description Timeout of a single workflow run. */
+      readonly workflowRunTimeout?: string;
+      /** @description Timeout of a single workflow task. */
+      readonly workflowTaskTimeout?: string;
+      readonly workflowType?: components['schemas']['WorkflowType'];
+    };
+    readonly WorkflowExecutionTerminatedEventAttributes: {
+      readonly details?: components['schemas']['Payloads'];
+      /** @description id of the client who requested termination */
+      readonly identity?: string;
+      /** @description User/client provided reason for termination */
+      readonly reason?: string;
+    };
+    readonly WorkflowExecutionTimedOutEventAttributes: {
+      /** @description If another run is started by cron or retry, this contains the new run id. */
+      readonly newExecutionRunId?: string;
+      /**
+       * Format: enum
+       * @enum {string}
+       */
+      readonly retryState?:
         | 'RETRY_STATE_UNSPECIFIED'
         | 'RETRY_STATE_IN_PROGRESS'
         | 'RETRY_STATE_NON_RETRYABLE_FAILURE'
@@ -4834,129 +4846,129 @@ export interface components {
         | 'RETRY_STATE_RETRY_POLICY_NOT_SET'
         | 'RETRY_STATE_INTERNAL_SERVER_ERROR'
         | 'RETRY_STATE_CANCEL_REQUESTED';
-      /** @description If another run is started by cron or retry, this contains the new run id. */
-      newExecutionRunId?: string;
     };
-    WorkflowExecutionUpdateAcceptedEventAttributes: {
-      /** @description The instance ID of the update protocol that generated this event. */
-      protocolInstanceId?: string;
+    readonly WorkflowExecutionUpdateAcceptedEventAttributes: {
+      /**
+       * @description The message payload of the original request message that initiated this
+       *  update.
+       */
+      readonly acceptedRequest?: components['schemas']['Request'];
       /**
        * @description The message ID of the original request message that initiated this
        *  update. Needed so that the worker can recreate and deliver that same
        *  message as part of replay.
        */
-      acceptedRequestMessageId?: string;
+      readonly acceptedRequestMessageId?: string;
       /** @description The event ID used to sequence the original request message. */
-      acceptedRequestSequencingEventId?: string;
-      /**
-       * @description The message payload of the original request message that initiated this
-       *  update.
-       */
-      acceptedRequest?: components['schemas']['Request'];
+      readonly acceptedRequestSequencingEventId?: string;
+      /** @description The instance ID of the update protocol that generated this event. */
+      readonly protocolInstanceId?: string;
     };
-    WorkflowExecutionUpdateAdmittedEventAttributes: {
-      /** @description The update request associated with this event. */
-      request?: components['schemas']['Request'];
+    readonly WorkflowExecutionUpdateAdmittedEventAttributes: {
       /**
        * Format: enum
        * @description An explanation of why this event was written to history.
        * @enum {string}
        */
-      origin?: 'UPDATE_ADMITTED_EVENT_ORIGIN_UNSPECIFIED' | 'UPDATE_ADMITTED_EVENT_ORIGIN_REAPPLY';
+      readonly origin?:
+        | 'UPDATE_ADMITTED_EVENT_ORIGIN_UNSPECIFIED'
+        | 'UPDATE_ADMITTED_EVENT_ORIGIN_REAPPLY';
+      /** @description The update request associated with this event. */
+      readonly request?: components['schemas']['Request'];
     };
-    WorkflowExecutionUpdateCompletedEventAttributes: {
-      /** @description The metadata about this update. */
-      meta?: components['schemas']['Meta'];
+    readonly WorkflowExecutionUpdateCompletedEventAttributes: {
       /** @description The event ID indicating the acceptance of this update. */
-      acceptedEventId?: string;
+      readonly acceptedEventId?: string;
+      /** @description The metadata about this update. */
+      readonly meta?: components['schemas']['Meta'];
       /** @description The outcome of executing the workflow update function. */
-      outcome?: components['schemas']['Outcome'];
+      readonly outcome?: components['schemas']['Outcome'];
     };
-    WorkflowExecutionUpdateRejectedEventAttributes: {
+    readonly WorkflowExecutionUpdateRejectedEventAttributes: {
+      /** @description The cause of rejection. */
+      readonly failure?: components['schemas']['Failure'];
       /** @description The instance ID of the update protocol that generated this event. */
-      protocolInstanceId?: string;
+      readonly protocolInstanceId?: string;
+      /**
+       * @description The message payload of the original request message that initiated this
+       *  update.
+       */
+      readonly rejectedRequest?: components['schemas']['Request'];
       /**
        * @description The message ID of the original request message that initiated this
        *  update. Needed so that the worker can recreate and deliver that same
        *  message as part of replay.
        */
-      rejectedRequestMessageId?: string;
+      readonly rejectedRequestMessageId?: string;
       /** @description The event ID used to sequence the original request message. */
-      rejectedRequestSequencingEventId?: string;
-      /**
-       * @description The message payload of the original request message that initiated this
-       *  update.
-       */
-      rejectedRequest?: components['schemas']['Request'];
-      /** @description The cause of rejection. */
-      failure?: components['schemas']['Failure'];
+      readonly rejectedRequestSequencingEventId?: string;
     };
-    WorkflowPropertiesModifiedEventAttributes: {
-      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
-      workflowTaskCompletedEventId?: string;
+    readonly WorkflowPropertiesModifiedEventAttributes: {
       /**
        * @description If set, update the workflow memo with the provided values. The values will be merged with
        *  the existing memo. If the user wants to delete values, a default/empty Payload should be
        *  used as the value for the key being deleted.
        */
-      upsertedMemo?: components['schemas']['Memo'];
+      readonly upsertedMemo?: components['schemas']['Memo'];
+      /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
+      readonly workflowTaskCompletedEventId?: string;
     };
-    WorkflowPropertiesModifiedExternallyEventAttributes: {
+    readonly WorkflowPropertiesModifiedExternallyEventAttributes: {
       /**
        * @description If set to a nonempty string, future workflow tasks for this workflow shall be dispatched on
        *  the provided queue.
        */
-      newTaskQueue?: string;
-      /** @description If set, update the workflow task timeout to this value. */
-      newWorkflowTaskTimeout?: string;
-      /** @description If set, update the workflow run timeout to this value. May be set to 0 for no timeout. */
-      newWorkflowRunTimeout?: string;
+      readonly newTaskQueue?: string;
       /** @description If set, update the workflow execution timeout to this value. May be set to 0 for no timeout. */
-      newWorkflowExecutionTimeout?: string;
+      readonly newWorkflowExecutionTimeout?: string;
+      /** @description If set, update the workflow run timeout to this value. May be set to 0 for no timeout. */
+      readonly newWorkflowRunTimeout?: string;
+      /** @description If set, update the workflow task timeout to this value. */
+      readonly newWorkflowTaskTimeout?: string;
       /**
        * @description If set, update the workflow memo with the provided values. The values will be merged with
        *  the existing memo. If the user wants to delete values, a default/empty Payload should be
        *  used as the value for the key being deleted.
        */
-      upsertedMemo?: components['schemas']['Memo'];
+      readonly upsertedMemo?: components['schemas']['Memo'];
     };
     /** @description See https://docs.temporal.io/docs/concepts/queries/ */
-    WorkflowQuery: {
-      /** @description The workflow-author-defined identifier of the query. Typically a function name. */
-      queryType?: string;
-      /** @description Serialized arguments that will be provided to the query handler. */
-      queryArgs?: components['schemas']['Payloads'];
+    readonly WorkflowQuery: {
       /**
        * @description Headers that were passed by the caller of the query and copied by temporal
        *  server into the workflow task.
        */
-      header?: components['schemas']['Header'];
+      readonly header?: components['schemas']['Header'];
+      /** @description Serialized arguments that will be provided to the query handler. */
+      readonly queryArgs?: components['schemas']['Payloads'];
+      /** @description The workflow-author-defined identifier of the query. Typically a function name. */
+      readonly queryType?: string;
     };
-    WorkflowTaskCompletedEventAttributes: {
-      /** @description The id of the `WORKFLOW_TASK_SCHEDULED` event this task corresponds to */
-      scheduledEventId?: string;
-      /** @description The id of the `WORKFLOW_TASK_STARTED` event this task corresponds to */
-      startedEventId?: string;
-      /** @description Identity of the worker who completed this task */
-      identity?: string;
+    readonly WorkflowTaskCompletedEventAttributes: {
       /** @description Binary ID of the worker who completed this task */
-      binaryChecksum?: string;
+      readonly binaryChecksum?: string;
+      /** @description Identity of the worker who completed this task */
+      readonly identity?: string;
+      /** @description Local usage data sent during workflow task completion and recorded here for posterity */
+      readonly meteringMetadata?: components['schemas']['MeteringMetadata'];
+      /** @description The id of the `WORKFLOW_TASK_SCHEDULED` event this task corresponds to */
+      readonly scheduledEventId?: string;
+      /**
+       * @description Data the SDK wishes to record for itself, but server need not interpret, and does not
+       *  directly impact workflow state.
+       */
+      readonly sdkMetadata?: components['schemas']['WorkflowTaskCompletedMetadata'];
+      /** @description The id of the `WORKFLOW_TASK_STARTED` event this task corresponds to */
+      readonly startedEventId?: string;
       /**
        * @description Version info of the worker who processed this workflow task. If present, the `build_id` field
        *  within is also used as `binary_checksum`, which may be omitted in that case (it may also be
        *  populated to preserve compatibility).
        *  Deprecated. Use the info inside the corresponding WorkflowTaskStartedEvent
        */
-      workerVersion?: components['schemas']['WorkerVersionStamp'];
-      /**
-       * @description Data the SDK wishes to record for itself, but server need not interpret, and does not
-       *  directly impact workflow state.
-       */
-      sdkMetadata?: components['schemas']['WorkflowTaskCompletedMetadata'];
-      /** @description Local usage data sent during workflow task completion and recorded here for posterity */
-      meteringMetadata?: components['schemas']['MeteringMetadata'];
+      readonly workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
-    WorkflowTaskCompletedMetadata: {
+    readonly WorkflowTaskCompletedMetadata: {
       /**
        * @description Internal flags used by the core SDK. SDKs using flags must comply with the following behavior:
        *
@@ -4978,7 +4990,7 @@ export interface components {
        *  (-- api-linter: core::0141::forbidden-types=disabled
        *      aip.dev/not-precedent: These really shouldn't have negative values. --)
        */
-      coreUsedFlags?: number[];
+      readonly coreUsedFlags?: readonly number[];
       /**
        * @description Flags used by the SDK lang. No attempt is made to distinguish between different SDK languages
        *  here as processing a workflow with a different language than the one which authored it is
@@ -4987,7 +4999,7 @@ export interface components {
        *  (-- api-linter: core::0141::forbidden-types=disabled
        *      aip.dev/not-precedent: These really shouldn't have negative values. --)
        */
-      langUsedFlags?: number[];
+      readonly langUsedFlags?: readonly number[];
       /**
        * @description Name of the SDK that processed the task. This is usually something like "temporal-go" and is
        *  usually the same as client-name gRPC header. This should only be set if its value changed
@@ -4996,24 +5008,27 @@ export interface components {
        *  (-- api-linter: core::0122::name-suffix=disabled
        *      aip.dev/not-precedent: We're ok with a name suffix here. --)
        */
-      sdkName?: string;
+      readonly sdkName?: string;
       /**
        * @description Version of the SDK that processed the task. This is usually something like "1.20.0" and is
        *  usually the same as client-version gRPC header. This should only be set if its value changed
        *  since the last time recorded on the workflow (or be set on the first task).
        */
-      sdkVersion?: string;
+      readonly sdkVersion?: string;
     };
-    WorkflowTaskFailedEventAttributes: {
-      /** @description The id of the `WORKFLOW_TASK_SCHEDULED` event this task corresponds to */
-      scheduledEventId?: string;
-      /** @description The id of the `WORKFLOW_TASK_STARTED` event this task corresponds to */
-      startedEventId?: string;
+    readonly WorkflowTaskFailedEventAttributes: {
+      /** @description The original run id of the workflow. For reset workflow. */
+      readonly baseRunId?: string;
+      /**
+       * @description DEPRECATED since 1.21 - use `worker_version` instead.
+       *  If a worker explicitly failed this task, its binary id
+       */
+      readonly binaryChecksum?: string;
       /**
        * Format: enum
        * @enum {string}
        */
-      cause?:
+      readonly cause?:
         | 'WORKFLOW_TASK_FAILED_CAUSE_UNSPECIFIED'
         | 'WORKFLOW_TASK_FAILED_CAUSE_UNHANDLED_COMMAND'
         | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_SCHEDULE_ACTIVITY_ATTRIBUTES'
@@ -5051,80 +5066,77 @@ export interface components {
         | 'WORKFLOW_TASK_FAILED_CAUSE_BAD_REQUEST_CANCEL_NEXUS_OPERATION_ATTRIBUTES'
         | 'WORKFLOW_TASK_FAILED_CAUSE_FEATURE_DISABLED';
       /** @description The failure details */
-      failure?: components['schemas']['Failure'];
-      /** @description If a worker explicitly failed this task, it's identity. TODO: What is this set to if server fails the task? */
-      identity?: string;
-      /** @description The original run id of the workflow. For reset workflow. */
-      baseRunId?: string;
-      /** @description If the workflow is being reset, the new run id. */
-      newRunId?: string;
+      readonly failure?: components['schemas']['Failure'];
       /** @description TODO: ? */
-      forkEventVersion?: string;
-      /**
-       * @description DEPRECATED since 1.21 - use `worker_version` instead.
-       *  If a worker explicitly failed this task, its binary id
-       */
-      binaryChecksum?: string;
+      readonly forkEventVersion?: string;
+      /** @description If a worker explicitly failed this task, it's identity. TODO: What is this set to if server fails the task? */
+      readonly identity?: string;
+      /** @description If the workflow is being reset, the new run id. */
+      readonly newRunId?: string;
+      /** @description The id of the `WORKFLOW_TASK_SCHEDULED` event this task corresponds to */
+      readonly scheduledEventId?: string;
+      /** @description The id of the `WORKFLOW_TASK_STARTED` event this task corresponds to */
+      readonly startedEventId?: string;
       /**
        * @description Version info of the worker who processed this workflow task. If present, the `build_id` field
        *  within is also used as `binary_checksum`, which may be omitted in that case (it may also be
        *  populated to preserve compatibility).
        *  Deprecated. Use the info inside the corresponding WorkflowTaskStartedEvent
        */
-      workerVersion?: components['schemas']['WorkerVersionStamp'];
+      readonly workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
-    WorkflowTaskScheduledEventAttributes: {
-      /** @description The task queue this workflow task was enqueued in, which could be a normal or sticky queue */
-      taskQueue?: components['schemas']['TaskQueue'];
+    readonly WorkflowTaskScheduledEventAttributes: {
+      /**
+       * Format: int32
+       * @description Starting at 1, how many attempts there have been to complete this task
+       */
+      readonly attempt?: number;
       /**
        * @description How long the worker has to process this task once receiving it before it times out
        *
        *  (-- api-linter: core::0140::prepositions=disabled
        *      aip.dev/not-precedent: "to" is used to indicate interval. --)
        */
-      startToCloseTimeout?: string;
-      /**
-       * Format: int32
-       * @description Starting at 1, how many attempts there have been to complete this task
-       */
-      attempt?: number;
+      readonly startToCloseTimeout?: string;
+      /** @description The task queue this workflow task was enqueued in, which could be a normal or sticky queue */
+      readonly taskQueue?: components['schemas']['TaskQueue'];
     };
-    WorkflowTaskStartedEventAttributes: {
-      /** @description The id of the `WORKFLOW_TASK_SCHEDULED` event this task corresponds to */
-      scheduledEventId?: string;
-      /** @description Identity of the worker who picked up this task */
-      identity?: string;
-      /** @description TODO: ? Appears unused? */
-      requestId?: string;
+    readonly WorkflowTaskStartedEventAttributes: {
       /**
-       * @description True if this workflow should continue-as-new soon because its history size (in
-       *  either event count or bytes) is getting large.
+       * @description Used by server internally to properly reapply build ID redirects to an execution
+       *  when rebuilding it from events.
        */
-      suggestContinueAsNew?: boolean;
+      readonly buildIdRedirectCounter?: string;
       /**
        * @description Total history size in bytes, which the workflow might use to decide when to
        *  continue-as-new regardless of the suggestion. Note that history event count is
        *  just the event id of this event, so we don't include it explicitly here.
        */
-      historySizeBytes?: string;
-      /** @description Version info of the worker to whom this task was dispatched. */
-      workerVersion?: components['schemas']['WorkerVersionStamp'];
-      /**
-       * @description Used by server internally to properly reapply build ID redirects to an execution
-       *  when rebuilding it from events.
-       */
-      buildIdRedirectCounter?: string;
-    };
-    WorkflowTaskTimedOutEventAttributes: {
+      readonly historySizeBytes?: string;
+      /** @description Identity of the worker who picked up this task */
+      readonly identity?: string;
+      /** @description TODO: ? Appears unused? */
+      readonly requestId?: string;
       /** @description The id of the `WORKFLOW_TASK_SCHEDULED` event this task corresponds to */
-      scheduledEventId?: string;
+      readonly scheduledEventId?: string;
+      /**
+       * @description True if this workflow should continue-as-new soon because its history size (in
+       *  either event count or bytes) is getting large.
+       */
+      readonly suggestContinueAsNew?: boolean;
+      /** @description Version info of the worker to whom this task was dispatched. */
+      readonly workerVersion?: components['schemas']['WorkerVersionStamp'];
+    };
+    readonly WorkflowTaskTimedOutEventAttributes: {
+      /** @description The id of the `WORKFLOW_TASK_SCHEDULED` event this task corresponds to */
+      readonly scheduledEventId?: string;
       /** @description The id of the `WORKFLOW_TASK_STARTED` event this task corresponds to */
-      startedEventId?: string;
+      readonly startedEventId?: string;
       /**
        * Format: enum
        * @enum {string}
        */
-      timeoutType?:
+      readonly timeoutType?:
         | 'TIMEOUT_TYPE_UNSPECIFIED'
         | 'TIMEOUT_TYPE_START_TO_CLOSE'
         | 'TIMEOUT_TYPE_SCHEDULE_TO_START'
@@ -5135,8 +5147,8 @@ export interface components {
      * @description Represents the identifier used by a workflow author to define the workflow. Typically, the
      *  name of a function. This is sometimes referred to as the workflow's "name"
      */
-    WorkflowType: {
-      name?: string;
+    readonly WorkflowType: {
+      readonly name?: string;
     };
   };
   responses: never;
@@ -5157,13 +5169,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetClusterInfoResponse'];
+          readonly 'application/json': components['schemas']['GetClusterInfoResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5186,13 +5198,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListNamespacesResponse'];
+          readonly 'application/json': components['schemas']['ListNamespacesResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5206,22 +5218,22 @@ export interface operations {
    *  namespace.
    */
   RegisterNamespace: {
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['RegisterNamespaceRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['RegisterNamespaceRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['RegisterNamespaceResponse'];
+          readonly 'application/json': components['schemas']['RegisterNamespaceResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5240,13 +5252,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['DescribeNamespaceResponse'];
+          readonly 'application/json': components['schemas']['DescribeNamespaceResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5264,22 +5276,22 @@ export interface operations {
         namespace: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['RespondActivityTaskCanceledRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['RespondActivityTaskCanceledRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['RespondActivityTaskCanceledResponse'];
+          readonly 'application/json': components['schemas']['RespondActivityTaskCanceledResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5298,22 +5310,22 @@ export interface operations {
         namespace: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['RespondActivityTaskCanceledByIdRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['RespondActivityTaskCanceledByIdRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['RespondActivityTaskCanceledByIdResponse'];
+          readonly 'application/json': components['schemas']['RespondActivityTaskCanceledByIdResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5332,22 +5344,22 @@ export interface operations {
         namespace: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['RespondActivityTaskCompletedRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['RespondActivityTaskCompletedRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['RespondActivityTaskCompletedResponse'];
+          readonly 'application/json': components['schemas']['RespondActivityTaskCompletedResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5366,22 +5378,22 @@ export interface operations {
         namespace: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['RespondActivityTaskCompletedByIdRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['RespondActivityTaskCompletedByIdRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['RespondActivityTaskCompletedByIdResponse'];
+          readonly 'application/json': components['schemas']['RespondActivityTaskCompletedByIdResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5399,22 +5411,22 @@ export interface operations {
         namespace: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['RespondActivityTaskFailedRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['RespondActivityTaskFailedRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['RespondActivityTaskFailedResponse'];
+          readonly 'application/json': components['schemas']['RespondActivityTaskFailedResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5433,22 +5445,22 @@ export interface operations {
         namespace: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['RespondActivityTaskFailedByIdRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['RespondActivityTaskFailedByIdRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['RespondActivityTaskFailedByIdResponse'];
+          readonly 'application/json': components['schemas']['RespondActivityTaskFailedByIdResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5467,22 +5479,22 @@ export interface operations {
         namespace: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['RecordActivityTaskHeartbeatRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['RecordActivityTaskHeartbeatRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['RecordActivityTaskHeartbeatResponse'];
+          readonly 'application/json': components['schemas']['RecordActivityTaskHeartbeatResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5501,22 +5513,22 @@ export interface operations {
         namespace: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['RecordActivityTaskHeartbeatByIdRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['RecordActivityTaskHeartbeatByIdRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['RecordActivityTaskHeartbeatByIdResponse'];
+          readonly 'application/json': components['schemas']['RecordActivityTaskHeartbeatByIdResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5533,22 +5545,22 @@ export interface operations {
         namespace: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateActivityOptionsByIdRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['UpdateActivityOptionsByIdRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateActivityOptionsByIdResponse'];
+          readonly 'application/json': components['schemas']['UpdateActivityOptionsByIdResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5569,13 +5581,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListArchivedWorkflowExecutionsResponse'];
+          readonly 'application/json': components['schemas']['ListArchivedWorkflowExecutionsResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5598,13 +5610,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListBatchOperationsResponse'];
+          readonly 'application/json': components['schemas']['ListBatchOperationsResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5623,13 +5635,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['DescribeBatchOperationResponse'];
+          readonly 'application/json': components['schemas']['DescribeBatchOperationResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5644,22 +5656,22 @@ export interface operations {
         jobId: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['StartBatchOperationRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['StartBatchOperationRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['StartBatchOperationResponse'];
+          readonly 'application/json': components['schemas']['StartBatchOperationResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5674,22 +5686,22 @@ export interface operations {
         jobId: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['StopBatchOperationRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['StopBatchOperationRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['StopBatchOperationResponse'];
+          readonly 'application/json': components['schemas']['StopBatchOperationResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5714,13 +5726,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListSchedulesResponse'];
+          readonly 'application/json': components['schemas']['ListSchedulesResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5739,13 +5751,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['DescribeScheduleResponse'];
+          readonly 'application/json': components['schemas']['DescribeScheduleResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5760,22 +5772,22 @@ export interface operations {
         scheduleId: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateScheduleRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['CreateScheduleRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['CreateScheduleResponse'];
+          readonly 'application/json': components['schemas']['CreateScheduleResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5798,13 +5810,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['DeleteScheduleResponse'];
+          readonly 'application/json': components['schemas']['DeleteScheduleResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5828,13 +5840,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListScheduleMatchingTimesResponse'];
+          readonly 'application/json': components['schemas']['ListScheduleMatchingTimesResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5849,22 +5861,22 @@ export interface operations {
         scheduleId: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['PatchScheduleRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['PatchScheduleRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['PatchScheduleResponse'];
+          readonly 'application/json': components['schemas']['PatchScheduleResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5879,22 +5891,22 @@ export interface operations {
         scheduleId: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateScheduleRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['UpdateScheduleRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateScheduleResponse'];
+          readonly 'application/json': components['schemas']['UpdateScheduleResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -5910,73 +5922,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListSearchAttributesResponse'];
+          readonly 'application/json': components['schemas']['ListSearchAttributesResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
-        };
-      };
-    };
-  };
-  /**
-   * @description Deprecated. Use `GetWorkerVersioningRules`.
-   *  Fetches the worker build id versioning sets for a task queue.
-   */
-  GetWorkerBuildIdCompatibility: {
-    parameters: {
-      query?: {
-        /**
-         * @description Limits how many compatible sets will be returned. Specify 1 to only return the current
-         *  default major version set. 0 returns all sets.
-         */
-        maxSets?: number;
-      };
-      path: {
-        namespace: string;
-        /** @description Must be set, the task queue to interrogate about worker id compatibility. */
-        taskQueue: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          'application/json': components['schemas']['GetWorkerBuildIdCompatibilityResponse'];
-        };
-      };
-      /** @description Default error response */
-      default: {
-        content: {
-          'application/json': components['schemas']['Status'];
-        };
-      };
-    };
-  };
-  /**
-   * @description Fetches the Build ID assignment and redirect rules for a Task Queue.
-   *  WARNING: Worker Versioning is not yet stable and the API and behavior may change incompatibly.
-   */
-  GetWorkerVersioningRules: {
-    parameters: {
-      path: {
-        namespace: string;
-        taskQueue: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          'application/json': components['schemas']['GetWorkerVersioningRulesResponse'];
-        };
-      };
-      /** @description Default error response */
-      default: {
-        content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -6015,7 +5967,7 @@ export interface operations {
         /** @description All options except `task_queue_type` and `include_task_queue_status` are only available in the `ENHANCED` mode. */
         apiMode?: 'DESCRIBE_TASK_QUEUE_MODE_UNSPECIFIED' | 'DESCRIBE_TASK_QUEUE_MODE_ENHANCED';
         /** @description Include specific Build IDs. */
-        'versions.buildIds'?: string[];
+        'versions.buildIds'?: readonly string[];
         /** @description Include the unversioned queue. */
         'versions.unversioned'?: boolean;
         /**
@@ -6024,7 +5976,7 @@ export interface operations {
          */
         'versions.allActive'?: boolean;
         /** @description Task queue types to report info about. If not specified, all types are considered. */
-        taskQueueTypes?: (
+        taskQueueTypes?: readonly (
           | 'TASK_QUEUE_TYPE_UNSPECIFIED'
           | 'TASK_QUEUE_TYPE_WORKFLOW'
           | 'TASK_QUEUE_TYPE_ACTIVITY'
@@ -6049,13 +6001,73 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['DescribeTaskQueueResponse'];
+          readonly 'application/json': components['schemas']['DescribeTaskQueueResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Deprecated. Use `GetWorkerVersioningRules`.
+   *  Fetches the worker build id versioning sets for a task queue.
+   */
+  GetWorkerBuildIdCompatibility: {
+    parameters: {
+      query?: {
+        /**
+         * @description Limits how many compatible sets will be returned. Specify 1 to only return the current
+         *  default major version set. 0 returns all sets.
+         */
+        maxSets?: number;
+      };
+      path: {
+        namespace: string;
+        /** @description Must be set, the task queue to interrogate about worker id compatibility. */
+        taskQueue: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['GetWorkerBuildIdCompatibilityResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Fetches the Build ID assignment and redirect rules for a Task Queue.
+   *  WARNING: Worker Versioning is not yet stable and the API and behavior may change incompatibly.
+   */
+  GetWorkerVersioningRules: {
+    parameters: {
+      path: {
+        namespace: string;
+        taskQueue: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['GetWorkerVersioningRulesResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -6070,22 +6082,22 @@ export interface operations {
         namespace: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateNamespaceRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['UpdateNamespaceRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateNamespaceResponse'];
+          readonly 'application/json': components['schemas']['UpdateNamespaceResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -6115,7 +6127,7 @@ export interface operations {
          *  Open source users can adjust this limit by setting the server's dynamic config value for
          *  `limit.reachabilityQueryBuildIds` with the caveat that this call can strain the visibility store.
          */
-        buildIds?: string[];
+        buildIds?: readonly string[];
         /**
          * @description Task queues to retrieve reachability for. Leave this empty to query for all task queues associated with given
          *  build ids in the namespace.
@@ -6123,7 +6135,7 @@ export interface operations {
          *  The number of task queues that the server will fetch reachability information for is limited.
          *  See the `GetWorkerTaskReachabilityResponse` documentation for more information.
          */
-        taskQueues?: string[];
+        taskQueues?: readonly string[];
         /**
          * @description Type of reachability to query for.
          *  `TASK_REACHABILITY_NEW_WORKFLOWS` is always returned in the response.
@@ -6147,13 +6159,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetWorkerTaskReachabilityResponse'];
+          readonly 'application/json': components['schemas']['GetWorkerTaskReachabilityResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -6172,13 +6184,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['CountWorkflowExecutionsResponse'];
+          readonly 'application/json': components['schemas']['CountWorkflowExecutionsResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -6199,50 +6211,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListWorkflowExecutionsResponse'];
+          readonly 'application/json': components['schemas']['ListWorkflowExecutionsResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
-        };
-      };
-    };
-  };
-  /**
-   * @description ExecuteMultiOperation executes multiple operations within a single workflow.
-   *
-   *  Operations are started atomically, meaning if *any* operation fails to be started, none are,
-   *  and the request fails. Upon start, the API returns only when *all* operations have a response.
-   *
-   *  Upon failure, it returns `MultiOperationExecutionFailure` where the status code
-   *  equals the status code of the *first* operation that failed to be started.
-   *
-   *  NOTE: Experimental API.
-   */
-  ExecuteMultiOperation: {
-    parameters: {
-      path: {
-        namespace: string;
-      };
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['ExecuteMultiOperationRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          'application/json': components['schemas']['ExecuteMultiOperationResponse'];
-        };
-      };
-      /** @description Default error response */
-      default: {
-        content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -6263,13 +6238,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['DescribeWorkflowExecutionResponse'];
+          readonly 'application/json': components['schemas']['DescribeWorkflowExecutionResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -6313,13 +6288,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetWorkflowExecutionHistoryResponse'];
+          readonly 'application/json': components['schemas']['GetWorkflowExecutionHistoryResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -6346,13 +6321,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetWorkflowExecutionHistoryReverseResponse'];
+          readonly 'application/json': components['schemas']['GetWorkflowExecutionHistoryReverseResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -6366,22 +6341,187 @@ export interface operations {
         'query.query_type': string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['QueryWorkflowRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['QueryWorkflowRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['QueryWorkflowResponse'];
+          readonly 'application/json': components['schemas']['QueryWorkflowResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description RequestCancelWorkflowExecution is called by workers when they want to request cancellation of
+   *  a workflow execution.
+   *
+   *  This results in a new `WORKFLOW_EXECUTION_CANCEL_REQUESTED` event being written to the
+   *  workflow history and a new workflow task created for the workflow. It returns success if the requested
+   *  workflow is already closed. It fails with 'NotFound' if the requested workflow doesn't exist.
+   */
+  RequestCancelWorkflowExecution: {
+    parameters: {
+      path: {
+        namespace: string;
+        'workflow_execution.workflow_id': string;
+      };
+    };
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['RequestCancelWorkflowExecutionRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['RequestCancelWorkflowExecutionResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description ResetWorkflowExecution will reset an existing workflow execution to a specified
+   *  `WORKFLOW_TASK_COMPLETED` event (exclusive). It will immediately terminate the current
+   *  execution instance.
+   *  TODO: Does exclusive here mean *just* the completed event, or also WFT started? Otherwise the task is doomed to time out?
+   */
+  ResetWorkflowExecution: {
+    parameters: {
+      path: {
+        namespace: string;
+        'workflow_execution.workflow_id': string;
+      };
+    };
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['ResetWorkflowExecutionRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['ResetWorkflowExecutionResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description SignalWorkflowExecution is used to send a signal to a running workflow execution.
+   *
+   *  This results in a `WORKFLOW_EXECUTION_SIGNALED` event recorded in the history and a workflow
+   *  task being created for the execution.
+   */
+  SignalWorkflowExecution: {
+    parameters: {
+      path: {
+        namespace: string;
+        'workflow_execution.workflow_id': string;
+        /** @description The workflow author-defined name of the signal to send to the workflow */
+        signalName: string;
+      };
+    };
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['SignalWorkflowExecutionRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['SignalWorkflowExecutionResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description TerminateWorkflowExecution terminates an existing workflow execution by recording a
+   *  `WORKFLOW_EXECUTION_TERMINATED` event in the history and immediately terminating the
+   *  execution instance.
+   */
+  TerminateWorkflowExecution: {
+    parameters: {
+      path: {
+        namespace: string;
+        'workflow_execution.workflow_id': string;
+      };
+    };
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['TerminateWorkflowExecutionRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['TerminateWorkflowExecutionResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /** @description Invokes the specified Update function on user Workflow code. */
+  UpdateWorkflowExecution: {
+    parameters: {
+      path: {
+        /** @description The namespace name of the target Workflow. */
+        namespace: string;
+        'workflow_execution.workflow_id': string;
+        'request.input.name': string;
+      };
+    };
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['UpdateWorkflowExecutionRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['UpdateWorkflowExecutionResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -6400,22 +6540,22 @@ export interface operations {
         workflowId: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['StartWorkflowExecutionRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['StartWorkflowExecutionRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['StartWorkflowExecutionResponse'];
+          readonly 'application/json': components['schemas']['StartWorkflowExecutionResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -6443,187 +6583,59 @@ export interface operations {
         signalName: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['SignalWithStartWorkflowExecutionRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['SignalWithStartWorkflowExecutionRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SignalWithStartWorkflowExecutionResponse'];
+          readonly 'application/json': components['schemas']['SignalWithStartWorkflowExecutionResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
   };
   /**
-   * @description RequestCancelWorkflowExecution is called by workers when they want to request cancellation of
-   *  a workflow execution.
+   * @description ExecuteMultiOperation executes multiple operations within a single workflow.
    *
-   *  This results in a new `WORKFLOW_EXECUTION_CANCEL_REQUESTED` event being written to the
-   *  workflow history and a new workflow task created for the workflow. It returns success if the requested
-   *  workflow is already closed. It fails with 'NotFound' if the requested workflow doesn't exist.
-   */
-  RequestCancelWorkflowExecution: {
-    parameters: {
-      path: {
-        namespace: string;
-        'workflow_execution.workflow_id': string;
-      };
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['RequestCancelWorkflowExecutionRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          'application/json': components['schemas']['RequestCancelWorkflowExecutionResponse'];
-        };
-      };
-      /** @description Default error response */
-      default: {
-        content: {
-          'application/json': components['schemas']['Status'];
-        };
-      };
-    };
-  };
-  /**
-   * @description ResetWorkflowExecution will reset an existing workflow execution to a specified
-   *  `WORKFLOW_TASK_COMPLETED` event (exclusive). It will immediately terminate the current
-   *  execution instance.
-   *  TODO: Does exclusive here mean *just* the completed event, or also WFT started? Otherwise the task is doomed to time out?
-   */
-  ResetWorkflowExecution: {
-    parameters: {
-      path: {
-        namespace: string;
-        'workflow_execution.workflow_id': string;
-      };
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['ResetWorkflowExecutionRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          'application/json': components['schemas']['ResetWorkflowExecutionResponse'];
-        };
-      };
-      /** @description Default error response */
-      default: {
-        content: {
-          'application/json': components['schemas']['Status'];
-        };
-      };
-    };
-  };
-  /**
-   * @description SignalWorkflowExecution is used to send a signal to a running workflow execution.
+   *  Operations are started atomically, meaning if *any* operation fails to be started, none are,
+   *  and the request fails. Upon start, the API returns only when *all* operations have a response.
    *
-   *  This results in a `WORKFLOW_EXECUTION_SIGNALED` event recorded in the history and a workflow
-   *  task being created for the execution.
+   *  Upon failure, it returns `MultiOperationExecutionFailure` where the status code
+   *  equals the status code of the *first* operation that failed to be started.
+   *
+   *  NOTE: Experimental API.
    */
-  SignalWorkflowExecution: {
+  ExecuteMultiOperation: {
     parameters: {
       path: {
         namespace: string;
-        'workflow_execution.workflow_id': string;
-        /** @description The workflow author-defined name of the signal to send to the workflow */
-        signalName: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['SignalWorkflowExecutionRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['ExecuteMultiOperationRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SignalWorkflowExecutionResponse'];
+          readonly 'application/json': components['schemas']['ExecuteMultiOperationResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
-        };
-      };
-    };
-  };
-  /**
-   * @description TerminateWorkflowExecution terminates an existing workflow execution by recording a
-   *  `WORKFLOW_EXECUTION_TERMINATED` event in the history and immediately terminating the
-   *  execution instance.
-   */
-  TerminateWorkflowExecution: {
-    parameters: {
-      path: {
-        namespace: string;
-        'workflow_execution.workflow_id': string;
-      };
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['TerminateWorkflowExecutionRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          'application/json': components['schemas']['TerminateWorkflowExecutionResponse'];
-        };
-      };
-      /** @description Default error response */
-      default: {
-        content: {
-          'application/json': components['schemas']['Status'];
-        };
-      };
-    };
-  };
-  /** @description Invokes the specified Update function on user Workflow code. */
-  UpdateWorkflowExecution: {
-    parameters: {
-      path: {
-        /** @description The namespace name of the target Workflow. */
-        namespace: string;
-        'workflow_execution.workflow_id': string;
-        'request.input.name': string;
-      };
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateWorkflowExecutionRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          'application/json': components['schemas']['UpdateWorkflowExecutionResponse'];
-        };
-      };
-      /** @description Default error response */
-      default: {
-        content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -6656,13 +6668,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListNexusEndpointsResponse'];
+          readonly 'application/json': components['schemas']['ListNexusEndpointsResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -6673,22 +6685,22 @@ export interface operations {
    *  Returns the created endpoint with its initial version. You may use this version for subsequent updates.
    */
   CreateNexusEndpoint: {
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateNexusEndpointRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['CreateNexusEndpointRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['CreateNexusEndpointResponse'];
+          readonly 'application/json': components['schemas']['CreateNexusEndpointResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -6705,13 +6717,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetNexusEndpointResponse'];
+          readonly 'application/json': components['schemas']['GetNexusEndpointResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -6732,13 +6744,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['DeleteNexusEndpointResponse'];
+          readonly 'application/json': components['schemas']['DeleteNexusEndpointResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -6757,22 +6769,22 @@ export interface operations {
         id: string;
       };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateNexusEndpointRequest'];
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['UpdateNexusEndpointRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateNexusEndpointResponse'];
+          readonly 'application/json': components['schemas']['UpdateNexusEndpointResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };
@@ -6783,13 +6795,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetSystemInfoResponse'];
+          readonly 'application/json': components['schemas']['GetSystemInfoResponse'];
         };
       };
       /** @description Default error response */
       default: {
         content: {
-          'application/json': components['schemas']['Status'];
+          readonly 'application/json': components['schemas']['Status'];
         };
       };
     };

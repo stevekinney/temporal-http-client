@@ -107,6 +107,14 @@ export interface paths {
      */
     post: operations['RecordActivityTaskHeartbeatById'];
   };
+  '/api/v1/namespaces/{namespace}/activities/update-options-by-id': {
+    /**
+     * @description UpdateActivityOptionsById is called by the client to update the options of an activity
+     *  (-- api-linter: core::0136::prepositions=disabled
+     *      aip.dev/not-precedent: "By" is used to indicate request type. --)
+     */
+    post: operations['UpdateActivityOptionsById'];
+  };
   '/api/v1/namespaces/{namespace}/archived-workflows': {
     /** @description ListArchivedWorkflowExecutions is a visibility API to list archived workflow executions in a specific namespace. */
     get: operations['ListArchivedWorkflowExecutions'];
@@ -124,40 +132,6 @@ export interface paths {
   '/api/v1/namespaces/{namespace}/batch-operations/{jobId}/stop': {
     /** @description StopBatchOperation stops a batch operation */
     post: operations['StopBatchOperation'];
-  };
-  '/api/v1/namespaces/{namespace}/nexus/outgoing-services': {
-    /**
-     * @description List all Nexus outgoing services for a namespace, sorted by service name in ascending order. Set page_token in
-     *  the request to the next_page_token field of the previous response to get the next page of results. An empty
-     *  next_page_token indicates that there are no more results. During pagination, a newly added service with a name
-     *  lexicographically earlier than the previous page's last service name may be missed.
-     */
-    get: operations['ListNexusOutgoingServices'];
-    /**
-     * @description Create a Nexus service. This will fail if a service with the same name already exists in the namespace with a
-     *  status of ALREADY_EXISTS.
-     *  Returns the created service with its initial version. You may use this version for subsequent updates. You don't
-     *  need to increment the version yourself. The server will increment the version for you after each update.
-     */
-    post: operations['CreateNexusOutgoingService'];
-  };
-  '/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}': {
-    /**
-     * @description Get a registered outgoing Nexus service by namespace and service name. The returned version can be used for
-     *  optimistic updates.
-     */
-    get: operations['GetNexusOutgoingService'];
-    /** @description Delete an outgoing Nexus service by namespace and service name. */
-    delete: operations['DeleteNexusOutgoingService'];
-  };
-  '/api/v1/namespaces/{namespace}/nexus/outgoing-services/{name}/update': {
-    /**
-     * @description Update an outgoing Nexus service by namespace and service name. The version in the request should match the
-     *  current version of the service. This will fail with a status of FAILED_PRECONDITION if the version does not match.
-     *  Returns the updated service with the updated version, which can be used for subsequent updates. You don't need
-     *  to increment the version yourself. The server will increment the version for you.
-     */
-    post: operations['UpdateNexusOutgoingService'];
   };
   '/api/v1/namespaces/{namespace}/schedules': {
     /** @description List all schedules in a namespace. */
@@ -346,41 +320,395 @@ export interface paths {
     post: operations['TerminateWorkflowExecution'];
   };
   '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update/{request.input.name}': {
-    /** @description Invokes the specified update function on user workflow code. */
+    /** @description Invokes the specified Update function on user Workflow code. */
     post: operations['UpdateWorkflowExecution'];
   };
-  '/api/v1/nexus/incoming-services': {
+  '/api/v1/nexus/endpoints': {
     /**
-     * @description List all Nexus incoming services for the cluster, sorted by service ID in ascending order. Set page_token in the
-     *  request to the next_page_token field of the previous response to get the next page of results. An empty
-     *  next_page_token indicates that there are no more results. During pagination, a newly added service with an ID
-     *  lexicographically earlier than the previous page's last service name may be missed.
+     * @description List all Nexus endpoints for the cluster, sorted by ID in ascending order. Set page_token in the request to the
+     *  next_page_token field of the previous response to get the next page of results. An empty next_page_token
+     *  indicates that there are no more results. During pagination, a newly added service with an ID lexicographically
+     *  earlier than the previous page's last endpoint's ID may be missed.
      */
-    get: operations['ListNexusIncomingServices'];
+    get: operations['ListNexusEndpoints'];
     /**
-     * @description Create a Nexus service. This will fail if a service with the same name already exists in the namespace with a
-     *  status of ALREADY_EXISTS.
-     *  Returns the created service with its initial version. You may use this version for subsequent updates.
+     * @description Create a Nexus endpoint. This will fail if an endpoint with the same name is already registered with a status of
+     *  ALREADY_EXISTS.
+     *  Returns the created endpoint with its initial version. You may use this version for subsequent updates.
      */
-    post: operations['CreateNexusIncomingService'];
+    post: operations['CreateNexusEndpoint'];
   };
-  '/api/v1/nexus/incoming-services/{id}': {
-    /** @description Get a registered incoming Nexus service by ID. The returned version can be used for optimistic updates. */
-    get: operations['GetNexusIncomingService'];
+  '/api/v1/nexus/endpoints/{id}': {
+    /** @description Get a registered Nexus endpoint by ID. The returned version can be used for optimistic updates. */
+    get: operations['GetNexusEndpoint'];
     /** @description Delete an incoming Nexus service by ID. */
-    delete: operations['DeleteNexusIncomingService'];
+    delete: operations['DeleteNexusEndpoint'];
   };
-  '/api/v1/nexus/incoming-services/{id}/update': {
+  '/api/v1/nexus/endpoints/{id}/update': {
     /**
-     * @description Optimistically update a Nexus service based on provided version as obtained via the
-     *  `GetNexusIncomingService` or `ListNexusOutgoingServicesResponse` APIs. This will fail with a status of
-     *  FAILED_PRECONDITION if the version does not match.
-     *  Returns the updated service with its updated version. You may use this version for subsequent updates. You don't
+     * @description Optimistically update a Nexus endpoint based on provided version as obtained via the `GetNexusEndpoint` or
+     *  `ListNexusEndpointResponse` APIs. This will fail with a status of FAILED_PRECONDITION if the version does not
+     *  match.
+     *  Returns the updated endpoint with its updated version. You may use this version for subsequent updates. You don't
      *  need to increment the version yourself. The server will increment the version for you after each update.
      */
-    post: operations['UpdateNexusIncomingService'];
+    post: operations['UpdateNexusEndpoint'];
   };
   '/api/v1/system-info': {
+    /** @description GetSystemInfo returns information about the system. */
+    get: operations['GetSystemInfo'];
+  };
+  '/cluster': {
+    /** @description GetClusterInfo returns information about temporal cluster */
+    get: operations['GetClusterInfo'];
+  };
+  '/cluster/namespaces': {
+    /** @description ListNamespaces returns the information and configuration for all namespaces. */
+    get: operations['ListNamespaces'];
+    /**
+     * @description RegisterNamespace creates a new namespace which can be used as a container for all resources.
+     *
+     *  A Namespace is a top level entity within Temporal, and is used as a container for resources
+     *  like workflow executions, task queues, etc. A Namespace acts as a sandbox and provides
+     *  isolation for all resources within the namespace. All resources belongs to exactly one
+     *  namespace.
+     */
+    post: operations['RegisterNamespace'];
+  };
+  '/cluster/namespaces/{namespace}': {
+    /** @description DescribeNamespace returns the information and configuration for a registered namespace. */
+    get: operations['DescribeNamespace'];
+  };
+  '/cluster/namespaces/{namespace}/search-attributes': {
+    /** @description ListSearchAttributes returns comprehensive information about search attributes. */
+    get: operations['ListSearchAttributes'];
+  };
+  '/cluster/namespaces/{namespace}/update': {
+    /**
+     * @description UpdateNamespace is used to update the information and configuration of a registered
+     *  namespace.
+     */
+    post: operations['UpdateNamespace'];
+  };
+  '/cluster/nexus/endpoints': {
+    /**
+     * @description List all Nexus endpoints for the cluster, sorted by ID in ascending order. Set page_token in the request to the
+     *  next_page_token field of the previous response to get the next page of results. An empty next_page_token
+     *  indicates that there are no more results. During pagination, a newly added service with an ID lexicographically
+     *  earlier than the previous page's last endpoint's ID may be missed.
+     */
+    get: operations['ListNexusEndpoints'];
+    /**
+     * @description Create a Nexus endpoint. This will fail if an endpoint with the same name is already registered with a status of
+     *  ALREADY_EXISTS.
+     *  Returns the created endpoint with its initial version. You may use this version for subsequent updates.
+     */
+    post: operations['CreateNexusEndpoint'];
+  };
+  '/cluster/nexus/endpoints/{id}': {
+    /** @description Get a registered Nexus endpoint by ID. The returned version can be used for optimistic updates. */
+    get: operations['GetNexusEndpoint'];
+    /** @description Delete an incoming Nexus service by ID. */
+    delete: operations['DeleteNexusEndpoint'];
+  };
+  '/cluster/nexus/endpoints/{id}/update': {
+    /**
+     * @description Optimistically update a Nexus endpoint based on provided version as obtained via the `GetNexusEndpoint` or
+     *  `ListNexusEndpointResponse` APIs. This will fail with a status of FAILED_PRECONDITION if the version does not
+     *  match.
+     *  Returns the updated endpoint with its updated version. You may use this version for subsequent updates. You don't
+     *  need to increment the version yourself. The server will increment the version for you after each update.
+     */
+    post: operations['UpdateNexusEndpoint'];
+  };
+  '/namespaces/{namespace}/activities/cancel': {
+    /**
+     * @description RespondActivityTaskFailed is called by workers when processing an activity task fails.
+     *
+     *  This results in a new `ACTIVITY_TASK_CANCELED` event being written to the workflow history
+     *  and a new workflow task created for the workflow. Fails with `NotFound` if the task token is
+     *  no longer valid due to activity timeout, already being completed, or never having existed.
+     */
+    post: operations['RespondActivityTaskCanceled'];
+  };
+  '/namespaces/{namespace}/activities/cancel-by-id': {
+    /**
+     * @description See `RecordActivityTaskCanceled`. This version allows clients to record failures by
+     *  namespace/workflow id/activity id instead of task token.
+     *
+     *  (-- api-linter: core::0136::prepositions=disabled
+     *      aip.dev/not-precedent: "By" is used to indicate request type. --)
+     */
+    post: operations['RespondActivityTaskCanceledById'];
+  };
+  '/namespaces/{namespace}/activities/complete': {
+    /**
+     * @description RespondActivityTaskCompleted is called by workers when they successfully complete an activity
+     *  task.
+     *
+     *  This results in a new `ACTIVITY_TASK_COMPLETED` event being written to the workflow history
+     *  and a new workflow task created for the workflow. Fails with `NotFound` if the task token is
+     *  no longer valid due to activity timeout, already being completed, or never having existed.
+     */
+    post: operations['RespondActivityTaskCompleted'];
+  };
+  '/namespaces/{namespace}/activities/complete-by-id': {
+    /**
+     * @description See `RecordActivityTaskCompleted`. This version allows clients to record completions by
+     *  namespace/workflow id/activity id instead of task token.
+     *
+     *  (-- api-linter: core::0136::prepositions=disabled
+     *      aip.dev/not-precedent: "By" is used to indicate request type. --)
+     */
+    post: operations['RespondActivityTaskCompletedById'];
+  };
+  '/namespaces/{namespace}/activities/fail': {
+    /**
+     * @description RespondActivityTaskFailed is called by workers when processing an activity task fails.
+     *
+     *  This results in a new `ACTIVITY_TASK_FAILED` event being written to the workflow history and
+     *  a new workflow task created for the workflow. Fails with `NotFound` if the task token is no
+     *  longer valid due to activity timeout, already being completed, or never having existed.
+     */
+    post: operations['RespondActivityTaskFailed'];
+  };
+  '/namespaces/{namespace}/activities/fail-by-id': {
+    /**
+     * @description See `RecordActivityTaskFailed`. This version allows clients to record failures by
+     *  namespace/workflow id/activity id instead of task token.
+     *
+     *  (-- api-linter: core::0136::prepositions=disabled
+     *      aip.dev/not-precedent: "By" is used to indicate request type. --)
+     */
+    post: operations['RespondActivityTaskFailedById'];
+  };
+  '/namespaces/{namespace}/activities/heartbeat': {
+    /**
+     * @description RecordActivityTaskHeartbeat is optionally called by workers while they execute activities.
+     *
+     *  If worker fails to heartbeat within the `heartbeat_timeout` interval for the activity task,
+     *  then it will be marked as timed out and an `ACTIVITY_TASK_TIMED_OUT` event will be written to
+     *  the workflow history. Calling `RecordActivityTaskHeartbeat` will fail with `NotFound` in
+     *  such situations, in that event, the SDK should request cancellation of the activity.
+     */
+    post: operations['RecordActivityTaskHeartbeat'];
+  };
+  '/namespaces/{namespace}/activities/heartbeat-by-id': {
+    /**
+     * @description See `RecordActivityTaskHeartbeat`. This version allows clients to record heartbeats by
+     *  namespace/workflow id/activity id instead of task token.
+     *
+     *  (-- api-linter: core::0136::prepositions=disabled
+     *      aip.dev/not-precedent: "By" is used to indicate request type. --)
+     */
+    post: operations['RecordActivityTaskHeartbeatById'];
+  };
+  '/namespaces/{namespace}/activities/update-options-by-id': {
+    /**
+     * @description UpdateActivityOptionsById is called by the client to update the options of an activity
+     *  (-- api-linter: core::0136::prepositions=disabled
+     *      aip.dev/not-precedent: "By" is used to indicate request type. --)
+     */
+    post: operations['UpdateActivityOptionsById'];
+  };
+  '/namespaces/{namespace}/archived-workflows': {
+    /** @description ListArchivedWorkflowExecutions is a visibility API to list archived workflow executions in a specific namespace. */
+    get: operations['ListArchivedWorkflowExecutions'];
+  };
+  '/namespaces/{namespace}/batch-operations': {
+    /** @description ListBatchOperations returns a list of batch operations */
+    get: operations['ListBatchOperations'];
+  };
+  '/namespaces/{namespace}/batch-operations/{jobId}': {
+    /** @description DescribeBatchOperation returns the information about a batch operation */
+    get: operations['DescribeBatchOperation'];
+    /** @description StartBatchOperation starts a new batch operation */
+    post: operations['StartBatchOperation'];
+  };
+  '/namespaces/{namespace}/batch-operations/{jobId}/stop': {
+    /** @description StopBatchOperation stops a batch operation */
+    post: operations['StopBatchOperation'];
+  };
+  '/namespaces/{namespace}/schedules': {
+    /** @description List all schedules in a namespace. */
+    get: operations['ListSchedules'];
+  };
+  '/namespaces/{namespace}/schedules/{scheduleId}': {
+    /** @description Returns the schedule description and current state of an existing schedule. */
+    get: operations['DescribeSchedule'];
+    /** @description Creates a new schedule. */
+    post: operations['CreateSchedule'];
+    /** @description Deletes a schedule, removing it from the system. */
+    delete: operations['DeleteSchedule'];
+  };
+  '/namespaces/{namespace}/schedules/{scheduleId}/matching-times': {
+    /** @description Lists matching times within a range. */
+    get: operations['ListScheduleMatchingTimes'];
+  };
+  '/namespaces/{namespace}/schedules/{scheduleId}/patch': {
+    /** @description Makes a specific change to a schedule or triggers an immediate action. */
+    post: operations['PatchSchedule'];
+  };
+  '/namespaces/{namespace}/schedules/{scheduleId}/update': {
+    /** @description Changes the configuration or state of an existing schedule. */
+    post: operations['UpdateSchedule'];
+  };
+  '/namespaces/{namespace}/task-queues/{taskQueue}/worker-build-id-compatibility': {
+    /**
+     * @description Deprecated. Use `GetWorkerVersioningRules`.
+     *  Fetches the worker build id versioning sets for a task queue.
+     */
+    get: operations['GetWorkerBuildIdCompatibility'];
+  };
+  '/namespaces/{namespace}/task-queues/{taskQueue}/worker-versioning-rules': {
+    /**
+     * @description Fetches the Build ID assignment and redirect rules for a Task Queue.
+     *  WARNING: Worker Versioning is not yet stable and the API and behavior may change incompatibly.
+     */
+    get: operations['GetWorkerVersioningRules'];
+  };
+  '/namespaces/{namespace}/task-queues/{task_queue.name}': {
+    /**
+     * @description DescribeTaskQueue returns the following information about the target task queue, broken down by Build ID:
+     *    - List of pollers
+     *    - Workflow Reachability status
+     *    - Backlog info for Workflow and/or Activity tasks
+     */
+    get: operations['DescribeTaskQueue'];
+  };
+  '/namespaces/{namespace}/worker-task-reachability': {
+    /**
+     * @description Deprecated. Use `DescribeTaskQueue`.
+     *
+     *  Fetches task reachability to determine whether a worker may be retired.
+     *  The request may specify task queues to query for or let the server fetch all task queues mapped to the given
+     *  build IDs.
+     *
+     *  When requesting a large number of task queues or all task queues associated with the given build ids in a
+     *  namespace, all task queues will be listed in the response but some of them may not contain reachability
+     *  information due to a server enforced limit. When reaching the limit, task queues that reachability information
+     *  could not be retrieved for will be marked with a single TASK_REACHABILITY_UNSPECIFIED entry. The caller may issue
+     *  another call to get the reachability for those task queues.
+     *
+     *  Open source users can adjust this limit by setting the server's dynamic config value for
+     *  `limit.reachabilityTaskQueueScan` with the caveat that this call can strain the visibility store.
+     */
+    get: operations['GetWorkerTaskReachability'];
+  };
+  '/namespaces/{namespace}/workflow-count': {
+    /** @description CountWorkflowExecutions is a visibility API to count of workflow executions in a specific namespace. */
+    get: operations['CountWorkflowExecutions'];
+  };
+  '/namespaces/{namespace}/workflows': {
+    /** @description ListWorkflowExecutions is a visibility API to list workflow executions in a specific namespace. */
+    get: operations['ListWorkflowExecutions'];
+  };
+  '/namespaces/{namespace}/workflows/execute-multi-operation': {
+    /**
+     * @description ExecuteMultiOperation executes multiple operations within a single workflow.
+     *
+     *  Operations are started atomically, meaning if *any* operation fails to be started, none are,
+     *  and the request fails. Upon start, the API returns only when *all* operations have a response.
+     *
+     *  Upon failure, it returns `MultiOperationExecutionFailure` where the status code
+     *  equals the status code of the *first* operation that failed to be started.
+     *
+     *  NOTE: Experimental API.
+     */
+    post: operations['ExecuteMultiOperation'];
+  };
+  '/namespaces/{namespace}/workflows/{execution.workflow_id}': {
+    /** @description DescribeWorkflowExecution returns information about the specified workflow execution. */
+    get: operations['DescribeWorkflowExecution'];
+  };
+  '/namespaces/{namespace}/workflows/{execution.workflow_id}/history': {
+    /**
+     * @description GetWorkflowExecutionHistory returns the history of specified workflow execution. Fails with
+     *  `NotFound` if the specified workflow execution is unknown to the service.
+     */
+    get: operations['GetWorkflowExecutionHistory'];
+  };
+  '/namespaces/{namespace}/workflows/{execution.workflow_id}/history-reverse': {
+    /**
+     * @description GetWorkflowExecutionHistoryReverse returns the history of specified workflow execution in reverse
+     *  order (starting from last event). Fails with`NotFound` if the specified workflow execution is
+     *  unknown to the service.
+     */
+    get: operations['GetWorkflowExecutionHistoryReverse'];
+  };
+  '/namespaces/{namespace}/workflows/{execution.workflow_id}/query/{query.query_type}': {
+    /** @description QueryWorkflow requests a query be executed for a specified workflow execution. */
+    post: operations['QueryWorkflow'];
+  };
+  '/namespaces/{namespace}/workflows/{workflowId}': {
+    /**
+     * @description StartWorkflowExecution starts a new workflow execution.
+     *
+     *  It will create the execution with a `WORKFLOW_EXECUTION_STARTED` event in its history and
+     *  also schedule the first workflow task. Returns `WorkflowExecutionAlreadyStarted`, if an
+     *  instance already exists with same workflow id.
+     */
+    post: operations['StartWorkflowExecution'];
+  };
+  '/namespaces/{namespace}/workflows/{workflowId}/signal-with-start/{signalName}': {
+    /**
+     * @description SignalWithStartWorkflowExecution is used to ensure a signal is sent to a workflow, even if
+     *  it isn't yet started.
+     *
+     *  If the workflow is running, a `WORKFLOW_EXECUTION_SIGNALED` event is recorded in the history
+     *  and a workflow task is generated.
+     *
+     *  If the workflow is not running or not found, then the workflow is created with
+     *  `WORKFLOW_EXECUTION_STARTED` and `WORKFLOW_EXECUTION_SIGNALED` events in its history, and a
+     *  workflow task is generated.
+     *
+     *  (-- api-linter: core::0136::prepositions=disabled
+     *      aip.dev/not-precedent: "With" is used to indicate combined operation. --)
+     */
+    post: operations['SignalWithStartWorkflowExecution'];
+  };
+  '/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/cancel': {
+    /**
+     * @description RequestCancelWorkflowExecution is called by workers when they want to request cancellation of
+     *  a workflow execution.
+     *
+     *  This results in a new `WORKFLOW_EXECUTION_CANCEL_REQUESTED` event being written to the
+     *  workflow history and a new workflow task created for the workflow. It returns success if the requested
+     *  workflow is already closed. It fails with 'NotFound' if the requested workflow doesn't exist.
+     */
+    post: operations['RequestCancelWorkflowExecution'];
+  };
+  '/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/reset': {
+    /**
+     * @description ResetWorkflowExecution will reset an existing workflow execution to a specified
+     *  `WORKFLOW_TASK_COMPLETED` event (exclusive). It will immediately terminate the current
+     *  execution instance.
+     *  TODO: Does exclusive here mean *just* the completed event, or also WFT started? Otherwise the task is doomed to time out?
+     */
+    post: operations['ResetWorkflowExecution'];
+  };
+  '/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/signal/{signalName}': {
+    /**
+     * @description SignalWorkflowExecution is used to send a signal to a running workflow execution.
+     *
+     *  This results in a `WORKFLOW_EXECUTION_SIGNALED` event recorded in the history and a workflow
+     *  task being created for the execution.
+     */
+    post: operations['SignalWorkflowExecution'];
+  };
+  '/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/terminate': {
+    /**
+     * @description TerminateWorkflowExecution terminates an existing workflow execution by recording a
+     *  `WORKFLOW_EXECUTION_TERMINATED` event in the history and immediately terminating the
+     *  execution instance.
+     */
+    post: operations['TerminateWorkflowExecution'];
+  };
+  '/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update/{request.input.name}': {
+    /** @description Invokes the specified Update function on user Workflow code. */
+    post: operations['UpdateWorkflowExecution'];
+  };
+  '/system-info': {
     /** @description GetSystemInfo returns information about the system. */
     get: operations['GetSystemInfo'];
   };
@@ -409,6 +737,39 @@ export interface components {
         | 'RETRY_STATE_RETRY_POLICY_NOT_SET'
         | 'RETRY_STATE_INTERNAL_SERVER_ERROR'
         | 'RETRY_STATE_CANCEL_REQUESTED';
+    };
+    ActivityOptions: {
+      taskQueue?: components['schemas']['TaskQueue'];
+      /**
+       * @description Indicates how long the caller is willing to wait for an activity completion. Limits how long
+       *  retries will be attempted. Either this or `start_to_close_timeout` must be specified.
+       *
+       *  (-- api-linter: core::0140::prepositions=disabled
+       *      aip.dev/not-precedent: "to" is used to indicate interval. --)
+       */
+      scheduleToCloseTimeout?: string;
+      /**
+       * @description Limits time an activity task can stay in a task queue before a worker picks it up. This
+       *  timeout is always non retryable, as all a retry would achieve is to put it back into the same
+       *  queue. Defaults to `schedule_to_close_timeout` or workflow execution timeout if not
+       *  specified.
+       *
+       *  (-- api-linter: core::0140::prepositions=disabled
+       *      aip.dev/not-precedent: "to" is used to indicate interval. --)
+       */
+      scheduleToStartTimeout?: string;
+      /**
+       * @description Maximum time an activity is allowed to execute after being picked up by a worker. This
+       *  timeout is always retryable. Either this or `schedule_to_close_timeout` must be
+       *  specified.
+       *
+       *  (-- api-linter: core::0140::prepositions=disabled
+       *      aip.dev/not-precedent: "to" is used to indicate interval. --)
+       */
+      startToCloseTimeout?: string;
+      /** @description Maximum permitted time between successful worker heartbeats. */
+      heartbeatTimeout?: string;
+      retryPolicy?: components['schemas']['RetryPolicy'];
     };
     ActivityPropertiesModifiedExternallyEventAttributes: {
       /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this modification corresponds to. */
@@ -612,8 +973,6 @@ export interface components {
        *  retry interval calculated by the retry policy. Retry attempts will
        *  still be subject to the maximum retries limit and total time limit
        *  defined by the policy.
-       *  ATTENTION: this value will be ignored if set for failures produced by
-       *  the workflow.
        */
       nextRetryDelay?: string;
     };
@@ -754,29 +1113,31 @@ export interface components {
       identity?: string;
     };
     /**
-     * @description These rules assign a Build ID to Unassigned Workflow Executions and
-     *  Activities.
+     * @description Assignment rules are applied to *new* Workflow and Activity executions at
+     *  schedule time to assign them to a Build ID.
      *
-     *  Specifically, assignment rules are applied to the following Executions or
-     *  Activities when they are scheduled in a Task Queue:
-     *     - Generally, any new Workflow Execution, except:
-     *       - When A Child Workflow or a Continue-As-New Execution inherits the
-     *         Build ID from its parent/previous execution by setting the
-     *         `inherit_build_id` flag.
-     *       - Workflow Executions started Eagerly are assigned to the Build ID of
-     *         the Starter.
-     *     - An Activity that is scheduled on a Task Queue different from the one
-     *       their Workflow runs on, unless the `use_workflow_build_id` flag is set.
+     *  Assignment rules will not be used in the following cases:
+     *     - Child Workflows or Continue-As-New Executions who inherit their
+     *       parent/previous Workflow's assigned Build ID (by setting the
+     *       `inherit_build_id` flag - default behavior in SDKs when the same Task Queue
+     *       is used.)
+     *     - An Activity that inherits the assigned Build ID of its Workflow (by
+     *       setting the `use_workflow_build_id` flag - default behavior in SDKs
+     *       when the same Task Queue is used.)
      *
      *  In absence of (applicable) redirect rules (`CompatibleBuildIdRedirectRule`s)
      *  the task will be dispatched to Workers of the Build ID determined by the
-     *  assignment rules. Otherwise, the final Build ID will be determined by the
-     *  redirect rules.
+     *  assignment rules (or inherited). Otherwise, the final Build ID will be
+     *  determined by the redirect rules.
      *
-     *  When using Worker Versioning, in the steady state, for a given Task Queue,
-     *  there should typically be exactly one assignment rule to send all Unassigned
-     *  tasks to the latest Build ID. Existence of at least one such "unconditional"
-     *  rule at all times is enforce by the system, unless the `force` flag is used
+     *  Once a Workflow completes its first Workflow Task in a particular Build ID it
+     *  stays in that Build ID regardless of changes to assignment rules. Redirect
+     *  rules can be used to move the workflow to another compatible Build ID.
+     *
+     *  When using Worker Versioning on a Task Queue, in the steady state,
+     *  there should typically be a single assignment rule to send all new executions
+     *  to the latest Build ID. Existence of at least one such "unconditional"
+     *  rule at all times is enforces by the system, unless the `force` flag is used
      *  by the user when replacing/deleting these rules (for exceptional cases).
      *
      *  During a deployment, one or more additional rules can be added to assign a
@@ -787,10 +1148,8 @@ export interface components {
      *  applied and the rest will be ignored.
      *
      *  In the event that no assignment rule is applicable on a task (or the Task
-     *  Queue is simply not versioned), the tasks will be sent to unversioned
-     *  workers, if available. Otherwise, they remain Unassigned, and will be
-     *  retried for assignment, or dispatch to unversioned workers, at a later time
-     *  depending on the availability of workers.
+     *  Queue is simply not versioned), the tasks will be dispatched to an
+     *  unversioned Worker.
      */
     BuildIdAssignmentRule: {
       targetBuildId?: string;
@@ -853,6 +1212,7 @@ export interface components {
     /** @description Callback to attach to various events in the system, e.g. workflow run completion. */
     Callback: {
       nexus?: components['schemas']['Callback_Nexus'];
+      internal?: components['schemas']['Callback_Internal'];
     };
     /** @description CallbackInfo contains the state of an attached workflow callback. */
     CallbackInfo: {
@@ -900,6 +1260,19 @@ export interface components {
     };
     /** @description Trigger for when the workflow is closed. */
     CallbackInfo_WorkflowClosed: Record<string, never>;
+    /**
+     * @description Callbacks to be delivered internally within the system.
+     *  This variant is not settable in the API and will be rejected by the service with an INVALID_ARGUMENT error.
+     *  The only reason that this is exposed is because callbacks are replicated across clusters via the
+     *  WorkflowExecutionStarted event, which is defined in the public API.
+     */
+    Callback_Internal: {
+      /**
+       * Format: bytes
+       * @description Opaque internal data.
+       */
+      data?: string;
+    };
     Callback_Nexus: {
       /** @description Callback URL. */
       url?: string;
@@ -1066,11 +1439,16 @@ export interface components {
      *   - To be able to Reset an old Execution so it can run on the current
      *     (compatible) Build ID.
      *
-     *  Redirect rules can be chained, but only the last rule in the chain can have
-     *  a ramp.
+     *  Redirect rules can be chained.
      */
     CompatibleBuildIdRedirectRule: {
       sourceBuildId?: string;
+      /**
+       * @description Target Build ID must be compatible with the Source Build ID; that is it
+       *  must be able to process event histories made by the Source Build ID by
+       *  using [Patching](https://docs.temporal.io/workflows#patching) or other
+       *  means.
+       */
       targetBuildId?: string;
     };
     /**
@@ -1100,25 +1478,13 @@ export interface components {
       groupValues?: components['schemas']['Payload'][];
       count?: string;
     };
-    CreateNexusIncomingServiceRequest: {
-      /** @description Service definition to create. */
-      spec?: components['schemas']['IncomingServiceSpec'];
+    CreateNexusEndpointRequest: {
+      /** @description Endpoint definition to create. */
+      spec?: components['schemas']['EndpointSpec'];
     };
-    CreateNexusIncomingServiceResponse: {
+    CreateNexusEndpointResponse: {
       /** @description Data post acceptance. Can be used to issue additional updates to this record. */
-      service?: components['schemas']['IncomingService'];
-    };
-    CreateNexusOutgoingServiceRequest: {
-      /** @description Namespace to create this service definition in. */
-      namespace?: string;
-      /** @description Name of service to create. */
-      name?: string;
-      /** @description Service definition to create. Does not contain a version because there's nothing to match against. */
-      spec?: components['schemas']['OutgoingServiceSpec'];
-    };
-    CreateNexusOutgoingServiceResponse: {
-      /** @description Data post acceptance. Can be used to issue additional updates to this record. */
-      service?: components['schemas']['OutgoingService'];
+      endpoint?: components['schemas']['Endpoint'];
     };
     /**
      * @description (-- api-linter: core::0203::optional=disabled
@@ -1154,8 +1520,7 @@ export interface components {
       /** Format: bytes */
       data?: string;
     };
-    DeleteNexusIncomingServiceResponse: Record<string, never>;
-    DeleteNexusOutgoingServiceResponse: Record<string, never>;
+    DeleteNexusEndpointResponse: Record<string, never>;
     DeleteScheduleResponse: Record<string, never>;
     DescribeBatchOperationResponse: {
       /**
@@ -1264,6 +1629,73 @@ export interface components {
       callbacks?: components['schemas']['CallbackInfo'][];
       pendingNexusOperations?: components['schemas']['PendingNexusOperationInfo'][];
     };
+    /** @description A cluster-global binding from an endpoint ID to a target for dispatching incoming Nexus requests. */
+    Endpoint: {
+      /** @description Data version for this endpoint, incremented for every update issued via the UpdateNexusEndpoint API. */
+      version?: string;
+      /** @description Unique server-generated endpoint ID. */
+      id?: string;
+      /** @description Spec for the endpoint. */
+      spec?: components['schemas']['EndpointSpec'];
+      /**
+       * Format: date-time
+       * @description The date and time when the endpoint was created.
+       *  (-- api-linter: core::0142::time-field-names=disabled
+       *      aip.dev/not-precedent: Not following linter rules. --)
+       */
+      createdTime?: string;
+      /**
+       * Format: date-time
+       * @description The date and time when the endpoint was last modified.
+       *  Will not be set if the endpoint has never been modified.
+       *  (-- api-linter: core::0142::time-field-names=disabled
+       *      aip.dev/not-precedent: Not following linter rules. --)
+       */
+      lastModifiedTime?: string;
+      /**
+       * @description Server exposed URL prefix for invocation of operations on this endpoint.
+       *  This doesn't include the protocol, hostname or port as the server does not know how it should be accessed
+       *  publicly. The URL is stable in the face of endpoint renames.
+       */
+      urlPrefix?: string;
+    };
+    /** @description Contains mutable fields for an Endpoint. */
+    EndpointSpec: {
+      /**
+       * @description Endpoint name, unique for this cluster. Must match `[a-zA-Z_][a-zA-Z0-9_]*`.
+       *  Renaming an endpoint breaks all workflow callers that reference this endpoint, causing operations to fail.
+       */
+      name?: string;
+      /**
+       * @description Markdown description serialized as a single JSON string.
+       *  If the Payload is encrypted, the UI and CLI may decrypt with the configured codec server endpoint.
+       *  By default, the server enforces a limit of 20,000 bytes for this entire payload.
+       */
+      description?: components['schemas']['Payload'];
+      /** @description Target to route requests to. */
+      target?: components['schemas']['EndpointTarget'];
+    };
+    /** @description Target to route requests to. */
+    EndpointTarget: {
+      worker?: components['schemas']['EndpointTarget_Worker'];
+      external?: components['schemas']['EndpointTarget_External'];
+    };
+    /**
+     * @description Target an external server by URL.
+     *  At a later point, this will support providing credentials, in the meantime, an http.RoundTripper can be injected
+     *  into the server to modify the request.
+     */
+    EndpointTarget_External: {
+      /** @description URL to call. */
+      url?: string;
+    };
+    /** @description Target a worker polling on a Nexus task queue in a specific namespace. */
+    EndpointTarget_Worker: {
+      /** @description Namespace to route requests to. */
+      namespace?: string;
+      /** @description Nexus task queue to route requests to. */
+      taskQueue?: string;
+    };
     ExecuteMultiOperationRequest: {
       namespace?: string;
       /**
@@ -1283,8 +1715,14 @@ export interface components {
        * @description Additional restrictions:
        *  - setting `cron_schedule` is invalid
        *  - setting `request_eager_execution` is invalid
+       *  - setting `workflow_start_delay` is invalid
        */
       startWorkflow?: components['schemas']['StartWorkflowExecutionRequest'];
+      /**
+       * @description Additional restrictions:
+       *  - setting `first_execution_run_id` is invalid
+       *  - setting `workflow_execution.run_id` is invalid
+       */
       updateWorkflow?: components['schemas']['UpdateWorkflowExecutionRequest'];
     };
     ExecuteMultiOperationResponse: {
@@ -1384,11 +1822,8 @@ export interface components {
       persistenceStore?: string;
       visibilityStore?: string;
     };
-    GetNexusIncomingServiceResponse: {
-      service?: components['schemas']['IncomingService'];
-    };
-    GetNexusOutgoingServiceResponse: {
-      service?: components['schemas']['OutgoingService'];
+    GetNexusEndpointResponse: {
+      endpoint?: components['schemas']['Endpoint'];
     };
     GetSystemInfoResponse: {
       /** @description Version of the server. */
@@ -1431,6 +1866,11 @@ export interface components {
       sdkMetadata?: boolean;
       /** @description True if the server supports count group by execution status */
       countGroupByExecutionStatus?: boolean;
+      /**
+       * @description True if the server supports Nexus operations.
+       *  This flag is dependent both on server version and for Nexus to be enabled via server configuration.
+       */
+      nexus?: boolean;
     };
     GetWorkerBuildIdCompatibilityResponse: {
       /**
@@ -1563,13 +2003,13 @@ export interface components {
         | 'EVENT_TYPE_SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_FAILED'
         | 'EVENT_TYPE_EXTERNAL_WORKFLOW_EXECUTION_SIGNALED'
         | 'EVENT_TYPE_UPSERT_WORKFLOW_SEARCH_ATTRIBUTES'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_UPDATE_ADMITTED'
         | 'EVENT_TYPE_WORKFLOW_EXECUTION_UPDATE_ACCEPTED'
         | 'EVENT_TYPE_WORKFLOW_EXECUTION_UPDATE_REJECTED'
         | 'EVENT_TYPE_WORKFLOW_EXECUTION_UPDATE_COMPLETED'
         | 'EVENT_TYPE_WORKFLOW_PROPERTIES_MODIFIED_EXTERNALLY'
         | 'EVENT_TYPE_ACTIVITY_PROPERTIES_MODIFIED_EXTERNALLY'
         | 'EVENT_TYPE_WORKFLOW_PROPERTIES_MODIFIED'
-        | 'EVENT_TYPE_WORKFLOW_EXECUTION_UPDATE_ADMITTED'
         | 'EVENT_TYPE_NEXUS_OPERATION_SCHEDULED'
         | 'EVENT_TYPE_NEXUS_OPERATION_STARTED'
         | 'EVENT_TYPE_NEXUS_OPERATION_COMPLETED'
@@ -1588,6 +2028,19 @@ export interface components {
        *  acceptable for the event type and/or attributes to be uninterpretable.
        */
       workerMayIgnore?: boolean;
+      /**
+       * @description Metadata on the event. This is often carried over from commands and client calls. Most events
+       *  won't have this information, and how this information is used is dependent upon the interface
+       *  that reads it.
+       *
+       *  Current well-known uses:
+       *   * workflow_execution_started_event_attributes - summary and details from start workflow.
+       *   * timer_started_event_attributes - summary represents an identifier for the timer for use by
+       *     user interfaces.
+       */
+      userMetadata?: components['schemas']['UserMetadata'];
+      /** @description Links associated with the event. */
+      links?: components['schemas']['Link'][];
       workflowExecutionStartedEventAttributes?: components['schemas']['WorkflowExecutionStartedEventAttributes'];
       workflowExecutionCompletedEventAttributes?: components['schemas']['WorkflowExecutionCompletedEventAttributes'];
       workflowExecutionFailedEventAttributes?: components['schemas']['WorkflowExecutionFailedEventAttributes'];
@@ -1643,61 +2096,15 @@ export interface components {
       nexusOperationTimedOutEventAttributes?: components['schemas']['NexusOperationTimedOutEventAttributes'];
       nexusOperationCancelRequestedEventAttributes?: components['schemas']['NexusOperationCancelRequestedEventAttributes'];
     };
-    /**
-     * @description A cluster-global binding from a service ID to namespace, task queue, and metadata for dispatching incoming Nexus
-     *  requests.
-     */
-    IncomingService: {
-      /** @description Data version for this service, incremented for every update issued via the UpdateNexusIncomingService API. */
-      version?: string;
-      /** @description Unique server-generated service ID. */
-      id?: string;
-      /** @description Spec for the service. */
-      spec?: components['schemas']['IncomingServiceSpec'];
-      /**
-       * Format: date-time
-       * @description The date and time when the service was created.
-       *  (-- api-linter: core::0142::time-field-names=disabled
-       *      aip.dev/not-precedent: Not following linter rules. --)
-       */
-      createdTime?: string;
-      /**
-       * Format: date-time
-       * @description The date and time when the service was last modified.
-       *  Will not be set if the service has never been modified.
-       *  (-- api-linter: core::0142::time-field-names=disabled
-       *      aip.dev/not-precedent: Not following linter rules. --)
-       */
-      lastModifiedTime?: string;
-      /**
-       * @description Server exposed URL prefix for invocation of operations on this service.
-       *  This doesn't include the protocol, hostname or port as the server does not know how it should be accessed
-       *  publicly. The URL is stable in the face of service renames.
-       */
-      urlPrefix?: string;
-    };
-    /** @description Contains mutable fields for an IncomingService. */
-    IncomingServiceSpec: {
-      /** @description Service name, unique for this cluster. Must match `[a-zA-Z_][a-zA-Z0-9_]*`. */
-      name?: string;
-      /** @description Namespace to route requests to. */
-      namespace?: string;
-      /** @description Task queue to route requests to. */
-      taskQueue?: string;
-      /** @description Generic service metadata that is available to the server's authorizer. */
-      metadata?: {
-        [key: string]: components['schemas']['GoogleProtobufAny'];
-      };
-    };
     Input: {
       /**
-       * @description Headers that are passed with the update from the requesting entity.
+       * @description Headers that are passed with the Update from the requesting entity.
        *  These can include things like auth or tracing tokens.
        */
       header?: components['schemas']['Header'];
-      /** @description The name of the input handler to invoke on the target workflow */
+      /** @description The name of the Update handler to invoke on the target Workflow. */
       name?: string;
-      /** @description The arguments to pass to the named handler. */
+      /** @description The arguments to pass to the named Update handler. */
       args?: components['schemas']['Payloads'];
     };
     /**
@@ -1717,6 +2124,21 @@ export interface components {
       interval?: string;
       phase?: string;
     };
+    /**
+     * @description Link can be associated with history events. It might contain information about an external entity
+     *  related to the history event. For example, workflow A makes a Nexus call that starts workflow B:
+     *  in this case, a history event in workflow A could contain a Link to the workflow started event in
+     *  workflow B, and vice-versa.
+     */
+    Link: {
+      workflowEvent?: components['schemas']['Link_WorkflowEvent'];
+    };
+    Link_WorkflowEvent: {
+      namespace?: string;
+      workflowId?: string;
+      runId?: string;
+      eventRef?: components['schemas']['WorkflowEvent_EventReference'];
+    };
     ListArchivedWorkflowExecutionsResponse: {
       executions?: components['schemas']['WorkflowExecutionInfo'][];
       /** Format: bytes */
@@ -1733,22 +2155,13 @@ export interface components {
       /** Format: bytes */
       nextPageToken?: string;
     };
-    ListNexusIncomingServicesResponse: {
+    ListNexusEndpointsResponse: {
       /**
        * Format: bytes
        * @description Token for getting the next page.
        */
       nextPageToken?: string;
-      services?: components['schemas']['IncomingService'][];
-    };
-    ListNexusOutgoingServicesResponse: {
-      /** @description List of services in the namespace for the requested page. */
-      services?: components['schemas']['OutgoingService'][];
-      /**
-       * Format: bytes
-       * @description Token for getting the next page.
-       */
-      nextPageToken?: string;
+      endpoints?: components['schemas']['Endpoint'][];
     };
     ListScheduleMatchingTimesResponse: {
       startTime?: string[];
@@ -1832,11 +2245,11 @@ export interface components {
        */
       body?: components['schemas']['GoogleProtobufAny'];
     };
-    /** @description Metadata about a workflow execution update. */
+    /** @description Metadata about a Workflow Update. */
     Meta: {
-      /** @description An ID with workflow-scoped uniqueness for this update */
+      /** @description An ID with workflow-scoped uniqueness for this Update. */
       updateId?: string;
-      /** @description A string identifying the agent that requested this update. */
+      /** @description A string identifying the agent that requested this Update. */
       identity?: string;
     };
     /** @description Metadata relevant for metering purposes */
@@ -1961,6 +2374,12 @@ export interface components {
       memo?: components['schemas']['Memo'];
       searchAttributes?: components['schemas']['SearchAttributes'];
       header?: components['schemas']['Header'];
+      /**
+       * @description Metadata on the workflow if it is started. This is carried over to the WorkflowExecutionConfig
+       *  for use by user interfaces to display the fixed as-of-start summary and details of the
+       *  workflow.
+       */
+      userMetadata?: components['schemas']['UserMetadata'];
     };
     NexusOperationCancelRequestedEventAttributes: {
       /** @description The id of the `NEXUS_OPERATION_SCHEDULED` event this cancel request corresponds to. */
@@ -1977,6 +2396,8 @@ export interface components {
       scheduledEventId?: string;
       /** @description Cancellation details. */
       failure?: components['schemas']['Failure'];
+      /** @description The request ID allocated at schedule time. */
+      requestId?: string;
     };
     /** @description NexusOperationCancellationInfo contains the state of a nexus operation cancellation. */
     NexusOperationCancellationInfo: {
@@ -2024,6 +2445,8 @@ export interface components {
        *  Delivered either via a completion callback or as a response to a synchronous operation.
        */
       result?: components['schemas']['Payload'];
+      /** @description The request ID allocated at schedule time. */
+      requestId?: string;
     };
     /** @description Nexus operation failed. */
     NexusOperationFailedEventAttributes: {
@@ -2031,10 +2454,14 @@ export interface components {
       scheduledEventId?: string;
       /** @description Failure details. A NexusOperationFailureInfo wrapping an ApplicationFailureInfo. */
       failure?: components['schemas']['Failure'];
+      /** @description The request ID allocated at schedule time. */
+      requestId?: string;
     };
     NexusOperationFailureInfo: {
       /** @description The NexusOperationScheduled event ID. */
       scheduledEventId?: string;
+      /** @description Endpoint name. */
+      endpoint?: string;
       /** @description Service name. */
       service?: string;
       /** @description Operation name. */
@@ -2044,7 +2471,9 @@ export interface components {
     };
     /** @description Event marking that an operation was scheduled by a workflow via the ScheduleNexusOperation command. */
     NexusOperationScheduledEventAttributes: {
-      /** @description Service name, resolved to a URL and a call config via the namespace's outgoing service registry. */
+      /** @description Endpoint name, must exist in the endpoint registry. */
+      endpoint?: string;
+      /** @description Service name. */
       service?: string;
       /** @description Operation name. */
       operation?: string;
@@ -2077,6 +2506,12 @@ export interface components {
        *  The ID will be transmitted with all nexus StartOperation requests and is used as an idempotentency key.
        */
       requestId?: string;
+      /**
+       * @description Endpoint ID as resolved in the endpoint registry at the time this event was generated.
+       *  This is stored on the event and used internally by the server in case the endpoint is renamed from the time the
+       *  event was originally scheduled.
+       */
+      endpointId?: string;
     };
     /**
      * @description Event marking an asynchronous operation was started by the responding Nexus handler.
@@ -2092,6 +2527,8 @@ export interface components {
        *  This ID is used when canceling the operation.
        */
       operationId?: string;
+      /** @description The request ID allocated at schedule time. */
+      requestId?: string;
     };
     /** @description Nexus operation timed out. */
     NexusOperationTimedOutEventAttributes: {
@@ -2099,51 +2536,13 @@ export interface components {
       scheduledEventId?: string;
       /** @description Failure details. A NexusOperationFailureInfo wrapping a CanceledFailureInfo. */
       failure?: components['schemas']['Failure'];
+      /** @description The request ID allocated at schedule time. */
+      requestId?: string;
     };
-    /** @description The outcome of a workflow update - success or failure. */
+    /** @description The outcome of a Workflow Update: success or failure. */
     Outcome: {
       success?: components['schemas']['Payloads'];
       failure?: components['schemas']['Failure'];
-    };
-    /**
-     * @description A per-namespace binding from service name to URL that is used by the service to invoke Nexus requests that are
-     *  initiated by workflows.
-     */
-    OutgoingService: {
-      /** @description Data version for this service, incremented for every mutation. */
-      version?: string;
-      /** @description Name of the service */
-      name?: string;
-      /** @description Spec for the service. */
-      spec?: components['schemas']['OutgoingServiceSpec'];
-      /**
-       * Format: date-time
-       * @description The date and time when the service was created.
-       *  (-- api-linter: core::0142::time-field-names=disabled
-       *      aip.dev/not-precedent: Not following linter rules. --)
-       */
-      createdTime?: string;
-      /**
-       * Format: date-time
-       * @description The date and time when the service was last modified.
-       *  Will not be set if the service has never been modified.
-       *  (-- api-linter: core::0142::time-field-names=disabled
-       *      aip.dev/not-precedent: Not following linter rules. --)
-       */
-      lastModifiedTime?: string;
-    };
-    /** @description Contains mutable fields for an OutgoingService. */
-    OutgoingServiceSpec: {
-      /** @description URL to invoke requests. */
-      url?: string;
-      /**
-       * @description Callback URL that is attached to every StartOperation request for this service.
-       *  The URL should be accessible to the handler of the StartOperation requests.
-       *  The service handles callbacks in the /api/v1/namespaces/{namespace_name}/nexus/callback route. Note that if the
-       *  namespace is renamed this URL will no longer be valid.
-       *  See https://github.com/nexus-rpc/api/blob/main/SPEC.md#query-parameters for more information.
-       */
-      publicCallbackUrl?: string;
     };
     PatchScheduleRequest: {
       /** @description The namespace of the schedule to patch. */
@@ -2223,9 +2622,11 @@ export interface components {
     /** @description PendingNexusOperationInfo contains the state of a pending Nexus operation. */
     PendingNexusOperationInfo: {
       /**
-       * @description Service name.
-       *  Resolved to a URL via the outgoing service registry for this workflow's namespace.
+       * @description Endpoint name.
+       *  Resolved to a URL via the cluster's endpoint registry.
        */
+      endpoint?: string;
+      /** @description Service name. */
       service?: string;
       /** @description Operation name. */
       operation?: string;
@@ -2271,6 +2672,11 @@ export interface components {
        */
       nextAttemptScheduleTime?: string;
       cancellationInfo?: components['schemas']['NexusOperationCancellationInfo'];
+      /**
+       * @description The event ID of the NexusOperationScheduled event. Can be used to correlate an operation in the
+       *  DescribeWorkflowExecution response with workflow history.
+       */
+      scheduledEventId?: string;
     };
     PendingWorkflowTaskInfo: {
       /**
@@ -2322,8 +2728,16 @@ export interface components {
        */
       attempt?: number;
       /**
-       * @description A hint that there are more tasks already present in this task queue. Can be used to
-       *  prioritize draining a sticky queue before polling from a normal queue.
+       * @description A hint that there are more tasks already present in this task queue
+       *  partition. Can be used to prioritize draining a sticky queue.
+       *
+       *  Specifically, the returned number is the number of tasks remaining in
+       *  the in-memory buffer for this partition, which is currently capped at
+       *  1000. Because sticky queues only have one partition, this number is
+       *  more useful when draining them. Normal queues, typically having more than one
+       *  partition, will return a number representing only some portion of the
+       *  overall backlog. Subsequent RPCs may not hit the same partition as
+       *  this call.
        */
       backlogCountHint?: string;
       /**
@@ -2529,7 +2943,7 @@ export interface components {
       releaseTime?: string;
       notes?: string;
     };
-    /** @description The client request that triggers a workflow execution update */
+    /** @description The client request that triggers a Workflow Update. */
     Request: {
       meta?: components['schemas']['Meta'];
       input?: components['schemas']['Input'];
@@ -3244,6 +3658,12 @@ export interface components {
       workflowStartDelay?: string;
       /** @description Indicates that a new workflow task should not be generated when this signal is received. */
       skipGenerateWorkflowTask?: boolean;
+      /**
+       * @description Metadata on the workflow if it is started. This is carried over to the WorkflowExecutionInfo
+       *  for use by user interfaces to display the fixed as-of-start summary and details of the
+       *  workflow.
+       */
+      userMetadata?: components['schemas']['UserMetadata'];
     };
     SignalWithStartWorkflowExecutionResponse: {
       /** @description The run id of the workflow that was started - or just signaled, if it was already running. */
@@ -3463,6 +3883,14 @@ export interface components {
        *  Callback addresses must be whitelisted in the server's dynamic configuration.
        */
       completionCallbacks?: components['schemas']['Callback'][];
+      /**
+       * @description Metadata on the workflow if it is started. This is carried over to the WorkflowExecutionInfo
+       *  for use by user interfaces to display the fixed as-of-start summary and details of the
+       *  workflow.
+       */
+      userMetadata?: components['schemas']['UserMetadata'];
+      /** @description Links to be associated with the workflow. */
+      links?: components['schemas']['Link'][];
     };
     StartWorkflowExecutionResponse: {
       /** @description The run id of the workflow that was started - or used (via WorkflowIdConflictPolicy USE_EXISTING). */
@@ -3567,6 +3995,68 @@ export interface components {
         | 'TASK_REACHABILITY_CLOSED_WORKFLOWS'
       )[];
     };
+    /**
+     * @description TaskQueueStats contains statistics about task queue backlog and activity.
+     *
+     *  For workflow task queue type, this result is partial because tasks sent to sticky queues are not included. Read
+     *  comments above each metric to understand the impact of sticky queue exclusion on that metric accuracy.
+     */
+    TaskQueueStats: {
+      /**
+       * @description The approximate number of tasks backlogged in this task queue. May count expired tasks but eventually
+       *  converges to the right value. Can be relied upon for scaling decisions.
+       *
+       *  Special note for workflow task queue type: this metric does not count sticky queue tasks. However, because
+       *  those tasks only remain valid for a few seconds, the inaccuracy becomes less significant as the backlog size
+       *  grows.
+       */
+      approximateBacklogCount?: string;
+      /**
+       * @description Approximate age of the oldest task in the backlog based on the creation time of the task at the head of
+       *  the queue. Can be relied upon for scaling decisions.
+       *
+       *  Special note for workflow task queue type: this metric does not count sticky queue tasks. However, because
+       *  those tasks only remain valid for a few seconds, they should not affect the result when backlog is older than
+       *  few seconds.
+       */
+      approximateBacklogAge?: string;
+      /**
+       * Format: float
+       * @description The approximate tasks per second added to the task queue, averaging the last 30 seconds. These includes tasks
+       *  whether or not they were added to/dispatched from the backlog or they were dispatched immediately without going
+       *  to the backlog (sync-matched).
+       *
+       *  The difference between `tasks_add_rate` and `tasks_dispatch_rate` is a reliable metric for the rate at which
+       *  backlog grows/shrinks.
+       *
+       *  Note: the actual tasks delivered to the workers may significantly be higher than the numbers reported by
+       *  tasks_add_rate, because:
+       *  - Tasks can be sent to workers without going to the task queue. This is called Eager dispatch. Eager dispatch is
+       *    enable for activities by default in the latest SDKs.
+       *  - Tasks going to Sticky queue are not accounted for. Note that, typically, only the first workflow task of each
+       *    workflow goes to a normal queue, and the rest workflow tasks go to the Sticky queue associated with a specific
+       *    worker instance.
+       */
+      tasksAddRate?: number;
+      /**
+       * Format: float
+       * @description The approximate tasks per second dispatched from the task queue, averaging the last 30 seconds. These includes
+       *  tasks whether or not they were added to/dispatched from the backlog or they were dispatched immediately without
+       *  going to the backlog (sync-matched).
+       *
+       *  The difference between `tasks_add_rate` and `tasks_dispatch_rate` is a reliable metric for the rate at which
+       *  backlog grows/shrinks.
+       *
+       *  Note: the actual tasks delivered to the workers may significantly be higher than the numbers reported by
+       *  tasks_dispatch_rate, because:
+       *  - Tasks can be sent to workers without going to the task queue. This is called Eager dispatch. Eager dispatch is
+       *    enable for activities by default in the latest SDKs.
+       *  - Tasks going to Sticky queue are not accounted for. Note that, typically, only the first workflow task of each
+       *    workflow goes to a normal queue, and the rest workflow tasks go to the Sticky queue associated with a specific
+       *    worker instance.
+       */
+      tasksDispatchRate?: number;
+    };
     /** @description Deprecated. Use `InternalTaskQueueStatus`. This is kept until `DescribeTaskQueue` supports legacy behavior. */
     TaskQueueStatus: {
       backlogCountHint?: string;
@@ -3579,6 +4069,7 @@ export interface components {
     TaskQueueTypeInfo: {
       /** @description Unversioned workers (with `useVersioning=false`) are reported in unversioned result even if they set a Build ID. */
       pollers?: components['schemas']['PollerInfo'][];
+      stats?: components['schemas']['TaskQueueStats'];
     };
     TaskQueueVersionInfo: {
       /** @description Task Queue info per Task Type. Key is the numerical value of the temporal.api.enums.v1.TaskQueueType enum. */
@@ -3587,6 +4078,15 @@ export interface components {
       };
       /**
        * Format: enum
+       * @description Task Reachability is eventually consistent; there may be a delay until it converges to the most
+       *  accurate value but it is designed in a way to take the more conservative side until it converges.
+       *  For example REACHABLE is more conservative than CLOSED_WORKFLOWS_ONLY.
+       *
+       *  Note: future activities who inherit their workflow's Build ID but not its Task Queue will not be
+       *  accounted for reachability as server cannot know if they'll happen as they do not use
+       *  assignment rules of their Task Queue. Same goes for Child Workflows or Continue-As-New Workflows
+       *  who inherit the parent/previous workflow's Build ID but not its Task Queue. In those cases, make
+       *  sure to query reachability for the parent/previous workflow's Task Queue as well.
        * @enum {string}
        */
       taskReachability?:
@@ -3679,6 +4179,32 @@ export interface components {
         | 'SCHEDULE_OVERLAP_POLICY_TERMINATE_OTHER'
         | 'SCHEDULE_OVERLAP_POLICY_ALLOW_ALL';
     };
+    UpdateActivityOptionsByIdRequest: {
+      /** @description Namespace of the workflow which scheduled this activity */
+      namespace?: string;
+      /** @description Id of the workflow which scheduled this activity */
+      workflowId?: string;
+      /**
+       * @description Run Id of the workflow which scheduled this activity
+       *  if empty - latest workflow is used
+       */
+      runId?: string;
+      /** @description Id of the activity we're updating */
+      activityId?: string;
+      /** @description The identity of the client who initiated this request */
+      identity?: string;
+      /** @description Activity options. Partial updates are accepted and controlled by update_mask */
+      activityOptions?: components['schemas']['ActivityOptions'];
+      /**
+       * Format: field-mask
+       * @description Controls which fields from `activity_options` will be applied
+       */
+      updateMask?: string;
+    };
+    UpdateActivityOptionsByIdResponse: {
+      /** @description Activity options after an update */
+      activityOptions?: components['schemas']['ActivityOptions'];
+    };
     UpdateNamespaceInfo: {
       description?: string;
       ownerEmail?: string;
@@ -3722,35 +4248,18 @@ export interface components {
       failoverVersion?: string;
       isGlobalNamespace?: boolean;
     };
-    UpdateNexusIncomingServiceRequest: {
-      /** @description Server-generated unique service ID. */
+    UpdateNexusEndpointRequest: {
+      /** @description Server-generated unique endpoint ID. */
       id?: string;
-      /** @description Data version for this service. Must match current version. */
+      /** @description Data version for this endpoint. Must match current version. */
       version?: string;
-      spec?: components['schemas']['IncomingServiceSpec'];
+      spec?: components['schemas']['EndpointSpec'];
     };
-    UpdateNexusIncomingServiceResponse: {
+    UpdateNexusEndpointResponse: {
       /** @description Data post acceptance. Can be used to issue additional updates to this record. */
-      service?: components['schemas']['IncomingService'];
+      endpoint?: components['schemas']['Endpoint'];
     };
-    UpdateNexusOutgoingServiceRequest: {
-      /** @description Namespace to find and update this service definition in. */
-      namespace?: string;
-      /** @description Service name, unique for this namespace. Must match `[a-zA-Z_][a-zA-Z0-9_]*`. */
-      name?: string;
-      /** @description Version of the service definition to update. Must match the current version. */
-      version?: string;
-      /** @description What to update the service spec to. */
-      spec?: components['schemas']['OutgoingServiceSpec'];
-    };
-    UpdateNexusOutgoingServiceResponse: {
-      /** @description Data post acceptance. Can be used to issue additional updates to this record. */
-      service?: components['schemas']['OutgoingService'];
-    };
-    /**
-     * @description The data needed by a client to refer to a previously invoked workflow
-     *  execution update process.
-     */
+    /** @description The data needed by a client to refer to a previously invoked Workflow Update. */
     UpdateRef: {
       workflowExecution?: components['schemas']['WorkflowExecution'];
       updateId?: string;
@@ -3792,28 +4301,31 @@ export interface components {
      *      aip.dev/not-precedent: Update RPCs don't follow Google API format. --)
      */
     UpdateWorkflowExecutionRequest: {
-      /** @description The namespace name of the target workflow */
+      /** @description The namespace name of the target Workflow. */
       namespace?: string;
       /**
-       * @description The target workflow id and (optionally) a specific run thereof
+       * @description The target Workflow Id and (optionally) a specific Run Id thereof.
        *  (-- api-linter: core::0203::optional=disabled
        *      aip.dev/not-precedent: false positive triggered by the word "optional" --)
        */
       workflowExecution?: components['schemas']['WorkflowExecution'];
       /**
-       * @description If set, this call will error if the most recent (if no run id is set on
-       *  `workflow_execution`), or specified (if it is) workflow execution is not
-       *  part of the same execution chain as this id.
+       * @description If set, this call will error if the most recent (if no Run Id is set on
+       *  `workflow_execution`), or specified (if it is) Workflow Execution is not
+       *  part of the same execution chain as this Id.
        */
       firstExecutionRunId?: string;
       /**
-       * @description Describes when this request should return - basically whether the
-       *  update is synchronous, asynchronous, or somewhere in between.
+       * @description Specifies client's intent to wait for Update results.
+       *  NOTE: This field works together with API call timeout which is limited by
+       *  server timeout (maximum wait time). If server timeout is expired before
+       *  user specified timeout, API call returns even if specified stage is not reached.
+       *  Actual reached stage will be included in the response.
        */
       waitPolicy?: components['schemas']['WaitPolicy'];
       /**
        * @description The request information that will be delivered all the way down to the
-       *  workflow execution.
+       *  Workflow Execution.
        */
       request?: components['schemas']['Request'];
     };
@@ -3821,8 +4333,8 @@ export interface components {
       /** @description Enough information for subsequent poll calls if needed. Never null. */
       updateRef?: components['schemas']['UpdateRef'];
       /**
-       * @description The outcome of the update if and only if the workflow execution update
-       *  has completed. If this response is being returned before the update has
+       * @description The outcome of the Update if and only if the Workflow Update
+       *  has completed. If this response is being returned before the Update has
        *  completed then this field will not be set.
        */
       outcome?: components['schemas']['Outcome'];
@@ -3851,6 +4363,22 @@ export interface components {
       workflowTaskCompletedEventId?: string;
       searchAttributes?: components['schemas']['SearchAttributes'];
     };
+    /** @description Information a user can set, often for use by user interfaces. */
+    UserMetadata: {
+      /**
+       * @description Short-form text that provides a summary. This payload should be a "json/plain"-encoded payload
+       *  that is a single JSON string for use in user interfaces. User interface formatting may not
+       *  apply to this text when used in "title" situations. The payload data section is limited to 400
+       *  bytes by default.
+       */
+      summary?: components['schemas']['Payload'];
+      /**
+       * @description Long-form text that provides details. This payload should be a "json/plain"-encoded payload
+       *  that is a single JSON string for use in user interfaces. User interface formatting may apply to
+       *  this text in common use. The payload data section is limited to 20000 bytes by default.
+       */
+      details?: components['schemas']['Payload'];
+    };
     /** @description VersionInfo contains details about current and recommended release versions as well as alerts and upgrade instructions. */
     VersionInfo: {
       current?: components['schemas']['ReleaseInfo'];
@@ -3860,15 +4388,15 @@ export interface components {
       /** Format: date-time */
       lastUpdateTime?: string;
     };
-    /**
-     * @description Specifies to the gRPC server how long the client wants the an update-related
-     *  RPC call to wait before returning control to the caller.
-     */
+    /** @description Specifies client's intent to wait for Update results. */
     WaitPolicy: {
       /**
        * Format: enum
-       * @description Indicates the update lifecycle stage that the gRPC call should wait for
-       *  before returning.
+       * @description Indicates the Update lifecycle stage that the Update must reach before
+       *  API call is returned.
+       *  NOTE: This field works together with API call timeout which is limited by
+       *  server timeout (maximum wait time). If server timeout is expired before
+       *  user specified timeout, API call returns even if specified stage is not reached.
        * @enum {string}
        */
       lifecycleStage?:
@@ -3903,6 +4431,69 @@ export interface components {
        *  marker for workflow reset points and the BuildIDs search attribute.
        */
       useVersioning?: boolean;
+    };
+    WorkflowEvent_EventReference: {
+      eventId?: string;
+      /**
+       * Format: enum
+       * @enum {string}
+       */
+      eventType?:
+        | 'EVENT_TYPE_UNSPECIFIED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_STARTED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_COMPLETED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_FAILED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_TIMED_OUT'
+        | 'EVENT_TYPE_WORKFLOW_TASK_SCHEDULED'
+        | 'EVENT_TYPE_WORKFLOW_TASK_STARTED'
+        | 'EVENT_TYPE_WORKFLOW_TASK_COMPLETED'
+        | 'EVENT_TYPE_WORKFLOW_TASK_TIMED_OUT'
+        | 'EVENT_TYPE_WORKFLOW_TASK_FAILED'
+        | 'EVENT_TYPE_ACTIVITY_TASK_SCHEDULED'
+        | 'EVENT_TYPE_ACTIVITY_TASK_STARTED'
+        | 'EVENT_TYPE_ACTIVITY_TASK_COMPLETED'
+        | 'EVENT_TYPE_ACTIVITY_TASK_FAILED'
+        | 'EVENT_TYPE_ACTIVITY_TASK_TIMED_OUT'
+        | 'EVENT_TYPE_ACTIVITY_TASK_CANCEL_REQUESTED'
+        | 'EVENT_TYPE_ACTIVITY_TASK_CANCELED'
+        | 'EVENT_TYPE_TIMER_STARTED'
+        | 'EVENT_TYPE_TIMER_FIRED'
+        | 'EVENT_TYPE_TIMER_CANCELED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_CANCEL_REQUESTED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_CANCELED'
+        | 'EVENT_TYPE_REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_INITIATED'
+        | 'EVENT_TYPE_REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_FAILED'
+        | 'EVENT_TYPE_EXTERNAL_WORKFLOW_EXECUTION_CANCEL_REQUESTED'
+        | 'EVENT_TYPE_MARKER_RECORDED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_SIGNALED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_TERMINATED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_CONTINUED_AS_NEW'
+        | 'EVENT_TYPE_START_CHILD_WORKFLOW_EXECUTION_INITIATED'
+        | 'EVENT_TYPE_START_CHILD_WORKFLOW_EXECUTION_FAILED'
+        | 'EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_STARTED'
+        | 'EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_COMPLETED'
+        | 'EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_FAILED'
+        | 'EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_CANCELED'
+        | 'EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_TIMED_OUT'
+        | 'EVENT_TYPE_CHILD_WORKFLOW_EXECUTION_TERMINATED'
+        | 'EVENT_TYPE_SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_INITIATED'
+        | 'EVENT_TYPE_SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_FAILED'
+        | 'EVENT_TYPE_EXTERNAL_WORKFLOW_EXECUTION_SIGNALED'
+        | 'EVENT_TYPE_UPSERT_WORKFLOW_SEARCH_ATTRIBUTES'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_UPDATE_ADMITTED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_UPDATE_ACCEPTED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_UPDATE_REJECTED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_UPDATE_COMPLETED'
+        | 'EVENT_TYPE_WORKFLOW_PROPERTIES_MODIFIED_EXTERNALLY'
+        | 'EVENT_TYPE_ACTIVITY_PROPERTIES_MODIFIED_EXTERNALLY'
+        | 'EVENT_TYPE_WORKFLOW_PROPERTIES_MODIFIED'
+        | 'EVENT_TYPE_NEXUS_OPERATION_SCHEDULED'
+        | 'EVENT_TYPE_NEXUS_OPERATION_STARTED'
+        | 'EVENT_TYPE_NEXUS_OPERATION_COMPLETED'
+        | 'EVENT_TYPE_NEXUS_OPERATION_FAILED'
+        | 'EVENT_TYPE_NEXUS_OPERATION_CANCELED'
+        | 'EVENT_TYPE_NEXUS_OPERATION_TIMED_OUT'
+        | 'EVENT_TYPE_NEXUS_OPERATION_CANCEL_REQUESTED';
     };
     /**
      * @description Identifies a specific workflow within a namespace. Practically speaking, because run_id is a
@@ -3943,6 +4534,8 @@ export interface components {
       workflowExecutionTimeout?: string;
       workflowRunTimeout?: string;
       defaultWorkflowTaskTimeout?: string;
+      /** @description User metadata provided on start workflow. */
+      userMetadata?: components['schemas']['UserMetadata'];
     };
     WorkflowExecutionContinuedAsNewEventAttributes: {
       /** @description The run ID of the new workflow started by this continue-as-new */
@@ -4078,6 +4671,15 @@ export interface components {
        *  of using the assignment rules.
        */
       inheritedBuildId?: string;
+      /**
+       * @description The first run ID in the execution chain.
+       *  Executions created via the following operations are considered to be in the same chain
+       *  - ContinueAsNew
+       *  - Workflow Retry
+       *  - Workflow Reset
+       *  - Cron Schedule
+       */
+      firstRunId?: string;
     };
     WorkflowExecutionSignaledEventAttributes: {
       /** @description The name/type of the signal to fire */
@@ -4919,6 +5521,38 @@ export interface operations {
       };
     };
   };
+  /**
+   * @description UpdateActivityOptionsById is called by the client to update the options of an activity
+   *  (-- api-linter: core::0136::prepositions=disabled
+   *      aip.dev/not-precedent: "By" is used to indicate request type. --)
+   */
+  UpdateActivityOptionsById: {
+    parameters: {
+      path: {
+        /** @description Namespace of the workflow which scheduled this activity */
+        namespace: string;
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateActivityOptionsByIdRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['UpdateActivityOptionsByIdResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
   /** @description ListArchivedWorkflowExecutions is a visibility API to list archived workflow executions in a specific namespace. */
   ListArchivedWorkflowExecutions: {
     parameters: {
@@ -5050,161 +5684,6 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['StopBatchOperationResponse'];
-        };
-      };
-      /** @description Default error response */
-      default: {
-        content: {
-          'application/json': components['schemas']['Status'];
-        };
-      };
-    };
-  };
-  /**
-   * @description List all Nexus outgoing services for a namespace, sorted by service name in ascending order. Set page_token in
-   *  the request to the next_page_token field of the previous response to get the next page of results. An empty
-   *  next_page_token indicates that there are no more results. During pagination, a newly added service with a name
-   *  lexicographically earlier than the previous page's last service name may be missed.
-   */
-  ListNexusOutgoingServices: {
-    parameters: {
-      query?: {
-        /** @description Maximum number of services to return in a single page. */
-        pageSize?: number;
-        /** @description Pass in the next_page_token from the previous response here. */
-        pageToken?: string;
-      };
-      path: {
-        /** @description Namespace to scope the list request to. */
-        namespace: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          'application/json': components['schemas']['ListNexusOutgoingServicesResponse'];
-        };
-      };
-      /** @description Default error response */
-      default: {
-        content: {
-          'application/json': components['schemas']['Status'];
-        };
-      };
-    };
-  };
-  /**
-   * @description Create a Nexus service. This will fail if a service with the same name already exists in the namespace with a
-   *  status of ALREADY_EXISTS.
-   *  Returns the created service with its initial version. You may use this version for subsequent updates. You don't
-   *  need to increment the version yourself. The server will increment the version for you after each update.
-   */
-  CreateNexusOutgoingService: {
-    parameters: {
-      path: {
-        /** @description Namespace to create this service definition in. */
-        namespace: string;
-      };
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateNexusOutgoingServiceRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          'application/json': components['schemas']['CreateNexusOutgoingServiceResponse'];
-        };
-      };
-      /** @description Default error response */
-      default: {
-        content: {
-          'application/json': components['schemas']['Status'];
-        };
-      };
-    };
-  };
-  /**
-   * @description Get a registered outgoing Nexus service by namespace and service name. The returned version can be used for
-   *  optimistic updates.
-   */
-  GetNexusOutgoingService: {
-    parameters: {
-      path: {
-        /** @description Namespace that contains this outgoing service definition. */
-        namespace: string;
-        /** @description Name of service to retrieve. */
-        name: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          'application/json': components['schemas']['GetNexusOutgoingServiceResponse'];
-        };
-      };
-      /** @description Default error response */
-      default: {
-        content: {
-          'application/json': components['schemas']['Status'];
-        };
-      };
-    };
-  };
-  /** @description Delete an outgoing Nexus service by namespace and service name. */
-  DeleteNexusOutgoingService: {
-    parameters: {
-      path: {
-        /** @description Namespace that contains this outgoing service definition. */
-        namespace: string;
-        /** @description Name of service to delete. */
-        name: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          'application/json': components['schemas']['DeleteNexusOutgoingServiceResponse'];
-        };
-      };
-      /** @description Default error response */
-      default: {
-        content: {
-          'application/json': components['schemas']['Status'];
-        };
-      };
-    };
-  };
-  /**
-   * @description Update an outgoing Nexus service by namespace and service name. The version in the request should match the
-   *  current version of the service. This will fail with a status of FAILED_PRECONDITION if the version does not match.
-   *  Returns the updated service with the updated version, which can be used for subsequent updates. You don't need
-   *  to increment the version yourself. The server will increment the version for you.
-   */
-  UpdateNexusOutgoingService: {
-    parameters: {
-      path: {
-        /** @description Namespace to find and update this service definition in. */
-        namespace: string;
-        /** @description Service name, unique for this namespace. Must match `[a-zA-Z_][a-zA-Z0-9_]*`. */
-        name: string;
-      };
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateNexusOutgoingServiceRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          'application/json': components['schemas']['UpdateNexusOutgoingServiceResponse'];
         };
       };
       /** @description Default error response */
@@ -5540,8 +6019,8 @@ export interface operations {
         /** @description Include the unversioned queue. */
         'versions.unversioned'?: boolean;
         /**
-         * @description Include all active versions. A version is considered active if it has had new
-         *  tasks or polls recently.
+         * @description Include all active versions. A version is considered active if, in the last few minutes,
+         *  it has had new tasks or polls, or it has been the subject of certain task queue API calls.
          */
         'versions.allActive'?: boolean;
         /** @description Task queue types to report info about. If not specified, all types are considered. */
@@ -5551,11 +6030,9 @@ export interface operations {
           | 'TASK_QUEUE_TYPE_ACTIVITY'
           | 'TASK_QUEUE_TYPE_NEXUS'
         )[];
-        /**
-         * @description Report backlog info for the requested task queue types and versions
-         *  bool report_backlog_info = 8;
-         *  Report list of pollers for requested task queue types and versions
-         */
+        /** @description Report stats for the requested task queue types and versions */
+        reportStats?: boolean;
+        /** @description Report list of pollers for requested task queue types and versions */
         reportPollers?: boolean;
         /**
          * @description Report task reachability for the requested versions and all task types (task reachability is not reported
@@ -6121,11 +6598,11 @@ export interface operations {
       };
     };
   };
-  /** @description Invokes the specified update function on user workflow code. */
+  /** @description Invokes the specified Update function on user Workflow code. */
   UpdateWorkflowExecution: {
     parameters: {
       path: {
-        /** @description The namespace name of the target workflow */
+        /** @description The namespace name of the target Workflow. */
         namespace: string;
         'workflow_execution.workflow_id': string;
         'request.input.name': string;
@@ -6152,23 +6629,23 @@ export interface operations {
     };
   };
   /**
-   * @description List all Nexus incoming services for the cluster, sorted by service ID in ascending order. Set page_token in the
-   *  request to the next_page_token field of the previous response to get the next page of results. An empty
-   *  next_page_token indicates that there are no more results. During pagination, a newly added service with an ID
-   *  lexicographically earlier than the previous page's last service name may be missed.
+   * @description List all Nexus endpoints for the cluster, sorted by ID in ascending order. Set page_token in the request to the
+   *  next_page_token field of the previous response to get the next page of results. An empty next_page_token
+   *  indicates that there are no more results. During pagination, a newly added service with an ID lexicographically
+   *  earlier than the previous page's last endpoint's ID may be missed.
    */
-  ListNexusIncomingServices: {
+  ListNexusEndpoints: {
     parameters: {
       query?: {
         pageSize?: number;
         /**
-         * @description To get the next page, pass in `ListNexusIncomingServicesResponse.next_page_token` from the previous page's
+         * @description To get the next page, pass in `ListNexusEndpointsResponse.next_page_token` from the previous page's
          *  response, the token will be empty if there's no other page.
-         *  Note: the last page may be empty if the total number of services registered is a multiple of the page size.
+         *  Note: the last page may be empty if the total number of endpoints registered is a multiple of the page size.
          */
         nextPageToken?: string;
         /**
-         * @description Name of the incoming service to filter on - optional. Specifying this will result in zero or one results.
+         * @description Name of the incoming endpoint to filter on - optional. Specifying this will result in zero or one results.
          *  (-- api-linter: core::203::field-behavior-required=disabled
          *      aip.dev/not-precedent: Not following linter rules. --)
          */
@@ -6179,7 +6656,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListNexusIncomingServicesResponse'];
+          'application/json': components['schemas']['ListNexusEndpointsResponse'];
         };
       };
       /** @description Default error response */
@@ -6191,21 +6668,21 @@ export interface operations {
     };
   };
   /**
-   * @description Create a Nexus service. This will fail if a service with the same name already exists in the namespace with a
-   *  status of ALREADY_EXISTS.
-   *  Returns the created service with its initial version. You may use this version for subsequent updates.
+   * @description Create a Nexus endpoint. This will fail if an endpoint with the same name is already registered with a status of
+   *  ALREADY_EXISTS.
+   *  Returns the created endpoint with its initial version. You may use this version for subsequent updates.
    */
-  CreateNexusIncomingService: {
+  CreateNexusEndpoint: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateNexusIncomingServiceRequest'];
+        'application/json': components['schemas']['CreateNexusEndpointRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['CreateNexusIncomingServiceResponse'];
+          'application/json': components['schemas']['CreateNexusEndpointResponse'];
         };
       };
       /** @description Default error response */
@@ -6216,11 +6693,11 @@ export interface operations {
       };
     };
   };
-  /** @description Get a registered incoming Nexus service by ID. The returned version can be used for optimistic updates. */
-  GetNexusIncomingService: {
+  /** @description Get a registered Nexus endpoint by ID. The returned version can be used for optimistic updates. */
+  GetNexusEndpoint: {
     parameters: {
       path: {
-        /** @description Server-generated unique service ID. */
+        /** @description Server-generated unique endpoint ID. */
         id: string;
       };
     };
@@ -6228,7 +6705,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetNexusIncomingServiceResponse'];
+          'application/json': components['schemas']['GetNexusEndpointResponse'];
         };
       };
       /** @description Default error response */
@@ -6240,14 +6717,14 @@ export interface operations {
     };
   };
   /** @description Delete an incoming Nexus service by ID. */
-  DeleteNexusIncomingService: {
+  DeleteNexusEndpoint: {
     parameters: {
       query?: {
-        /** @description Data version for this service. Must match current version. */
+        /** @description Data version for this endpoint. Must match current version. */
         version?: string;
       };
       path: {
-        /** @description Server-generated unique service ID. */
+        /** @description Server-generated unique endpoint ID. */
         id: string;
       };
     };
@@ -6255,7 +6732,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['DeleteNexusIncomingServiceResponse'];
+          'application/json': components['schemas']['DeleteNexusEndpointResponse'];
         };
       };
       /** @description Default error response */
@@ -6267,29 +6744,29 @@ export interface operations {
     };
   };
   /**
-   * @description Optimistically update a Nexus service based on provided version as obtained via the
-   *  `GetNexusIncomingService` or `ListNexusOutgoingServicesResponse` APIs. This will fail with a status of
-   *  FAILED_PRECONDITION if the version does not match.
-   *  Returns the updated service with its updated version. You may use this version for subsequent updates. You don't
+   * @description Optimistically update a Nexus endpoint based on provided version as obtained via the `GetNexusEndpoint` or
+   *  `ListNexusEndpointResponse` APIs. This will fail with a status of FAILED_PRECONDITION if the version does not
+   *  match.
+   *  Returns the updated endpoint with its updated version. You may use this version for subsequent updates. You don't
    *  need to increment the version yourself. The server will increment the version for you after each update.
    */
-  UpdateNexusIncomingService: {
+  UpdateNexusEndpoint: {
     parameters: {
       path: {
-        /** @description Server-generated unique service ID. */
+        /** @description Server-generated unique endpoint ID. */
         id: string;
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateNexusIncomingServiceRequest'];
+        'application/json': components['schemas']['UpdateNexusEndpointRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateNexusIncomingServiceResponse'];
+          'application/json': components['schemas']['UpdateNexusEndpointResponse'];
         };
       };
       /** @description Default error response */

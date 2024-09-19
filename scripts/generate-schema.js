@@ -7,7 +7,7 @@ import { $ } from 'zx';
 
 const openAPIDefinitionsDirectory = './tmp/api';
 const openApiDefinitions = join(openAPIDefinitionsDirectory, 'openapi', 'openapiv3.yaml');
-const schema = join('src', 'schema.ts');
+const schema = join('src', 'schema.d.ts');
 
 const directoryExists = await stat(openAPIDefinitionsDirectory)
   .then(() => true)
@@ -25,10 +25,6 @@ const emitter = degit('temporalio/api', {
   verbose: true,
 });
 
-emitter.on('info', (info) => {
-  console.log(chalk.bgBlue(' INFO '), info.message);
-});
-
 emitter.on('warn', (warning) => {
   console.warn(chalk.bgYellow(' WARN '), warning.message);
 });
@@ -40,4 +36,4 @@ emitter.on('error', (error) => {
 await emitter.clone(openAPIDefinitionsDirectory);
 
 await $`npx openapi-typescript ${openApiDefinitions} -o ${schema}`;
-await $`npm run format`;
+await $`npm run format -- --log-level=error`;

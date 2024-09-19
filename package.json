@@ -16,8 +16,7 @@
     }
   },
   "scripts": {
-    "build": "bunx --bun ",
-    "types": "tsc src/**/*.ts  --declaration --emitDeclarationOnly --skipLibCheck --outdir dist --module esnext",
+    "build": "bun run build.ts",
     "package": "publint",
     "prepublishOnly": "npm run package",
     "lint": "prettier --check . && eslint .",

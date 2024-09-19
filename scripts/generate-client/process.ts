@@ -1,8 +1,27 @@
+import ts from 'typescript';
 import type { Properties } from './get-property-signatures';
 import { isBody, isResponse } from './request-response';
 import { camelCase } from 'change-case';
+import { findNodeByName } from './find-node-by-name';
 
 type HTTPMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
+
+type OperationMetadata = {
+  documentation: string;
+  route: string;
+  response: string;
+  body: string;
+  mappings: Record<string, string>;
+  parameters: string[];
+  parametersTypes: Record<string, string>;
+  query: string[];
+  queryTypes: Record<string, string>;
+};
+
+export type OperationsMetadataWithRoute = OperationMetadata & {
+  route: string;
+  method: HTTPMethod;
+};
 
 function getOperationName(indexedAccessType: string) {
   return indexedAccessType.split("['")[1].split("']")[0];
@@ -41,24 +60,9 @@ function isHTTPMethod(method: string): method is HTTPMethod {
   return ['get', 'post', 'put', 'delete', 'patch'].includes(method);
 }
 
-type OperationMetadata = {
-  route: string;
-  response: string;
-  body: string;
-  mappings: Record<string, string>;
-  parameters: string[];
-  parametersTypes: Record<string, string>;
-  query: string[];
-  queryTypes: Record<string, string>;
-};
-
-export type OperationsMetadataWithRoute = OperationMetadata & {
-  route: string;
-  method: HTTPMethod;
-};
-
 function createOperationsMetadata(): OperationMetadata {
   return {
+    documentation: '',
     route: '',
     response: '',
     body: '',
@@ -114,11 +118,26 @@ function formatRoute(route: string) {
     .join('/');
 }
 
-export function processOperations(operations: Properties) {
+function hasJSDoc(node: ts.Node): node is ts.Node & { jsDoc: ts.JSDoc[] } {
+  if ('jsDoc' in node && Array.isArray(node.jsDoc)) return true;
+  return false;
+}
+
+export function getJSDoc(node: ts.Node | undefined, sourceFile: ts.SourceFile) {
+  if (!node) return '';
+  if (!hasJSDoc(node)) return '';
+  return node.jsDoc.map((doc) => doc.getText(sourceFile)).join('\n');
+}
+
+export function processOperations(operations: Properties, sourceFile: ts.SourceFile) {
   const result: Record<string, OperationMetadata> = {};
 
   for (const [operationName, operation] of Object.entries(operations)) {
+    const node = findNodeByName(operationName, sourceFile);
     const operationMetadata = (result[operationName] = createOperationsMetadata());
+
+    operationMetadata.documentation = getJSDoc(node, sourceFile);
+
     for (const [propertyName, property] of Object.entries(operation)) {
       if (propertyName === 'parameters') {
         for (const [parameter, parameterValue] of Object.entries(property)) {

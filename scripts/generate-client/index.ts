@@ -24,7 +24,7 @@ const { paths, operations } = findExportedInterfaces(schemaSourceFile);
 const pathsProperties = getPropertySignatures(paths, schemaSourceFile);
 const operationsProperties = getPropertySignatures(operations, schemaSourceFile);
 
-const operationsMetadata = processOperations(operationsProperties);
+const operationsMetadata = processOperations(operationsProperties, schemaSourceFile);
 const pathsMetadata = processPaths(pathsProperties, operationsMetadata);
 
 const clientCode = createClient(pathsMetadata);

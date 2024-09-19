@@ -19,5 +19,5 @@ const { values } = parseArgs({
   allowPositionals: true,
 });
 
-export const schemaInputPath = values.schema || 'src/schema.d.ts';
+export const schemaInputPath = values.schema || 'src/schema.ts';
 export const clientOutputPath = values.output || 'src/client.ts';

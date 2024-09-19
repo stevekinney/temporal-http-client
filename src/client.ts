@@ -1,10 +1,11 @@
-import type { components } from './schema.js';
+import type { components } from './schema';
 
 type RequestOptions = {
   onError?: (response: Response) => void;
   baseUrl?: string;
 };
 
+/** @description GetClusterInfo returns information about temporal cluster */
 export async function getClusterInfo({
   onError,
   baseUrl = window.location.origin,
@@ -23,6 +24,7 @@ export async function getClusterInfo({
   });
 }
 
+/** @description ListNamespaces returns the information and configuration for all namespaces. */
 export async function listNamespaces(
   {
     pageSize,
@@ -52,6 +54,14 @@ export async function listNamespaces(
   });
 }
 
+/**
+ * @description RegisterNamespace creates a new namespace which can be used as a container for all resources.
+ *
+ *  A Namespace is a top level entity within Temporal, and is used as a container for resources
+ *  like workflow executions, task queues, etc. A Namespace acts as a sandbox and provides
+ *  isolation for all resources within the namespace. All resources belongs to exactly one
+ *  namespace.
+ */
 export async function registerNamespace(
   { body }: { body: components['schemas']['RegisterNamespaceRequest'] },
   { onError, baseUrl = window.location.origin }: RequestOptions = {},
@@ -71,6 +81,7 @@ export async function registerNamespace(
   });
 }
 
+/** @description DescribeNamespace returns the information and configuration for a registered namespace. */
 export async function describeNamespace(
   { id, namespace }: { namespace: string; id?: string },
   { onError, baseUrl = window.location.origin }: RequestOptions = {},
@@ -91,6 +102,13 @@ export async function describeNamespace(
   });
 }
 
+/**
+ * @description RespondActivityTaskFailed is called by workers when processing an activity task fails.
+ *
+ *  This results in a new `ACTIVITY_TASK_CANCELED` event being written to the workflow history
+ *  and a new workflow task created for the workflow. Fails with `NotFound` if the task token is
+ *  no longer valid due to activity timeout, already being completed, or never having existed.
+ */
 export async function respondActivityTaskCanceled(
   {
     namespace,
@@ -113,6 +131,13 @@ export async function respondActivityTaskCanceled(
   });
 }
 
+/**
+ * @description See `RecordActivityTaskCanceled`. This version allows clients to record failures by
+ *  namespace/workflow id/activity id instead of task token.
+ *
+ *  (-- api-linter: core::0136::prepositions=disabled
+ *      aip.dev/not-precedent: "By" is used to indicate request type. --)
+ */
 export async function respondActivityTaskCanceledById(
   {
     namespace,
@@ -135,6 +160,14 @@ export async function respondActivityTaskCanceledById(
   });
 }
 
+/**
+ * @description RespondActivityTaskCompleted is called by workers when they successfully complete an activity
+ *  task.
+ *
+ *  This results in a new `ACTIVITY_TASK_COMPLETED` event being written to the workflow history
+ *  and a new workflow task created for the workflow. Fails with `NotFound` if the task token is
+ *  no longer valid due to activity timeout, already being completed, or never having existed.
+ */
 export async function respondActivityTaskCompleted(
   {
     namespace,
@@ -157,6 +190,13 @@ export async function respondActivityTaskCompleted(
   });
 }
 
+/**
+ * @description See `RecordActivityTaskCompleted`. This version allows clients to record completions by
+ *  namespace/workflow id/activity id instead of task token.
+ *
+ *  (-- api-linter: core::0136::prepositions=disabled
+ *      aip.dev/not-precedent: "By" is used to indicate request type. --)
+ */
 export async function respondActivityTaskCompletedById(
   {
     namespace,
@@ -179,6 +219,13 @@ export async function respondActivityTaskCompletedById(
   });
 }
 
+/**
+ * @description RespondActivityTaskFailed is called by workers when processing an activity task fails.
+ *
+ *  This results in a new `ACTIVITY_TASK_FAILED` event being written to the workflow history and
+ *  a new workflow task created for the workflow. Fails with `NotFound` if the task token is no
+ *  longer valid due to activity timeout, already being completed, or never having existed.
+ */
 export async function respondActivityTaskFailed(
   {
     namespace,
@@ -201,6 +248,13 @@ export async function respondActivityTaskFailed(
   });
 }
 
+/**
+ * @description See `RecordActivityTaskFailed`. This version allows clients to record failures by
+ *  namespace/workflow id/activity id instead of task token.
+ *
+ *  (-- api-linter: core::0136::prepositions=disabled
+ *      aip.dev/not-precedent: "By" is used to indicate request type. --)
+ */
 export async function respondActivityTaskFailedById(
   {
     namespace,
@@ -223,6 +277,14 @@ export async function respondActivityTaskFailedById(
   });
 }
 
+/**
+ * @description RecordActivityTaskHeartbeat is optionally called by workers while they execute activities.
+ *
+ *  If worker fails to heartbeat within the `heartbeat_timeout` interval for the activity task,
+ *  then it will be marked as timed out and an `ACTIVITY_TASK_TIMED_OUT` event will be written to
+ *  the workflow history. Calling `RecordActivityTaskHeartbeat` will fail with `NotFound` in
+ *  such situations, in that event, the SDK should request cancellation of the activity.
+ */
 export async function recordActivityTaskHeartbeat(
   {
     namespace,
@@ -245,6 +307,13 @@ export async function recordActivityTaskHeartbeat(
   });
 }
 
+/**
+ * @description See `RecordActivityTaskHeartbeat`. This version allows clients to record heartbeats by
+ *  namespace/workflow id/activity id instead of task token.
+ *
+ *  (-- api-linter: core::0136::prepositions=disabled
+ *      aip.dev/not-precedent: "By" is used to indicate request type. --)
+ */
 export async function recordActivityTaskHeartbeatById(
   {
     namespace,
@@ -267,6 +336,11 @@ export async function recordActivityTaskHeartbeatById(
   });
 }
 
+/**
+ * @description UpdateActivityOptionsById is called by the client to update the options of an activity
+ *  (-- api-linter: core::0136::prepositions=disabled
+ *      aip.dev/not-precedent: "By" is used to indicate request type. --)
+ */
 export async function updateActivityOptionsById(
   {
     namespace,
@@ -289,6 +363,7 @@ export async function updateActivityOptionsById(
   });
 }
 
+/** @description ListArchivedWorkflowExecutions is a visibility API to list archived workflow executions in a specific namespace. */
 export async function listArchivedWorkflowExecutions(
   {
     pageSize,
@@ -318,6 +393,7 @@ export async function listArchivedWorkflowExecutions(
   });
 }
 
+/** @description ListBatchOperations returns a list of batch operations */
 export async function listBatchOperations(
   {
     pageSize,
@@ -344,6 +420,7 @@ export async function listBatchOperations(
   });
 }
 
+/** @description DescribeBatchOperation returns the information about a batch operation */
 export async function describeBatchOperation(
   { namespace, jobId }: { namespace: string; jobId: string },
   { onError, baseUrl = window.location.origin }: RequestOptions = {},
@@ -362,6 +439,7 @@ export async function describeBatchOperation(
   });
 }
 
+/** @description StartBatchOperation starts a new batch operation */
 export async function startBatchOperation(
   {
     namespace,
@@ -389,6 +467,7 @@ export async function startBatchOperation(
   });
 }
 
+/** @description StopBatchOperation stops a batch operation */
 export async function stopBatchOperation(
   {
     namespace,
@@ -412,6 +491,7 @@ export async function stopBatchOperation(
   });
 }
 
+/** @description List all schedules in a namespace. */
 export async function listSchedules(
   {
     maximumPageSize,
@@ -441,6 +521,7 @@ export async function listSchedules(
   });
 }
 
+/** @description Returns the schedule description and current state of an existing schedule. */
 export async function describeSchedule(
   { namespace, scheduleId }: { namespace: string; scheduleId: string },
   { onError, baseUrl = window.location.origin }: RequestOptions = {},
@@ -459,6 +540,7 @@ export async function describeSchedule(
   });
 }
 
+/** @description Creates a new schedule. */
 export async function createSchedule(
   {
     namespace,
@@ -486,6 +568,7 @@ export async function createSchedule(
   });
 }
 
+/** @description Deletes a schedule, removing it from the system. */
 export async function deleteSchedule(
   { identity, namespace, scheduleId }: { namespace: string; scheduleId: string; identity?: string },
   { onError, baseUrl = window.location.origin }: RequestOptions = {},
@@ -506,6 +589,7 @@ export async function deleteSchedule(
   });
 }
 
+/** @description Lists matching times within a range. */
 export async function listScheduleMatchingTimes(
   {
     startTime,
@@ -536,6 +620,7 @@ export async function listScheduleMatchingTimes(
   });
 }
 
+/** @description Makes a specific change to a schedule or triggers an immediate action. */
 export async function patchSchedule(
   {
     namespace,
@@ -559,6 +644,7 @@ export async function patchSchedule(
   });
 }
 
+/** @description Changes the configuration or state of an existing schedule. */
 export async function updateSchedule(
   {
     namespace,
@@ -586,6 +672,7 @@ export async function updateSchedule(
   });
 }
 
+/** @description ListSearchAttributes returns comprehensive information about search attributes. */
 export async function listSearchAttributes(
   { namespace }: { namespace: string },
   { onError, baseUrl = window.location.origin }: RequestOptions = {},
@@ -604,6 +691,12 @@ export async function listSearchAttributes(
   });
 }
 
+/**
+ * @description DescribeTaskQueue returns the following information about the target task queue, broken down by Build ID:
+ *    - List of pollers
+ *    - Workflow Reachability status
+ *    - Backlog info for Workflow and/or Activity tasks
+ */
 export async function describeTaskQueue(
   {
     taskQueueName,
@@ -691,6 +784,10 @@ export async function describeTaskQueue(
   });
 }
 
+/**
+ * @description Deprecated. Use `GetWorkerVersioningRules`.
+ *  Fetches the worker build id versioning sets for a task queue.
+ */
 export async function getWorkerBuildIdCompatibility(
   { maxSets, namespace, taskQueue }: { namespace: string; taskQueue: string; maxSets?: number },
   { onError, baseUrl = window.location.origin }: RequestOptions = {},
@@ -714,6 +811,10 @@ export async function getWorkerBuildIdCompatibility(
   });
 }
 
+/**
+ * @description Fetches the Build ID assignment and redirect rules for a Task Queue.
+ *  WARNING: Worker Versioning is not yet stable and the API and behavior may change incompatibly.
+ */
 export async function getWorkerVersioningRules(
   { namespace, taskQueue }: { namespace: string; taskQueue: string },
   { onError, baseUrl = window.location.origin }: RequestOptions = {},
@@ -735,6 +836,10 @@ export async function getWorkerVersioningRules(
   });
 }
 
+/**
+ * @description UpdateNamespace is used to update the information and configuration of a registered
+ *  namespace.
+ */
 export async function updateNamespace(
   { namespace, body }: { namespace: string; body: components['schemas']['UpdateNamespaceRequest'] },
   { onError, baseUrl = window.location.origin }: RequestOptions = {},
@@ -754,6 +859,22 @@ export async function updateNamespace(
   });
 }
 
+/**
+ * @description Deprecated. Use `DescribeTaskQueue`.
+ *
+ *  Fetches task reachability to determine whether a worker may be retired.
+ *  The request may specify task queues to query for or let the server fetch all task queues mapped to the given
+ *  build IDs.
+ *
+ *  When requesting a large number of task queues or all task queues associated with the given build ids in a
+ *  namespace, all task queues will be listed in the response but some of them may not contain reachability
+ *  information due to a server enforced limit. When reaching the limit, task queues that reachability information
+ *  could not be retrieved for will be marked with a single TASK_REACHABILITY_UNSPECIFIED entry. The caller may issue
+ *  another call to get the reachability for those task queues.
+ *
+ *  Open source users can adjust this limit by setting the server's dynamic config value for
+ *  `limit.reachabilityTaskQueueScan` with the caveat that this call can strain the visibility store.
+ */
 export async function getWorkerTaskReachability(
   {
     buildIds,
@@ -793,6 +914,7 @@ export async function getWorkerTaskReachability(
   });
 }
 
+/** @description CountWorkflowExecutions is a visibility API to count of workflow executions in a specific namespace. */
 export async function countWorkflowExecutions(
   { query, namespace }: { namespace: string; query?: string },
   { onError, baseUrl = window.location.origin }: RequestOptions = {},
@@ -813,6 +935,7 @@ export async function countWorkflowExecutions(
   });
 }
 
+/** @description ListWorkflowExecutions is a visibility API to list workflow executions in a specific namespace. */
 export async function listWorkflowExecutions(
   {
     pageSize,
@@ -842,6 +965,7 @@ export async function listWorkflowExecutions(
   });
 }
 
+/** @description DescribeWorkflowExecution returns information about the specified workflow execution. */
 export async function describeWorkflowExecution(
   {
     executionWorkflowId,
@@ -870,6 +994,10 @@ export async function describeWorkflowExecution(
   });
 }
 
+/**
+ * @description GetWorkflowExecutionHistory returns the history of specified workflow execution. Fails with
+ *  `NotFound` if the specified workflow execution is unknown to the service.
+ */
 export async function getWorkflowExecutionHistory(
   {
     executionWorkflowId,
@@ -927,6 +1055,11 @@ export async function getWorkflowExecutionHistory(
   });
 }
 
+/**
+ * @description GetWorkflowExecutionHistoryReverse returns the history of specified workflow execution in reverse
+ *  order (starting from last event). Fails with`NotFound` if the specified workflow execution is
+ *  unknown to the service.
+ */
 export async function getWorkflowExecutionHistoryReverse(
   {
     executionWorkflowId,
@@ -971,6 +1104,7 @@ export async function getWorkflowExecutionHistoryReverse(
   });
 }
 
+/** @description QueryWorkflow requests a query be executed for a specified workflow execution. */
 export async function queryWorkflow(
   {
     namespace,
@@ -1003,6 +1137,14 @@ export async function queryWorkflow(
   });
 }
 
+/**
+ * @description RequestCancelWorkflowExecution is called by workers when they want to request cancellation of
+ *  a workflow execution.
+ *
+ *  This results in a new `WORKFLOW_EXECUTION_CANCEL_REQUESTED` event being written to the
+ *  workflow history and a new workflow task created for the workflow. It returns success if the requested
+ *  workflow is already closed. It fails with 'NotFound' if the requested workflow doesn't exist.
+ */
 export async function requestCancelWorkflowExecution(
   {
     namespace,
@@ -1030,6 +1172,12 @@ export async function requestCancelWorkflowExecution(
   });
 }
 
+/**
+ * @description ResetWorkflowExecution will reset an existing workflow execution to a specified
+ *  `WORKFLOW_TASK_COMPLETED` event (exclusive). It will immediately terminate the current
+ *  execution instance.
+ *  TODO: Does exclusive here mean *just* the completed event, or also WFT started? Otherwise the task is doomed to time out?
+ */
 export async function resetWorkflowExecution(
   {
     namespace,
@@ -1057,6 +1205,12 @@ export async function resetWorkflowExecution(
   });
 }
 
+/**
+ * @description SignalWorkflowExecution is used to send a signal to a running workflow execution.
+ *
+ *  This results in a `WORKFLOW_EXECUTION_SIGNALED` event recorded in the history and a workflow
+ *  task being created for the execution.
+ */
 export async function signalWorkflowExecution(
   {
     namespace,
@@ -1089,6 +1243,11 @@ export async function signalWorkflowExecution(
   });
 }
 
+/**
+ * @description TerminateWorkflowExecution terminates an existing workflow execution by recording a
+ *  `WORKFLOW_EXECUTION_TERMINATED` event in the history and immediately terminating the
+ *  execution instance.
+ */
 export async function terminateWorkflowExecution(
   {
     namespace,
@@ -1116,6 +1275,7 @@ export async function terminateWorkflowExecution(
   });
 }
 
+/** @description Invokes the specified Update function on user Workflow code. */
 export async function updateWorkflowExecution(
   {
     namespace,
@@ -1148,6 +1308,13 @@ export async function updateWorkflowExecution(
   });
 }
 
+/**
+ * @description StartWorkflowExecution starts a new workflow execution.
+ *
+ *  It will create the execution with a `WORKFLOW_EXECUTION_STARTED` event in its history and
+ *  also schedule the first workflow task. Returns `WorkflowExecutionAlreadyStarted`, if an
+ *  instance already exists with same workflow id.
+ */
 export async function startWorkflowExecution(
   {
     namespace,
@@ -1175,6 +1342,20 @@ export async function startWorkflowExecution(
   });
 }
 
+/**
+ * @description SignalWithStartWorkflowExecution is used to ensure a signal is sent to a workflow, even if
+ *  it isn't yet started.
+ *
+ *  If the workflow is running, a `WORKFLOW_EXECUTION_SIGNALED` event is recorded in the history
+ *  and a workflow task is generated.
+ *
+ *  If the workflow is not running or not found, then the workflow is created with
+ *  `WORKFLOW_EXECUTION_STARTED` and `WORKFLOW_EXECUTION_SIGNALED` events in its history, and a
+ *  workflow task is generated.
+ *
+ *  (-- api-linter: core::0136::prepositions=disabled
+ *      aip.dev/not-precedent: "With" is used to indicate combined operation. --)
+ */
 export async function signalWithStartWorkflowExecution(
   {
     namespace,
@@ -1207,6 +1388,17 @@ export async function signalWithStartWorkflowExecution(
   });
 }
 
+/**
+ * @description ExecuteMultiOperation executes multiple operations within a single workflow.
+ *
+ *  Operations are started atomically, meaning if *any* operation fails to be started, none are,
+ *  and the request fails. Upon start, the API returns only when *all* operations have a response.
+ *
+ *  Upon failure, it returns `MultiOperationExecutionFailure` where the status code
+ *  equals the status code of the *first* operation that failed to be started.
+ *
+ *  NOTE: Experimental API.
+ */
 export async function executeMultiOperation(
   {
     namespace,
@@ -1229,6 +1421,12 @@ export async function executeMultiOperation(
   });
 }
 
+/**
+ * @description List all Nexus endpoints for the cluster, sorted by ID in ascending order. Set page_token in the request to the
+ *  next_page_token field of the previous response to get the next page of results. An empty next_page_token
+ *  indicates that there are no more results. During pagination, a newly added service with an ID lexicographically
+ *  earlier than the previous page's last endpoint's ID may be missed.
+ */
 export async function listNexusEndpoints(
   { pageSize, nextPageToken, name }: { pageSize?: number; nextPageToken?: string; name?: string },
   { onError, baseUrl = window.location.origin }: RequestOptions = {},
@@ -1253,6 +1451,11 @@ export async function listNexusEndpoints(
   });
 }
 
+/**
+ * @description Create a Nexus endpoint. This will fail if an endpoint with the same name is already registered with a status of
+ *  ALREADY_EXISTS.
+ *  Returns the created endpoint with its initial version. You may use this version for subsequent updates.
+ */
 export async function createNexusEndpoint(
   { body }: { body: components['schemas']['CreateNexusEndpointRequest'] },
   { onError, baseUrl = window.location.origin }: RequestOptions = {},
@@ -1272,6 +1475,7 @@ export async function createNexusEndpoint(
   });
 }
 
+/** @description Get a registered Nexus endpoint by ID. The returned version can be used for optimistic updates. */
 export async function getNexusEndpoint(
   { id }: { id: string },
   { onError, baseUrl = window.location.origin }: RequestOptions = {},
@@ -1290,6 +1494,7 @@ export async function getNexusEndpoint(
   });
 }
 
+/** @description Delete an incoming Nexus service by ID. */
 export async function deleteNexusEndpoint(
   { version, id }: { id: string; version?: string },
   { onError, baseUrl = window.location.origin }: RequestOptions = {},
@@ -1310,6 +1515,13 @@ export async function deleteNexusEndpoint(
   });
 }
 
+/**
+ * @description Optimistically update a Nexus endpoint based on provided version as obtained via the `GetNexusEndpoint` or
+ *  `ListNexusEndpointResponse` APIs. This will fail with a status of FAILED_PRECONDITION if the version does not
+ *  match.
+ *  Returns the updated endpoint with its updated version. You may use this version for subsequent updates. You don't
+ *  need to increment the version yourself. The server will increment the version for you after each update.
+ */
 export async function updateNexusEndpoint(
   { id, body }: { id: string; body: components['schemas']['UpdateNexusEndpointRequest'] },
   { onError, baseUrl = window.location.origin }: RequestOptions = {},
@@ -1329,6 +1541,7 @@ export async function updateNexusEndpoint(
   });
 }
 
+/** @description GetSystemInfo returns information about the system. */
 export async function getSystemInfo({
   onError,
   baseUrl = window.location.origin,

@@ -21,7 +21,7 @@ const { values } = parseArgs({
   allowPositionals: true,
 });
 
-const schema = values.output || join('src', 'schema.d.ts');
+const schema = values.output || join('src', 'schema.ts');
 const openAPIDefinitionsDirectory = './tmp/api';
 const openApiDefinitions = join(openAPIDefinitionsDirectory, 'openapi', 'openapiv3.yaml');
 

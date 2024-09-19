@@ -28,6 +28,7 @@ function createOperation(name: string, operation: OperationsMetadataWithRoute) {
     queryTypes,
     parametersTypes,
     method,
+    documentation,
   } = operation;
 
   const fetchOptions = [
@@ -61,6 +62,7 @@ function createOperation(name: string, operation: OperationsMetadataWithRoute) {
   args.push(options);
 
   return `
+    ${documentation}
     export async function ${name}(${args.join(',')}): Promise<${response}> {
       const url = new URL(\`${route}\`, baseUrl);
 

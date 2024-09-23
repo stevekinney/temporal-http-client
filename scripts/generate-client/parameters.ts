@@ -61,7 +61,7 @@ export class Parameters {
 class Parameter {
   static onError = new Parameter(
     'method',
-    'onError',
+    'onError?',
     '({ response, operation }: { response: Response, operation: string }) => void',
   );
 

@@ -16,7 +16,7 @@ export default class TemporalClient {
   async getClusterInfo({
     onError,
   }: {
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['GetClusterInfoResponse']> {
     const url = new URL(`/api/v1/cluster-info`, this.baseURL);
 
@@ -48,7 +48,7 @@ export default class TemporalClient {
     pageSize?: number;
     nextPageToken?: string;
     namespaceFilterIncludeDeleted?: boolean;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['ListNamespacesResponse']> {
     const url = new URL(`/api/v1/namespaces`, this.baseURL);
 
@@ -97,7 +97,7 @@ export default class TemporalClient {
     onError,
     body,
   }: {
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['RegisterNamespaceRequest'];
   }): Promise<components['schemas']['RegisterNamespaceResponse']> {
     const url = new URL(`/api/v1/namespaces`, this.baseURL);
@@ -129,7 +129,7 @@ export default class TemporalClient {
   }: {
     id?: string;
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['DescribeNamespaceResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}`, this.baseURL);
 
@@ -168,7 +168,7 @@ export default class TemporalClient {
     body,
   }: {
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['RespondActivityTaskCanceledRequest'];
   }): Promise<components['schemas']['RespondActivityTaskCanceledResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/cancel`, this.baseURL);
@@ -205,7 +205,7 @@ export default class TemporalClient {
     body,
   }: {
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['RespondActivityTaskCanceledByIdRequest'];
   }): Promise<components['schemas']['RespondActivityTaskCanceledByIdResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/cancel-by-id`, this.baseURL);
@@ -243,7 +243,7 @@ export default class TemporalClient {
     body,
   }: {
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['RespondActivityTaskCompletedRequest'];
   }): Promise<components['schemas']['RespondActivityTaskCompletedResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/complete`, this.baseURL);
@@ -280,7 +280,7 @@ export default class TemporalClient {
     body,
   }: {
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['RespondActivityTaskCompletedByIdRequest'];
   }): Promise<components['schemas']['RespondActivityTaskCompletedByIdResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/complete-by-id`, this.baseURL);
@@ -317,7 +317,7 @@ export default class TemporalClient {
     body,
   }: {
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['RespondActivityTaskFailedRequest'];
   }): Promise<components['schemas']['RespondActivityTaskFailedResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/fail`, this.baseURL);
@@ -354,7 +354,7 @@ export default class TemporalClient {
     body,
   }: {
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['RespondActivityTaskFailedByIdRequest'];
   }): Promise<components['schemas']['RespondActivityTaskFailedByIdResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/fail-by-id`, this.baseURL);
@@ -392,7 +392,7 @@ export default class TemporalClient {
     body,
   }: {
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['RecordActivityTaskHeartbeatRequest'];
   }): Promise<components['schemas']['RecordActivityTaskHeartbeatResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/heartbeat`, this.baseURL);
@@ -429,7 +429,7 @@ export default class TemporalClient {
     body,
   }: {
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['RecordActivityTaskHeartbeatByIdRequest'];
   }): Promise<components['schemas']['RecordActivityTaskHeartbeatByIdResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/heartbeat-by-id`, this.baseURL);
@@ -464,7 +464,7 @@ export default class TemporalClient {
     body,
   }: {
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['UpdateActivityOptionsByIdRequest'];
   }): Promise<components['schemas']['UpdateActivityOptionsByIdResponse']> {
     const url = new URL(
@@ -503,7 +503,7 @@ export default class TemporalClient {
     nextPageToken?: string;
     query?: string;
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['ListArchivedWorkflowExecutionsResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/archived-workflows`, this.baseURL);
 
@@ -547,7 +547,7 @@ export default class TemporalClient {
     pageSize?: number;
     nextPageToken?: string;
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['ListBatchOperationsResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/batch-operations`, this.baseURL);
 
@@ -585,7 +585,7 @@ export default class TemporalClient {
   }: {
     namespace: string;
     jobId: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['DescribeBatchOperationResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/batch-operations/${jobId}`, this.baseURL);
 
@@ -616,7 +616,7 @@ export default class TemporalClient {
   }: {
     namespace: string;
     jobId: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['StartBatchOperationRequest'];
   }): Promise<components['schemas']['StartBatchOperationResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/batch-operations/${jobId}`, this.baseURL);
@@ -649,7 +649,7 @@ export default class TemporalClient {
   }: {
     namespace: string;
     jobId: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['StopBatchOperationRequest'];
   }): Promise<components['schemas']['StopBatchOperationResponse']> {
     const url = new URL(
@@ -688,7 +688,7 @@ export default class TemporalClient {
     nextPageToken?: string;
     query?: string;
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['ListSchedulesResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/schedules`, this.baseURL);
 
@@ -730,7 +730,7 @@ export default class TemporalClient {
   }: {
     namespace: string;
     scheduleId: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['DescribeScheduleResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/schedules/${scheduleId}`, this.baseURL);
 
@@ -761,7 +761,7 @@ export default class TemporalClient {
   }: {
     namespace: string;
     scheduleId: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['CreateScheduleRequest'];
   }): Promise<components['schemas']['CreateScheduleResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/schedules/${scheduleId}`, this.baseURL);
@@ -795,7 +795,7 @@ export default class TemporalClient {
     identity?: string;
     namespace: string;
     scheduleId: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['DeleteScheduleResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/schedules/${scheduleId}`, this.baseURL);
 
@@ -833,7 +833,7 @@ export default class TemporalClient {
     endTime?: string;
     namespace: string;
     scheduleId: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['ListScheduleMatchingTimesResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/schedules/${scheduleId}/matching-times`,
@@ -875,7 +875,7 @@ export default class TemporalClient {
   }: {
     namespace: string;
     scheduleId: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['PatchScheduleRequest'];
   }): Promise<components['schemas']['PatchScheduleResponse']> {
     const url = new URL(
@@ -911,7 +911,7 @@ export default class TemporalClient {
   }: {
     namespace: string;
     scheduleId: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['UpdateScheduleRequest'];
   }): Promise<components['schemas']['UpdateScheduleResponse']> {
     const url = new URL(
@@ -944,7 +944,7 @@ export default class TemporalClient {
     onError,
   }: {
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['ListSearchAttributesResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/search-attributes`, this.baseURL);
 
@@ -1017,7 +1017,7 @@ export default class TemporalClient {
     reportTaskReachability?: boolean;
     namespace: string;
     name: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['DescribeTaskQueueResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/task-queues/${name}`, this.baseURL);
 
@@ -1104,7 +1104,7 @@ export default class TemporalClient {
     maxSets?: number;
     namespace: string;
     taskQueue: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['GetWorkerBuildIdCompatibilityResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/task-queues/${taskQueue}/worker-build-id-compatibility`,
@@ -1144,7 +1144,7 @@ export default class TemporalClient {
   }: {
     namespace: string;
     taskQueue: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['GetWorkerVersioningRulesResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/task-queues/${taskQueue}/worker-versioning-rules`,
@@ -1179,7 +1179,7 @@ export default class TemporalClient {
     body,
   }: {
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['UpdateNamespaceRequest'];
   }): Promise<components['schemas']['UpdateNamespaceResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/update`, this.baseURL);
@@ -1235,7 +1235,7 @@ export default class TemporalClient {
       | 'TASK_REACHABILITY_OPEN_WORKFLOWS'
       | 'TASK_REACHABILITY_CLOSED_WORKFLOWS';
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['GetWorkerTaskReachabilityResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/worker-task-reachability`, this.baseURL);
 
@@ -1277,7 +1277,7 @@ export default class TemporalClient {
   }: {
     query?: string;
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['CountWorkflowExecutionsResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/workflow-count`, this.baseURL);
 
@@ -1315,7 +1315,7 @@ export default class TemporalClient {
     nextPageToken?: string;
     query?: string;
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['ListWorkflowExecutionsResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/workflows`, this.baseURL);
 
@@ -1361,7 +1361,7 @@ export default class TemporalClient {
     executionRunId?: string;
     namespace: string;
     workflowId: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['DescribeWorkflowExecutionResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/workflows/${workflowId}`, this.baseURL);
 
@@ -1419,7 +1419,7 @@ export default class TemporalClient {
     skipArchival?: boolean;
     namespace: string;
     workflowId: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['GetWorkflowExecutionHistoryResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/history`,
@@ -1492,7 +1492,7 @@ export default class TemporalClient {
     nextPageToken?: string;
     namespace: string;
     workflowId: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['GetWorkflowExecutionHistoryReverseResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/history-reverse`,
@@ -1544,7 +1544,7 @@ export default class TemporalClient {
     namespace: string;
     workflowId: string;
     queryType: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['QueryWorkflowRequest'];
   }): Promise<components['schemas']['QueryWorkflowResponse']> {
     const url = new URL(
@@ -1587,7 +1587,7 @@ export default class TemporalClient {
   }: {
     namespace: string;
     workflowId: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['RequestCancelWorkflowExecutionRequest'];
   }): Promise<components['schemas']['RequestCancelWorkflowExecutionResponse']> {
     const url = new URL(
@@ -1628,7 +1628,7 @@ export default class TemporalClient {
   }: {
     namespace: string;
     workflowId: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['ResetWorkflowExecutionRequest'];
   }): Promise<components['schemas']['ResetWorkflowExecutionResponse']> {
     const url = new URL(
@@ -1671,7 +1671,7 @@ export default class TemporalClient {
     namespace: string;
     workflowId: string;
     signalName: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['SignalWorkflowExecutionRequest'];
   }): Promise<components['schemas']['SignalWorkflowExecutionResponse']> {
     const url = new URL(
@@ -1711,7 +1711,7 @@ export default class TemporalClient {
   }: {
     namespace: string;
     workflowId: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['TerminateWorkflowExecutionRequest'];
   }): Promise<components['schemas']['TerminateWorkflowExecutionResponse']> {
     const url = new URL(
@@ -1749,7 +1749,7 @@ export default class TemporalClient {
     namespace: string;
     workflowId: string;
     name: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['UpdateWorkflowExecutionRequest'];
   }): Promise<components['schemas']['UpdateWorkflowExecutionResponse']> {
     const url = new URL(
@@ -1791,7 +1791,7 @@ export default class TemporalClient {
   }: {
     namespace: string;
     workflowId: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['StartWorkflowExecutionRequest'];
   }): Promise<components['schemas']['StartWorkflowExecutionResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/workflows/${workflowId}`, this.baseURL);
@@ -1839,7 +1839,7 @@ export default class TemporalClient {
     namespace: string;
     workflowId: string;
     signalName: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['SignalWithStartWorkflowExecutionRequest'];
   }): Promise<components['schemas']['SignalWithStartWorkflowExecutionResponse']> {
     const url = new URL(
@@ -1883,7 +1883,7 @@ export default class TemporalClient {
     body,
   }: {
     namespace: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['ExecuteMultiOperationRequest'];
   }): Promise<components['schemas']['ExecuteMultiOperationResponse']> {
     const url = new URL(
@@ -1925,7 +1925,7 @@ export default class TemporalClient {
     pageSize?: number;
     nextPageToken?: string;
     name?: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['ListNexusEndpointsResponse']> {
     const url = new URL(`/api/v1/nexus/endpoints`, this.baseURL);
 
@@ -1968,7 +1968,7 @@ export default class TemporalClient {
     onError,
     body,
   }: {
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['CreateNexusEndpointRequest'];
   }): Promise<components['schemas']['CreateNexusEndpointResponse']> {
     const url = new URL(`/api/v1/nexus/endpoints`, this.baseURL);
@@ -1998,7 +1998,7 @@ export default class TemporalClient {
     onError,
   }: {
     id: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['GetNexusEndpointResponse']> {
     const url = new URL(`/api/v1/nexus/endpoints/${id}`, this.baseURL);
 
@@ -2028,7 +2028,7 @@ export default class TemporalClient {
   }: {
     version?: string;
     id: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['DeleteNexusEndpointResponse']> {
     const url = new URL(`/api/v1/nexus/endpoints/${id}`, this.baseURL);
 
@@ -2067,7 +2067,7 @@ export default class TemporalClient {
     body,
   }: {
     id: string;
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
     body: components['schemas']['UpdateNexusEndpointRequest'];
   }): Promise<components['schemas']['UpdateNexusEndpointResponse']> {
     const url = new URL(`/api/v1/nexus/endpoints/${id}/update`, this.baseURL);
@@ -2095,7 +2095,7 @@ export default class TemporalClient {
   async getSystemInfo({
     onError,
   }: {
-    onError: ({ response, operation }: { response: Response; operation: string }) => void;
+    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['GetSystemInfoResponse']> {
     const url = new URL(`/api/v1/system-info`, this.baseURL);
 

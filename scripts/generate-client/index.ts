@@ -25,9 +25,9 @@ const pathsProperties = getPropertySignatures(paths, schemaSourceFile);
 const operationsProperties = getPropertySignatures(operations, schemaSourceFile);
 
 const operationsMetadata = processOperations(operationsProperties, schemaSourceFile);
-const pathsMetadata = processPaths(pathsProperties, operationsMetadata);
+processPaths(pathsProperties, operationsMetadata);
 
-const clientCode = createClient(pathsMetadata);
+const clientCode = createClient(operationsMetadata);
 
 const code = await prettier.format(clientCode, {
   ...prettierConfigutation,

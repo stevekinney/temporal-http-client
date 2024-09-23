@@ -1,6 +1,12 @@
 import ts from 'typescript';
 
-export function getNodeName(node: ts.Node, sourceFile: ts.SourceFile) {
+/**
+ *
+ * @param node A TypeScript AST node
+ * @param sourceFile The source file of the node
+ * @returns The name of the node
+ */
+export function getNodeName(node: ts.Node, sourceFile: ts.SourceFile): string {
   let name = '';
 
   if ('name' in node) {

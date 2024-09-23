@@ -1,10 +1,6 @@
 import ts from 'typescript';
 import { getNodeName } from './get-node-name';
 
-export type Properties = {
-  [key: string]: string | Properties;
-};
-
 export function getPropertySignatures<T extends Properties | string = Properties>(
   node:
     | ts.InterfaceDeclaration

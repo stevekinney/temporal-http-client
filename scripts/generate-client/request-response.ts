@@ -1,14 +1,8 @@
-type Body = {
-  content: {
-    "'application/json'": string;
-  };
-};
+export function isHTTPMethod(method: string): method is HTTPMethod {
+  return ['get', 'post', 'put', 'delete', 'patch'].includes(method);
+}
 
-type Response = {
-  '200': Body;
-};
-
-export function isBody(obj: unknown): obj is Body {
+export function isRequestBody(obj: unknown): obj is APIRequestResponseBody {
   if (!obj || typeof obj !== 'object') return false;
   if (!('content' in obj)) return false;
 
@@ -20,11 +14,11 @@ export function isBody(obj: unknown): obj is Body {
   return true;
 }
 
-export function isResponse(obj: unknown): obj is Response {
+export function isResponse(obj: unknown): obj is APIResponse {
   if (!obj || typeof obj !== 'object') return false;
   if (!('200' in obj)) return false;
 
   const body = obj['200'];
 
-  return isBody(body);
+  return isRequestBody(body);
 }

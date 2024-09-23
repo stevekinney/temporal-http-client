@@ -6,7 +6,7 @@ Provides a typesafe API client for [Temporal](https://temporal.io)'s HTTP API. T
 
 ## Updating the Schema
 
-`pnpm generate`
+`bun generate`
 
 This will download [Temporal's API repository](https://github.com/temporalio/api), generate types based on the OpenAPI specification, and write the types to `src/schema.d.ts`.
 
@@ -15,11 +15,11 @@ It will also create a set of client methods in `src/client.ts`.
 ## Usage
 
 ```ts
-import { getClusterInfo } from 'temporal-http-client';
+import { TemporalClient } from 'temporal-http-client';
 
-const client = new Client({ baseUrl: 'http://localhost:8233' });
+const client = new TemporalClient('http://localhost:8233');
 
-const response = await getClusterInfo();
+const response = await client.getClusterInfo();
 
 console.log(response);
 ```

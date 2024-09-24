@@ -6,7 +6,7 @@ const result = await Bun.build({
   packages: 'external',
 });
 
-await Bun.$`bunx tsc src/index.ts -d --outfile dist/index.d.ts --emitDeclarationOnly --module esnext --skipLibCheck`;
+await Bun.$`bunx tsc src/index.ts -d --outdir dist --emitDeclarationOnly --skipLibCheck`;
 
 console.log(result);
 

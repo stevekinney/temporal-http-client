@@ -1,7 +1,7 @@
 {
   "name": "temporal-http-client",
   "description": "A client for interacting with Temporal's HTTP API.",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "type": "module",
   "repository": {
     "type": "git",

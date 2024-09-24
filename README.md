@@ -15,7 +15,7 @@ It will also create a set of client methods in `src/client.ts`.
 ## Usage
 
 ```ts
-import { TemporalClient } from 'temporal-http-client';
+import TemporalClient from 'temporal-http-client';
 
 const client = new TemporalClient('http://localhost:8233');
 
@@ -23,3 +23,10 @@ const response = await client.getClusterInfo();
 
 console.log(response);
 ```
+
+Failing requests will trigger a `TemporalError`, which includes the `Request` and `Response` objects.
+
+The library also exports the following:
+
+- `TemporalError`
+- `isTemporalError`

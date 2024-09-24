@@ -1,28 +1,25 @@
 import ts from 'typescript';
-import { getNodeName } from './get-node-name';
+import { SourceFile } from './source-file';
 
-export function getPropertySignatures<T extends Properties | string = Properties>(
-  node:
-    | ts.InterfaceDeclaration
-    | ts.TypeLiteralNode
-    | ts.TypeNode
-    | ts.IndexSignatureDeclaration
-    | undefined,
-  sourceFile: ts.SourceFile,
-): T {
+export function getPropertySignatures(
+  node: ts.Node | undefined,
+  sourceFile: SourceFile,
+): string | Properties {
   if (!node) throw new Error('Node is undefined');
 
   if (ts.isIndexedAccessTypeNode(node)) {
-    return node.getText(sourceFile) as T;
+    const name = sourceFile.getText(node);
+    return name;
   }
 
-  if (!('members' in node)) return node.getText(sourceFile) as T;
+  if (!('members' in node)) return sourceFile.getText(node);
+  if (!Array.isArray(node.members)) throw new Error('Node members is not an array');
 
   const properties: Properties = {};
 
   for (const member of node.members) {
     if (ts.isPropertySignature(member)) {
-      const name = getNodeName(member, sourceFile);
+      const name = sourceFile.getNodeName(member);
       if (name) properties[name] = getPropertySignatures(member.type, sourceFile);
     }
 
@@ -34,12 +31,17 @@ export function getPropertySignatures<T extends Properties | string = Properties
     if (ts.isIndexSignatureDeclaration(member)) {
       member.parameters.forEach((parameter) => {
         if (parameter.type && ts.isTemplateLiteralTypeNode(parameter.type)) {
-          const name = parameter.type.getText(sourceFile);
+          const name = sourceFile.getText(parameter.type);
           if (name) properties[name] = getPropertySignatures(member.type, sourceFile);
         }
       });
     }
+
+    if (ts.isInterfaceDeclaration(member)) {
+      const nestedProperties = getPropertySignatures(member, sourceFile);
+      Object.assign(properties, nestedProperties);
+    }
   }
 
-  return properties as T;
+  return properties as Properties;
 }

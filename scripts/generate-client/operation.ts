@@ -1,32 +1,10 @@
 import ts from 'typescript';
+
 import { formatOperationName, formatRoute } from './format';
-import { findNodeByName } from './find-node-by-name';
-import { getJSDoc } from './jsdoc';
+import { Operations } from './operations';
 import { Parameters } from './parameters';
 
-export class Operations {
-  public readonly metadata: Record<string, OperationMetadata> = {};
-
-  constructor(public readonly sourceFile: ts.SourceFile) {}
-
-  add(operation: string): OperationMetadata {
-    const metadata = new OperationMetadata(operation, this);
-    this.metadata[operation] = metadata;
-    return metadata;
-  }
-
-  get(operation: string): OperationMetadata {
-    return this.metadata[operation];
-  }
-
-  toString() {
-    return Object.values(this.metadata)
-      .map((metadata) => metadata.toString())
-      .join('\n\n');
-  }
-}
-
-export class OperationMetadata {
+export class Operation {
   private httpMethod: Uppercase<HTTPMethod> | undefined;
   public apiRoute: string | undefined;
   public response: string | undefined;
@@ -49,7 +27,8 @@ export class OperationMetadata {
   }
 
   addResponse(property: APIResponse): void {
-    this.response = property['200']['content']["'application/json'"];
+    const response = property['200']['content']["'application/json'"];
+    this.response = response;
   }
 
   addRequestBody(property: APIRequestResponseBody): void {
@@ -71,7 +50,7 @@ export class OperationMetadata {
   }
 
   get node(): ts.Node {
-    const node = findNodeByName(this.operationName, this.sourceFile);
+    const node = this.sourceFile.findNodeByName(this.operationName);
     if (!node) throw new Error(`Node not found: ${this.operationName}`);
     return node;
   }
@@ -89,10 +68,20 @@ export class OperationMetadata {
   }
 
   get methodSignature() {
-    return `{ ${this.keys.join(', ')} }: { ${this.types.join(', ')} }`;
+    const params: string[] = [];
+
+    if (this.keys.length) {
+      params.push(`{ ${this.keys.join(', ')} }: { ${this.types.join(', ')} }`);
+    }
+
+    if (this.requestBody) {
+      params.push(`body: ${this.requestBody}`);
+    }
+
+    return params.join(', ');
   }
 
-  get fetchOptions() {
+  get requestOptions() {
     const options = [`method: '${this.method}'`, `headers: { 'Content-Type': 'application/json' }`];
     if (this.requestBody) options.push(`body: JSON.stringify(body)`);
     return options.join(',\n');
@@ -110,31 +99,6 @@ export class OperationMetadata {
   }
 
   get documentation() {
-    return getJSDoc(this.node, this.sourceFile);
-  }
-
-  toString() {
-    return `
-    ${this.documentation}
-    async ${this.name}(${this.methodSignature}): Promise<${this.response}> {
-      const url = new URL(\`${this.route}\`, this.baseURL);
-
-      ${this.searchParams}
-
-      const response = await fetch(url, {
-        ${this.fetchOptions}
-      })
-
-      if (!response.ok) {
-        if (onError) {
-          onError({response, operation: '${this.operationName}'});
-        } else {
-          throw new Error(\`\${response.status}: ${this.operationName} request failed. \${response.statusText}\`.trim());
-        }
-      };
-
-      return response.json();
-    }
-  `;
+    return this.sourceFile.getJSDoc(this.node);
   }
 }

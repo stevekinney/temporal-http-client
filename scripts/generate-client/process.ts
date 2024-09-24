@@ -1,10 +1,9 @@
-import ts from 'typescript';
-
 import { isRequestBody, isHTTPMethod, isResponse } from './request-response';
-import { Operations } from './operations-metadata';
+import { Operations } from './operations';
 import { getOperationName } from './format';
+import { SourceFile } from './source-file';
 
-export function processOperations(operations: Properties, sourceFile: ts.SourceFile): Operations {
+export function processOperations(operations: Properties, sourceFile: SourceFile): Operations {
   const result = new Operations(sourceFile);
 
   for (const [operationName, operation] of Object.entries(operations)) {

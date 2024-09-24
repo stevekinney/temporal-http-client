@@ -1,38 +1,50 @@
 /**
  * This file was automatically generated. Do not modify.
+ * Run `bun run generate:client` to update this file.
  */
 
 import type { components } from './schema';
 
+export type TemporalErrorParameters = {
+  request: Request;
+  response: Response;
+  operation: string;
+} & ErrorOptions;
+
+export function isTemporalError(error: unknown): error is TemporalError {
+  return error instanceof TemporalError;
+}
+
+export class TemporalError extends Error {
+  static isTemporalError = isTemporalError;
+
+  constructor(message: string, parameters: TemporalErrorParameters) {
+    super(message, parameters);
+    this.name = 'TemporalError';
+  }
+}
+
 export default class TemporalClient {
   /**
-   * @param The base URL of the Temporal API.
+   * @param baseURL {string} The base URL of the Temporal API.
    * @example
    * const client = new TemporalClient('https://api.temporal.io');
    */
   constructor(private readonly baseURL: string) {}
 
   /** @description GetClusterInfo returns information about temporal cluster */
-  async getClusterInfo({
-    onError,
-  }: {
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-  }): Promise<components['schemas']['GetClusterInfoResponse']> {
+  async getClusterInfo(): Promise<components['schemas']['GetClusterInfoResponse']> {
     const url = new URL(`/api/v1/cluster-info`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'GetClusterInfo' });
-      } else {
-        throw new Error(
-          `${response.status}: GetClusterInfo request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'getClusterInfo' });
     }
 
     return response.json();
@@ -43,43 +55,32 @@ export default class TemporalClient {
     pageSize,
     nextPageToken,
     namespaceFilterIncludeDeleted,
-    onError,
   }: {
     pageSize?: number;
     nextPageToken?: string;
     namespaceFilterIncludeDeleted?: boolean;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['ListNamespacesResponse']> {
     const url = new URL(`/api/v1/namespaces`, this.baseURL);
 
-    if (pageSize) {
-      url.searchParams.append('pageSize', String(pageSize));
-    }
+    if (pageSize) url.searchParams.append('pageSize', String(pageSize));
 
-    if (nextPageToken) {
-      url.searchParams.append('nextPageToken', nextPageToken);
-    }
+    if (nextPageToken) url.searchParams.append('nextPageToken', nextPageToken);
 
-    if (namespaceFilterIncludeDeleted) {
+    if (namespaceFilterIncludeDeleted)
       url.searchParams.append(
         'namespaceFilter.includeDeleted',
         String(namespaceFilterIncludeDeleted),
       );
-    }
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'ListNamespaces' });
-      } else {
-        throw new Error(
-          `${response.status}: ListNamespaces request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'listNamespaces' });
     }
 
     return response.json();
@@ -93,29 +94,21 @@ export default class TemporalClient {
    *  isolation for all resources within the namespace. All resources belongs to exactly one
    *  namespace.
    */
-  async registerNamespace({
-    onError,
-    body,
-  }: {
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['RegisterNamespaceRequest'];
-  }): Promise<components['schemas']['RegisterNamespaceResponse']> {
+  async registerNamespace(
+    body: components['schemas']['RegisterNamespaceRequest'],
+  ): Promise<components['schemas']['RegisterNamespaceResponse']> {
     const url = new URL(`/api/v1/namespaces`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'RegisterNamespace' });
-      } else {
-        throw new Error(
-          `${response.status}: RegisterNamespace request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'registerNamespace' });
     }
 
     return response.json();
@@ -125,31 +118,23 @@ export default class TemporalClient {
   async describeNamespace({
     id,
     namespace,
-    onError,
   }: {
     id?: string;
     namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['DescribeNamespaceResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}`, this.baseURL);
 
-    if (id) {
-      url.searchParams.append('id', id);
-    }
+    if (id) url.searchParams.append('id', id);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'DescribeNamespace' });
-      } else {
-        throw new Error(
-          `${response.status}: DescribeNamespace request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'describeNamespace' });
     }
 
     return response.json();
@@ -162,31 +147,22 @@ export default class TemporalClient {
    *  and a new workflow task created for the workflow. Fails with `NotFound` if the task token is
    *  no longer valid due to activity timeout, already being completed, or never having existed.
    */
-  async respondActivityTaskCanceled({
-    namespace,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['RespondActivityTaskCanceledRequest'];
-  }): Promise<components['schemas']['RespondActivityTaskCanceledResponse']> {
+  async respondActivityTaskCanceled(
+    { namespace }: { namespace: string },
+    body: components['schemas']['RespondActivityTaskCanceledRequest'],
+  ): Promise<components['schemas']['RespondActivityTaskCanceledResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/cancel`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'RespondActivityTaskCanceled' });
-      } else {
-        throw new Error(
-          `${response.status}: RespondActivityTaskCanceled request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'respondActivityTaskCanceled' });
     }
 
     return response.json();
@@ -199,31 +175,26 @@ export default class TemporalClient {
    *  (-- api-linter: core::0136::prepositions=disabled
    *      aip.dev/not-precedent: "By" is used to indicate request type. --)
    */
-  async respondActivityTaskCanceledById({
-    namespace,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['RespondActivityTaskCanceledByIdRequest'];
-  }): Promise<components['schemas']['RespondActivityTaskCanceledByIdResponse']> {
+  async respondActivityTaskCanceledById(
+    { namespace }: { namespace: string },
+    body: components['schemas']['RespondActivityTaskCanceledByIdRequest'],
+  ): Promise<components['schemas']['RespondActivityTaskCanceledByIdResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/cancel-by-id`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'RespondActivityTaskCanceledById' });
-      } else {
-        throw new Error(
-          `${response.status}: RespondActivityTaskCanceledById request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', {
+        request,
+        response,
+        operation: 'respondActivityTaskCanceledById',
+      });
     }
 
     return response.json();
@@ -237,31 +208,22 @@ export default class TemporalClient {
    *  and a new workflow task created for the workflow. Fails with `NotFound` if the task token is
    *  no longer valid due to activity timeout, already being completed, or never having existed.
    */
-  async respondActivityTaskCompleted({
-    namespace,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['RespondActivityTaskCompletedRequest'];
-  }): Promise<components['schemas']['RespondActivityTaskCompletedResponse']> {
+  async respondActivityTaskCompleted(
+    { namespace }: { namespace: string },
+    body: components['schemas']['RespondActivityTaskCompletedRequest'],
+  ): Promise<components['schemas']['RespondActivityTaskCompletedResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/complete`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'RespondActivityTaskCompleted' });
-      } else {
-        throw new Error(
-          `${response.status}: RespondActivityTaskCompleted request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'respondActivityTaskCompleted' });
     }
 
     return response.json();
@@ -274,31 +236,26 @@ export default class TemporalClient {
    *  (-- api-linter: core::0136::prepositions=disabled
    *      aip.dev/not-precedent: "By" is used to indicate request type. --)
    */
-  async respondActivityTaskCompletedById({
-    namespace,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['RespondActivityTaskCompletedByIdRequest'];
-  }): Promise<components['schemas']['RespondActivityTaskCompletedByIdResponse']> {
+  async respondActivityTaskCompletedById(
+    { namespace }: { namespace: string },
+    body: components['schemas']['RespondActivityTaskCompletedByIdRequest'],
+  ): Promise<components['schemas']['RespondActivityTaskCompletedByIdResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/complete-by-id`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'RespondActivityTaskCompletedById' });
-      } else {
-        throw new Error(
-          `${response.status}: RespondActivityTaskCompletedById request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', {
+        request,
+        response,
+        operation: 'respondActivityTaskCompletedById',
+      });
     }
 
     return response.json();
@@ -311,31 +268,22 @@ export default class TemporalClient {
    *  a new workflow task created for the workflow. Fails with `NotFound` if the task token is no
    *  longer valid due to activity timeout, already being completed, or never having existed.
    */
-  async respondActivityTaskFailed({
-    namespace,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['RespondActivityTaskFailedRequest'];
-  }): Promise<components['schemas']['RespondActivityTaskFailedResponse']> {
+  async respondActivityTaskFailed(
+    { namespace }: { namespace: string },
+    body: components['schemas']['RespondActivityTaskFailedRequest'],
+  ): Promise<components['schemas']['RespondActivityTaskFailedResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/fail`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'RespondActivityTaskFailed' });
-      } else {
-        throw new Error(
-          `${response.status}: RespondActivityTaskFailed request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'respondActivityTaskFailed' });
     }
 
     return response.json();
@@ -348,31 +296,26 @@ export default class TemporalClient {
    *  (-- api-linter: core::0136::prepositions=disabled
    *      aip.dev/not-precedent: "By" is used to indicate request type. --)
    */
-  async respondActivityTaskFailedById({
-    namespace,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['RespondActivityTaskFailedByIdRequest'];
-  }): Promise<components['schemas']['RespondActivityTaskFailedByIdResponse']> {
+  async respondActivityTaskFailedById(
+    { namespace }: { namespace: string },
+    body: components['schemas']['RespondActivityTaskFailedByIdRequest'],
+  ): Promise<components['schemas']['RespondActivityTaskFailedByIdResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/fail-by-id`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'RespondActivityTaskFailedById' });
-      } else {
-        throw new Error(
-          `${response.status}: RespondActivityTaskFailedById request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', {
+        request,
+        response,
+        operation: 'respondActivityTaskFailedById',
+      });
     }
 
     return response.json();
@@ -386,31 +329,22 @@ export default class TemporalClient {
    *  the workflow history. Calling `RecordActivityTaskHeartbeat` will fail with `NotFound` in
    *  such situations, in that event, the SDK should request cancellation of the activity.
    */
-  async recordActivityTaskHeartbeat({
-    namespace,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['RecordActivityTaskHeartbeatRequest'];
-  }): Promise<components['schemas']['RecordActivityTaskHeartbeatResponse']> {
+  async recordActivityTaskHeartbeat(
+    { namespace }: { namespace: string },
+    body: components['schemas']['RecordActivityTaskHeartbeatRequest'],
+  ): Promise<components['schemas']['RecordActivityTaskHeartbeatResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/heartbeat`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'RecordActivityTaskHeartbeat' });
-      } else {
-        throw new Error(
-          `${response.status}: RecordActivityTaskHeartbeat request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'recordActivityTaskHeartbeat' });
     }
 
     return response.json();
@@ -423,31 +357,26 @@ export default class TemporalClient {
    *  (-- api-linter: core::0136::prepositions=disabled
    *      aip.dev/not-precedent: "By" is used to indicate request type. --)
    */
-  async recordActivityTaskHeartbeatById({
-    namespace,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['RecordActivityTaskHeartbeatByIdRequest'];
-  }): Promise<components['schemas']['RecordActivityTaskHeartbeatByIdResponse']> {
+  async recordActivityTaskHeartbeatById(
+    { namespace }: { namespace: string },
+    body: components['schemas']['RecordActivityTaskHeartbeatByIdRequest'],
+  ): Promise<components['schemas']['RecordActivityTaskHeartbeatByIdResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/heartbeat-by-id`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'RecordActivityTaskHeartbeatById' });
-      } else {
-        throw new Error(
-          `${response.status}: RecordActivityTaskHeartbeatById request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', {
+        request,
+        response,
+        operation: 'recordActivityTaskHeartbeatById',
+      });
     }
 
     return response.json();
@@ -458,34 +387,25 @@ export default class TemporalClient {
    *  (-- api-linter: core::0136::prepositions=disabled
    *      aip.dev/not-precedent: "By" is used to indicate request type. --)
    */
-  async updateActivityOptionsById({
-    namespace,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['UpdateActivityOptionsByIdRequest'];
-  }): Promise<components['schemas']['UpdateActivityOptionsByIdResponse']> {
+  async updateActivityOptionsById(
+    { namespace }: { namespace: string },
+    body: components['schemas']['UpdateActivityOptionsByIdRequest'],
+  ): Promise<components['schemas']['UpdateActivityOptionsByIdResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/activities/update-options-by-id`,
       this.baseURL,
     );
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'UpdateActivityOptionsById' });
-      } else {
-        throw new Error(
-          `${response.status}: UpdateActivityOptionsById request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'updateActivityOptionsById' });
     }
 
     return response.json();
@@ -497,41 +417,33 @@ export default class TemporalClient {
     nextPageToken,
     query,
     namespace,
-    onError,
   }: {
     pageSize?: number;
     nextPageToken?: string;
     query?: string;
     namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['ListArchivedWorkflowExecutionsResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/archived-workflows`, this.baseURL);
 
-    if (pageSize) {
-      url.searchParams.append('pageSize', String(pageSize));
-    }
+    if (pageSize) url.searchParams.append('pageSize', String(pageSize));
 
-    if (nextPageToken) {
-      url.searchParams.append('nextPageToken', nextPageToken);
-    }
+    if (nextPageToken) url.searchParams.append('nextPageToken', nextPageToken);
 
-    if (query) {
-      url.searchParams.append('query', query);
-    }
+    if (query) url.searchParams.append('query', query);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'ListArchivedWorkflowExecutions' });
-      } else {
-        throw new Error(
-          `${response.status}: ListArchivedWorkflowExecutions request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', {
+        request,
+        response,
+        operation: 'listArchivedWorkflowExecutions',
+      });
     }
 
     return response.json();
@@ -542,36 +454,26 @@ export default class TemporalClient {
     pageSize,
     nextPageToken,
     namespace,
-    onError,
   }: {
     pageSize?: number;
     nextPageToken?: string;
     namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['ListBatchOperationsResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/batch-operations`, this.baseURL);
 
-    if (pageSize) {
-      url.searchParams.append('pageSize', String(pageSize));
-    }
+    if (pageSize) url.searchParams.append('pageSize', String(pageSize));
 
-    if (nextPageToken) {
-      url.searchParams.append('nextPageToken', nextPageToken);
-    }
+    if (nextPageToken) url.searchParams.append('nextPageToken', nextPageToken);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'ListBatchOperations' });
-      } else {
-        throw new Error(
-          `${response.status}: ListBatchOperations request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'listBatchOperations' });
     }
 
     return response.json();
@@ -581,96 +483,68 @@ export default class TemporalClient {
   async describeBatchOperation({
     namespace,
     jobId,
-    onError,
   }: {
     namespace: string;
     jobId: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['DescribeBatchOperationResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/batch-operations/${jobId}`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'DescribeBatchOperation' });
-      } else {
-        throw new Error(
-          `${response.status}: DescribeBatchOperation request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'describeBatchOperation' });
     }
 
     return response.json();
   }
 
   /** @description StartBatchOperation starts a new batch operation */
-  async startBatchOperation({
-    namespace,
-    jobId,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    jobId: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['StartBatchOperationRequest'];
-  }): Promise<components['schemas']['StartBatchOperationResponse']> {
+  async startBatchOperation(
+    { namespace, jobId }: { namespace: string; jobId: string },
+    body: components['schemas']['StartBatchOperationRequest'],
+  ): Promise<components['schemas']['StartBatchOperationResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/batch-operations/${jobId}`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'StartBatchOperation' });
-      } else {
-        throw new Error(
-          `${response.status}: StartBatchOperation request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'startBatchOperation' });
     }
 
     return response.json();
   }
 
   /** @description StopBatchOperation stops a batch operation */
-  async stopBatchOperation({
-    namespace,
-    jobId,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    jobId: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['StopBatchOperationRequest'];
-  }): Promise<components['schemas']['StopBatchOperationResponse']> {
+  async stopBatchOperation(
+    { namespace, jobId }: { namespace: string; jobId: string },
+    body: components['schemas']['StopBatchOperationRequest'],
+  ): Promise<components['schemas']['StopBatchOperationResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/batch-operations/${jobId}/stop`,
       this.baseURL,
     );
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'StopBatchOperation' });
-      } else {
-        throw new Error(
-          `${response.status}: StopBatchOperation request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'stopBatchOperation' });
     }
 
     return response.json();
@@ -682,41 +556,29 @@ export default class TemporalClient {
     nextPageToken,
     query,
     namespace,
-    onError,
   }: {
     maximumPageSize?: number;
     nextPageToken?: string;
     query?: string;
     namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['ListSchedulesResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/schedules`, this.baseURL);
 
-    if (maximumPageSize) {
-      url.searchParams.append('maximumPageSize', String(maximumPageSize));
-    }
+    if (maximumPageSize) url.searchParams.append('maximumPageSize', String(maximumPageSize));
 
-    if (nextPageToken) {
-      url.searchParams.append('nextPageToken', nextPageToken);
-    }
+    if (nextPageToken) url.searchParams.append('nextPageToken', nextPageToken);
 
-    if (query) {
-      url.searchParams.append('query', query);
-    }
+    if (query) url.searchParams.append('query', query);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'ListSchedules' });
-      } else {
-        throw new Error(
-          `${response.status}: ListSchedules request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'listSchedules' });
     }
 
     return response.json();
@@ -726,60 +588,43 @@ export default class TemporalClient {
   async describeSchedule({
     namespace,
     scheduleId,
-    onError,
   }: {
     namespace: string;
     scheduleId: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['DescribeScheduleResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/schedules/${scheduleId}`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'DescribeSchedule' });
-      } else {
-        throw new Error(
-          `${response.status}: DescribeSchedule request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'describeSchedule' });
     }
 
     return response.json();
   }
 
   /** @description Creates a new schedule. */
-  async createSchedule({
-    namespace,
-    scheduleId,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    scheduleId: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['CreateScheduleRequest'];
-  }): Promise<components['schemas']['CreateScheduleResponse']> {
+  async createSchedule(
+    { namespace, scheduleId }: { namespace: string; scheduleId: string },
+    body: components['schemas']['CreateScheduleRequest'],
+  ): Promise<components['schemas']['CreateScheduleResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/schedules/${scheduleId}`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'CreateSchedule' });
-      } else {
-        throw new Error(
-          `${response.status}: CreateSchedule request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'createSchedule' });
     }
 
     return response.json();
@@ -790,32 +635,24 @@ export default class TemporalClient {
     identity,
     namespace,
     scheduleId,
-    onError,
   }: {
     identity?: string;
     namespace: string;
     scheduleId: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['DeleteScheduleResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/schedules/${scheduleId}`, this.baseURL);
 
-    if (identity) {
-      url.searchParams.append('identity', identity);
-    }
+    if (identity) url.searchParams.append('identity', identity);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'DeleteSchedule' });
-      } else {
-        throw new Error(
-          `${response.status}: DeleteSchedule request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'deleteSchedule' });
     }
 
     return response.json();
@@ -827,112 +664,80 @@ export default class TemporalClient {
     endTime,
     namespace,
     scheduleId,
-    onError,
   }: {
     startTime?: string;
     endTime?: string;
     namespace: string;
     scheduleId: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['ListScheduleMatchingTimesResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/schedules/${scheduleId}/matching-times`,
       this.baseURL,
     );
 
-    if (startTime) {
-      url.searchParams.append('startTime', startTime);
-    }
+    if (startTime) url.searchParams.append('startTime', startTime);
 
-    if (endTime) {
-      url.searchParams.append('endTime', endTime);
-    }
+    if (endTime) url.searchParams.append('endTime', endTime);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'ListScheduleMatchingTimes' });
-      } else {
-        throw new Error(
-          `${response.status}: ListScheduleMatchingTimes request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'listScheduleMatchingTimes' });
     }
 
     return response.json();
   }
 
   /** @description Makes a specific change to a schedule or triggers an immediate action. */
-  async patchSchedule({
-    namespace,
-    scheduleId,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    scheduleId: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['PatchScheduleRequest'];
-  }): Promise<components['schemas']['PatchScheduleResponse']> {
+  async patchSchedule(
+    { namespace, scheduleId }: { namespace: string; scheduleId: string },
+    body: components['schemas']['PatchScheduleRequest'],
+  ): Promise<components['schemas']['PatchScheduleResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/schedules/${scheduleId}/patch`,
       this.baseURL,
     );
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'PatchSchedule' });
-      } else {
-        throw new Error(
-          `${response.status}: PatchSchedule request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'patchSchedule' });
     }
 
     return response.json();
   }
 
   /** @description Changes the configuration or state of an existing schedule. */
-  async updateSchedule({
-    namespace,
-    scheduleId,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    scheduleId: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['UpdateScheduleRequest'];
-  }): Promise<components['schemas']['UpdateScheduleResponse']> {
+  async updateSchedule(
+    { namespace, scheduleId }: { namespace: string; scheduleId: string },
+    body: components['schemas']['UpdateScheduleRequest'],
+  ): Promise<components['schemas']['UpdateScheduleResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/schedules/${scheduleId}/update`,
       this.baseURL,
     );
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'UpdateSchedule' });
-      } else {
-        throw new Error(
-          `${response.status}: UpdateSchedule request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'updateSchedule' });
     }
 
     return response.json();
@@ -941,26 +746,20 @@ export default class TemporalClient {
   /** @description ListSearchAttributes returns comprehensive information about search attributes. */
   async listSearchAttributes({
     namespace,
-    onError,
   }: {
     namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['ListSearchAttributesResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/search-attributes`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'ListSearchAttributes' });
-      } else {
-        throw new Error(
-          `${response.status}: ListSearchAttributes request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'listSearchAttributes' });
     }
 
     return response.json();
@@ -988,7 +787,6 @@ export default class TemporalClient {
     reportTaskReachability,
     namespace,
     name,
-    onError,
   }: {
     taskQueueName?: string;
     taskQueueKind?:
@@ -1017,75 +815,47 @@ export default class TemporalClient {
     reportTaskReachability?: boolean;
     namespace: string;
     name: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['DescribeTaskQueueResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/task-queues/${name}`, this.baseURL);
 
-    if (taskQueueName) {
-      url.searchParams.append('taskQueue.name', taskQueueName);
-    }
+    if (taskQueueName) url.searchParams.append('taskQueue.name', taskQueueName);
 
-    if (taskQueueKind) {
-      url.searchParams.append('taskQueue.kind', taskQueueKind);
-    }
+    if (taskQueueKind) url.searchParams.append('taskQueue.kind', taskQueueKind);
 
-    if (taskQueueNormalName) {
-      url.searchParams.append('taskQueue.normalName', taskQueueNormalName);
-    }
+    if (taskQueueNormalName) url.searchParams.append('taskQueue.normalName', taskQueueNormalName);
 
-    if (taskQueueType) {
-      url.searchParams.append('taskQueueType', taskQueueType);
-    }
+    if (taskQueueType) url.searchParams.append('taskQueueType', taskQueueType);
 
-    if (includeTaskQueueStatus) {
+    if (includeTaskQueueStatus)
       url.searchParams.append('includeTaskQueueStatus', String(includeTaskQueueStatus));
-    }
 
-    if (apiMode) {
-      url.searchParams.append('apiMode', apiMode);
-    }
+    if (apiMode) url.searchParams.append('apiMode', apiMode);
 
-    if (versionsBuildIds) {
-      url.searchParams.append('versions.buildIds', versionsBuildIds.join(','));
-    }
+    if (versionsBuildIds) url.searchParams.append('versions.buildIds', versionsBuildIds.join(','));
 
-    if (versionsUnversioned) {
+    if (versionsUnversioned)
       url.searchParams.append('versions.unversioned', String(versionsUnversioned));
-    }
 
-    if (versionsAllActive) {
-      url.searchParams.append('versions.allActive', String(versionsAllActive));
-    }
+    if (versionsAllActive) url.searchParams.append('versions.allActive', String(versionsAllActive));
 
-    if (taskQueueTypes) {
-      url.searchParams.append('taskQueueTypes', taskQueueTypes.join(','));
-    }
+    if (taskQueueTypes) url.searchParams.append('taskQueueTypes', taskQueueTypes.join(','));
 
-    if (reportStats) {
-      url.searchParams.append('reportStats', String(reportStats));
-    }
+    if (reportStats) url.searchParams.append('reportStats', String(reportStats));
 
-    if (reportPollers) {
-      url.searchParams.append('reportPollers', String(reportPollers));
-    }
+    if (reportPollers) url.searchParams.append('reportPollers', String(reportPollers));
 
-    if (reportTaskReachability) {
+    if (reportTaskReachability)
       url.searchParams.append('reportTaskReachability', String(reportTaskReachability));
-    }
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'DescribeTaskQueue' });
-      } else {
-        throw new Error(
-          `${response.status}: DescribeTaskQueue request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'describeTaskQueue' });
     }
 
     return response.json();
@@ -1099,35 +869,31 @@ export default class TemporalClient {
     maxSets,
     namespace,
     taskQueue,
-    onError,
   }: {
     maxSets?: number;
     namespace: string;
     taskQueue: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['GetWorkerBuildIdCompatibilityResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/task-queues/${taskQueue}/worker-build-id-compatibility`,
       this.baseURL,
     );
 
-    if (maxSets) {
-      url.searchParams.append('maxSets', String(maxSets));
-    }
+    if (maxSets) url.searchParams.append('maxSets', String(maxSets));
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'GetWorkerBuildIdCompatibility' });
-      } else {
-        throw new Error(
-          `${response.status}: GetWorkerBuildIdCompatibility request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', {
+        request,
+        response,
+        operation: 'getWorkerBuildIdCompatibility',
+      });
     }
 
     return response.json();
@@ -1140,30 +906,24 @@ export default class TemporalClient {
   async getWorkerVersioningRules({
     namespace,
     taskQueue,
-    onError,
   }: {
     namespace: string;
     taskQueue: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['GetWorkerVersioningRulesResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/task-queues/${taskQueue}/worker-versioning-rules`,
       this.baseURL,
     );
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'GetWorkerVersioningRules' });
-      } else {
-        throw new Error(
-          `${response.status}: GetWorkerVersioningRules request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'getWorkerVersioningRules' });
     }
 
     return response.json();
@@ -1173,31 +933,22 @@ export default class TemporalClient {
    * @description UpdateNamespace is used to update the information and configuration of a registered
    *  namespace.
    */
-  async updateNamespace({
-    namespace,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['UpdateNamespaceRequest'];
-  }): Promise<components['schemas']['UpdateNamespaceResponse']> {
+  async updateNamespace(
+    { namespace }: { namespace: string },
+    body: components['schemas']['UpdateNamespaceRequest'],
+  ): Promise<components['schemas']['UpdateNamespaceResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/update`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'UpdateNamespace' });
-      } else {
-        throw new Error(
-          `${response.status}: UpdateNamespace request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'updateNamespace' });
     }
 
     return response.json();
@@ -1224,7 +975,6 @@ export default class TemporalClient {
     taskQueues,
     reachability,
     namespace,
-    onError,
   }: {
     buildIds?: readonly string[];
     taskQueues?: readonly string[];
@@ -1235,35 +985,24 @@ export default class TemporalClient {
       | 'TASK_REACHABILITY_OPEN_WORKFLOWS'
       | 'TASK_REACHABILITY_CLOSED_WORKFLOWS';
     namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['GetWorkerTaskReachabilityResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/worker-task-reachability`, this.baseURL);
 
-    if (buildIds) {
-      url.searchParams.append('buildIds', buildIds.join(','));
-    }
+    if (buildIds) url.searchParams.append('buildIds', buildIds.join(','));
 
-    if (taskQueues) {
-      url.searchParams.append('taskQueues', taskQueues.join(','));
-    }
+    if (taskQueues) url.searchParams.append('taskQueues', taskQueues.join(','));
 
-    if (reachability) {
-      url.searchParams.append('reachability', reachability);
-    }
+    if (reachability) url.searchParams.append('reachability', reachability);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'GetWorkerTaskReachability' });
-      } else {
-        throw new Error(
-          `${response.status}: GetWorkerTaskReachability request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'getWorkerTaskReachability' });
     }
 
     return response.json();
@@ -1273,31 +1012,23 @@ export default class TemporalClient {
   async countWorkflowExecutions({
     query,
     namespace,
-    onError,
   }: {
     query?: string;
     namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['CountWorkflowExecutionsResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/workflow-count`, this.baseURL);
 
-    if (query) {
-      url.searchParams.append('query', query);
-    }
+    if (query) url.searchParams.append('query', query);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'CountWorkflowExecutions' });
-      } else {
-        throw new Error(
-          `${response.status}: CountWorkflowExecutions request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'countWorkflowExecutions' });
     }
 
     return response.json();
@@ -1309,41 +1040,29 @@ export default class TemporalClient {
     nextPageToken,
     query,
     namespace,
-    onError,
   }: {
     pageSize?: number;
     nextPageToken?: string;
     query?: string;
     namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['ListWorkflowExecutionsResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/workflows`, this.baseURL);
 
-    if (pageSize) {
-      url.searchParams.append('pageSize', String(pageSize));
-    }
+    if (pageSize) url.searchParams.append('pageSize', String(pageSize));
 
-    if (nextPageToken) {
-      url.searchParams.append('nextPageToken', nextPageToken);
-    }
+    if (nextPageToken) url.searchParams.append('nextPageToken', nextPageToken);
 
-    if (query) {
-      url.searchParams.append('query', query);
-    }
+    if (query) url.searchParams.append('query', query);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'ListWorkflowExecutions' });
-      } else {
-        throw new Error(
-          `${response.status}: ListWorkflowExecutions request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'listWorkflowExecutions' });
     }
 
     return response.json();
@@ -1355,37 +1074,27 @@ export default class TemporalClient {
     executionRunId,
     namespace,
     workflowId,
-    onError,
   }: {
     executionWorkflowId?: string;
     executionRunId?: string;
     namespace: string;
     workflowId: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['DescribeWorkflowExecutionResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/workflows/${workflowId}`, this.baseURL);
 
-    if (executionWorkflowId) {
-      url.searchParams.append('execution.workflowId', executionWorkflowId);
-    }
+    if (executionWorkflowId) url.searchParams.append('execution.workflowId', executionWorkflowId);
 
-    if (executionRunId) {
-      url.searchParams.append('execution.runId', executionRunId);
-    }
+    if (executionRunId) url.searchParams.append('execution.runId', executionRunId);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'DescribeWorkflowExecution' });
-      } else {
-        throw new Error(
-          `${response.status}: DescribeWorkflowExecution request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'describeWorkflowExecution' });
     }
 
     return response.json();
@@ -1405,7 +1114,6 @@ export default class TemporalClient {
     skipArchival,
     namespace,
     workflowId,
-    onError,
   }: {
     executionWorkflowId?: string;
     executionRunId?: string;
@@ -1419,54 +1127,36 @@ export default class TemporalClient {
     skipArchival?: boolean;
     namespace: string;
     workflowId: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['GetWorkflowExecutionHistoryResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/history`,
       this.baseURL,
     );
 
-    if (executionWorkflowId) {
-      url.searchParams.append('execution.workflowId', executionWorkflowId);
-    }
+    if (executionWorkflowId) url.searchParams.append('execution.workflowId', executionWorkflowId);
 
-    if (executionRunId) {
-      url.searchParams.append('execution.runId', executionRunId);
-    }
+    if (executionRunId) url.searchParams.append('execution.runId', executionRunId);
 
-    if (maximumPageSize) {
-      url.searchParams.append('maximumPageSize', String(maximumPageSize));
-    }
+    if (maximumPageSize) url.searchParams.append('maximumPageSize', String(maximumPageSize));
 
-    if (nextPageToken) {
-      url.searchParams.append('nextPageToken', nextPageToken);
-    }
+    if (nextPageToken) url.searchParams.append('nextPageToken', nextPageToken);
 
-    if (waitNewEvent) {
-      url.searchParams.append('waitNewEvent', String(waitNewEvent));
-    }
+    if (waitNewEvent) url.searchParams.append('waitNewEvent', String(waitNewEvent));
 
-    if (historyEventFilterType) {
+    if (historyEventFilterType)
       url.searchParams.append('historyEventFilterType', historyEventFilterType);
-    }
 
-    if (skipArchival) {
-      url.searchParams.append('skipArchival', String(skipArchival));
-    }
+    if (skipArchival) url.searchParams.append('skipArchival', String(skipArchival));
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'GetWorkflowExecutionHistory' });
-      } else {
-        throw new Error(
-          `${response.status}: GetWorkflowExecutionHistory request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'getWorkflowExecutionHistory' });
     }
 
     return response.json();
@@ -1484,7 +1174,6 @@ export default class TemporalClient {
     nextPageToken,
     namespace,
     workflowId,
-    onError,
   }: {
     executionWorkflowId?: string;
     executionRunId?: string;
@@ -1492,80 +1181,62 @@ export default class TemporalClient {
     nextPageToken?: string;
     namespace: string;
     workflowId: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['GetWorkflowExecutionHistoryReverseResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/history-reverse`,
       this.baseURL,
     );
 
-    if (executionWorkflowId) {
-      url.searchParams.append('execution.workflowId', executionWorkflowId);
-    }
+    if (executionWorkflowId) url.searchParams.append('execution.workflowId', executionWorkflowId);
 
-    if (executionRunId) {
-      url.searchParams.append('execution.runId', executionRunId);
-    }
+    if (executionRunId) url.searchParams.append('execution.runId', executionRunId);
 
-    if (maximumPageSize) {
-      url.searchParams.append('maximumPageSize', String(maximumPageSize));
-    }
+    if (maximumPageSize) url.searchParams.append('maximumPageSize', String(maximumPageSize));
 
-    if (nextPageToken) {
-      url.searchParams.append('nextPageToken', nextPageToken);
-    }
+    if (nextPageToken) url.searchParams.append('nextPageToken', nextPageToken);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'GetWorkflowExecutionHistoryReverse' });
-      } else {
-        throw new Error(
-          `${response.status}: GetWorkflowExecutionHistoryReverse request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', {
+        request,
+        response,
+        operation: 'getWorkflowExecutionHistoryReverse',
+      });
     }
 
     return response.json();
   }
 
   /** @description QueryWorkflow requests a query be executed for a specified workflow execution. */
-  async queryWorkflow({
-    namespace,
-    workflowId,
-    queryType,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    workflowId: string;
-    queryType: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['QueryWorkflowRequest'];
-  }): Promise<components['schemas']['QueryWorkflowResponse']> {
+  async queryWorkflow(
+    {
+      namespace,
+      workflowId,
+      queryType,
+    }: { namespace: string; workflowId: string; queryType: string },
+    body: components['schemas']['QueryWorkflowRequest'],
+  ): Promise<components['schemas']['QueryWorkflowResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/query/${queryType}`,
       this.baseURL,
     );
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'QueryWorkflow' });
-      } else {
-        throw new Error(
-          `${response.status}: QueryWorkflow request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'queryWorkflow' });
     }
 
     return response.json();
@@ -1579,36 +1250,29 @@ export default class TemporalClient {
    *  workflow history and a new workflow task created for the workflow. It returns success if the requested
    *  workflow is already closed. It fails with 'NotFound' if the requested workflow doesn't exist.
    */
-  async requestCancelWorkflowExecution({
-    namespace,
-    workflowId,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    workflowId: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['RequestCancelWorkflowExecutionRequest'];
-  }): Promise<components['schemas']['RequestCancelWorkflowExecutionResponse']> {
+  async requestCancelWorkflowExecution(
+    { namespace, workflowId }: { namespace: string; workflowId: string },
+    body: components['schemas']['RequestCancelWorkflowExecutionRequest'],
+  ): Promise<components['schemas']['RequestCancelWorkflowExecutionResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/cancel`,
       this.baseURL,
     );
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'RequestCancelWorkflowExecution' });
-      } else {
-        throw new Error(
-          `${response.status}: RequestCancelWorkflowExecution request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', {
+        request,
+        response,
+        operation: 'requestCancelWorkflowExecution',
+      });
     }
 
     return response.json();
@@ -1620,36 +1284,25 @@ export default class TemporalClient {
    *  execution instance.
    *  TODO: Does exclusive here mean *just* the completed event, or also WFT started? Otherwise the task is doomed to time out?
    */
-  async resetWorkflowExecution({
-    namespace,
-    workflowId,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    workflowId: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['ResetWorkflowExecutionRequest'];
-  }): Promise<components['schemas']['ResetWorkflowExecutionResponse']> {
+  async resetWorkflowExecution(
+    { namespace, workflowId }: { namespace: string; workflowId: string },
+    body: components['schemas']['ResetWorkflowExecutionRequest'],
+  ): Promise<components['schemas']['ResetWorkflowExecutionResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/reset`,
       this.baseURL,
     );
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'ResetWorkflowExecution' });
-      } else {
-        throw new Error(
-          `${response.status}: ResetWorkflowExecution request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'resetWorkflowExecution' });
     }
 
     return response.json();
@@ -1661,38 +1314,29 @@ export default class TemporalClient {
    *  This results in a `WORKFLOW_EXECUTION_SIGNALED` event recorded in the history and a workflow
    *  task being created for the execution.
    */
-  async signalWorkflowExecution({
-    namespace,
-    workflowId,
-    signalName,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    workflowId: string;
-    signalName: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['SignalWorkflowExecutionRequest'];
-  }): Promise<components['schemas']['SignalWorkflowExecutionResponse']> {
+  async signalWorkflowExecution(
+    {
+      namespace,
+      workflowId,
+      signalName,
+    }: { namespace: string; workflowId: string; signalName: string },
+    body: components['schemas']['SignalWorkflowExecutionRequest'],
+  ): Promise<components['schemas']['SignalWorkflowExecutionResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/signal/${signalName}`,
       this.baseURL,
     );
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'SignalWorkflowExecution' });
-      } else {
-        throw new Error(
-          `${response.status}: SignalWorkflowExecution request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'signalWorkflowExecution' });
     }
 
     return response.json();
@@ -1703,74 +1347,50 @@ export default class TemporalClient {
    *  `WORKFLOW_EXECUTION_TERMINATED` event in the history and immediately terminating the
    *  execution instance.
    */
-  async terminateWorkflowExecution({
-    namespace,
-    workflowId,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    workflowId: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['TerminateWorkflowExecutionRequest'];
-  }): Promise<components['schemas']['TerminateWorkflowExecutionResponse']> {
+  async terminateWorkflowExecution(
+    { namespace, workflowId }: { namespace: string; workflowId: string },
+    body: components['schemas']['TerminateWorkflowExecutionRequest'],
+  ): Promise<components['schemas']['TerminateWorkflowExecutionResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/terminate`,
       this.baseURL,
     );
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'TerminateWorkflowExecution' });
-      } else {
-        throw new Error(
-          `${response.status}: TerminateWorkflowExecution request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'terminateWorkflowExecution' });
     }
 
     return response.json();
   }
 
   /** @description Invokes the specified Update function on user Workflow code. */
-  async updateWorkflowExecution({
-    namespace,
-    workflowId,
-    name,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    workflowId: string;
-    name: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['UpdateWorkflowExecutionRequest'];
-  }): Promise<components['schemas']['UpdateWorkflowExecutionResponse']> {
+  async updateWorkflowExecution(
+    { namespace, workflowId, name }: { namespace: string; workflowId: string; name: string },
+    body: components['schemas']['UpdateWorkflowExecutionRequest'],
+  ): Promise<components['schemas']['UpdateWorkflowExecutionResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/update/${name}`,
       this.baseURL,
     );
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'UpdateWorkflowExecution' });
-      } else {
-        throw new Error(
-          `${response.status}: UpdateWorkflowExecution request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'updateWorkflowExecution' });
     }
 
     return response.json();
@@ -1783,33 +1403,22 @@ export default class TemporalClient {
    *  also schedule the first workflow task. Returns `WorkflowExecutionAlreadyStarted`, if an
    *  instance already exists with same workflow id.
    */
-  async startWorkflowExecution({
-    namespace,
-    workflowId,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    workflowId: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['StartWorkflowExecutionRequest'];
-  }): Promise<components['schemas']['StartWorkflowExecutionResponse']> {
+  async startWorkflowExecution(
+    { namespace, workflowId }: { namespace: string; workflowId: string },
+    body: components['schemas']['StartWorkflowExecutionRequest'],
+  ): Promise<components['schemas']['StartWorkflowExecutionResponse']> {
     const url = new URL(`/api/v1/namespaces/${namespace}/workflows/${workflowId}`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'StartWorkflowExecution' });
-      } else {
-        throw new Error(
-          `${response.status}: StartWorkflowExecution request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'startWorkflowExecution' });
     }
 
     return response.json();
@@ -1829,38 +1438,33 @@ export default class TemporalClient {
    *  (-- api-linter: core::0136::prepositions=disabled
    *      aip.dev/not-precedent: "With" is used to indicate combined operation. --)
    */
-  async signalWithStartWorkflowExecution({
-    namespace,
-    workflowId,
-    signalName,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    workflowId: string;
-    signalName: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['SignalWithStartWorkflowExecutionRequest'];
-  }): Promise<components['schemas']['SignalWithStartWorkflowExecutionResponse']> {
+  async signalWithStartWorkflowExecution(
+    {
+      namespace,
+      workflowId,
+      signalName,
+    }: { namespace: string; workflowId: string; signalName: string },
+    body: components['schemas']['SignalWithStartWorkflowExecutionRequest'],
+  ): Promise<components['schemas']['SignalWithStartWorkflowExecutionResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/signal-with-start/${signalName}`,
       this.baseURL,
     );
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'SignalWithStartWorkflowExecution' });
-      } else {
-        throw new Error(
-          `${response.status}: SignalWithStartWorkflowExecution request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', {
+        request,
+        response,
+        operation: 'signalWithStartWorkflowExecution',
+      });
     }
 
     return response.json();
@@ -1877,34 +1481,25 @@ export default class TemporalClient {
    *
    *  NOTE: Experimental API.
    */
-  async executeMultiOperation({
-    namespace,
-    onError,
-    body,
-  }: {
-    namespace: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['ExecuteMultiOperationRequest'];
-  }): Promise<components['schemas']['ExecuteMultiOperationResponse']> {
+  async executeMultiOperation(
+    { namespace }: { namespace: string },
+    body: components['schemas']['ExecuteMultiOperationRequest'],
+  ): Promise<components['schemas']['ExecuteMultiOperationResponse']> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/execute-multi-operation`,
       this.baseURL,
     );
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'ExecuteMultiOperation' });
-      } else {
-        throw new Error(
-          `${response.status}: ExecuteMultiOperation request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'executeMultiOperation' });
     }
 
     return response.json();
@@ -1920,40 +1515,28 @@ export default class TemporalClient {
     pageSize,
     nextPageToken,
     name,
-    onError,
   }: {
     pageSize?: number;
     nextPageToken?: string;
     name?: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['ListNexusEndpointsResponse']> {
     const url = new URL(`/api/v1/nexus/endpoints`, this.baseURL);
 
-    if (pageSize) {
-      url.searchParams.append('pageSize', String(pageSize));
-    }
+    if (pageSize) url.searchParams.append('pageSize', String(pageSize));
 
-    if (nextPageToken) {
-      url.searchParams.append('nextPageToken', nextPageToken);
-    }
+    if (nextPageToken) url.searchParams.append('nextPageToken', nextPageToken);
 
-    if (name) {
-      url.searchParams.append('name', name);
-    }
+    if (name) url.searchParams.append('name', name);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'ListNexusEndpoints' });
-      } else {
-        throw new Error(
-          `${response.status}: ListNexusEndpoints request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'listNexusEndpoints' });
     }
 
     return response.json();
@@ -1964,29 +1547,21 @@ export default class TemporalClient {
    *  ALREADY_EXISTS.
    *  Returns the created endpoint with its initial version. You may use this version for subsequent updates.
    */
-  async createNexusEndpoint({
-    onError,
-    body,
-  }: {
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['CreateNexusEndpointRequest'];
-  }): Promise<components['schemas']['CreateNexusEndpointResponse']> {
+  async createNexusEndpoint(
+    body: components['schemas']['CreateNexusEndpointRequest'],
+  ): Promise<components['schemas']['CreateNexusEndpointResponse']> {
     const url = new URL(`/api/v1/nexus/endpoints`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'CreateNexusEndpoint' });
-      } else {
-        throw new Error(
-          `${response.status}: CreateNexusEndpoint request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'createNexusEndpoint' });
     }
 
     return response.json();
@@ -1995,26 +1570,20 @@ export default class TemporalClient {
   /** @description Get a registered Nexus endpoint by ID. The returned version can be used for optimistic updates. */
   async getNexusEndpoint({
     id,
-    onError,
   }: {
     id: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['GetNexusEndpointResponse']> {
     const url = new URL(`/api/v1/nexus/endpoints/${id}`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'GetNexusEndpoint' });
-      } else {
-        throw new Error(
-          `${response.status}: GetNexusEndpoint request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'getNexusEndpoint' });
     }
 
     return response.json();
@@ -2024,31 +1593,23 @@ export default class TemporalClient {
   async deleteNexusEndpoint({
     version,
     id,
-    onError,
   }: {
     version?: string;
     id: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
   }): Promise<components['schemas']['DeleteNexusEndpointResponse']> {
     const url = new URL(`/api/v1/nexus/endpoints/${id}`, this.baseURL);
 
-    if (version) {
-      url.searchParams.append('version', version);
-    }
+    if (version) url.searchParams.append('version', version);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'DeleteNexusEndpoint' });
-      } else {
-        throw new Error(
-          `${response.status}: DeleteNexusEndpoint request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'deleteNexusEndpoint' });
     }
 
     return response.json();
@@ -2061,57 +1622,40 @@ export default class TemporalClient {
    *  Returns the updated endpoint with its updated version. You may use this version for subsequent updates. You don't
    *  need to increment the version yourself. The server will increment the version for you after each update.
    */
-  async updateNexusEndpoint({
-    id,
-    onError,
-    body,
-  }: {
-    id: string;
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-    body: components['schemas']['UpdateNexusEndpointRequest'];
-  }): Promise<components['schemas']['UpdateNexusEndpointResponse']> {
+  async updateNexusEndpoint(
+    { id }: { id: string },
+    body: components['schemas']['UpdateNexusEndpointRequest'],
+  ): Promise<components['schemas']['UpdateNexusEndpointResponse']> {
     const url = new URL(`/api/v1/nexus/endpoints/${id}/update`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'UpdateNexusEndpoint' });
-      } else {
-        throw new Error(
-          `${response.status}: UpdateNexusEndpoint request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'updateNexusEndpoint' });
     }
 
     return response.json();
   }
 
   /** @description GetSystemInfo returns information about the system. */
-  async getSystemInfo({
-    onError,
-  }: {
-    onError?: ({ response, operation }: { response: Response; operation: string }) => void;
-  }): Promise<components['schemas']['GetSystemInfoResponse']> {
+  async getSystemInfo(): Promise<components['schemas']['GetSystemInfoResponse']> {
     const url = new URL(`/api/v1/system-info`, this.baseURL);
 
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
 
+    const response = await fetch(request);
+
     if (!response.ok) {
-      if (onError) {
-        onError({ response, operation: 'GetSystemInfo' });
-      } else {
-        throw new Error(
-          `${response.status}: GetSystemInfo request failed. ${response.statusText}`.trim(),
-        );
-      }
+      throw new TemporalError('', { request, response, operation: 'getSystemInfo' });
     }
 
     return response.json();

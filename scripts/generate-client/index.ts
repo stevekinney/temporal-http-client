@@ -3,10 +3,11 @@ import ts from 'typescript';
 import prettier from 'prettier';
 
 import { schemaInputPath, clientOutputPath } from './parse-args';
-import { findExportedInterfaces } from './find-exported-interfaces';
 import { getPropertySignatures } from './get-property-signatures';
 import { processOperations, processPaths } from './process';
 import { createClient } from './create-client';
+import { isProperties } from './is-properties';
+import { SourceFile } from './source-file';
 
 // Load prettier configuration for code formatting.
 const prettierConfigutation = await file('.prettierrc').json();
@@ -19,12 +20,23 @@ const schemaSourceFile = ts.createSourceFile(
   ts.ScriptTarget.Latest,
 );
 
-const { paths, operations } = findExportedInterfaces(schemaSourceFile);
+const sourceFile = new SourceFile(schemaSourceFile);
 
-const pathsProperties = getPropertySignatures(paths, schemaSourceFile);
-const operationsProperties = getPropertySignatures(operations, schemaSourceFile);
+const { paths, operations } = sourceFile.exportedInterfaces;
 
-const operationsMetadata = processOperations(operationsProperties, schemaSourceFile);
+const pathsProperties = getPropertySignatures(paths, sourceFile);
+const operationsProperties = getPropertySignatures(operations, sourceFile);
+
+if (!isProperties(operationsProperties)) {
+  throw new Error('Operations must be an object');
+}
+
+const operationsMetadata = processOperations(operationsProperties, sourceFile);
+
+if (!isProperties(pathsProperties)) {
+  throw new Error('Paths must be an object');
+}
+
 processPaths(pathsProperties, operationsMetadata);
 
 const clientCode = createClient(operationsMetadata);

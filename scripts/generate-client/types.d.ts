@@ -14,4 +14,4 @@ type APIResponse = {
   '200': APIRequestResponseBody;
 };
 
-type ParameterKind = 'path' | 'query' | 'body' | 'method';
+type ParameterKind = 'path' | 'query' | 'method';

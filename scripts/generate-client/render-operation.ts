@@ -20,7 +20,7 @@ export function renderOperation(operation: Operation | Operations): string {
       const response = await fetch(request);
 
       if (!response.ok) {
-        throw new TemporalError('', { request, response, operation: '${operation.name}' });
+        throw new TemporalError(\`\${response.status}: ${operation.name} request failed.\`, { request, response, operation: '${operation.name}' });
       };
 
       return response.json();

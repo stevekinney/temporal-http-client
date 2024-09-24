@@ -44,7 +44,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'getClusterInfo' });
+      throw new TemporalError(`${response.status}: getClusterInfo request failed.`, {
+        request,
+        response,
+        operation: 'getClusterInfo',
+      });
     }
 
     return response.json();
@@ -80,7 +84,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'listNamespaces' });
+      throw new TemporalError(`${response.status}: listNamespaces request failed.`, {
+        request,
+        response,
+        operation: 'listNamespaces',
+      });
     }
 
     return response.json();
@@ -108,7 +116,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'registerNamespace' });
+      throw new TemporalError(`${response.status}: registerNamespace request failed.`, {
+        request,
+        response,
+        operation: 'registerNamespace',
+      });
     }
 
     return response.json();
@@ -134,7 +146,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'describeNamespace' });
+      throw new TemporalError(`${response.status}: describeNamespace request failed.`, {
+        request,
+        response,
+        operation: 'describeNamespace',
+      });
     }
 
     return response.json();
@@ -162,7 +178,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'respondActivityTaskCanceled' });
+      throw new TemporalError(`${response.status}: respondActivityTaskCanceled request failed.`, {
+        request,
+        response,
+        operation: 'respondActivityTaskCanceled',
+      });
     }
 
     return response.json();
@@ -190,11 +210,10 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', {
-        request,
-        response,
-        operation: 'respondActivityTaskCanceledById',
-      });
+      throw new TemporalError(
+        `${response.status}: respondActivityTaskCanceledById request failed.`,
+        { request, response, operation: 'respondActivityTaskCanceledById' },
+      );
     }
 
     return response.json();
@@ -223,7 +242,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'respondActivityTaskCompleted' });
+      throw new TemporalError(`${response.status}: respondActivityTaskCompleted request failed.`, {
+        request,
+        response,
+        operation: 'respondActivityTaskCompleted',
+      });
     }
 
     return response.json();
@@ -251,11 +274,10 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', {
-        request,
-        response,
-        operation: 'respondActivityTaskCompletedById',
-      });
+      throw new TemporalError(
+        `${response.status}: respondActivityTaskCompletedById request failed.`,
+        { request, response, operation: 'respondActivityTaskCompletedById' },
+      );
     }
 
     return response.json();
@@ -283,7 +305,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'respondActivityTaskFailed' });
+      throw new TemporalError(`${response.status}: respondActivityTaskFailed request failed.`, {
+        request,
+        response,
+        operation: 'respondActivityTaskFailed',
+      });
     }
 
     return response.json();
@@ -311,7 +337,7 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', {
+      throw new TemporalError(`${response.status}: respondActivityTaskFailedById request failed.`, {
         request,
         response,
         operation: 'respondActivityTaskFailedById',
@@ -344,7 +370,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'recordActivityTaskHeartbeat' });
+      throw new TemporalError(`${response.status}: recordActivityTaskHeartbeat request failed.`, {
+        request,
+        response,
+        operation: 'recordActivityTaskHeartbeat',
+      });
     }
 
     return response.json();
@@ -372,11 +402,10 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', {
-        request,
-        response,
-        operation: 'recordActivityTaskHeartbeatById',
-      });
+      throw new TemporalError(
+        `${response.status}: recordActivityTaskHeartbeatById request failed.`,
+        { request, response, operation: 'recordActivityTaskHeartbeatById' },
+      );
     }
 
     return response.json();
@@ -405,7 +434,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'updateActivityOptionsById' });
+      throw new TemporalError(`${response.status}: updateActivityOptionsById request failed.`, {
+        request,
+        response,
+        operation: 'updateActivityOptionsById',
+      });
     }
 
     return response.json();
@@ -439,11 +472,10 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', {
-        request,
-        response,
-        operation: 'listArchivedWorkflowExecutions',
-      });
+      throw new TemporalError(
+        `${response.status}: listArchivedWorkflowExecutions request failed.`,
+        { request, response, operation: 'listArchivedWorkflowExecutions' },
+      );
     }
 
     return response.json();
@@ -473,7 +505,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'listBatchOperations' });
+      throw new TemporalError(`${response.status}: listBatchOperations request failed.`, {
+        request,
+        response,
+        operation: 'listBatchOperations',
+      });
     }
 
     return response.json();
@@ -497,7 +533,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'describeBatchOperation' });
+      throw new TemporalError(`${response.status}: describeBatchOperation request failed.`, {
+        request,
+        response,
+        operation: 'describeBatchOperation',
+      });
     }
 
     return response.json();
@@ -519,7 +559,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'startBatchOperation' });
+      throw new TemporalError(`${response.status}: startBatchOperation request failed.`, {
+        request,
+        response,
+        operation: 'startBatchOperation',
+      });
     }
 
     return response.json();
@@ -544,7 +588,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'stopBatchOperation' });
+      throw new TemporalError(`${response.status}: stopBatchOperation request failed.`, {
+        request,
+        response,
+        operation: 'stopBatchOperation',
+      });
     }
 
     return response.json();
@@ -578,7 +626,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'listSchedules' });
+      throw new TemporalError(`${response.status}: listSchedules request failed.`, {
+        request,
+        response,
+        operation: 'listSchedules',
+      });
     }
 
     return response.json();
@@ -602,7 +654,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'describeSchedule' });
+      throw new TemporalError(`${response.status}: describeSchedule request failed.`, {
+        request,
+        response,
+        operation: 'describeSchedule',
+      });
     }
 
     return response.json();
@@ -624,7 +680,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'createSchedule' });
+      throw new TemporalError(`${response.status}: createSchedule request failed.`, {
+        request,
+        response,
+        operation: 'createSchedule',
+      });
     }
 
     return response.json();
@@ -652,7 +712,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'deleteSchedule' });
+      throw new TemporalError(`${response.status}: deleteSchedule request failed.`, {
+        request,
+        response,
+        operation: 'deleteSchedule',
+      });
     }
 
     return response.json();
@@ -687,7 +751,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'listScheduleMatchingTimes' });
+      throw new TemporalError(`${response.status}: listScheduleMatchingTimes request failed.`, {
+        request,
+        response,
+        operation: 'listScheduleMatchingTimes',
+      });
     }
 
     return response.json();
@@ -712,7 +780,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'patchSchedule' });
+      throw new TemporalError(`${response.status}: patchSchedule request failed.`, {
+        request,
+        response,
+        operation: 'patchSchedule',
+      });
     }
 
     return response.json();
@@ -737,7 +809,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'updateSchedule' });
+      throw new TemporalError(`${response.status}: updateSchedule request failed.`, {
+        request,
+        response,
+        operation: 'updateSchedule',
+      });
     }
 
     return response.json();
@@ -759,7 +835,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'listSearchAttributes' });
+      throw new TemporalError(`${response.status}: listSearchAttributes request failed.`, {
+        request,
+        response,
+        operation: 'listSearchAttributes',
+      });
     }
 
     return response.json();
@@ -855,7 +935,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'describeTaskQueue' });
+      throw new TemporalError(`${response.status}: describeTaskQueue request failed.`, {
+        request,
+        response,
+        operation: 'describeTaskQueue',
+      });
     }
 
     return response.json();
@@ -889,7 +973,7 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', {
+      throw new TemporalError(`${response.status}: getWorkerBuildIdCompatibility request failed.`, {
         request,
         response,
         operation: 'getWorkerBuildIdCompatibility',
@@ -923,7 +1007,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'getWorkerVersioningRules' });
+      throw new TemporalError(`${response.status}: getWorkerVersioningRules request failed.`, {
+        request,
+        response,
+        operation: 'getWorkerVersioningRules',
+      });
     }
 
     return response.json();
@@ -948,7 +1036,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'updateNamespace' });
+      throw new TemporalError(`${response.status}: updateNamespace request failed.`, {
+        request,
+        response,
+        operation: 'updateNamespace',
+      });
     }
 
     return response.json();
@@ -1002,7 +1094,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'getWorkerTaskReachability' });
+      throw new TemporalError(`${response.status}: getWorkerTaskReachability request failed.`, {
+        request,
+        response,
+        operation: 'getWorkerTaskReachability',
+      });
     }
 
     return response.json();
@@ -1028,7 +1124,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'countWorkflowExecutions' });
+      throw new TemporalError(`${response.status}: countWorkflowExecutions request failed.`, {
+        request,
+        response,
+        operation: 'countWorkflowExecutions',
+      });
     }
 
     return response.json();
@@ -1062,7 +1162,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'listWorkflowExecutions' });
+      throw new TemporalError(`${response.status}: listWorkflowExecutions request failed.`, {
+        request,
+        response,
+        operation: 'listWorkflowExecutions',
+      });
     }
 
     return response.json();
@@ -1094,7 +1198,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'describeWorkflowExecution' });
+      throw new TemporalError(`${response.status}: describeWorkflowExecution request failed.`, {
+        request,
+        response,
+        operation: 'describeWorkflowExecution',
+      });
     }
 
     return response.json();
@@ -1156,7 +1264,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'getWorkflowExecutionHistory' });
+      throw new TemporalError(`${response.status}: getWorkflowExecutionHistory request failed.`, {
+        request,
+        response,
+        operation: 'getWorkflowExecutionHistory',
+      });
     }
 
     return response.json();
@@ -1203,11 +1315,10 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', {
-        request,
-        response,
-        operation: 'getWorkflowExecutionHistoryReverse',
-      });
+      throw new TemporalError(
+        `${response.status}: getWorkflowExecutionHistoryReverse request failed.`,
+        { request, response, operation: 'getWorkflowExecutionHistoryReverse' },
+      );
     }
 
     return response.json();
@@ -1236,7 +1347,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'queryWorkflow' });
+      throw new TemporalError(`${response.status}: queryWorkflow request failed.`, {
+        request,
+        response,
+        operation: 'queryWorkflow',
+      });
     }
 
     return response.json();
@@ -1268,11 +1383,10 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', {
-        request,
-        response,
-        operation: 'requestCancelWorkflowExecution',
-      });
+      throw new TemporalError(
+        `${response.status}: requestCancelWorkflowExecution request failed.`,
+        { request, response, operation: 'requestCancelWorkflowExecution' },
+      );
     }
 
     return response.json();
@@ -1302,7 +1416,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'resetWorkflowExecution' });
+      throw new TemporalError(`${response.status}: resetWorkflowExecution request failed.`, {
+        request,
+        response,
+        operation: 'resetWorkflowExecution',
+      });
     }
 
     return response.json();
@@ -1336,7 +1454,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'signalWorkflowExecution' });
+      throw new TemporalError(`${response.status}: signalWorkflowExecution request failed.`, {
+        request,
+        response,
+        operation: 'signalWorkflowExecution',
+      });
     }
 
     return response.json();
@@ -1365,7 +1487,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'terminateWorkflowExecution' });
+      throw new TemporalError(`${response.status}: terminateWorkflowExecution request failed.`, {
+        request,
+        response,
+        operation: 'terminateWorkflowExecution',
+      });
     }
 
     return response.json();
@@ -1390,7 +1516,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'updateWorkflowExecution' });
+      throw new TemporalError(`${response.status}: updateWorkflowExecution request failed.`, {
+        request,
+        response,
+        operation: 'updateWorkflowExecution',
+      });
     }
 
     return response.json();
@@ -1418,7 +1548,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'startWorkflowExecution' });
+      throw new TemporalError(`${response.status}: startWorkflowExecution request failed.`, {
+        request,
+        response,
+        operation: 'startWorkflowExecution',
+      });
     }
 
     return response.json();
@@ -1460,11 +1594,10 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', {
-        request,
-        response,
-        operation: 'signalWithStartWorkflowExecution',
-      });
+      throw new TemporalError(
+        `${response.status}: signalWithStartWorkflowExecution request failed.`,
+        { request, response, operation: 'signalWithStartWorkflowExecution' },
+      );
     }
 
     return response.json();
@@ -1499,7 +1632,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'executeMultiOperation' });
+      throw new TemporalError(`${response.status}: executeMultiOperation request failed.`, {
+        request,
+        response,
+        operation: 'executeMultiOperation',
+      });
     }
 
     return response.json();
@@ -1536,7 +1673,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'listNexusEndpoints' });
+      throw new TemporalError(`${response.status}: listNexusEndpoints request failed.`, {
+        request,
+        response,
+        operation: 'listNexusEndpoints',
+      });
     }
 
     return response.json();
@@ -1561,7 +1702,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'createNexusEndpoint' });
+      throw new TemporalError(`${response.status}: createNexusEndpoint request failed.`, {
+        request,
+        response,
+        operation: 'createNexusEndpoint',
+      });
     }
 
     return response.json();
@@ -1583,7 +1728,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'getNexusEndpoint' });
+      throw new TemporalError(`${response.status}: getNexusEndpoint request failed.`, {
+        request,
+        response,
+        operation: 'getNexusEndpoint',
+      });
     }
 
     return response.json();
@@ -1609,7 +1758,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'deleteNexusEndpoint' });
+      throw new TemporalError(`${response.status}: deleteNexusEndpoint request failed.`, {
+        request,
+        response,
+        operation: 'deleteNexusEndpoint',
+      });
     }
 
     return response.json();
@@ -1637,7 +1790,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'updateNexusEndpoint' });
+      throw new TemporalError(`${response.status}: updateNexusEndpoint request failed.`, {
+        request,
+        response,
+        operation: 'updateNexusEndpoint',
+      });
     }
 
     return response.json();
@@ -1655,7 +1812,11 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError('', { request, response, operation: 'getSystemInfo' });
+      throw new TemporalError(`${response.status}: getSystemInfo request failed.`, {
+        request,
+        response,
+        operation: 'getSystemInfo',
+      });
     }
 
     return response.json();

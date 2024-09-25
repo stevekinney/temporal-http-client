@@ -83,3 +83,17 @@ export class SourceFile {
     return node.jsDoc.map((doc) => doc.getText(this.sourceFile)).join('\n');
   }
 }
+
+if (import.meta.vitest) {
+  const { it, expect } = import.meta.vitest;
+
+  it('visits each node', () => {
+    const source = ts.createSourceFile('test.ts', 'const x = 1;', ts.ScriptTarget.ESNext);
+    const sourceFile = new SourceFile(source);
+    let count = 0;
+
+    sourceFile.visit(() => count++);
+
+    expect(count).toBe(6);
+  });
+}

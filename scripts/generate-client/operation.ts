@@ -60,7 +60,7 @@ export class Operation {
   }
 
   get keys() {
-    return this.parameters.all.map((parameter) => parameter.keyName);
+    return this.parameters.all.map((parameter) => parameter.key);
   }
 
   get types(): string[] {

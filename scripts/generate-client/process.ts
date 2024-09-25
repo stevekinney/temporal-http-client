@@ -3,11 +3,14 @@ import { Operations } from './operations';
 import { getOperationName } from './format';
 import { SourceFile } from './source-file';
 
-export function processOperations(operations: Properties, sourceFile: SourceFile): Operations {
-  const result = new Operations(sourceFile);
+export function processOperations(
+  operationsProperties: Properties,
+  sourceFile: SourceFile,
+): Operations {
+  const operations = new Operations(sourceFile);
 
-  for (const [operationName, operation] of Object.entries(operations)) {
-    const operationMetadata = result.add(operationName);
+  for (const [operationName, operation] of Object.entries(operationsProperties)) {
+    const operationMetadata = operations.add(operationName);
 
     for (const [propertyName, property] of Object.entries(operation)) {
       if (propertyName === 'parameters') {
@@ -26,10 +29,10 @@ export function processOperations(operations: Properties, sourceFile: SourceFile
     }
   }
 
-  return result;
+  return operations;
 }
 
-export function processPaths(paths: Properties, operationsMetadata: Operations) {
+export function processPaths(paths: Properties, operations: Operations) {
   for (const [pathName, path] of Object.entries(paths)) {
     if (!pathName.includes('/api/v1')) continue;
 
@@ -37,10 +40,10 @@ export function processPaths(paths: Properties, operationsMetadata: Operations) 
       const operation = getOperationName(String(operationType));
 
       if (isHTTPMethod(method)) {
-        operationsMetadata.get(operation).addRoute(method, pathName);
+        operations.get(operation).addRoute(method, pathName);
       }
     }
   }
 
-  return operationsMetadata;
+  return operations;
 }

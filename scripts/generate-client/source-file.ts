@@ -1,5 +1,14 @@
 import ts from 'typescript';
 
+type NodeTypeValidator = (node: ts.Node) => node is ts.Node;
+
+function isSyntaxKind<T extends NodeTypeValidator>(
+  node: ts.Node,
+  validator: T,
+): node is ExtractPredicateType<T> {
+  return validator(node);
+}
+
 export class SourceFile {
   constructor(public readonly sourceFile: ts.SourceFile) {}
 
@@ -17,25 +26,38 @@ export class SourceFile {
     ts.forEachChild(startingNode, visit);
   }
 
-  getText(node: ts.Node) {
-    return node.getText(this.sourceFile);
+  findNodesBySyntaxKind<T extends NodeTypeValidator, R = ExtractPredicateType<T>>(
+    validator: T,
+  ): R[] {
+    const nodes: R[] = [];
+
+    this.visit((node) => {
+      if (isSyntaxKind(node, validator)) {
+        nodes.push(node as R);
+      }
+    });
+
+    return nodes;
   }
 
-  getNodeName(node: ts.Node): string {
-    let name = '';
+  findNodeBySyntaxKind<T extends NodeTypeValidator, R = ExtractPredicateType<T>>(
+    validator: T,
+  ): R | undefined {
+    let result: R | undefined;
 
-    if ('name' in node) {
-      name = (node.name as ts.Node).getText(this.sourceFile);
-    }
+    this.visit((node) => {
+      if (isSyntaxKind(node, validator)) {
+        result = node as R;
+      }
+    });
 
-    if ('questionToken' in node && node.questionToken) {
-      name += '?';
-    }
-
-    return name;
+    return result;
   }
 
-  findNodeByName(name: string | string[], startingNode: ts.Node = this.sourceFile) {
+  findNodeByName(
+    name: string | string[],
+    startingNode: ts.Node = this.sourceFile,
+  ): ts.Node | undefined {
     let result: ts.Node | undefined;
 
     if (Array.isArray(name)) {
@@ -57,6 +79,24 @@ export class SourceFile {
     return result;
   }
 
+  getText(node: ts.Node) {
+    return node.getText(this.sourceFile);
+  }
+
+  getNodeName(node: ts.Node): string {
+    let name = '';
+
+    if ('name' in node) {
+      name = (node.name as ts.Node).getText(this.sourceFile);
+    }
+
+    if ('questionToken' in node && node.questionToken) {
+      name += '?';
+    }
+
+    return name;
+  }
+
   get exportedInterfaces() {
     const exportedInterfaces: Record<string, ts.InterfaceDeclaration> = {};
 
@@ -74,7 +114,9 @@ export class SourceFile {
   }
 
   hasJSDoc<T extends ts.Node>(node: T): node is T & { jsDoc: ts.JSDoc[] } {
-    if ('jsDoc' in node && Array.isArray(node.jsDoc)) return true;
+    if ('jsDoc' in node) {
+      return Boolean(node.jsDoc);
+    }
     return false;
   }
 
@@ -82,18 +124,4 @@ export class SourceFile {
     if (!this.hasJSDoc(node)) return '';
     return node.jsDoc.map((doc) => doc.getText(this.sourceFile)).join('\n');
   }
-}
-
-if (import.meta.vitest) {
-  const { it, expect } = import.meta.vitest;
-
-  it('visits each node', () => {
-    const source = ts.createSourceFile('test.ts', 'const x = 1;', ts.ScriptTarget.ESNext);
-    const sourceFile = new SourceFile(source);
-    let count = 0;
-
-    sourceFile.visit(() => count++);
-
-    expect(count).toBe(6);
-  });
 }

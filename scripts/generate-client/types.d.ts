@@ -15,3 +15,9 @@ type APIResponse = {
 };
 
 type ParameterKind = 'path' | 'query' | 'method';
+
+// Utility type to extract the type predicate from a NodeTypeValidator
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ExtractPredicateType<T extends NodeTypeValidator> = T extends (node: any) => node is infer U
+  ? U
+  : never;

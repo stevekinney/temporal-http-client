@@ -101,7 +101,6 @@ describe('SourceFile', () => {
         expect(ts.isVariableStatement(node)).toBe(true);
       }
     });
-  });
 
   describe('findNodeBySyntaxKind', () => {
     it('finds a node by syntax kind', () => {

@@ -1,15 +1,16 @@
 import ts from 'typescript';
+import z from 'zod';
 
 type NodeWithName = ts.Node & { name: ts.Node };
 
-export function hasNameNode(node: ts.Node): node is NodeWithName {
-  if ('name' in node) {
-    if (!node.name) return false;
-    if (typeof node.name !== 'object') return false;
-    if ('getText' in node.name) return true;
-  }
+const NodeNameSchema = z.object({
+  name: z.object({
+    getText: z.function().returns(z.string()),
+  }),
+});
 
-  return false;
+export function hasNameNode(node: ts.Node): node is NodeWithName {
+  return NodeNameSchema.safeParse(node).success;
 }
 
 export function findByName(

@@ -17,7 +17,7 @@
   },
   "scripts": {
     "build": "bun run build.ts",
-    "test": "vitest",
+    "test": "bun test",
     "package": "publint",
     "prepublishOnly": "npm run package",
     "lint": "prettier --check . && eslint .",
@@ -51,9 +51,7 @@
     "publint": "^0.1.9",
     "tslib": "^2.4.1",
     "typescript": "^5.4.2",
-    "vite": "^5.0.11",
-    "vite-plugin-dts": "^3.7.3",
-    "vitest": "^2.1.1",
+    "zod": "^3.24.2",
     "zx": "^7.2.3"
   }
 }

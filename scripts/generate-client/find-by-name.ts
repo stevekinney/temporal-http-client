@@ -1,15 +1,18 @@
 import ts from 'typescript';
 import z from 'zod';
 
-type NodeWithName = ts.Node & { name: ts.Node };
+type NodeWithName = z.infer<typeof NodeNameSchema>;
 
 const NodeNameSchema = z.object({
+  kind: z.number(),
+  flags: z.number(),
+  parent: z.any(),
   name: z.object({
     getText: z.function().returns(z.string()),
   }),
 });
 
-export function hasNameNode(node: ts.Node): node is NodeWithName {
+export function hasNameNode(node: unknown): node is NodeWithName {
   return NodeNameSchema.safeParse(node).success;
 }
 

@@ -1,6 +1,11 @@
 import ts from 'typescript';
+import { z } from 'zod';
 
 type NodeTypeValidator = (node: ts.Node) => node is ts.Node;
+
+const jsDocSchema = z.object({
+  jsDoc: z.array(z.any()),
+});
 
 function isSyntaxKind<T extends NodeTypeValidator>(
   node: ts.Node,
@@ -120,10 +125,7 @@ export class SourceFile {
   }
 
   hasJSDoc<T extends ts.Node>(node: T): node is T & { jsDoc: ts.JSDoc[] } {
-    if ('jsDoc' in node) {
-      return Boolean(node.jsDoc);
-    }
-    return false;
+    return jsDocSchema.safeParse(node).success;
   }
 
   getJSDoc(node: ts.Node) {

@@ -13,15 +13,34 @@ describe('SourceFile', () => {
     expect(sourceFile.sourceFile).toBe(source);
   });
 
-  it('finds a node by name', () => {
-    const source = createSourceFile('const x = 1;');
-    const sourceFile = new SourceFile(source);
-    const node = sourceFile.findNodeByName('x');
+  describe('findNodeByName', () => {
+    it('finds a node by name', () => {
+      const source = createSourceFile('const x = 1;');
+      const sourceFile = new SourceFile(source);
+      const node = sourceFile.findNodeByName('x');
 
-    if (!node) throw new Error('Node not found');
-    if (!ts.isVariableDeclaration(node)) throw new Error('Node is not a variable declaration');
+      if (!node) throw new Error('Node not found');
+      if (!ts.isVariableDeclaration(node)) throw new Error('Node is not a variable declaration');
 
-    expect(node.name.getText(source)).toBe('x');
+      expect(node.name.getText(source)).toBe('x');
+    });
+
+    it('finds a node by name in a nested structure', () => {
+      const source = createSourceFile(`
+        const x = {
+          y: {
+            z: 1,
+          },
+        };
+      `);
+      const sourceFile = new SourceFile(source);
+      const node = sourceFile.findNodeByName(['x', 'y', 'z']);
+
+      if (!node) throw new Error('Node not found');
+      if (!ts.isPropertyAssignment(node)) throw new Error('Node is not a property assignment');
+
+      expect(node.name.getText(source)).toBe('z');
+    });
   });
 
   describe('exportedInterfaces', () => {
@@ -101,6 +120,7 @@ describe('SourceFile', () => {
         expect(ts.isVariableStatement(node)).toBe(true);
       }
     });
+  });
 
   describe('findNodeBySyntaxKind', () => {
     it('finds a node by syntax kind', () => {

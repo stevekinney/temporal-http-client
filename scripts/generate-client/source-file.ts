@@ -9,6 +9,13 @@ function isSyntaxKind<T extends NodeTypeValidator>(
   return validator(node);
 }
 
+function isNodeExported(node: ts.Node): boolean {
+  return (
+    (ts.getCombinedModifierFlags(node as ts.Declaration) & ts.ModifierFlags.Export) !== 0 ||
+    (!!node.parent && node.parent.kind === ts.SyntaxKind.SourceFile)
+  );
+}
+
 export class SourceFile {
   constructor(public readonly sourceFile: ts.SourceFile) {}
 
@@ -79,32 +86,31 @@ export class SourceFile {
     return result;
   }
 
-  getText(node: ts.Node) {
-    return node.getText(this.sourceFile);
-  }
-
   getNodeName(node: ts.Node): string {
+    const isOptional = 'questionToken' in node && node.questionToken;
+
     let name = '';
 
     if ('name' in node) {
       name = (node.name as ts.Node).getText(this.sourceFile);
     }
 
-    if ('questionToken' in node && node.questionToken) {
+    if (isOptional) {
       name += '?';
     }
 
     return name;
   }
 
+  getText(node: ts.Node) {
+    return node.getText(this.sourceFile);
+  }
+
   get exportedInterfaces() {
     const exportedInterfaces: Record<string, ts.InterfaceDeclaration> = {};
 
-    ts.forEachChild(this.sourceFile, (node) => {
-      if (
-        ts.isInterfaceDeclaration(node) &&
-        node.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword)
-      ) {
+    this.visit((node) => {
+      if (ts.isInterfaceDeclaration(node) && isNodeExported(node)) {
         const name = this.getNodeName(node);
         exportedInterfaces[name] = node;
       }

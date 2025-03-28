@@ -1,11 +1,11 @@
 import type { Operation } from './operation';
 import { Operations } from './operations';
 
-export function renderOperation(operation: Operations): string;
-export function renderOperation(operation: Operation): string;
-export function renderOperation(operation: Operation | Operations): string {
+export function renderOperations(operation: Operations): string;
+export function renderOperations(operation: Operation): string;
+export function renderOperations(operation: Operation | Operations): string {
   if (operation instanceof Operations) {
-    return operation.all.map(renderOperation).join('\n\n');
+    return operation.all.map(renderOperations).join('\n\n');
   }
 
   return `

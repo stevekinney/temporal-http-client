@@ -107,13 +107,73 @@ export interface paths {
      */
     post: operations['RecordActivityTaskHeartbeatById'];
   };
-  '/api/v1/namespaces/{namespace}/activities/update-options-by-id': {
+  '/api/v1/namespaces/{namespace}/activities/pause': {
     /**
-     * @description UpdateActivityOptionsById is called by the client to update the options of an activity
-     *  (-- api-linter: core::0136::prepositions=disabled
-     *      aip.dev/not-precedent: "By" is used to indicate request type. --)
+     * @description PauseActivity pauses the execution of an activity specified by its ID or type.
+     *  If there are multiple pending activities of the provided type - all of them will be paused
+     *
+     *  Pausing an activity means:
+     *  - If the activity is currently waiting for a retry or is running and subsequently fails,
+     *    it will not be rescheduled until it is unpaused.
+     *  - If the activity is already paused, calling this method will have no effect.
+     *  - If the activity is running and finishes successfully, the activity will be completed.
+     *  - If the activity is running and finishes with failure:
+     *    * if there is no retry left - the activity will be completed.
+     *    * if there are more retries left - the activity will be paused.
+     *  For long-running activities:
+     *  - activities in paused state will send a cancellation with "activity_paused" set to 'true' in response to 'RecordActivityTaskHeartbeat'.
+     *  - The activity should respond to the cancellation accordingly.
+     *
+     *  Returns a `NotFound` error if there is no pending activity with the provided ID or type
      */
-    post: operations['UpdateActivityOptionsById'];
+    post: operations['PauseActivity'];
+  };
+  '/api/v1/namespaces/{namespace}/activities/reset': {
+    /**
+     * @description ResetActivity resets the execution of an activity specified by its ID or type.
+     *  If there are multiple pending activities of the provided type - all of them will be reset.
+     *
+     *  Resetting an activity means:
+     *  * number of attempts will be reset to 0.
+     *  * activity timeouts will be reset.
+     *  * if the activity is waiting for retry, and it is not paused or 'keep_paused' is not provided:
+     *     it will be scheduled immediately (* see 'jitter' flag),
+     *
+     *  Flags:
+     *
+     *  'jitter': the activity will be scheduled at a random time within the jitter duration.
+     *  If the activity currently paused it will be unpaused, unless 'keep_paused' flag is provided.
+     *  'reset_heartbeats': the activity heartbeat timer and heartbeats will be reset.
+     *  'keep_paused': if the activity is paused, it will remain paused.
+     *
+     *  Returns a `NotFound` error if there is no pending activity with the provided ID or type.
+     */
+    post: operations['ResetActivity'];
+  };
+  '/api/v1/namespaces/{namespace}/activities/unpause': {
+    /**
+     * @description UnpauseActivity unpauses the execution of an activity specified by its ID or type.
+     *  If there are multiple pending activities of the provided type - all of them will be unpaused.
+     *
+     *  If activity is not paused, this call will have no effect.
+     *  If the activity was paused while waiting for retry, it will be scheduled immediately (* see 'jitter' flag).
+     *  Once the activity is unpaused, all timeout timers will be regenerated.
+     *
+     *  Flags:
+     *  'jitter': the activity will be scheduled at a random time within the jitter duration.
+     *  'reset_attempts': the number of attempts will be reset.
+     *  'reset_heartbeat': the activity heartbeat timer and heartbeats will be reset.
+     *
+     *  Returns a `NotFound` error if there is no pending activity with the provided ID or type
+     */
+    post: operations['UnpauseActivity'];
+  };
+  '/api/v1/namespaces/{namespace}/activities/update-options': {
+    /**
+     * @description UpdateActivityOptions is called by the client to update the options of an activity by its ID or type.
+     *  If there are multiple pending activities of the provided type - all of them will be updated.
+     */
+    post: operations['UpdateActivityOptions'];
   };
   '/api/v1/namespaces/{namespace}/archived-workflows': {
     /** @description ListArchivedWorkflowExecutions is a visibility API to list archived workflow executions in a specific namespace. */
@@ -132,6 +192,53 @@ export interface paths {
   '/api/v1/namespaces/{namespace}/batch-operations/{jobId}/stop': {
     /** @description StopBatchOperation stops a batch operation */
     post: operations['StopBatchOperation'];
+  };
+  '/api/v1/namespaces/{namespace}/current-deployment/{deployment.series_name}': {
+    /**
+     * @description Sets a deployment as the current deployment for its deployment series. Can optionally update
+     *  the metadata of the deployment as well.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     *  Deprecated. Replaced by `SetWorkerDeploymentCurrentVersion`.
+     */
+    post: operations['SetCurrentDeployment'];
+  };
+  '/api/v1/namespaces/{namespace}/current-deployment/{seriesName}': {
+    /**
+     * @description Returns the current deployment (and its info) for a given deployment series.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     *  Deprecated. Replaced by `current_version` returned by `DescribeWorkerDeployment`.
+     */
+    get: operations['GetCurrentDeployment'];
+  };
+  '/api/v1/namespaces/{namespace}/deployments': {
+    /**
+     * @description Lists worker deployments in the namespace. Optionally can filter based on deployment series
+     *  name.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     *  Deprecated. Replaced with `ListWorkerDeployments`.
+     */
+    get: operations['ListDeployments'];
+  };
+  '/api/v1/namespaces/{namespace}/deployments/{deployment.series_name}/{deployment.build_id}': {
+    /**
+     * @description Describes a worker deployment.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     *  Deprecated. Replaced with `DescribeWorkerDeploymentVersion`.
+     */
+    get: operations['DescribeDeployment'];
+  };
+  '/api/v1/namespaces/{namespace}/deployments/{deployment.series_name}/{deployment.build_id}/reachability': {
+    /**
+     * @description Returns the reachability level of a worker deployment to help users decide when it is time
+     *  to decommission a deployment. Reachability level is calculated based on the deployment's
+     *  `status` and existing workflows that depend on the given deployment for their execution.
+     *  Calculating reachability is relatively expensive. Therefore, server might return a recently
+     *  cached value. In such a case, the `last_update_time` will inform you about the actual
+     *  reachability calculation time.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     *  Deprecated. Replaced with `DrainageInfo` returned by `DescribeWorkerDeploymentVersion`.
+     */
+    get: operations['GetDeploymentReachability'];
   };
   '/api/v1/namespaces/{namespace}/schedules': {
     /** @description List all schedules in a namespace. */
@@ -190,6 +297,66 @@ export interface paths {
      *  namespace.
      */
     post: operations['UpdateNamespace'];
+  };
+  '/api/v1/namespaces/{namespace}/worker-deployment-versions/{version}': {
+    /**
+     * @description Describes a worker deployment version.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     */
+    get: operations['DescribeWorkerDeploymentVersion'];
+    /**
+     * @description Used for manual deletion of Versions. User can delete a Version only when all the
+     *  following conditions are met:
+     *   - It is not the Current or Ramping Version of its Deployment.
+     *   - It has no active pollers (none of the task queues in the Version have pollers)
+     *   - It is not draining (see WorkerDeploymentVersionInfo.drainage_info). This condition
+     *     can be skipped by passing `skip-drainage=true`.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     */
+    delete: operations['DeleteWorkerDeploymentVersion'];
+  };
+  '/api/v1/namespaces/{namespace}/worker-deployment-versions/{version}/update-metadata': {
+    /**
+     * @description Updates the user-given metadata attached to a Worker Deployment Version.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     */
+    post: operations['UpdateWorkerDeploymentVersionMetadata'];
+  };
+  '/api/v1/namespaces/{namespace}/worker-deployments': {
+    /**
+     * @description Lists all Worker Deployments that are tracked in the Namespace.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     */
+    get: operations['ListWorkerDeployments'];
+  };
+  '/api/v1/namespaces/{namespace}/worker-deployments/{deploymentName}': {
+    /**
+     * @description Describes a Worker Deployment.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     */
+    get: operations['DescribeWorkerDeployment'];
+    /**
+     * @description Deletes records of (an old) Deployment. A deployment can only be deleted if
+     *  it has no Version in it.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     */
+    delete: operations['DeleteWorkerDeployment'];
+  };
+  '/api/v1/namespaces/{namespace}/worker-deployments/{deploymentName}/set-current-version': {
+    /**
+     * @description Set/unset the Current Version of a Worker Deployment. Automatically unsets the Ramping
+     *  Version if it is the Version being set as Current.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     */
+    post: operations['SetWorkerDeploymentCurrentVersion'];
+  };
+  '/api/v1/namespaces/{namespace}/worker-deployments/{deploymentName}/set-ramping-version': {
+    /**
+     * @description Set/unset the Ramping Version of a Worker Deployment and its ramp percentage. Can be used for
+     *  gradual ramp to unversioned workers too.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     */
+    post: operations['SetWorkerDeploymentRampingVersion'];
   };
   '/api/v1/namespaces/{namespace}/worker-task-reachability': {
     /**
@@ -277,6 +444,10 @@ export interface paths {
      *  execution instance.
      */
     post: operations['TerminateWorkflowExecution'];
+  };
+  '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update-options': {
+    /** @description UpdateWorkflowExecutionOptions partially updates the WorkflowExecutionOptions of an existing workflow execution. */
+    post: operations['UpdateWorkflowExecutionOptions'];
   };
   '/api/v1/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update/{request.input.name}': {
     /** @description Invokes the specified Update function on user Workflow code. */
@@ -503,13 +674,73 @@ export interface paths {
      */
     post: operations['RecordActivityTaskHeartbeatById'];
   };
-  '/namespaces/{namespace}/activities/update-options-by-id': {
+  '/namespaces/{namespace}/activities/pause': {
     /**
-     * @description UpdateActivityOptionsById is called by the client to update the options of an activity
-     *  (-- api-linter: core::0136::prepositions=disabled
-     *      aip.dev/not-precedent: "By" is used to indicate request type. --)
+     * @description PauseActivity pauses the execution of an activity specified by its ID or type.
+     *  If there are multiple pending activities of the provided type - all of them will be paused
+     *
+     *  Pausing an activity means:
+     *  - If the activity is currently waiting for a retry or is running and subsequently fails,
+     *    it will not be rescheduled until it is unpaused.
+     *  - If the activity is already paused, calling this method will have no effect.
+     *  - If the activity is running and finishes successfully, the activity will be completed.
+     *  - If the activity is running and finishes with failure:
+     *    * if there is no retry left - the activity will be completed.
+     *    * if there are more retries left - the activity will be paused.
+     *  For long-running activities:
+     *  - activities in paused state will send a cancellation with "activity_paused" set to 'true' in response to 'RecordActivityTaskHeartbeat'.
+     *  - The activity should respond to the cancellation accordingly.
+     *
+     *  Returns a `NotFound` error if there is no pending activity with the provided ID or type
      */
-    post: operations['UpdateActivityOptionsById'];
+    post: operations['PauseActivity'];
+  };
+  '/namespaces/{namespace}/activities/reset': {
+    /**
+     * @description ResetActivity resets the execution of an activity specified by its ID or type.
+     *  If there are multiple pending activities of the provided type - all of them will be reset.
+     *
+     *  Resetting an activity means:
+     *  * number of attempts will be reset to 0.
+     *  * activity timeouts will be reset.
+     *  * if the activity is waiting for retry, and it is not paused or 'keep_paused' is not provided:
+     *     it will be scheduled immediately (* see 'jitter' flag),
+     *
+     *  Flags:
+     *
+     *  'jitter': the activity will be scheduled at a random time within the jitter duration.
+     *  If the activity currently paused it will be unpaused, unless 'keep_paused' flag is provided.
+     *  'reset_heartbeats': the activity heartbeat timer and heartbeats will be reset.
+     *  'keep_paused': if the activity is paused, it will remain paused.
+     *
+     *  Returns a `NotFound` error if there is no pending activity with the provided ID or type.
+     */
+    post: operations['ResetActivity'];
+  };
+  '/namespaces/{namespace}/activities/unpause': {
+    /**
+     * @description UnpauseActivity unpauses the execution of an activity specified by its ID or type.
+     *  If there are multiple pending activities of the provided type - all of them will be unpaused.
+     *
+     *  If activity is not paused, this call will have no effect.
+     *  If the activity was paused while waiting for retry, it will be scheduled immediately (* see 'jitter' flag).
+     *  Once the activity is unpaused, all timeout timers will be regenerated.
+     *
+     *  Flags:
+     *  'jitter': the activity will be scheduled at a random time within the jitter duration.
+     *  'reset_attempts': the number of attempts will be reset.
+     *  'reset_heartbeat': the activity heartbeat timer and heartbeats will be reset.
+     *
+     *  Returns a `NotFound` error if there is no pending activity with the provided ID or type
+     */
+    post: operations['UnpauseActivity'];
+  };
+  '/namespaces/{namespace}/activities/update-options': {
+    /**
+     * @description UpdateActivityOptions is called by the client to update the options of an activity by its ID or type.
+     *  If there are multiple pending activities of the provided type - all of them will be updated.
+     */
+    post: operations['UpdateActivityOptions'];
   };
   '/namespaces/{namespace}/archived-workflows': {
     /** @description ListArchivedWorkflowExecutions is a visibility API to list archived workflow executions in a specific namespace. */
@@ -528,6 +759,53 @@ export interface paths {
   '/namespaces/{namespace}/batch-operations/{jobId}/stop': {
     /** @description StopBatchOperation stops a batch operation */
     post: operations['StopBatchOperation'];
+  };
+  '/namespaces/{namespace}/current-deployment/{deployment.series_name}': {
+    /**
+     * @description Sets a deployment as the current deployment for its deployment series. Can optionally update
+     *  the metadata of the deployment as well.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     *  Deprecated. Replaced by `SetWorkerDeploymentCurrentVersion`.
+     */
+    post: operations['SetCurrentDeployment'];
+  };
+  '/namespaces/{namespace}/current-deployment/{seriesName}': {
+    /**
+     * @description Returns the current deployment (and its info) for a given deployment series.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     *  Deprecated. Replaced by `current_version` returned by `DescribeWorkerDeployment`.
+     */
+    get: operations['GetCurrentDeployment'];
+  };
+  '/namespaces/{namespace}/deployments': {
+    /**
+     * @description Lists worker deployments in the namespace. Optionally can filter based on deployment series
+     *  name.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     *  Deprecated. Replaced with `ListWorkerDeployments`.
+     */
+    get: operations['ListDeployments'];
+  };
+  '/namespaces/{namespace}/deployments/{deployment.series_name}/{deployment.build_id}': {
+    /**
+     * @description Describes a worker deployment.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     *  Deprecated. Replaced with `DescribeWorkerDeploymentVersion`.
+     */
+    get: operations['DescribeDeployment'];
+  };
+  '/namespaces/{namespace}/deployments/{deployment.series_name}/{deployment.build_id}/reachability': {
+    /**
+     * @description Returns the reachability level of a worker deployment to help users decide when it is time
+     *  to decommission a deployment. Reachability level is calculated based on the deployment's
+     *  `status` and existing workflows that depend on the given deployment for their execution.
+     *  Calculating reachability is relatively expensive. Therefore, server might return a recently
+     *  cached value. In such a case, the `last_update_time` will inform you about the actual
+     *  reachability calculation time.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     *  Deprecated. Replaced with `DrainageInfo` returned by `DescribeWorkerDeploymentVersion`.
+     */
+    get: operations['GetDeploymentReachability'];
   };
   '/namespaces/{namespace}/schedules': {
     /** @description List all schedules in a namespace. */
@@ -575,6 +853,66 @@ export interface paths {
      *  WARNING: Worker Versioning is not yet stable and the API and behavior may change incompatibly.
      */
     get: operations['GetWorkerVersioningRules'];
+  };
+  '/namespaces/{namespace}/worker-deployment-versions/{version}': {
+    /**
+     * @description Describes a worker deployment version.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     */
+    get: operations['DescribeWorkerDeploymentVersion'];
+    /**
+     * @description Used for manual deletion of Versions. User can delete a Version only when all the
+     *  following conditions are met:
+     *   - It is not the Current or Ramping Version of its Deployment.
+     *   - It has no active pollers (none of the task queues in the Version have pollers)
+     *   - It is not draining (see WorkerDeploymentVersionInfo.drainage_info). This condition
+     *     can be skipped by passing `skip-drainage=true`.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     */
+    delete: operations['DeleteWorkerDeploymentVersion'];
+  };
+  '/namespaces/{namespace}/worker-deployment-versions/{version}/update-metadata': {
+    /**
+     * @description Updates the user-given metadata attached to a Worker Deployment Version.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     */
+    post: operations['UpdateWorkerDeploymentVersionMetadata'];
+  };
+  '/namespaces/{namespace}/worker-deployments': {
+    /**
+     * @description Lists all Worker Deployments that are tracked in the Namespace.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     */
+    get: operations['ListWorkerDeployments'];
+  };
+  '/namespaces/{namespace}/worker-deployments/{deploymentName}': {
+    /**
+     * @description Describes a Worker Deployment.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     */
+    get: operations['DescribeWorkerDeployment'];
+    /**
+     * @description Deletes records of (an old) Deployment. A deployment can only be deleted if
+     *  it has no Version in it.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     */
+    delete: operations['DeleteWorkerDeployment'];
+  };
+  '/namespaces/{namespace}/worker-deployments/{deploymentName}/set-current-version': {
+    /**
+     * @description Set/unset the Current Version of a Worker Deployment. Automatically unsets the Ramping
+     *  Version if it is the Version being set as Current.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     */
+    post: operations['SetWorkerDeploymentCurrentVersion'];
+  };
+  '/namespaces/{namespace}/worker-deployments/{deploymentName}/set-ramping-version': {
+    /**
+     * @description Set/unset the Ramping Version of a Worker Deployment and its ramp percentage. Can be used for
+     *  gradual ramp to unversioned workers too.
+     *  Experimental. This API might significantly change or be removed in a future release.
+     */
+    post: operations['SetWorkerDeploymentRampingVersion'];
   };
   '/namespaces/{namespace}/worker-task-reachability': {
     /**
@@ -662,6 +1000,10 @@ export interface paths {
      *  execution instance.
      */
     post: operations['TerminateWorkflowExecution'];
+  };
+  '/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update-options': {
+    /** @description UpdateWorkflowExecutionOptions partially updates the WorkflowExecutionOptions of an existing workflow execution. */
+    post: operations['UpdateWorkflowExecutionOptions'];
   };
   '/namespaces/{namespace}/workflows/{workflow_execution.workflow_id}/update/{request.input.name}': {
     /** @description Invokes the specified Update function on user Workflow code. */
@@ -858,6 +1200,11 @@ export interface components {
       readonly heartbeatTimeout?: string;
       readonly input?: components['schemas']['Payloads'];
       /**
+       * @description Priority metadata. If this message is not present, or any fields are not
+       *  present, they inherit the values from the workflow.
+       */
+      readonly priority?: components['schemas']['Priority'];
+      /**
        * @description Activities are assigned a default retry policy controlled by the service's dynamic
        *  configuration. Retries will happen up to `schedule_to_close_timeout`. To disable retries set
        *  retry_policy.maximum_attempts to 1.
@@ -908,6 +1255,7 @@ export interface components {
       /**
        * @description Used by server internally to properly reapply build ID redirects to an execution
        *  when rebuilding it from events.
+       *  Deprecated. This field should be cleaned up when versioning-2 API is removed. [cleanup-experimental-wv]
        */
       readonly buildIdRedirectCounter?: string;
       /** @description id of the worker that picked up this task */
@@ -921,7 +1269,10 @@ export interface components {
       readonly requestId?: string;
       /** @description The id of the `ACTIVITY_TASK_SCHEDULED` event this task corresponds to */
       readonly scheduledEventId?: string;
-      /** @description Version info of the worker to whom this task was dispatched. */
+      /**
+       * @description Version info of the worker to whom this task was dispatched.
+       *  Deprecated. This field should be cleaned up when versioning-2 API is removed. [cleanup-experimental-wv]
+       */
       readonly workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
     readonly ActivityTaskTimedOutEventAttributes: {
@@ -1116,6 +1467,38 @@ export interface components {
       /** @description The identity of the worker/client */
       readonly identity?: string;
     };
+    /** @description BatchOperationUnpauseActivities sends unpause requests to batch workflows. */
+    readonly BatchOperationUnpauseActivities: {
+      /** @description The identity of the worker/client. */
+      readonly identity?: string;
+      /**
+       * @description If set, the activity will start at a random time within the specified jitter
+       *  duration, introducing variability to the start time.
+       */
+      readonly jitter?: string;
+      readonly matchAll?: boolean;
+      /** @description Providing this flag will also reset the number of attempts. */
+      readonly resetAttempts?: boolean;
+      /** @description Providing this flag will also reset the heartbeat details. */
+      readonly resetHeartbeat?: boolean;
+      readonly type?: string;
+    };
+    /**
+     * @description BatchOperationUpdateWorkflowExecutionOptions sends UpdateWorkflowExecutionOptions requests to batch workflows.
+     *  Keep the parameters in sync with temporal.api.workflowservice.v1.UpdateWorkflowExecutionOptionsRequest.
+     */
+    readonly BatchOperationUpdateWorkflowExecutionOptions: {
+      /** @description The identity of the worker/client. */
+      readonly identity?: string;
+      /**
+       * Format: field-mask
+       * @description Controls which fields from `workflow_execution_options` will be applied.
+       *  To unset a field, set it to null and use the update mask to indicate that it should be mutated.
+       */
+      readonly updateMask?: string;
+      /** @description Workflow Execution options. Partial updates are accepted and controlled by update_mask. */
+      readonly workflowExecutionOptions?: components['schemas']['WorkflowExecutionOptions'];
+    };
     /**
      * @description Assignment rules are applied to *new* Workflow and Activity executions at
      *  schedule time to assign them to a Build ID.
@@ -1247,6 +1630,8 @@ export interface components {
        *  This number represents a minimum bound since the attempt is incremented after the callback request completes.
        */
       readonly attempt?: number;
+      /** @description If the state is BLOCKED, blocked reason provides additional information. */
+      readonly blockedReason?: string;
       /** @description Information on how this callback should be invoked (e.g. its URL and type). */
       readonly callback?: components['schemas']['Callback'];
       /**
@@ -1276,7 +1661,8 @@ export interface components {
         | 'CALLBACK_STATE_SCHEDULED'
         | 'CALLBACK_STATE_BACKING_OFF'
         | 'CALLBACK_STATE_FAILED'
-        | 'CALLBACK_STATE_SUCCEEDED';
+        | 'CALLBACK_STATE_SUCCEEDED'
+        | 'CALLBACK_STATE_BLOCKED';
       /** @description Trigger for this callback. */
       readonly trigger?: components['schemas']['CallbackInfo_Trigger'];
     };
@@ -1529,6 +1915,102 @@ export interface components {
     };
     readonly DeleteNexusEndpointResponse: Record<string, unknown>;
     readonly DeleteScheduleResponse: Record<string, unknown>;
+    readonly DeleteWorkerDeploymentResponse: Record<string, unknown>;
+    readonly DeleteWorkerDeploymentVersionResponse: Record<string, unknown>;
+    /**
+     * @description `Deployment` identifies a deployment of Temporal workers. The combination of deployment series
+     *  name + build ID serves as the identifier. User can use `WorkerDeploymentOptions` in their worker
+     *  programs to specify these values.
+     *  Deprecated.
+     */
+    readonly Deployment: {
+      /**
+       * @description Build ID changes with each version of the worker when the worker program code and/or config
+       *  changes.
+       */
+      readonly buildId?: string;
+      /**
+       * @description Different versions of the same worker service/application are related together by having a
+       *  shared series name.
+       *  Out of all deployments of a series, one can be designated as the current deployment, which
+       *  receives new workflow executions and new tasks of workflows with
+       *  `VERSIONING_BEHAVIOR_AUTO_UPGRADE` versioning behavior.
+       */
+      readonly seriesName?: string;
+    };
+    /**
+     * @description `DeploymentInfo` holds information about a deployment. Deployment information is tracked
+     *  automatically by server as soon as the first poll from that deployment reaches the server. There
+     *  can be multiple task queue workers in a single deployment which are listed in this message.
+     *  Deprecated.
+     */
+    readonly DeploymentInfo: {
+      /** Format: date-time */
+      readonly createTime?: string;
+      readonly deployment?: components['schemas']['Deployment'];
+      /** @description If this deployment is the current deployment of its deployment series. */
+      readonly isCurrent?: boolean;
+      /**
+       * @description A user-defined set of key-values. Can be updated as part of write operations to the
+       *  deployment, such as `SetCurrentDeployment`.
+       */
+      readonly metadata?: {
+        [key: string]: components['schemas']['Payload'];
+      };
+      readonly taskQueueInfos?: readonly components['schemas']['DeploymentInfo_TaskQueueInfo'][];
+    };
+    readonly DeploymentInfo_TaskQueueInfo: {
+      /**
+       * Format: date-time
+       * @description When server saw the first poller for this task queue in this deployment.
+       */
+      readonly firstPollerTime?: string;
+      readonly name?: string;
+      /**
+       * Format: enum
+       * @enum {string}
+       */
+      readonly type?:
+        | 'TASK_QUEUE_TYPE_UNSPECIFIED'
+        | 'TASK_QUEUE_TYPE_WORKFLOW'
+        | 'TASK_QUEUE_TYPE_ACTIVITY'
+        | 'TASK_QUEUE_TYPE_NEXUS';
+    };
+    /**
+     * @description DeploymentListInfo is an abbreviated set of fields from DeploymentInfo that's returned in
+     *  ListDeployments.
+     *  Deprecated.
+     */
+    readonly DeploymentListInfo: {
+      /** Format: date-time */
+      readonly createTime?: string;
+      readonly deployment?: components['schemas']['Deployment'];
+      /** @description If this deployment is the current deployment of its deployment series. */
+      readonly isCurrent?: boolean;
+    };
+    /**
+     * @description Holds information about ongoing transition of a workflow execution from one deployment to another.
+     *  Deprecated. Use DeploymentVersionTransition.
+     */
+    readonly DeploymentTransition: {
+      /**
+       * @description The target deployment of the transition. Null means a so-far-versioned workflow is
+       *  transitioning to unversioned workers.
+       */
+      readonly deployment?: components['schemas']['Deployment'];
+    };
+    /**
+     * @description Holds information about ongoing transition of a workflow execution from one worker
+     *  deployment version to another.
+     *  Experimental. Might change in the future.
+     */
+    readonly DeploymentVersionTransition: {
+      /**
+       * @description Required. The target Version of the transition. May be `__unversioned__` which means a
+       *  so-far-versioned workflow is transitioning to unversioned workers.
+       */
+      readonly version?: string;
+    };
     readonly DescribeBatchOperationResponse: {
       /**
        * Format: date-time
@@ -1554,7 +2036,8 @@ export interface components {
         | 'BATCH_OPERATION_TYPE_CANCEL'
         | 'BATCH_OPERATION_TYPE_SIGNAL'
         | 'BATCH_OPERATION_TYPE_DELETE'
-        | 'BATCH_OPERATION_TYPE_RESET';
+        | 'BATCH_OPERATION_TYPE_RESET'
+        | 'BATCH_OPERATION_TYPE_UPDATE_EXECUTION_OPTIONS';
       /** @description Reason indicates the reason to stop a operation */
       readonly reason?: string;
       /**
@@ -1574,6 +2057,10 @@ export interface components {
         | 'BATCH_OPERATION_STATE_FAILED';
       /** @description Total operation count */
       readonly totalOperationCount?: string;
+    };
+    /** @description [cleanup-wv-pre-release] Pre-release deployment APIs, clean up later */
+    readonly DescribeDeploymentResponse: {
+      readonly deploymentInfo?: components['schemas']['DeploymentInfo'];
     };
     readonly DescribeNamespaceResponse: {
       readonly config?: components['schemas']['NamespaceConfig'];
@@ -1620,12 +2107,37 @@ export interface components {
       /** @description Deprecated. Not set in `ENHANCED` mode. */
       readonly taskQueueStatus?: components['schemas']['TaskQueueStatus'];
       /**
+       * @description Specifies which Worker Deployment Version(s) Server routes this Task Queue's tasks to.
+       *  When not present, it means the tasks are routed to Unversioned workers (workers with
+       *  UNVERSIONED or unspecified WorkerVersioningMode.)
+       *  Task Queue Versioning info is updated indirectly by calling SetWorkerDeploymentCurrentVersion
+       *  and SetWorkerDeploymentRampingVersion on Worker Deployments.
+       *  Note: This information is not relevant to Pinned workflow executions and their activities as
+       *  they are always routed to their Pinned Deployment Version. However, new workflow executions
+       *  are typically not Pinned until they complete their first task (unless they are started with
+       *  a Pinned VersioningOverride or are Child Workflows of a Pinned parent).
+       */
+      readonly versioningInfo?: components['schemas']['TaskQueueVersioningInfo'];
+      /**
        * @description This map contains Task Queue information for each Build ID. Empty string as key value means unversioned.
        *  Only set in `ENHANCED` mode.
        */
       readonly versionsInfo?: {
         [key: string]: components['schemas']['TaskQueueVersionInfo'];
       };
+    };
+    readonly DescribeWorkerDeploymentResponse: {
+      /**
+       * Format: bytes
+       * @description This value is returned so that it can be optionally passed to APIs
+       *  that write to the Worker Deployment state to ensure that the state
+       *  did not change between this read and a future write.
+       */
+      readonly conflictToken?: string;
+      readonly workerDeploymentInfo?: components['schemas']['WorkerDeploymentInfo'];
+    };
+    readonly DescribeWorkerDeploymentVersionResponse: {
+      readonly workerDeploymentVersionInfo?: components['schemas']['WorkerDeploymentVersionInfo'];
     };
     readonly DescribeWorkflowExecutionResponse: {
       readonly callbacks?: readonly components['schemas']['CallbackInfo'][];
@@ -1635,6 +2147,7 @@ export interface components {
       readonly pendingNexusOperations?: readonly components['schemas']['PendingNexusOperationInfo'][];
       readonly pendingWorkflowTask?: components['schemas']['PendingWorkflowTaskInfo'];
       readonly workflowExecutionInfo?: components['schemas']['WorkflowExecutionInfo'];
+      readonly workflowExtendedInfo?: components['schemas']['WorkflowExecutionExtendedInfo'];
     };
     /** @description A cluster-global binding from an endpoint ID to a target for dispatching incoming Nexus requests. */
     readonly Endpoint: {
@@ -1799,6 +2312,7 @@ export interface components {
        */
       readonly encodedAttributes?: components['schemas']['Payload'];
       readonly message?: string;
+      readonly nexusHandlerFailureInfo?: components['schemas']['NexusHandlerFailureInfo'];
       readonly nexusOperationExecutionFailureInfo?: components['schemas']['NexusOperationFailureInfo'];
       readonly resetWorkflowFailureInfo?: components['schemas']['ResetWorkflowFailureInfo'];
       readonly serverFailureInfo?: components['schemas']['ServerFailureInfo'];
@@ -1828,6 +2342,29 @@ export interface components {
       };
       readonly versionInfo?: components['schemas']['VersionInfo'];
       readonly visibilityStore?: string;
+    };
+    /** @description [cleanup-wv-pre-release] Pre-release deployment APIs, clean up later */
+    readonly GetCurrentDeploymentResponse: {
+      readonly currentDeploymentInfo?: components['schemas']['DeploymentInfo'];
+    };
+    /** @description [cleanup-wv-pre-release] Pre-release deployment APIs, clean up later */
+    readonly GetDeploymentReachabilityResponse: {
+      readonly deploymentInfo?: components['schemas']['DeploymentInfo'];
+      /**
+       * Format: date-time
+       * @description Reachability level might come from server cache. This timestamp specifies when the value
+       *  was actually calculated.
+       */
+      readonly lastUpdateTime?: string;
+      /**
+       * Format: enum
+       * @enum {string}
+       */
+      readonly reachability?:
+        | 'DEPLOYMENT_REACHABILITY_UNSPECIFIED'
+        | 'DEPLOYMENT_REACHABILITY_REACHABLE'
+        | 'DEPLOYMENT_REACHABILITY_CLOSED_WORKFLOWS_ONLY'
+        | 'DEPLOYMENT_REACHABILITY_UNREACHABLE';
     };
     readonly GetNexusEndpointResponse: {
       readonly endpoint?: components['schemas']['Endpoint'];
@@ -1879,6 +2416,7 @@ export interface components {
       /** @description True if server supports upserting workflow memo */
       readonly upsertMemo?: boolean;
     };
+    /** @description [cleanup-wv-pre-release] */
     readonly GetWorkerBuildIdCompatibilityResponse: {
       /**
        * @description Major version sets, in order from oldest to newest. The last element of the list will always
@@ -1889,7 +2427,10 @@ export interface components {
        */
       readonly majorVersionSets?: readonly components['schemas']['CompatibleVersionSet'][];
     };
-    /** @description Deprecated. Use `DescribeTaskQueue`. */
+    /**
+     * @description [cleanup-wv-pre-release]
+     *  Deprecated. Use `DescribeTaskQueue`.
+     */
     readonly GetWorkerTaskReachabilityResponse: {
       /**
        * @description Task reachability, broken down by build id and then task queue.
@@ -1904,6 +2445,7 @@ export interface components {
        */
       readonly buildIdReachability?: readonly components['schemas']['BuildIdReachability'][];
     };
+    /** @description [cleanup-wv-pre-release] */
     readonly GetWorkerVersioningRulesResponse: {
       readonly assignmentRules?: readonly components['schemas']['TimestampedBuildIdAssignmentRule'][];
       readonly compatibleRedirectRules?: readonly components['schemas']['TimestampedCompatibleBuildIdRedirectRule'][];
@@ -2037,7 +2579,8 @@ export interface components {
         | 'EVENT_TYPE_NEXUS_OPERATION_FAILED'
         | 'EVENT_TYPE_NEXUS_OPERATION_CANCELED'
         | 'EVENT_TYPE_NEXUS_OPERATION_TIMED_OUT'
-        | 'EVENT_TYPE_NEXUS_OPERATION_CANCEL_REQUESTED';
+        | 'EVENT_TYPE_NEXUS_OPERATION_CANCEL_REQUESTED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_OPTIONS_UPDATED';
       readonly externalWorkflowExecutionCancelRequestedEventAttributes?: components['schemas']['ExternalWorkflowExecutionCancelRequestedEventAttributes'];
       readonly externalWorkflowExecutionSignaledEventAttributes?: components['schemas']['ExternalWorkflowExecutionSignaledEventAttributes'];
       /** @description Links associated with the event. */
@@ -2087,6 +2630,7 @@ export interface components {
       readonly workflowExecutionCompletedEventAttributes?: components['schemas']['WorkflowExecutionCompletedEventAttributes'];
       readonly workflowExecutionContinuedAsNewEventAttributes?: components['schemas']['WorkflowExecutionContinuedAsNewEventAttributes'];
       readonly workflowExecutionFailedEventAttributes?: components['schemas']['WorkflowExecutionFailedEventAttributes'];
+      readonly workflowExecutionOptionsUpdatedEventAttributes?: components['schemas']['WorkflowExecutionOptionsUpdatedEventAttributes'];
       readonly workflowExecutionSignaledEventAttributes?: components['schemas']['WorkflowExecutionSignaledEventAttributes'];
       readonly workflowExecutionStartedEventAttributes?: components['schemas']['WorkflowExecutionStartedEventAttributes'];
       readonly workflowExecutionTerminatedEventAttributes?: components['schemas']['WorkflowExecutionTerminatedEventAttributes'];
@@ -2166,6 +2710,12 @@ export interface components {
       /** @description BatchOperationInfo contains the basic info about batch operation */
       readonly operationInfo?: readonly components['schemas']['BatchOperationInfo'][];
     };
+    /** @description [cleanup-wv-pre-release] Pre-release deployment APIs, clean up later */
+    readonly ListDeploymentsResponse: {
+      readonly deployments?: readonly components['schemas']['DeploymentListInfo'][];
+      /** Format: bytes */
+      readonly nextPageToken?: string;
+    };
     readonly ListNamespacesResponse: {
       readonly namespaces?: readonly components['schemas']['DescribeNamespaceResponse'][];
       /** Format: bytes */
@@ -2216,6 +2766,19 @@ export interface components {
           | 'INDEXED_VALUE_TYPE_DATETIME'
           | 'INDEXED_VALUE_TYPE_KEYWORD_LIST';
       };
+    };
+    readonly ListWorkerDeploymentsResponse: {
+      /** Format: bytes */
+      readonly nextPageToken?: string;
+      /** @description The list of worker deployments. */
+      readonly workerDeployments?: readonly components['schemas']['ListWorkerDeploymentsResponse_WorkerDeploymentSummary'][];
+    };
+    /** @description A subset of WorkerDeploymentInfo */
+    readonly ListWorkerDeploymentsResponse_WorkerDeploymentSummary: {
+      /** Format: date-time */
+      readonly createTime?: string;
+      readonly name?: string;
+      readonly routingConfig?: components['schemas']['RoutingConfig'];
     };
     readonly ListWorkflowExecutionsResponse: {
       readonly executions?: readonly components['schemas']['WorkflowExecutionInfo'][];
@@ -2367,6 +2930,8 @@ export interface components {
       /** @description Serialized arguments to the workflow. */
       readonly input?: components['schemas']['Payloads'];
       readonly memo?: components['schemas']['Memo'];
+      /** @description Priority metadata */
+      readonly priority?: components['schemas']['Priority'];
       /** @description The retry policy for the workflow. Will never exceed `workflow_execution_timeout`. */
       readonly retryPolicy?: components['schemas']['RetryPolicy'];
       readonly searchAttributes?: components['schemas']['SearchAttributes'];
@@ -2377,6 +2942,11 @@ export interface components {
        *  workflow.
        */
       readonly userMetadata?: components['schemas']['UserMetadata'];
+      /**
+       * @description If set, takes precedence over the Versioning Behavior sent by the SDK on Workflow Task completion.
+       *  To unset the override after the workflow is running, use UpdateWorkflowExecutionOptions.
+       */
+      readonly versioningOverride?: components['schemas']['VersioningOverride'];
       /** @description Total workflow execution timeout including retries and continue as new. */
       readonly workflowExecutionTimeout?: string;
       readonly workflowId?: string;
@@ -2397,6 +2967,22 @@ export interface components {
       readonly workflowTaskTimeout?: string;
       readonly workflowType?: components['schemas']['WorkflowType'];
     };
+    readonly NexusHandlerFailureInfo: {
+      /**
+       * Format: enum
+       * @description Retry behavior, defaults to the retry behavior of the error type as defined in the spec.
+       * @enum {string}
+       */
+      readonly retryBehavior?:
+        | 'NEXUS_HANDLER_ERROR_RETRY_BEHAVIOR_UNSPECIFIED'
+        | 'NEXUS_HANDLER_ERROR_RETRY_BEHAVIOR_RETRYABLE'
+        | 'NEXUS_HANDLER_ERROR_RETRY_BEHAVIOR_NON_RETRYABLE';
+      /**
+       * @description The Nexus error type as defined in the spec:
+       *  https://github.com/nexus-rpc/api/blob/main/SPEC.md#predefined-handler-errors.
+       */
+      readonly type?: string;
+    };
     /** @description Nexus operation completed as canceled. May or may not have been due to a cancellation request by the workflow. */
     readonly NexusOperationCanceledEventAttributes: {
       /** @description Cancellation details. */
@@ -2414,6 +3000,8 @@ export interface components {
        *  This number represents a minimum bound since the attempt is incremented after the request completes.
        */
       readonly attempt?: number;
+      /** @description If the state is BLOCKED, blocked reason provides additional information. */
+      readonly blockedReason?: string;
       /**
        * Format: date-time
        * @description The time when the last attempt completed.
@@ -2441,7 +3029,8 @@ export interface components {
         | 'NEXUS_OPERATION_CANCELLATION_STATE_BACKING_OFF'
         | 'NEXUS_OPERATION_CANCELLATION_STATE_SUCCEEDED'
         | 'NEXUS_OPERATION_CANCELLATION_STATE_FAILED'
-        | 'NEXUS_OPERATION_CANCELLATION_STATE_TIMED_OUT';
+        | 'NEXUS_OPERATION_CANCELLATION_STATE_TIMED_OUT'
+        | 'NEXUS_OPERATION_CANCELLATION_STATE_BLOCKED';
     };
     readonly NexusOperationCancelRequestedEventAttributes: {
       /** @description The id of the `NEXUS_OPERATION_SCHEDULED` event this cancel request corresponds to. */
@@ -2478,8 +3067,14 @@ export interface components {
       readonly endpoint?: string;
       /** @description Operation name. */
       readonly operation?: string;
-      /** @description Operation ID - may be empty if the operation completed synchronously. */
+      /**
+       * @description Operation ID - may be empty if the operation completed synchronously.
+       *
+       *  Deprecated: Renamed to operation_token.
+       */
       readonly operationId?: string;
+      /** @description Operation token - may be empty if the operation completed synchronously. */
+      readonly operationToken?: string;
       /** @description The NexusOperationScheduled event ID. */
       readonly scheduledEventId?: string;
       /** @description Service name. */
@@ -2539,8 +3134,15 @@ export interface components {
       /**
        * @description The operation ID returned by the Nexus handler in the response to the StartOperation request.
        *  This ID is used when canceling the operation.
+       *
+       *  Deprecated: Renamed to operation_token.
        */
       readonly operationId?: string;
+      /**
+       * @description The operation token returned by the Nexus handler in the response to the StartOperation request.
+       *  This token is used when canceling the operation.
+       */
+      readonly operationToken?: string;
       /** @description The request ID allocated at schedule time. */
       readonly requestId?: string;
       /** @description The ID of the `NEXUS_OPERATION_SCHEDULED` event this task corresponds to. */
@@ -2554,6 +3156,20 @@ export interface components {
       readonly requestId?: string;
       /** @description The ID of the `NEXUS_OPERATION_SCHEDULED` event. Uniquely identifies this operation. */
       readonly scheduledEventId?: string;
+    };
+    /**
+     * @description When StartWorkflowExecution uses the conflict policy WORKFLOW_ID_CONFLICT_POLICY_USE_EXISTING and
+     *  there is already an existing running workflow, OnConflictOptions defines actions to be taken on
+     *  the existing running workflow. In this case, it will create a WorkflowExecutionOptionsUpdatedEvent
+     *  history event in the running workflow with the changes requested in this object.
+     */
+    readonly OnConflictOptions: {
+      /** @description Attaches the completion callbacks to the running workflow. */
+      readonly attachCompletionCallbacks?: boolean;
+      /** @description Attaches the links to the WorkflowExecutionOptionsUpdatedEvent history event. */
+      readonly attachLinks?: boolean;
+      /** @description Attaches the request ID to the running workflow. */
+      readonly attachRequestId?: boolean;
     };
     /** @description The outcome of a Workflow Update: success or failure. */
     readonly Outcome: {
@@ -2572,6 +3188,19 @@ export interface components {
       readonly scheduleId?: string;
     };
     readonly PatchScheduleResponse: Record<string, unknown>;
+    readonly PauseActivityRequest: {
+      /** @description Execution info of the workflow which scheduled this activity */
+      readonly execution?: components['schemas']['WorkflowExecution'];
+      /** @description Only the activity with this ID will be paused. */
+      readonly id?: string;
+      /** @description The identity of the client who initiated this request. */
+      readonly identity?: string;
+      /** @description Namespace of the workflow which scheduled this activity. */
+      readonly namespace?: string;
+      /** @description Pause all running activities of this type. */
+      readonly type?: string;
+    };
+    readonly PauseActivityResponse: Record<string, unknown>;
     /**
      * @description Represents some binary (byte array) data (ex: activity input parameters or workflow result) with
      *  metadata which describes this binary data (format, encoding, encryption, etc). Serialization
@@ -2602,6 +3231,12 @@ export interface components {
        * @description The time when the last activity attempt was completed. If activity has not been completed yet then it will be null.
        */
       readonly lastAttemptCompleteTime?: string;
+      /**
+       * @description The deployment this activity was dispatched to most recently. Present only if the activity
+       *  was dispatched to a versioned worker.
+       *  Deprecated. Use `last_worker_deployment_version`.
+       */
+      readonly lastDeployment?: components['schemas']['Deployment'];
       readonly lastFailure?: components['schemas']['Failure'];
       /** Format: date-time */
       readonly lastHeartbeatTime?: string;
@@ -2614,8 +3249,13 @@ export interface components {
       readonly lastIndependentlyAssignedBuildId?: string;
       /** Format: date-time */
       readonly lastStartedTime?: string;
+      /** @description The Worker Deployment Version this activity was dispatched to most recently. */
+      readonly lastWorkerDeploymentVersion?: string;
       readonly lastWorkerIdentity?: string;
-      /** @description The version stamp of the worker to whom this activity was most recently dispatched */
+      /**
+       * @description The version stamp of the worker to whom this activity was most recently dispatched
+       *  Deprecated. This field should be cleaned up when versioning-2 API is removed. [cleanup-experimental-wv]
+       */
       readonly lastWorkerVersionStamp?: components['schemas']['WorkerVersionStamp'];
       /** Format: int32 */
       readonly maximumAttempts?: number;
@@ -2625,6 +3265,10 @@ export interface components {
        *  If activity is currently scheduled or started it will be null.
        */
       readonly nextAttemptScheduleTime?: string;
+      /** @description Indicates if activity is paused. */
+      readonly paused?: boolean;
+      /** @description Priority metadata */
+      readonly priority?: components['schemas']['Priority'];
       /** Format: date-time */
       readonly scheduledTime?: string;
       /**
@@ -2661,6 +3305,8 @@ export interface components {
        *  This number represents a minimum bound since the attempt is incremented after the request completes.
        */
       readonly attempt?: number;
+      /** @description If the state is BLOCKED, blocked reason provides additional information. */
+      readonly blockedReason?: string;
       readonly cancellationInfo?: components['schemas']['NexusOperationCancellationInfo'];
       /**
        * @description Endpoint name.
@@ -2681,8 +3327,14 @@ export interface components {
       readonly nextAttemptScheduleTime?: string;
       /** @description Operation name. */
       readonly operation?: string;
-      /** @description Operation ID. Only set for asynchronous operations after a successful StartOperation call. */
+      /**
+       * @description Operation ID. Only set for asynchronous operations after a successful StartOperation call.
+       *
+       *  Deprecated: Renamed to operation_token.
+       */
       readonly operationId?: string;
+      /** @description Operation token. Only set for asynchronous operations after a successful StartOperation call. */
+      readonly operationToken?: string;
       /**
        * @description The event ID of the NexusOperationScheduled event. Can be used to correlate an operation in the
        *  DescribeWorkflowExecution response with workflow history.
@@ -2710,7 +3362,8 @@ export interface components {
         | 'PENDING_NEXUS_OPERATION_STATE_UNSPECIFIED'
         | 'PENDING_NEXUS_OPERATION_STATE_SCHEDULED'
         | 'PENDING_NEXUS_OPERATION_STATE_BACKING_OFF'
-        | 'PENDING_NEXUS_OPERATION_STATE_STARTED';
+        | 'PENDING_NEXUS_OPERATION_STATE_STARTED'
+        | 'PENDING_NEXUS_OPERATION_STATE_BLOCKED';
     };
     readonly PendingWorkflowTaskInfo: {
       /** Format: int32 */
@@ -2737,6 +3390,8 @@ export interface components {
         | 'PENDING_WORKFLOW_TASK_STATE_STARTED';
     };
     readonly PollerInfo: {
+      /** @description Worker deployment options that SDK sent to server. */
+      readonly deploymentOptions?: components['schemas']['WorkerDeploymentOptions'];
       readonly identity?: string;
       /** Format: date-time */
       readonly lastAccessTime?: string;
@@ -2745,8 +3400,25 @@ export interface components {
       /**
        * @description If a worker has opted into the worker versioning feature while polling, its capabilities will
        *  appear here.
+       *  Deprecated. Replaced by deployment_options.
        */
       readonly workerVersionCapabilities?: components['schemas']['WorkerVersionCapabilities'];
+    };
+    /**
+     * @description Attached to task responses to give hints to the SDK about how it may adjust its number of
+     *  pollers.
+     */
+    readonly PollerScalingDecision: {
+      /**
+       * Format: int32
+       * @description How many poll requests to suggest should be added or removed, if any. As of now, server only
+       *  scales up or down by 1. However, SDKs should allow for other values (while staying within
+       *  defined min/max).
+       *
+       *  The SDK is free to ignore this suggestion, EX: making more polls would not make sense because
+       *  all slots are already occupied.
+       */
+      readonly pollRequestDeltaSuggestion?: number;
     };
     readonly PollWorkflowTaskQueueResponse: {
       /**
@@ -2781,6 +3453,8 @@ export interface components {
        *  should be fetched via `GetWorkflowExecutionHistory`.
        */
       readonly nextPageToken?: string;
+      /** @description Server-advised information the SDK may use to adjust its poller count. */
+      readonly pollerScalingDecision?: components['schemas']['PollerScalingDecision'];
       /**
        * @description The last workflow task started event which was processed by some worker for this execution.
        *  Will be zero if no task has ever started.
@@ -2829,6 +3503,43 @@ export interface components {
        */
       readonly workflowExecutionTaskQueue?: components['schemas']['TaskQueue'];
       readonly workflowType?: components['schemas']['WorkflowType'];
+    };
+    /**
+     * @description Priority contains metadata that controls relative ordering of task processing
+     *  when tasks are backlogged in a queue. Initially, Priority will be used in
+     *  activity and workflow task queues, which are typically where backlogs exist.
+     *  Other queues in the server (such as transfer and timer queues) and rate
+     *  limiting decisions do not use Priority, but may in the future.
+     *
+     *  Priority is attached to workflows and activities. Activities and child
+     *  workflows inherit Priority from the workflow that created them, but may
+     *  override fields when they are started or modified. For each field of a
+     *  Priority on an activity/workflow, not present or equal to zero/empty string
+     *  means to inherit the value from the calling workflow, or if there is no
+     *  calling workflow, then use the default (documented below).
+     *
+     *  Despite being named "Priority", this message will also contains fields that
+     *  control "fairness" mechanisms.
+     *
+     *  The overall semantics of Priority are:
+     *  1. First, consider "priority_key": lower number goes first.
+     *  (more will be added here later)
+     */
+    readonly Priority: {
+      /**
+       * Format: int32
+       * @description Priority key is a positive integer from 1 to n, where smaller integers
+       *  correspond to higher priorities (tasks run sooner). In general, tasks in
+       *  a queue should be processed in close to priority order, although small
+       *  deviations are possible.
+       *
+       *  The maximum priority value (minimum priority) is determined by server
+       *  configuration, and defaults to 5.
+       *
+       *  The default priority is (min+max)/2. With the default max of 5 and min of
+       *  1, that comes out to 3.
+       */
+      readonly priorityKey?: number;
     };
     readonly QueryRejected: {
       /**
@@ -2910,6 +3621,8 @@ export interface components {
       readonly workflowId?: string;
     };
     readonly RecordActivityTaskHeartbeatByIdResponse: {
+      /** @description Will be set to true if the activity is paused. */
+      readonly activityPaused?: boolean;
       /**
        * @description Will be set to true if the activity has been asked to cancel itself. The SDK should then
        *  notify the activity of cancellation if it is still running.
@@ -2929,6 +3642,8 @@ export interface components {
       readonly taskToken?: string;
     };
     readonly RecordActivityTaskHeartbeatResponse: {
+      /** @description Will be set to true if the activity is paused. */
+      readonly activityPaused?: boolean;
       /**
        * @description Will be set to true if the activity has been asked to cancel itself. The SDK should then
        *  notify the activity of cancellation if it is still running.
@@ -3047,6 +3762,31 @@ export interface components {
       readonly workflowExecution?: components['schemas']['WorkflowExecution'];
     };
     readonly RequestCancelWorkflowExecutionResponse: Record<string, unknown>;
+    readonly ResetActivityRequest: {
+      /** @description Execution info of the workflow which scheduled this activity */
+      readonly execution?: components['schemas']['WorkflowExecution'];
+      /** @description Only activity with this ID will be reset. */
+      readonly id?: string;
+      /** @description The identity of the client who initiated this request. */
+      readonly identity?: string;
+      /**
+       * @description If set, and activity is in backoff, the activity will start at a random time within the specified jitter duration.
+       *  (unless it is paused and keep_paused is set)
+       */
+      readonly jitter?: string;
+      /** @description if activity is paused, it will remain paused after reset */
+      readonly keepPaused?: boolean;
+      /** @description Namespace of the workflow which scheduled this activity. */
+      readonly namespace?: string;
+      /**
+       * @description Indicates that activity should reset heartbeat details.
+       *  This flag will be applied only to the new instance of the activity.
+       */
+      readonly resetHeartbeat?: boolean;
+      /** @description Reset all running activities with of this type. */
+      readonly type?: string;
+    };
+    readonly ResetActivityResponse: Record<string, unknown>;
     /**
      * @description Describes where and how to reset a workflow, used for batch reset currently
      *  and may be used for single-workflow reset later.
@@ -3071,6 +3811,7 @@ export interface components {
         | 'RESET_REAPPLY_EXCLUDE_TYPE_SIGNAL'
         | 'RESET_REAPPLY_EXCLUDE_TYPE_UPDATE'
         | 'RESET_REAPPLY_EXCLUDE_TYPE_NEXUS'
+        | 'RESET_REAPPLY_EXCLUDE_TYPE_CANCEL_REQUEST'
       )[];
       /**
        * Format: enum
@@ -3130,6 +3871,7 @@ export interface components {
         | 'RESET_REAPPLY_EXCLUDE_TYPE_SIGNAL'
         | 'RESET_REAPPLY_EXCLUDE_TYPE_UPDATE'
         | 'RESET_REAPPLY_EXCLUDE_TYPE_NEXUS'
+        | 'RESET_REAPPLY_EXCLUDE_TYPE_CANCEL_REQUEST'
       )[];
       /**
        * Format: enum
@@ -3142,6 +3884,11 @@ export interface components {
         | 'RESET_REAPPLY_TYPE_SIGNAL'
         | 'RESET_REAPPLY_TYPE_NONE'
         | 'RESET_REAPPLY_TYPE_ALL_ELIGIBLE';
+      /**
+       * @description The workflow to reset. If this contains a run ID then the workflow will be reset back to the
+       *  provided event ID in that run. Otherwise it will be reset to the provided event ID in the
+       *  current run. In all cases the current run will be terminated and a new run started.
+       */
       readonly workflowExecution?: components['schemas']['WorkflowExecution'];
       /**
        * @description The id of a `WORKFLOW_TASK_COMPLETED`,`WORKFLOW_TASK_TIMED_OUT`, `WORKFLOW_TASK_FAILED`, or
@@ -3171,6 +3918,14 @@ export interface components {
     };
     readonly RespondActivityTaskCanceledByIdResponse: Record<string, unknown>;
     readonly RespondActivityTaskCanceledRequest: {
+      /**
+       * @description Deployment info of the worker that completed this task. Must be present if user has set
+       *  `WorkerDeploymentOptions` regardless of versioning being enabled or not.
+       *  Deprecated. Replaced with `deployment_options`.
+       */
+      readonly deployment?: components['schemas']['Deployment'];
+      /** @description Worker deployment options that user has set in the worker. */
+      readonly deploymentOptions?: components['schemas']['WorkerDeploymentOptions'];
       /** @description Serialized additional information to attach to the cancellation */
       readonly details?: components['schemas']['Payloads'];
       /** @description The identity of the worker/client */
@@ -3185,6 +3940,7 @@ export interface components {
        * @description Version info of the worker who processed this task. This message's `build_id` field should
        *  always be set by SDKs. Workers opting into versioning will also set the `use_versioning`
        *  field to true. See message docstrings for more.
+       *  Deprecated. Use `deployment` instead.
        */
       readonly workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
@@ -3205,6 +3961,14 @@ export interface components {
     };
     readonly RespondActivityTaskCompletedByIdResponse: Record<string, unknown>;
     readonly RespondActivityTaskCompletedRequest: {
+      /**
+       * @description Deployment info of the worker that completed this task. Must be present if user has set
+       *  `WorkerDeploymentOptions` regardless of versioning being enabled or not.
+       *  Deprecated. Replaced with `deployment_options`.
+       */
+      readonly deployment?: components['schemas']['Deployment'];
+      /** @description Worker deployment options that user has set in the worker. */
+      readonly deploymentOptions?: components['schemas']['WorkerDeploymentOptions'];
       /** @description The identity of the worker/client */
       readonly identity?: string;
       readonly namespace?: string;
@@ -3219,6 +3983,7 @@ export interface components {
        * @description Version info of the worker who processed this task. This message's `build_id` field should
        *  always be set by SDKs. Workers opting into versioning will also set the `use_versioning`
        *  field to true. See message docstrings for more.
+       *  Deprecated. Use `deployment` instead.
        */
       readonly workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
@@ -3247,6 +4012,14 @@ export interface components {
       readonly failures?: readonly components['schemas']['Failure'][];
     };
     readonly RespondActivityTaskFailedRequest: {
+      /**
+       * @description Deployment info of the worker that completed this task. Must be present if user has set
+       *  `WorkerDeploymentOptions` regardless of versioning being enabled or not.
+       *  Deprecated. Replaced with `deployment_options`.
+       */
+      readonly deployment?: components['schemas']['Deployment'];
+      /** @description Worker deployment options that user has set in the worker. */
+      readonly deploymentOptions?: components['schemas']['WorkerDeploymentOptions'];
       /** @description Detailed failure information */
       readonly failure?: components['schemas']['Failure'];
       /** @description The identity of the worker/client */
@@ -3263,6 +4036,7 @@ export interface components {
        * @description Version info of the worker who processed this task. This message's `build_id` field should
        *  always be set by SDKs. Workers opting into versioning will also set the `use_versioning`
        *  field to true. See message docstrings for more.
+       *  Deprecated. Use `deployment` instead.
        */
       readonly workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
@@ -3301,6 +4075,53 @@ export interface components {
        */
       readonly nonRetryableErrorTypes?: readonly string[];
     };
+    readonly RoutingConfig: {
+      /**
+       * @description Always present. Specifies which Deployment Version should should receive new workflow
+       *  executions and tasks of existing unversioned or AutoUpgrade workflows.
+       *  Can be one of the following:
+       *  - A Deployment Version identifier in the form "<deployment_name>.<build_id>".
+       *  - Or, the "__unversioned__" special value, to represent all the unversioned workers (those
+       *    with `UNVERSIONED` (or unspecified) `WorkerVersioningMode`.)
+       *  Note: Current Version is overridden by the Ramping Version for a portion of traffic when a ramp
+       *  is set (see `ramping_version`.)
+       */
+      readonly currentVersion?: string;
+      /**
+       * Format: date-time
+       * @description Last time current version was changed.
+       */
+      readonly currentVersionChangedTime?: string;
+      /**
+       * @description When present, it means the traffic is being shifted from the Current Version to the Ramping
+       *  Version.
+       *  Must always be different from Current Version. Can be one of the following:
+       *  - A Deployment Version identifier in the form "<deployment_name>.<build_id>".
+       *  - Or, the "__unversioned__" special value, to represent all the unversioned workers (those
+       *    with `UNVERSIONED` (or unspecified) `WorkerVersioningMode`.)
+       *  Note that it is possible to ramp from one Version to another Version, or from unversioned
+       *  workers to a particular Version, or from a particular Version to unversioned workers.
+       */
+      readonly rampingVersion?: string;
+      /**
+       * Format: date-time
+       * @description Last time ramping version was changed. Not updated if only the ramp percentage changes.
+       */
+      readonly rampingVersionChangedTime?: string;
+      /**
+       * Format: float
+       * @description Percentage of tasks that are routed to the Ramping Version instead of the Current Version.
+       *  Valid range: [0, 100]. A 100% value means the Ramping Version is receiving full traffic but
+       *  not yet "promoted" to be the Current Version, likely due to pending validations.
+       */
+      readonly rampingVersionPercentage?: number;
+      /**
+       * Format: date-time
+       * @description Last time ramping version percentage was changed.
+       *  If ramping version is changed, this is also updated, even if the percentage stays the same.
+       */
+      readonly rampingVersionPercentageChangedTime?: string;
+    };
     readonly Schedule: {
       readonly action?: components['schemas']['ScheduleAction'];
       readonly policies?: components['schemas']['SchedulePolicies'];
@@ -3330,6 +4151,21 @@ export interface components {
       readonly scheduleTime?: string;
       /** @description If action was start_workflow: */
       readonly startWorkflowResult?: components['schemas']['WorkflowExecution'];
+      /**
+       * Format: enum
+       * @description If the action was start_workflow, this field will reflect an
+       *  eventually-consistent view of the started workflow's status.
+       * @enum {string}
+       */
+      readonly startWorkflowStatus?:
+        | 'WORKFLOW_EXECUTION_STATUS_UNSPECIFIED'
+        | 'WORKFLOW_EXECUTION_STATUS_RUNNING'
+        | 'WORKFLOW_EXECUTION_STATUS_COMPLETED'
+        | 'WORKFLOW_EXECUTION_STATUS_FAILED'
+        | 'WORKFLOW_EXECUTION_STATUS_CANCELED'
+        | 'WORKFLOW_EXECUTION_STATUS_TERMINATED'
+        | 'WORKFLOW_EXECUTION_STATUS_CONTINUED_AS_NEW'
+        | 'WORKFLOW_EXECUTION_STATUS_TIMED_OUT';
     };
     readonly ScheduleInfo: {
       /** @description Number of actions taken so far. */
@@ -3580,6 +4416,143 @@ export interface components {
     readonly ServerFailureInfo: {
       readonly nonRetryable?: boolean;
     };
+    /** @description [cleanup-wv-pre-release] Pre-release deployment APIs, clean up later */
+    readonly SetCurrentDeploymentRequest: {
+      readonly deployment?: components['schemas']['Deployment'];
+      /** @description Optional. The identity of the client who initiated this request. */
+      readonly identity?: string;
+      readonly namespace?: string;
+      /**
+       * @description Optional. Use to add or remove user-defined metadata entries. Metadata entries are exposed
+       *  when describing a deployment. It is a good place for information such as operator name,
+       *  links to internal deployment pipelines, etc.
+       */
+      readonly updateMetadata?: components['schemas']['UpdateDeploymentMetadata'];
+    };
+    /** @description [cleanup-wv-pre-release] Pre-release deployment APIs, clean up later */
+    readonly SetCurrentDeploymentResponse: {
+      readonly currentDeploymentInfo?: components['schemas']['DeploymentInfo'];
+      /** @description Info of the deployment that was current before executing this operation. */
+      readonly previousDeploymentInfo?: components['schemas']['DeploymentInfo'];
+    };
+    /** @description Set/unset the Current Version of a Worker Deployment. */
+    readonly SetWorkerDeploymentCurrentVersionRequest: {
+      /**
+       * Format: bytes
+       * @description Optional. This can be the value of conflict_token from a Describe, or another Worker
+       *  Deployment API. Passing a non-nil conflict token will cause this request to fail if the
+       *  Deployment's configuration has been modified between the API call that generated the
+       *  token and this one.
+       */
+      readonly conflictToken?: string;
+      readonly deploymentName?: string;
+      /** @description Optional. The identity of the client who initiated this request. */
+      readonly identity?: string;
+      /**
+       * @description Optional. By default this request would be rejected if not all the expected Task Queues are
+       *  being polled by the new Version, to protect against accidental removal of Task Queues, or
+       *  worker health issues. Pass `true` here to bypass this protection.
+       *  The set of expected Task Queues is the set of all the Task Queues that were ever poller by
+       *  the existing Current Version of the Deployment, with the following exclusions:
+       *    - Task Queues that are not used anymore (inferred by having empty backlog and a task
+       *      add_rate of 0.)
+       *    - Task Queues that are moved to another Worker Deployment (inferred by the Task Queue
+       *      having a different Current Version than the Current Version of this deployment.)
+       *  WARNING: Do not set this flag unless you are sure that the missing task queue pollers are not
+       *  needed. If the request is unexpectedly rejected due to missing pollers, then that means the
+       *  pollers have not reached to the server yet. Only set this if you expect those pollers to
+       *  never arrive.
+       */
+      readonly ignoreMissingTaskQueues?: boolean;
+      readonly namespace?: string;
+      /**
+       * @description Required. Can be one of the following:
+       *  - A Deployment Version identifier in the form "<deployment_name>.<build_id>".
+       *  - Or, the "__unversioned__" special value, to represent all the unversioned workers (those
+       *    with `UNVERSIONED` (or unspecified) `WorkerVersioningMode`.)
+       */
+      readonly version?: string;
+    };
+    readonly SetWorkerDeploymentCurrentVersionResponse: {
+      /**
+       * Format: bytes
+       * @description This value is returned so that it can be optionally passed to APIs
+       *  that write to the Worker Deployment state to ensure that the state
+       *  did not change between this API call and a future write.
+       */
+      readonly conflictToken?: string;
+      /**
+       * @description The version that was current before executing this operation, in the form
+       *  "<deployment_name>.<build_id>". Can also be the `__unversioned__` special value.
+       */
+      readonly previousVersion?: string;
+    };
+    /** @description Set/unset the Ramping Version of a Worker Deployment and its ramp percentage. */
+    readonly SetWorkerDeploymentRampingVersionRequest: {
+      /**
+       * Format: bytes
+       * @description Optional. This can be the value of conflict_token from a Describe, or another Worker
+       *  Deployment API. Passing a non-nil conflict token will cause this request to fail if the
+       *  Deployment's configuration has been modified between the API call that generated the
+       *  token and this one.
+       */
+      readonly conflictToken?: string;
+      readonly deploymentName?: string;
+      /** @description Optional. The identity of the client who initiated this request. */
+      readonly identity?: string;
+      /**
+       * @description Optional. By default this request would be rejected if not all the expected Task Queues are
+       *  being polled by the new Version, to protect against accidental removal of Task Queues, or
+       *  worker health issues. Pass `true` here to bypass this protection.
+       *  The set of expected Task Queues equals to all the Task Queues ever polled from the existing
+       *  Current Version of the Deployment, with the following exclusions:
+       *    - Task Queues that are not used anymore (inferred by having empty backlog and a task
+       *      add_rate of 0.)
+       *    - Task Queues that are moved to another Worker Deployment (inferred by the Task Queue
+       *      having a different Current Version than the Current Version of this deployment.)
+       *  WARNING: Do not set this flag unless you are sure that the missing task queue poller are not
+       *  needed. If the request is unexpectedly rejected due to missing pollers, then that means the
+       *  pollers have not reached to the server yet. Only set this if you expect those pollers to
+       *  never arrive.
+       *  Note: this check only happens when the ramping version is about to change, not every time
+       *  that the percentage changes. Also note that the check is against the deployment's Current
+       *  Version, not the previous Ramping Version.
+       */
+      readonly ignoreMissingTaskQueues?: boolean;
+      readonly namespace?: string;
+      /**
+       * Format: float
+       * @description Ramp percentage to set. Valid range: [0,100].
+       */
+      readonly percentage?: number;
+      /**
+       * @description Can be one of the following:
+       *  - Absent/empty value to unset the Ramping Version. Must be paired with `percentage=0`.
+       *  - A Deployment Version identifier in the form "<deployment_name>.<build_id>".
+       *  - Or, the "__unversioned__" special value, to represent all the unversioned workers (those
+       *    with `UNVERSIONED` (or unspecified) `WorkerVersioningMode`.)
+       */
+      readonly version?: string;
+    };
+    readonly SetWorkerDeploymentRampingVersionResponse: {
+      /**
+       * Format: bytes
+       * @description This value is returned so that it can be optionally passed to APIs
+       *  that write to the Worker Deployment state to ensure that the state
+       *  did not change between this API call and a future write.
+       */
+      readonly conflictToken?: string;
+      /**
+       * Format: float
+       * @description The ramping version percentage before executing this operation.
+       */
+      readonly previousPercentage?: number;
+      /**
+       * @description The version that was ramping before executing this operation, in the form
+       *  "<deployment_name>.<build_id>". Can also be the `__unversioned__` special value.
+       */
+      readonly previousVersion?: string;
+    };
     readonly SignalExternalWorkflowExecutionFailedEventAttributes: {
       /**
        * Format: enum
@@ -3640,6 +4613,8 @@ export interface components {
       readonly links?: readonly components['schemas']['Link'][];
       readonly memo?: components['schemas']['Memo'];
       readonly namespace?: string;
+      /** @description Priority metadata */
+      readonly priority?: components['schemas']['Priority'];
       /** @description Used to de-dupe signal w/ start requests */
       readonly requestId?: string;
       /** @description Retry policy for the workflow */
@@ -3649,8 +4624,6 @@ export interface components {
       readonly signalInput?: components['schemas']['Payloads'];
       /** @description The workflow author-defined name of the signal to send to the workflow */
       readonly signalName?: string;
-      /** @description Indicates that a new workflow task should not be generated when this signal is received. */
-      readonly skipGenerateWorkflowTask?: boolean;
       /** @description The task queue to start this workflow on, if it will be started */
       readonly taskQueue?: components['schemas']['TaskQueue'];
       /**
@@ -3659,6 +4632,11 @@ export interface components {
        *  workflow.
        */
       readonly userMetadata?: components['schemas']['UserMetadata'];
+      /**
+       * @description If set, takes precedence over the Versioning Behavior sent by the SDK on Workflow Task completion.
+       *  To unset the override after the workflow is running, use UpdateWorkflowExecutionOptions.
+       */
+      readonly versioningOverride?: components['schemas']['VersioningOverride'];
       /** @description Total workflow execution timeout including retries and continue as new */
       readonly workflowExecutionTimeout?: string;
       readonly workflowId?: string;
@@ -3695,10 +4673,9 @@ export interface components {
       /**
        * @description Time to wait before dispatching the first workflow task. Cannot be used with `cron_schedule`.
        *  Note that the signal will be delivered with the first workflow task. If the workflow gets
-       *  another SignalWithStartWorkflow before the delay and `skip_generate_workflow_task` is false
-       *  or not set, a workflow task will be dispatched immediately and the rest of the delay period
-       *  will be ignored, even if that request also had a delay. Signal via SignalWorkflowExecution
-       *  will not unblock the workflow.
+       *  another SignalWithStartWorkflow before the delay a workflow task will be dispatched immediately
+       *  and the rest of the delay period will be ignored, even if that request also had a delay.
+       *  Signal via SignalWorkflowExecution will not unblock the workflow.
        */
       readonly workflowStartDelay?: string;
       /** @description Timeout of a single workflow task */
@@ -3730,8 +4707,6 @@ export interface components {
       readonly requestId?: string;
       /** @description The workflow author-defined name of the signal to send to the workflow */
       readonly signalName?: string;
-      /** @description Indicates that a new workflow task should not be generated when this signal is received. */
-      readonly skipGenerateWorkflowTask?: boolean;
       readonly workflowExecution?: components['schemas']['WorkflowExecution'];
     };
     readonly SignalWorkflowExecutionResponse: Record<string, unknown>;
@@ -3762,6 +4737,8 @@ export interface components {
       readonly resetOperation?: components['schemas']['BatchOperationReset'];
       readonly signalOperation?: components['schemas']['BatchOperationSignal'];
       readonly terminationOperation?: components['schemas']['BatchOperationTermination'];
+      readonly unpauseActivitiesOperation?: components['schemas']['BatchOperationUnpauseActivities'];
+      readonly updateWorkflowOptionsOperation?: components['schemas']['BatchOperationUpdateWorkflowExecutionOptions'];
       /**
        * @description Visibility query defines the the group of workflow to apply the batch operation
        *  This field and `executions` are mutually exclusive
@@ -3822,6 +4799,8 @@ export interface components {
         | 'PARENT_CLOSE_POLICY_TERMINATE'
         | 'PARENT_CLOSE_POLICY_ABANDON'
         | 'PARENT_CLOSE_POLICY_REQUEST_CANCEL';
+      /** @description Priority metadata */
+      readonly priority?: components['schemas']['Priority'];
       readonly retryPolicy?: components['schemas']['RetryPolicy'];
       readonly searchAttributes?: components['schemas']['SearchAttributes'];
       readonly taskQueue?: components['schemas']['TaskQueue'];
@@ -3874,6 +4853,15 @@ export interface components {
       readonly memo?: components['schemas']['Memo'];
       readonly namespace?: string;
       /**
+       * @description Defines actions to be done to the existing running workflow when the conflict policy
+       *  WORKFLOW_ID_CONFLICT_POLICY_USE_EXISTING is used. If not set (ie., nil value) or set to a
+       *  empty object (ie., all options with default value), it won't do anything to the existing
+       *  running workflow. If set, it will add a history event to the running workflow.
+       */
+      readonly onConflictOptions?: components['schemas']['OnConflictOptions'];
+      /** @description Priority metadata */
+      readonly priority?: components['schemas']['Priority'];
+      /**
        * @description Request to get the first workflow task inline in the response bypassing matching service and worker polling.
        *  If set to `true` the caller is expected to have a worker available and capable of processing the task.
        *  The returned task will be marked as started and is expected to be completed by the specified
@@ -3892,6 +4880,11 @@ export interface components {
        *  workflow.
        */
       readonly userMetadata?: components['schemas']['UserMetadata'];
+      /**
+       * @description If set, takes precedence over the Versioning Behavior sent by the SDK on Workflow Task completion.
+       *  To unset the override after the workflow is running, use UpdateWorkflowExecutionOptions.
+       */
+      readonly versioningOverride?: components['schemas']['VersioningOverride'];
       /** @description Total workflow execution timeout including retries and continue as new. */
       readonly workflowExecutionTimeout?: string;
       readonly workflowId?: string;
@@ -4140,6 +5133,43 @@ export interface components {
         [key: string]: components['schemas']['TaskQueueTypeInfo'];
       };
     };
+    /** @description Experimental. Worker Deployments are experimental and might significantly change in the future. */
+    readonly TaskQueueVersioningInfo: {
+      /**
+       * @description Always present. Specifies which Deployment Version should receive new workflow
+       *  executions and tasks of existing unversioned or AutoUpgrade workflows.
+       *  Can be one of the following:
+       *  - A Deployment Version identifier in the form "<deployment_name>.<build_id>".
+       *  - Or, the "__unversioned__" special value, to represent all the unversioned workers (those
+       *    with `UNVERSIONED` (or unspecified) `WorkerVersioningMode`.)
+       *  Note: Current Version is overridden by the Ramping Version for a portion of traffic when a ramp
+       *  is set (see `ramping_version`.)
+       */
+      readonly currentVersion?: string;
+      /**
+       * @description When present, it means the traffic is being shifted from the Current Version to the Ramping
+       *  Version.
+       *  Must always be different from `current_version`. Can be one of the following:
+       *  - A Deployment Version identifier in the form "<deployment_name>.<build_id>".
+       *  - Or, the "__unversioned__" special value, to represent all the unversioned workers (those
+       *    with `UNVERSIONED` (or unspecified) `WorkerVersioningMode`.)
+       *  Note that it is possible to ramp from one Version to another Version, or from unversioned
+       *  workers to a particular Version, or from a particular Version to unversioned workers.
+       */
+      readonly rampingVersion?: string;
+      /**
+       * Format: float
+       * @description Percentage of tasks that are routed to the Ramping Version instead of the Current Version.
+       *  Valid range: [0, 100]. A 100% value means the Ramping Version is receiving full traffic but
+       *  not yet "promoted" to be the Current Version, likely due to pending validations.
+       */
+      readonly rampingVersionPercentage?: number;
+      /**
+       * Format: date-time
+       * @description Last time versioning information of this Task Queue changed.
+       */
+      readonly updateTime?: string;
+    };
     readonly TerminatedFailureInfo: Record<string, unknown>;
     readonly TerminateWorkflowExecutionRequest: {
       /** @description Serialized additional information to attach to the termination event */
@@ -4226,31 +5256,60 @@ export interface components {
         | 'SCHEDULE_OVERLAP_POLICY_TERMINATE_OTHER'
         | 'SCHEDULE_OVERLAP_POLICY_ALLOW_ALL';
     };
-    readonly UpdateActivityOptionsByIdRequest: {
-      /** @description Id of the activity we're updating */
-      readonly activityId?: string;
+    readonly UnpauseActivityRequest: {
+      /** @description Execution info of the workflow which scheduled this activity */
+      readonly execution?: components['schemas']['WorkflowExecution'];
+      /** @description Only the activity with this ID will be unpaused. */
+      readonly id?: string;
+      /** @description The identity of the client who initiated this request. */
+      readonly identity?: string;
+      /** @description If set, the activity will start at a random time within the specified jitter duration. */
+      readonly jitter?: string;
+      /** @description Namespace of the workflow which scheduled this activity. */
+      readonly namespace?: string;
+      /** @description Providing this flag will also reset the number of attempts. */
+      readonly resetAttempts?: boolean;
+      /** @description Providing this flag will also reset the heartbeat details. */
+      readonly resetHeartbeat?: boolean;
+      /** @description Unpause all running activities with of this type. */
+      readonly type?: string;
+      /** @description Unpause all running activities. */
+      readonly unpauseAll?: boolean;
+    };
+    readonly UnpauseActivityResponse: Record<string, unknown>;
+    readonly UpdateActivityOptionsRequest: {
       /** @description Activity options. Partial updates are accepted and controlled by update_mask */
       readonly activityOptions?: components['schemas']['ActivityOptions'];
+      /** @description Execution info of the workflow which scheduled this activity */
+      readonly execution?: components['schemas']['WorkflowExecution'];
+      /** @description Only activity with this ID will be updated. */
+      readonly id?: string;
       /** @description The identity of the client who initiated this request */
       readonly identity?: string;
       /** @description Namespace of the workflow which scheduled this activity */
       readonly namespace?: string;
-      /**
-       * @description Run Id of the workflow which scheduled this activity
-       *  if empty - latest workflow is used
-       */
-      readonly runId?: string;
+      /** @description Update all running activities of this type. */
+      readonly type?: string;
       /**
        * Format: field-mask
        * @description Controls which fields from `activity_options` will be applied
        */
       readonly updateMask?: string;
-      /** @description Id of the workflow which scheduled this activity */
-      readonly workflowId?: string;
     };
-    readonly UpdateActivityOptionsByIdResponse: {
+    readonly UpdateActivityOptionsResponse: {
       /** @description Activity options after an update */
       readonly activityOptions?: components['schemas']['ActivityOptions'];
+    };
+    /**
+     * @description Used as part of Deployment write APIs to update metadata attached to a deployment.
+     *  Deprecated.
+     */
+    readonly UpdateDeploymentMetadata: {
+      /** @description List of keys to remove from the metadata. */
+      readonly removeEntries?: readonly string[];
+      readonly upsertEntries?: {
+        [key: string]: components['schemas']['Payload'];
+      };
     };
     readonly UpdateNamespaceInfo: {
       /**
@@ -4343,6 +5402,43 @@ export interface components {
       readonly searchAttributes?: components['schemas']['SearchAttributes'];
     };
     readonly UpdateScheduleResponse: Record<string, unknown>;
+    /** @description Used to update the user-defined metadata of a Worker Deployment Version. */
+    readonly UpdateWorkerDeploymentVersionMetadataRequest: {
+      readonly namespace?: string;
+      /** @description List of keys to remove from the metadata. */
+      readonly removeEntries?: readonly string[];
+      readonly upsertEntries?: {
+        [key: string]: components['schemas']['Payload'];
+      };
+      /** @description Deployment Version identifier in the form "<deployment_name>.<build_id>". */
+      readonly version?: string;
+    };
+    readonly UpdateWorkerDeploymentVersionMetadataResponse: {
+      /** @description Full metadata after performing the update. */
+      readonly metadata?: components['schemas']['VersionMetadata'];
+    };
+    readonly UpdateWorkflowExecutionOptionsRequest: {
+      /** @description The namespace name of the target Workflow. */
+      readonly namespace?: string;
+      /**
+       * Format: field-mask
+       * @description Controls which fields from `workflow_execution_options` will be applied.
+       *  To unset a field, set it to null and use the update mask to indicate that it should be mutated.
+       */
+      readonly updateMask?: string;
+      /**
+       * @description The target Workflow Id and (optionally) a specific Run Id thereof.
+       *  (-- api-linter: core::0203::optional=disabled
+       *      aip.dev/not-precedent: false positive triggered by the word "optional" --)
+       */
+      readonly workflowExecution?: components['schemas']['WorkflowExecution'];
+      /** @description Workflow Execution options. Partial updates are accepted and controlled by update_mask. */
+      readonly workflowExecutionOptions?: components['schemas']['WorkflowExecutionOptions'];
+    };
+    readonly UpdateWorkflowExecutionOptionsResponse: {
+      /** @description Workflow Execution options after update. */
+      readonly workflowExecutionOptions?: components['schemas']['WorkflowExecutionOptions'];
+    };
     /**
      * @description (-- api-linter: core::0134=disabled
      *      aip.dev/not-precedent: Update RPCs don't follow Google API format. --)
@@ -4426,6 +5522,33 @@ export interface components {
        */
       readonly summary?: components['schemas']['Payload'];
     };
+    /**
+     * @description Information about workflow drainage to help the user determine when it is safe
+     *  to decommission a Version. Not present while version is current or ramping.
+     *  Experimental. Worker Deployments are experimental and might significantly change in the future.
+     */
+    readonly VersionDrainageInfo: {
+      /**
+       * Format: date-time
+       * @description Last time the drainage status changed.
+       */
+      readonly lastChangedTime?: string;
+      /**
+       * Format: date-time
+       * @description Last time the system checked for drainage of this version.
+       */
+      readonly lastCheckedTime?: string;
+      /**
+       * Format: enum
+       * @description Set to DRAINING when the version first stops accepting new executions (is no longer current or ramping).
+       *  Set to DRAINED when no more open pinned workflows exist on this version.
+       * @enum {string}
+       */
+      readonly status?:
+        | 'VERSION_DRAINAGE_STATUS_UNSPECIFIED'
+        | 'VERSION_DRAINAGE_STATUS_DRAINING'
+        | 'VERSION_DRAINAGE_STATUS_DRAINED';
+    };
     /** @description VersionInfo contains details about current and recommended release versions as well as alerts and upgrade instructions. */
     readonly VersionInfo: {
       readonly alerts?: readonly components['schemas']['Alert'][];
@@ -4434,6 +5557,42 @@ export interface components {
       /** Format: date-time */
       readonly lastUpdateTime?: string;
       readonly recommended?: components['schemas']['ReleaseInfo'];
+    };
+    /**
+     * @description Used to override the versioning behavior (and pinned deployment version, if applicable) of a
+     *  specific workflow execution. If set, takes precedence over the worker-sent values. See
+     *  `WorkflowExecutionInfo.VersioningInfo` for more information. To remove the override, call
+     *  `UpdateWorkflowExecutionOptions` with a null `VersioningOverride`, and use the `update_mask`
+     *  to indicate that it should be mutated.
+     */
+    readonly VersioningOverride: {
+      /**
+       * Format: enum
+       * @description Required.
+       * @enum {string}
+       */
+      readonly behavior?:
+        | 'VERSIONING_BEHAVIOR_UNSPECIFIED'
+        | 'VERSIONING_BEHAVIOR_PINNED'
+        | 'VERSIONING_BEHAVIOR_AUTO_UPGRADE';
+      /**
+       * @description Required if behavior is `PINNED`. Must be null if behavior is `AUTO_UPGRADE`.
+       *  Identifies the worker deployment to pin the workflow to.
+       *  Deprecated. Use `pinned_version`.
+       */
+      readonly deployment?: components['schemas']['Deployment'];
+      /**
+       * @description Required if behavior is `PINNED`. Must be absent if behavior is not `PINNED`.
+       *  Identifies the worker deployment version to pin the workflow to, in the format
+       *  "<deployment_name>.<build_id>".
+       */
+      readonly pinnedVersion?: string;
+    };
+    readonly VersionMetadata: {
+      /** @description Arbitrary key-values. */
+      readonly entries?: {
+        [key: string]: components['schemas']['Payload'];
+      };
     };
     /** @description Specifies client's intent to wait for Update results. */
     readonly WaitPolicy: {
@@ -4453,20 +5612,169 @@ export interface components {
         | 'UPDATE_WORKFLOW_EXECUTION_LIFECYCLE_STAGE_COMPLETED';
     };
     /**
-     * @description Identifies the version(s) that a worker is compatible with when polling or identifying itself,
+     * @description A Worker Deployment (Deployment, for short) represents all workers serving
+     *  a shared set of Task Queues. Typically, a Deployment represents one service or
+     *  application.
+     *  A Deployment contains multiple Deployment Versions, each representing a different
+     *  version of workers. (see documentation of WorkerDeploymentVersionInfo)
+     *  Deployment records are created in Temporal server automatically when their
+     *  first poller arrives to the server.
+     *  Experimental. Worker Deployments are experimental and might significantly change in the future.
+     */
+    readonly WorkerDeploymentInfo: {
+      /** Format: date-time */
+      readonly createTime?: string;
+      /**
+       * @description Identity of the last client who modified the configuration of this Deployment. Set to the
+       *  `identity` value sent by APIs such as `SetWorkerDeploymentCurrentVersion` and
+       *  `SetWorkerDeploymentRampingVersion`.
+       */
+      readonly lastModifierIdentity?: string;
+      /** @description Identifies a Worker Deployment. Must be unique within the namespace. */
+      readonly name?: string;
+      readonly routingConfig?: components['schemas']['RoutingConfig'];
+      /**
+       * @description Deployment Versions that are currently tracked in this Deployment. A DeploymentVersion will be
+       *  cleaned up automatically if all the following conditions meet:
+       *  - It does not receive new executions (is not current or ramping)
+       *  - It has no active pollers (see WorkerDeploymentVersionInfo.pollers_status)
+       *  - It is drained (see WorkerDeploymentVersionInfo.drainage_status)
+       */
+      readonly versionSummaries?: readonly components['schemas']['WorkerDeploymentInfo_WorkerDeploymentVersionSummary'][];
+    };
+    readonly WorkerDeploymentInfo_WorkerDeploymentVersionSummary: {
+      /** Format: date-time */
+      readonly createTime?: string;
+      /**
+       * Format: enum
+       * @enum {string}
+       */
+      readonly drainageStatus?:
+        | 'VERSION_DRAINAGE_STATUS_UNSPECIFIED'
+        | 'VERSION_DRAINAGE_STATUS_DRAINING'
+        | 'VERSION_DRAINAGE_STATUS_DRAINED';
+      /** @description The fully-qualified string representation of the version, in the form "<deployment_name>.<build_id>". */
+      readonly version?: string;
+    };
+    /**
+     * @description Worker Deployment options set in SDK that need to be sent to server in every poll.
+     *  Experimental. Worker Deployments are experimental and might significantly change in the future.
+     */
+    readonly WorkerDeploymentOptions: {
+      /**
+       * @description The Build ID of the worker. Required when `worker_versioning_mode==VERSIONED`, in which case,
+       *  the worker will be part of a Deployment Version identified by "<deployment_name>.<build_id>".
+       */
+      readonly buildId?: string;
+      /** @description Required. Worker Deployment name. */
+      readonly deploymentName?: string;
+      /**
+       * Format: enum
+       * @description Required. Versioning Mode for this worker. Must be the same for all workers with the
+       *  same `deployment_name` and `build_id` combination, across all Task Queues.
+       *  When `worker_versioning_mode==VERSIONED`, the worker will be part of a Deployment Version
+       *  identified by "<deployment_name>.<build_id>".
+       * @enum {string}
+       */
+      readonly workerVersioningMode?:
+        | 'WORKER_VERSIONING_MODE_UNSPECIFIED'
+        | 'WORKER_VERSIONING_MODE_UNVERSIONED'
+        | 'WORKER_VERSIONING_MODE_VERSIONED';
+    };
+    /**
+     * @description A Worker Deployment Version (Version, for short) represents all workers of the same
+     *  code and config within a Deployment. Workers of the same Version are expected to
+     *  behave exactly the same so when executions move between them there are no
+     *  non-determinism issues.
+     *  Worker Deployment Versions are created in Temporal server automatically when
+     *  their first poller arrives to the server.
+     *  Experimental. Worker Deployments are experimental and might significantly change in the future.
+     */
+    readonly WorkerDeploymentVersionInfo: {
+      /** Format: date-time */
+      readonly createTime?: string;
+      /**
+       * Format: date-time
+       * @description (-- api-linter: core::0140::prepositions=disabled
+       *      aip.dev/not-precedent: 'Since' captures the field semantics despite being a preposition. --)
+       *  Nil if not current.
+       */
+      readonly currentSinceTime?: string;
+      readonly deploymentName?: string;
+      /**
+       * @description Helps user determine when it is safe to decommission the workers of this
+       *  Version. Not present when version is current or ramping.
+       *  Current limitations:
+       *  - Not supported for Unversioned mode.
+       *  - Periodically refreshed, may have delays up to few minutes (consult the
+       *    last_checked_time value).
+       *  - Refreshed only when version is not current or ramping AND the status is not
+       *    "drained" yet.
+       *  - Once the status is changed to "drained", it is not changed until the Version
+       *    becomes Current or Ramping again, at which time the drainage info is cleared.
+       *    This means if the Version is "drained" but new workflows are sent to it via
+       *    Pinned Versioning Override, the status does not account for those Pinned-override
+       *    executions and remains "drained".
+       */
+      readonly drainageInfo?: components['schemas']['VersionDrainageInfo'];
+      /** @description Arbitrary user-provided metadata attached to this version. */
+      readonly metadata?: components['schemas']['VersionMetadata'];
+      /**
+       * Format: date-time
+       * @description (-- api-linter: core::0140::prepositions=disabled
+       *      aip.dev/not-precedent: 'Since' captures the field semantics despite being a preposition. --)
+       *  Nil if not ramping. Updated when the version first starts ramping, not on each ramp change.
+       */
+      readonly rampingSinceTime?: string;
+      /**
+       * Format: float
+       * @description Range: [0, 100]. Must be zero if the version is not ramping (i.e. `ramping_since_time` is nil).
+       *  Can be in the range [0, 100] if the version is ramping.
+       */
+      readonly rampPercentage?: number;
+      /**
+       * Format: date-time
+       * @description Last time `current_since_time`, `ramping_since_time, or `ramp_percentage` of this version changed.
+       */
+      readonly routingChangedTime?: string;
+      /** @description All the Task Queues that have ever polled from this Deployment version. */
+      readonly taskQueueInfos?: readonly components['schemas']['WorkerDeploymentVersionInfo_VersionTaskQueueInfo'][];
+      /** @description The fully-qualified string representation of the version, in the form "<deployment_name>.<build_id>". */
+      readonly version?: string;
+    };
+    readonly WorkerDeploymentVersionInfo_VersionTaskQueueInfo: {
+      readonly name?: string;
+      /**
+       * Format: enum
+       * @enum {string}
+       */
+      readonly type?:
+        | 'TASK_QUEUE_TYPE_UNSPECIFIED'
+        | 'TASK_QUEUE_TYPE_WORKFLOW'
+        | 'TASK_QUEUE_TYPE_ACTIVITY'
+        | 'TASK_QUEUE_TYPE_NEXUS';
+    };
+    /**
+     * @description Identifies the version that a worker is compatible with when polling or identifying itself,
      *  and whether or not this worker is opting into the build-id based versioning feature. This is
      *  used by matching to determine which workers ought to receive what tasks.
+     *  Deprecated. Use WorkerDeploymentOptions instead.
      */
     readonly WorkerVersionCapabilities: {
       /** @description An opaque whole-worker identifier */
       readonly buildId?: string;
+      /** @description Must be sent if user has set a deployment series name (versioning-3). */
+      readonly deploymentSeriesName?: string;
       /**
        * @description If set, the worker is opting in to worker versioning, and wishes to only receive appropriate
        *  tasks.
        */
       readonly useVersioning?: boolean;
     };
-    /** @description Identifies the version(s) of a worker that processed a task */
+    /**
+     * @description Deprecated. This message is replaced with `Deployment` and `VersioningBehavior`.
+     *  Identifies the version(s) of a worker that processed a task
+     */
     readonly WorkerVersionStamp: {
       /**
        * @description An opaque whole-worker identifier. Replaces the deprecated `binary_checksum` field when this
@@ -4540,7 +5848,8 @@ export interface components {
         | 'EVENT_TYPE_NEXUS_OPERATION_FAILED'
         | 'EVENT_TYPE_NEXUS_OPERATION_CANCELED'
         | 'EVENT_TYPE_NEXUS_OPERATION_TIMED_OUT'
-        | 'EVENT_TYPE_NEXUS_OPERATION_CANCEL_REQUESTED';
+        | 'EVENT_TYPE_NEXUS_OPERATION_CANCEL_REQUESTED'
+        | 'EVENT_TYPE_WORKFLOW_EXECUTION_OPTIONS_UPDATED';
     };
     /**
      * @description Identifies a specific workflow within a namespace. Practically speaking, because run_id is a
@@ -4625,6 +5934,32 @@ export interface components {
       readonly workflowTaskTimeout?: string;
       readonly workflowType?: components['schemas']['WorkflowType'];
     };
+    /** @description Holds all the extra information about workflow execution that is not part of Visibility. */
+    readonly WorkflowExecutionExtendedInfo: {
+      /** @description indicates if the workflow received a cancel request */
+      readonly cancelRequested?: boolean;
+      /**
+       * Format: date-time
+       * @description Workflow execution expiration time is defined as workflow start time plus expiration timeout.
+       *  Workflow start time may change after workflow reset.
+       */
+      readonly executionExpirationTime?: string;
+      /**
+       * Format: date-time
+       * @description Last workflow reset time. Nil if the workflow was never reset.
+       */
+      readonly lastResetTime?: string;
+      /**
+       * Format: date-time
+       * @description Original workflow start time.
+       */
+      readonly originalStartTime?: string;
+      /**
+       * Format: date-time
+       * @description Workflow run expiration time is defined as current workflow run start time plus workflow run timeout.
+       */
+      readonly runExpirationTime?: string;
+    };
     readonly WorkflowExecutionFailedEventAttributes: {
       /** @description Serialized result of workflow failure (ex: An exception thrown, or error returned) */
       readonly failure?: components['schemas']['Failure'];
@@ -4646,6 +5981,10 @@ export interface components {
       /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
       readonly workflowTaskCompletedEventId?: string;
     };
+    /**
+     * @description Hold basic information about a workflow execution.
+     *  This structure is a part of visibility, and thus contain a limited subset of information.
+     */
     readonly WorkflowExecutionInfo: {
       /**
        * @description The currently assigned build ID for this execution. Presence of this value means worker versioning is used
@@ -4654,6 +5993,7 @@ export interface components {
        *  again, the assigned build ID may change according to the latest versioning rules.
        *  Assigned build ID can also change in the middle of a execution if Compatible Redirect Rules are applied to
        *  this execution.
+       *  Deprecated. This field should be cleaned up when versioning-2 API is removed. [cleanup-experimental-wv]
        */
       readonly assignedBuildId?: string;
       readonly autoResetPoints?: components['schemas']['ResetPoints'];
@@ -4681,13 +6021,19 @@ export interface components {
       /**
        * @description Build ID inherited from a previous/parent execution. If present, assigned_build_id will be set to this, instead
        *  of using the assignment rules.
+       *  Deprecated. This field should be cleaned up when versioning-2 API is removed. [cleanup-experimental-wv]
        */
       readonly inheritedBuildId?: string;
       readonly memo?: components['schemas']['Memo'];
-      /** @description If set, the most recent worker version stamp that appeared in a workflow task completion */
+      /**
+       * @description If set, the most recent worker version stamp that appeared in a workflow task completion
+       *  Deprecated. This field should be cleaned up when versioning-2 API is removed. [cleanup-experimental-wv]
+       */
       readonly mostRecentWorkerVersionStamp?: components['schemas']['WorkerVersionStamp'];
       readonly parentExecution?: components['schemas']['WorkflowExecution'];
       readonly parentNamespaceId?: string;
+      /** @description Priority metadata */
+      readonly priority?: components['schemas']['Priority'];
       /**
        * @description Contains information about the root workflow execution.
        *  The root workflow execution is defined as follows:
@@ -4727,6 +6073,37 @@ export interface components {
         | 'WORKFLOW_EXECUTION_STATUS_TIMED_OUT';
       readonly taskQueue?: string;
       readonly type?: components['schemas']['WorkflowType'];
+      /**
+       * @description Absent value means the workflow execution is not versioned. When present, the execution might
+       *  be versioned or unversioned, depending on `versioning_info.behavior` and `versioning_info.versioning_override`.
+       *  Experimental. Versioning info is experimental and might change in the future.
+       */
+      readonly versioningInfo?: components['schemas']['WorkflowExecutionVersioningInfo'];
+      /**
+       * @description The name of Worker Deployment that completed the most recent workflow task.
+       *  Experimental. Worker Deployments are experimental and might change in the future.
+       */
+      readonly workerDeploymentName?: string;
+    };
+    readonly WorkflowExecutionOptions: {
+      /** @description If set, takes precedence over the Versioning Behavior sent by the SDK on Workflow Task completion. */
+      readonly versioningOverride?: components['schemas']['VersioningOverride'];
+    };
+    readonly WorkflowExecutionOptionsUpdatedEventAttributes: {
+      /** @description Completion callbacks attached to the running workflow execution. */
+      readonly attachedCompletionCallbacks?: readonly components['schemas']['Callback'][];
+      /**
+       * @description Request ID attachedto the running workflow execution so that subsequent requests with same
+       *  request ID will be deduped.
+       */
+      readonly attachedRequestId?: string;
+      /** @description Versioning override removed in this event. */
+      readonly unsetVersioningOverride?: boolean;
+      /**
+       * @description Versioning override upserted in this event.
+       *  Ignored if nil or if unset_versioning_override is true.
+       */
+      readonly versioningOverride?: components['schemas']['VersioningOverride'];
     };
     readonly WorkflowExecutionSignaledEventAttributes: {
       /** @description When signal origin is a workflow execution, this field is set. */
@@ -4742,7 +6119,7 @@ export interface components {
       readonly input?: components['schemas']['Payloads'];
       /** @description The name/type of the signal to fire */
       readonly signalName?: string;
-      /** @description Indicates the signal did not generate a new workflow task when received. */
+      /** @description This field is deprecated and never respected. It should always be set to false. */
       readonly skipGenerateWorkflowTask?: boolean;
     };
     /** @description Always the first event in workflow history */
@@ -4775,7 +6152,10 @@ export interface components {
       readonly header?: components['schemas']['Header'];
       /** @description Identity of the client who requested this execution */
       readonly identity?: string;
-      /** @description When present, this execution is assigned to the build ID of its parent or previous execution. */
+      /**
+       * @description When present, this execution is assigned to the build ID of its parent or previous execution.
+       *  Deprecated. This field should be cleaned up when versioning-2 API is removed. [cleanup-experimental-wv]
+       */
       readonly inheritedBuildId?: string;
       /**
        * Format: enum
@@ -4804,6 +6184,14 @@ export interface components {
        */
       readonly parentInitiatedEventVersion?: string;
       /**
+       * @description When present, it means this is a child workflow of a parent that is Pinned to this Worker
+       *  Deployment Version. In this case, child workflow will start as Pinned to this Version instead
+       *  of starting on the Current Version of its Task Queue.
+       *  This is set only if the child workflow is starting on a Task Queue belonging to the same
+       *  Worker Deployment Version.
+       */
+      readonly parentPinnedWorkerDeploymentVersion?: string;
+      /**
        * @description Contains information about parent workflow execution that initiated the child workflow these attributes belong to.
        *  If the workflow these attributes belong to is not a child workflow of any other execution, this field will not be populated.
        */
@@ -4815,6 +6203,8 @@ export interface components {
       readonly parentWorkflowNamespace?: string;
       readonly parentWorkflowNamespaceId?: string;
       readonly prevAutoResetPoints?: components['schemas']['ResetPoints'];
+      /** @description Priority metadata */
+      readonly priority?: components['schemas']['Priority'];
       readonly retryPolicy?: components['schemas']['RetryPolicy'];
       /**
        * @description Contains information about the root workflow execution.
@@ -4840,10 +6230,12 @@ export interface components {
       /**
        * @description If this workflow intends to use anything other than the current overall default version for
        *  the queue, then we include it here.
-       *  Deprecated. use `inherited_build_id` instead
+       *  Deprecated. [cleanup-experimental-wv]
        */
       readonly sourceVersionStamp?: components['schemas']['WorkerVersionStamp'];
       readonly taskQueue?: components['schemas']['TaskQueue'];
+      /** @description Versioning override applied to this workflow when it was started. */
+      readonly versioningOverride?: components['schemas']['VersioningOverride'];
       /**
        * Format: date-time
        * @description The absolute time at which the workflow will be timed out.
@@ -4940,6 +6332,102 @@ export interface components {
       /** @description The event ID used to sequence the original request message. */
       readonly rejectedRequestSequencingEventId?: string;
     };
+    /**
+     * @description Holds all the information about worker versioning for a particular workflow execution.
+     *  Experimental. Versioning info is experimental and might change in the future.
+     */
+    readonly WorkflowExecutionVersioningInfo: {
+      /**
+       * Format: enum
+       * @description Versioning behavior determines how the server should treat this execution when workers are
+       *  upgraded. When present it means this workflow execution is versioned; UNSPECIFIED means
+       *  unversioned. See the comments in `VersioningBehavior` enum for more info about different
+       *  behaviors.
+       *  This field is first set after an execution completes its first workflow task on a versioned
+       *  worker, and set again on completion of every subsequent workflow task.
+       *  For child workflows of Pinned parents, this will be set to Pinned (along with `version`) when
+       *  the the child starts so that child's first workflow task goes to the same Version as the
+       *  parent. After the first workflow task, it depends on the child workflow itself if it wants
+       *  to stay pinned or become unpinned (according to Versioning Behavior set in the worker).
+       *  Note that `behavior` is overridden by `versioning_override` if the latter is present.
+       * @enum {string}
+       */
+      readonly behavior?:
+        | 'VERSIONING_BEHAVIOR_UNSPECIFIED'
+        | 'VERSIONING_BEHAVIOR_PINNED'
+        | 'VERSIONING_BEHAVIOR_AUTO_UPGRADE';
+      /**
+       * @description The worker deployment that completed the last workflow task of this workflow execution. Must
+       *  be present if `behavior` is set. Absent value means no workflow task is completed, or the
+       *  last workflow task was completed by an unversioned worker. Unversioned workers may still send
+       *  a deployment value which will be stored here, so the right way to check if an execution is
+       *  versioned if an execution is versioned or not is via the `behavior` field.
+       *  Note that `deployment` is overridden by `versioning_override` if the latter is present.
+       *  Deprecated. Use `version`.
+       */
+      readonly deployment?: components['schemas']['Deployment'];
+      /**
+       * @description When present, indicates the workflow is transitioning to a different deployment. Can
+       *  indicate one of the following transitions: unversioned -> versioned, versioned -> versioned
+       *  on a different deployment, or versioned -> unversioned.
+       *  Not applicable to workflows with PINNED behavior.
+       *  When a workflow with AUTO_UPGRADE behavior creates a new workflow task, it will automatically
+       *  start a transition to the task queue's current deployment if the task queue's current
+       *  deployment is different from the workflow's deployment.
+       *  If the AUTO_UPGRADE workflow is stuck due to backlogged activity or workflow tasks, those
+       *  tasks will be redirected to the task queue's current deployment. As soon as a poller from
+       *  that deployment is available to receive the task, the workflow will automatically start a
+       *  transition to that deployment and continue execution there.
+       *  A deployment transition can only exist while there is a pending or started workflow task.
+       *  Once the pending workflow task completes on the transition's target deployment, the
+       *  transition completes and the workflow's `deployment` and `behavior` fields are updated per
+       *  the worker's task completion response.
+       *  Pending activities will not start new attempts during a transition. Once the transition is
+       *  completed, pending activities will start their next attempt on the new deployment.
+       *  Deprecated. Use version_transition.
+       */
+      readonly deploymentTransition?: components['schemas']['DeploymentTransition'];
+      /**
+       * @description The Worker Deployment Version that completed the last workflow task of this workflow
+       *  execution, in the form "<deployment_name>.<build_id>".
+       *  Must be present if and only if `behavior` is set. An absent value means no workflow task is
+       *  completed, or the workflow is unversioned.
+       *  For child workflows of Pinned parents, this will be set to parent's Pinned Version when the
+       *  the child starts so that child's first workflow task goes to the same Version as the parent.
+       *  Note that if `versioning_override.behavior` is PINNED then `versioning_override.pinned_version`
+       *  will override this value.
+       */
+      readonly version?: string;
+      /**
+       * @description Present if user has set an execution-specific versioning override. This override takes
+       *  precedence over SDK-sent `behavior` (and `version` when override is PINNED). An
+       *  override can be set when starting a new execution, as well as afterwards by calling the
+       *  `UpdateWorkflowExecutionOptions` API.
+       *  Pinned overrides are automatically inherited by child workflows.
+       */
+      readonly versioningOverride?: components['schemas']['VersioningOverride'];
+      /**
+       * @description When present, indicates the workflow is transitioning to a different deployment version
+       *  (which may belong to the same deployment name or another). Can indicate one of the following
+       *  transitions: unversioned -> versioned, versioned -> versioned
+       *  on a different deployment version, or versioned -> unversioned.
+       *  Not applicable to workflows with PINNED behavior.
+       *  When a workflow with AUTO_UPGRADE behavior creates a new workflow task, it will automatically
+       *  start a transition to the task queue's current version if the task queue's current version is
+       *  different from the workflow's current deployment version.
+       *  If the AUTO_UPGRADE workflow is stuck due to backlogged activity or workflow tasks, those
+       *  tasks will be redirected to the task queue's current version. As soon as a poller from
+       *  that deployment version is available to receive the task, the workflow will automatically
+       *  start a transition to that version and continue execution there.
+       *  A version transition can only exist while there is a pending or started workflow task.
+       *  Once the pending workflow task completes on the transition's target version, the
+       *  transition completes and the workflow's `behavior`, and `version` fields are updated per the
+       *  worker's task completion response.
+       *  Pending activities will not start new attempts during a transition. Once the transition is
+       *  completed, pending activities will start their next attempt on the new version.
+       */
+      readonly versionTransition?: components['schemas']['DeploymentVersionTransition'];
+    };
     readonly WorkflowPropertiesModifiedEventAttributes: {
       /**
        * @description If set, update the workflow memo with the provided values. The values will be merged with
@@ -4950,23 +6438,17 @@ export interface components {
       /** @description The `WORKFLOW_TASK_COMPLETED` event which this command was reported with */
       readonly workflowTaskCompletedEventId?: string;
     };
+    /** @description Not used anywhere. Use case is replaced by WorkflowExecutionOptionsUpdatedEventAttributes */
     readonly WorkflowPropertiesModifiedExternallyEventAttributes: {
-      /**
-       * @description If set to a nonempty string, future workflow tasks for this workflow shall be dispatched on
-       *  the provided queue.
-       */
+      /** @description Not used. */
       readonly newTaskQueue?: string;
-      /** @description If set, update the workflow execution timeout to this value. May be set to 0 for no timeout. */
+      /** @description Not used. */
       readonly newWorkflowExecutionTimeout?: string;
-      /** @description If set, update the workflow run timeout to this value. May be set to 0 for no timeout. */
+      /** @description Not used. */
       readonly newWorkflowRunTimeout?: string;
-      /** @description If set, update the workflow task timeout to this value. */
+      /** @description Not used. */
       readonly newWorkflowTaskTimeout?: string;
-      /**
-       * @description If set, update the workflow memo with the provided values. The values will be merged with
-       *  the existing memo. If the user wants to delete values, a default/empty Payload should be
-       *  used as the value for the key being deleted.
-       */
+      /** @description Not used. */
       readonly upsertedMemo?: components['schemas']['Memo'];
     };
     /** @description See https://docs.temporal.io/docs/concepts/queries/ */
@@ -4984,6 +6466,13 @@ export interface components {
     readonly WorkflowTaskCompletedEventAttributes: {
       /** @description Binary ID of the worker who completed this task */
       readonly binaryChecksum?: string;
+      /**
+       * @description The deployment that completed this task. May or may not be set for unversioned workers,
+       *  depending on whether a value is sent by the SDK. This value updates workflow execution's
+       *  `versioning_info.deployment`.
+       *  Deprecated. Replaced with `worker_deployment_version`.
+       */
+      readonly deployment?: components['schemas']['Deployment'];
       /** @description Identity of the worker who completed this task */
       readonly identity?: string;
       /** @description Local usage data sent during workflow task completion and recorded here for posterity */
@@ -4998,10 +6487,33 @@ export interface components {
       /** @description The id of the `WORKFLOW_TASK_STARTED` event this task corresponds to */
       readonly startedEventId?: string;
       /**
+       * Format: enum
+       * @description Versioning behavior sent by the worker that completed this task for this particular workflow
+       *  execution. UNSPECIFIED means the task was completed by an unversioned worker. This value
+       *  updates workflow execution's `versioning_info.behavior`.
+       * @enum {string}
+       */
+      readonly versioningBehavior?:
+        | 'VERSIONING_BEHAVIOR_UNSPECIFIED'
+        | 'VERSIONING_BEHAVIOR_PINNED'
+        | 'VERSIONING_BEHAVIOR_AUTO_UPGRADE';
+      /**
+       * @description The name of Worker Deployment that completed this task. Must be set if `versioning_behavior`
+       *  is set. This value updates workflow execution's `worker_deployment_name`.
+       *  Experimental. Worker Deployments are experimental and might significantly change in the future.
+       */
+      readonly workerDeploymentName?: string;
+      /**
+       * @description The Worker Deployment Version that completed this task. Must be set if `versioning_behavior`
+       *  is set. This value updates workflow execution's `versioning_info.version`.
+       *  Experimental. Worker Deployments are experimental and might significantly change in the future.
+       */
+      readonly workerDeploymentVersion?: string;
+      /**
        * @description Version info of the worker who processed this workflow task. If present, the `build_id` field
        *  within is also used as `binary_checksum`, which may be omitted in that case (it may also be
        *  populated to preserve compatibility).
-       *  Deprecated. Use the info inside the corresponding WorkflowTaskStartedEvent
+       *  Deprecated. Use `deployment` and `versioning_behavior` instead.
        */
       readonly workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
@@ -5142,6 +6654,7 @@ export interface components {
       /**
        * @description Used by server internally to properly reapply build ID redirects to an execution
        *  when rebuilding it from events.
+       *  Deprecated. This field should be cleaned up when versioning-2 API is removed. [cleanup-experimental-wv]
        */
       readonly buildIdRedirectCounter?: string;
       /**
@@ -5161,7 +6674,10 @@ export interface components {
        *  either event count or bytes) is getting large.
        */
       readonly suggestContinueAsNew?: boolean;
-      /** @description Version info of the worker to whom this task was dispatched. */
+      /**
+       * @description Version info of the worker to whom this task was dispatched.
+       *  Deprecated. This field should be cleaned up when versioning-2 API is removed. [cleanup-experimental-wv]
+       */
       readonly workerVersion?: components['schemas']['WorkerVersionStamp'];
     };
     readonly WorkflowTaskTimedOutEventAttributes: {
@@ -5571,11 +7087,143 @@ export interface operations {
     };
   };
   /**
-   * @description UpdateActivityOptionsById is called by the client to update the options of an activity
-   *  (-- api-linter: core::0136::prepositions=disabled
-   *      aip.dev/not-precedent: "By" is used to indicate request type. --)
+   * @description PauseActivity pauses the execution of an activity specified by its ID or type.
+   *  If there are multiple pending activities of the provided type - all of them will be paused
+   *
+   *  Pausing an activity means:
+   *  - If the activity is currently waiting for a retry or is running and subsequently fails,
+   *    it will not be rescheduled until it is unpaused.
+   *  - If the activity is already paused, calling this method will have no effect.
+   *  - If the activity is running and finishes successfully, the activity will be completed.
+   *  - If the activity is running and finishes with failure:
+   *    * if there is no retry left - the activity will be completed.
+   *    * if there are more retries left - the activity will be paused.
+   *  For long-running activities:
+   *  - activities in paused state will send a cancellation with "activity_paused" set to 'true' in response to 'RecordActivityTaskHeartbeat'.
+   *  - The activity should respond to the cancellation accordingly.
+   *
+   *  Returns a `NotFound` error if there is no pending activity with the provided ID or type
    */
-  UpdateActivityOptionsById: {
+  PauseActivity: {
+    parameters: {
+      path: {
+        /** @description Namespace of the workflow which scheduled this activity. */
+        namespace: string;
+      };
+    };
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['PauseActivityRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['PauseActivityResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description ResetActivity resets the execution of an activity specified by its ID or type.
+   *  If there are multiple pending activities of the provided type - all of them will be reset.
+   *
+   *  Resetting an activity means:
+   *  * number of attempts will be reset to 0.
+   *  * activity timeouts will be reset.
+   *  * if the activity is waiting for retry, and it is not paused or 'keep_paused' is not provided:
+   *     it will be scheduled immediately (* see 'jitter' flag),
+   *
+   *  Flags:
+   *
+   *  'jitter': the activity will be scheduled at a random time within the jitter duration.
+   *  If the activity currently paused it will be unpaused, unless 'keep_paused' flag is provided.
+   *  'reset_heartbeats': the activity heartbeat timer and heartbeats will be reset.
+   *  'keep_paused': if the activity is paused, it will remain paused.
+   *
+   *  Returns a `NotFound` error if there is no pending activity with the provided ID or type.
+   */
+  ResetActivity: {
+    parameters: {
+      path: {
+        /** @description Namespace of the workflow which scheduled this activity. */
+        namespace: string;
+      };
+    };
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['ResetActivityRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['ResetActivityResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description UnpauseActivity unpauses the execution of an activity specified by its ID or type.
+   *  If there are multiple pending activities of the provided type - all of them will be unpaused.
+   *
+   *  If activity is not paused, this call will have no effect.
+   *  If the activity was paused while waiting for retry, it will be scheduled immediately (* see 'jitter' flag).
+   *  Once the activity is unpaused, all timeout timers will be regenerated.
+   *
+   *  Flags:
+   *  'jitter': the activity will be scheduled at a random time within the jitter duration.
+   *  'reset_attempts': the number of attempts will be reset.
+   *  'reset_heartbeat': the activity heartbeat timer and heartbeats will be reset.
+   *
+   *  Returns a `NotFound` error if there is no pending activity with the provided ID or type
+   */
+  UnpauseActivity: {
+    parameters: {
+      path: {
+        /** @description Namespace of the workflow which scheduled this activity. */
+        namespace: string;
+      };
+    };
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['UnpauseActivityRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['UnpauseActivityResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description UpdateActivityOptions is called by the client to update the options of an activity by its ID or type.
+   *  If there are multiple pending activities of the provided type - all of them will be updated.
+   */
+  UpdateActivityOptions: {
     parameters: {
       path: {
         /** @description Namespace of the workflow which scheduled this activity */
@@ -5584,14 +7232,14 @@ export interface operations {
     };
     readonly requestBody: {
       readonly content: {
-        readonly 'application/json': components['schemas']['UpdateActivityOptionsByIdRequest'];
+        readonly 'application/json': components['schemas']['UpdateActivityOptionsRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          readonly 'application/json': components['schemas']['UpdateActivityOptionsByIdResponse'];
+          readonly 'application/json': components['schemas']['UpdateActivityOptionsResponse'];
         };
       };
       /** @description Default error response */
@@ -5733,6 +7381,190 @@ export interface operations {
       200: {
         content: {
           readonly 'application/json': components['schemas']['StopBatchOperationResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Sets a deployment as the current deployment for its deployment series. Can optionally update
+   *  the metadata of the deployment as well.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   *  Deprecated. Replaced by `SetWorkerDeploymentCurrentVersion`.
+   */
+  SetCurrentDeployment: {
+    parameters: {
+      path: {
+        namespace: string;
+        'deployment.series_name': string;
+      };
+    };
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['SetCurrentDeploymentRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['SetCurrentDeploymentResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Returns the current deployment (and its info) for a given deployment series.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   *  Deprecated. Replaced by `current_version` returned by `DescribeWorkerDeployment`.
+   */
+  GetCurrentDeployment: {
+    parameters: {
+      path: {
+        namespace: string;
+        seriesName: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['GetCurrentDeploymentResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Lists worker deployments in the namespace. Optionally can filter based on deployment series
+   *  name.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   *  Deprecated. Replaced with `ListWorkerDeployments`.
+   */
+  ListDeployments: {
+    parameters: {
+      query?: {
+        pageSize?: number;
+        nextPageToken?: string;
+        /** @description Optional. Use to filter based on exact series name match. */
+        seriesName?: string;
+      };
+      path: {
+        namespace: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['ListDeploymentsResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Describes a worker deployment.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   *  Deprecated. Replaced with `DescribeWorkerDeploymentVersion`.
+   */
+  DescribeDeployment: {
+    parameters: {
+      query?: {
+        /**
+         * @description Different versions of the same worker service/application are related together by having a
+         *  shared series name.
+         *  Out of all deployments of a series, one can be designated as the current deployment, which
+         *  receives new workflow executions and new tasks of workflows with
+         *  `VERSIONING_BEHAVIOR_AUTO_UPGRADE` versioning behavior.
+         */
+        'deployment.seriesName'?: string;
+        /**
+         * @description Build ID changes with each version of the worker when the worker program code and/or config
+         *  changes.
+         */
+        'deployment.buildId'?: string;
+      };
+      path: {
+        namespace: string;
+        'deployment.series_name': string;
+        'deployment.build_id': string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['DescribeDeploymentResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Returns the reachability level of a worker deployment to help users decide when it is time
+   *  to decommission a deployment. Reachability level is calculated based on the deployment's
+   *  `status` and existing workflows that depend on the given deployment for their execution.
+   *  Calculating reachability is relatively expensive. Therefore, server might return a recently
+   *  cached value. In such a case, the `last_update_time` will inform you about the actual
+   *  reachability calculation time.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   *  Deprecated. Replaced with `DrainageInfo` returned by `DescribeWorkerDeploymentVersion`.
+   */
+  GetDeploymentReachability: {
+    parameters: {
+      query?: {
+        /**
+         * @description Different versions of the same worker service/application are related together by having a
+         *  shared series name.
+         *  Out of all deployments of a series, one can be designated as the current deployment, which
+         *  receives new workflow executions and new tasks of workflows with
+         *  `VERSIONING_BEHAVIOR_AUTO_UPGRADE` versioning behavior.
+         */
+        'deployment.seriesName'?: string;
+        /**
+         * @description Build ID changes with each version of the worker when the worker program code and/or config
+         *  changes.
+         */
+        'deployment.buildId'?: string;
+      };
+      path: {
+        namespace: string;
+        'deployment.series_name': string;
+        'deployment.build_id': string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['GetDeploymentReachabilityResponse'];
         };
       };
       /** @description Default error response */
@@ -6140,6 +7972,256 @@ export interface operations {
     };
   };
   /**
+   * @description Describes a worker deployment version.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   */
+  DescribeWorkerDeploymentVersion: {
+    parameters: {
+      path: {
+        namespace: string;
+        /** @description Deployment Version identifier in the form "<deployment_name>.<build_id>". */
+        version: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['DescribeWorkerDeploymentVersionResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Used for manual deletion of Versions. User can delete a Version only when all the
+   *  following conditions are met:
+   *   - It is not the Current or Ramping Version of its Deployment.
+   *   - It has no active pollers (none of the task queues in the Version have pollers)
+   *   - It is not draining (see WorkerDeploymentVersionInfo.drainage_info). This condition
+   *     can be skipped by passing `skip-drainage=true`.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   */
+  DeleteWorkerDeploymentVersion: {
+    parameters: {
+      query?: {
+        /**
+         * @description Pass to force deletion even if the Version is draining. In this case the open pinned
+         *  workflows will be stuck until manually moved to another version by UpdateWorkflowExecutionOptions.
+         */
+        skipDrainage?: boolean;
+        /** @description Optional. The identity of the client who initiated this request. */
+        identity?: string;
+      };
+      path: {
+        namespace: string;
+        /** @description Deployment Version identifier in the form "<deployment_name>.<build_id>". */
+        version: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['DeleteWorkerDeploymentVersionResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Updates the user-given metadata attached to a Worker Deployment Version.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   */
+  UpdateWorkerDeploymentVersionMetadata: {
+    parameters: {
+      path: {
+        namespace: string;
+        /** @description Deployment Version identifier in the form "<deployment_name>.<build_id>". */
+        version: string;
+      };
+    };
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['UpdateWorkerDeploymentVersionMetadataRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['UpdateWorkerDeploymentVersionMetadataResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Lists all Worker Deployments that are tracked in the Namespace.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   */
+  ListWorkerDeployments: {
+    parameters: {
+      query?: {
+        pageSize?: number;
+        nextPageToken?: string;
+      };
+      path: {
+        namespace: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['ListWorkerDeploymentsResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Describes a Worker Deployment.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   */
+  DescribeWorkerDeployment: {
+    parameters: {
+      path: {
+        namespace: string;
+        deploymentName: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['DescribeWorkerDeploymentResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Deletes records of (an old) Deployment. A deployment can only be deleted if
+   *  it has no Version in it.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   */
+  DeleteWorkerDeployment: {
+    parameters: {
+      query?: {
+        /** @description Optional. The identity of the client who initiated this request. */
+        identity?: string;
+      };
+      path: {
+        namespace: string;
+        deploymentName: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['DeleteWorkerDeploymentResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Set/unset the Current Version of a Worker Deployment. Automatically unsets the Ramping
+   *  Version if it is the Version being set as Current.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   */
+  SetWorkerDeploymentCurrentVersion: {
+    parameters: {
+      path: {
+        namespace: string;
+        deploymentName: string;
+      };
+    };
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['SetWorkerDeploymentCurrentVersionRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['SetWorkerDeploymentCurrentVersionResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
+   * @description Set/unset the Ramping Version of a Worker Deployment and its ramp percentage. Can be used for
+   *  gradual ramp to unversioned workers too.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   */
+  SetWorkerDeploymentRampingVersion: {
+    parameters: {
+      path: {
+        namespace: string;
+        deploymentName: string;
+      };
+    };
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['SetWorkerDeploymentRampingVersionRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['SetWorkerDeploymentRampingVersionResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /**
    * @description Deprecated. Use `DescribeTaskQueue`.
    *
    *  Fetches task reachability to determine whether a worker may be retired.
@@ -6523,6 +8605,35 @@ export interface operations {
       200: {
         content: {
           readonly 'application/json': components['schemas']['TerminateWorkflowExecutionResponse'];
+        };
+      };
+      /** @description Default error response */
+      default: {
+        content: {
+          readonly 'application/json': components['schemas']['Status'];
+        };
+      };
+    };
+  };
+  /** @description UpdateWorkflowExecutionOptions partially updates the WorkflowExecutionOptions of an existing workflow execution. */
+  UpdateWorkflowExecutionOptions: {
+    parameters: {
+      path: {
+        /** @description The namespace name of the target Workflow. */
+        namespace: string;
+        'workflow_execution.workflow_id': string;
+      };
+    };
+    readonly requestBody: {
+      readonly content: {
+        readonly 'application/json': components['schemas']['UpdateWorkflowExecutionOptionsRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          readonly 'application/json': components['schemas']['UpdateWorkflowExecutionOptionsResponse'];
         };
       };
       /** @description Default error response */

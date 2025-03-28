@@ -1,12 +1,12 @@
-import { parseArgs } from 'util';
-import { mkdir, rm, stat } from 'fs/promises';
-import { join } from 'path';
+import { parseArgs } from 'node:util';
+import { mkdir, rm } from 'node:fs/promises';
+import { join } from 'node:path';
+import yaml from 'js-yaml';
 
 import chalk from 'chalk';
 import degit from 'degit';
-import { $ } from 'zx';
 
-import { argv } from 'bun';
+import { argv, $ } from 'bun';
 
 const { values } = parseArgs({
   args: argv,
@@ -23,13 +23,10 @@ const { values } = parseArgs({
 
 const schema = values.output || join('src', 'schema.ts');
 const openAPIDefinitionsDirectory = './tmp/api';
-const openApiDefinitions = join(openAPIDefinitionsDirectory, 'openapi', 'openapiv3.yaml');
+const openApiDefinitionsFile = join(openAPIDefinitionsDirectory, 'openapi', 'openapiv3.yaml');
+const openApiDefinitions = Bun.file(openApiDefinitionsFile);
 
-const directoryExists = await stat(openAPIDefinitionsDirectory)
-  .then(() => true)
-  .catch(() => false);
-
-if (directoryExists) {
+if (await openApiDefinitions.exists()) {
   await rm(openAPIDefinitionsDirectory, { recursive: true });
 }
 
@@ -47,7 +44,12 @@ emitter.on('warn', (warning) => {
 
 await emitter.clone(openAPIDefinitionsDirectory);
 
-await $`npx openapi-typescript ${openApiDefinitions} -o ${schema} --immutable-types --alphabetize --support-array-length --empty-objects-unknown -default-non-nullable`.quiet();
+await $`npx openapi-typescript ${openApiDefinitionsFile} -o ${schema} --immutable-types --alphabetize --support-array-length --empty-objects-unknown -default-non-nullable`.quiet();
 await $`npm run format -- --log-level=error`.quiet();
+
+const openApiSchema = await openApiDefinitions.text();
+const openApiSchemaObject = yaml.load(openApiSchema);
+const openApiSchemaString = JSON.stringify(openApiSchemaObject, null, 2);
+await Bun.write('./src/schema.json', openApiSchemaString);
 
 console.log(chalk.green('Schema generated successfully:'), chalk.blue(schema));

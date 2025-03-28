@@ -1,5 +1,5 @@
 import { Operations } from './operations';
-import { renderOperation } from './render-operation';
+import { renderOperations } from './render-operations.ts';
 
 // @ts-expect-error - There is no default export, but we're importing it as text.
 import TemporalError from './temporal-error.ts' with { type: 'text' };
@@ -23,7 +23,7 @@ export function createClient(operations: Operations) {
        */
       constructor(private readonly baseURL: string) {}
 
-      ${renderOperation(operations)}
+      ${renderOperations(operations)}
 
     }
   `;

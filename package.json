@@ -22,9 +22,10 @@
     "prepublishOnly": "npm run package",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
-    "generate": "npm run generate:schema && npm run generate:client",
+    "generate": "npm run generate:schema && npm run generate:client && npm run generate:types",
     "generate:client": "bun ./scripts/generate-client",
-    "generate:schema": "bun ./scripts/generate-schema"
+    "generate:schema": "bun ./scripts/generate-schema",
+    "generate:types": "bun ./scripts/generate-types"
   },
   "files": [
     "dist",
@@ -35,6 +36,7 @@
     "@types/bun": "latest",
     "@types/degit": "^2.8.6",
     "@types/eslint": "^8.56.0",
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.11.25",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
@@ -53,5 +55,9 @@
     "typescript": "^5.4.2",
     "zod": "^3.24.2",
     "zx": "^7.2.3"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "json-schema-to-zod": "^2.6.0"
   }
 }

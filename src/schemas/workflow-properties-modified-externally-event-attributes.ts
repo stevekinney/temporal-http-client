@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Not used anywhere. Use case is replaced by WorkflowExecutionOptionsUpdatedEventAttributes*/
-export const WorkflowPropertiesModifiedExternallyEventAttributesSchema = z
+export const WorkflowPropertiesModifiedExternallyEventAttributes = z
   .object({
     /**Not used.*/
     newTaskQueue: z.string().describe("Not used.").optional(),
@@ -29,6 +29,6 @@ export const WorkflowPropertiesModifiedExternallyEventAttributesSchema = z
   .describe(
     "Not used anywhere. Use case is replaced by WorkflowExecutionOptionsUpdatedEventAttributes",
   );
-export type WorkflowPropertiesModifiedExternallyEventAttributesSchema = z.infer<
-  typeof WorkflowPropertiesModifiedExternallyEventAttributesSchema
+export type WorkflowPropertiesModifiedExternallyEventAttributes = z.infer<
+  typeof WorkflowPropertiesModifiedExternallyEventAttributes
 >;

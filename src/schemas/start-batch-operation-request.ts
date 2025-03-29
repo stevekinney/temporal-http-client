@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const StartBatchOperationRequestSchema = z.object({
+export const StartBatchOperationRequest = z.object({
   /**Namespace that contains the batch operation*/
   namespace: z
     .string()
@@ -58,6 +58,6 @@ export const StartBatchOperationRequestSchema = z.object({
   updateWorkflowOptionsOperation: z.any().optional(),
   unpauseActivitiesOperation: z.any().optional(),
 });
-export type StartBatchOperationRequestSchema = z.infer<
-  typeof StartBatchOperationRequestSchema
+export type StartBatchOperationRequest = z.infer<
+  typeof StartBatchOperationRequest
 >;

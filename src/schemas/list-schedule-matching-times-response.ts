@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-export const ListScheduleMatchingTimesResponseSchema = z.object({
+export const ListScheduleMatchingTimesResponse = z.object({
   startTime: z.array(z.string().datetime({ offset: true })).optional(),
 });
-export type ListScheduleMatchingTimesResponseSchema = z.infer<
-  typeof ListScheduleMatchingTimesResponseSchema
+export type ListScheduleMatchingTimesResponse = z.infer<
+  typeof ListScheduleMatchingTimesResponse
 >;

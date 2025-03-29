@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const DescribeWorkflowExecutionResponseSchema = z.object({
+export const DescribeWorkflowExecutionResponse = z.object({
   executionConfig: z.any().optional(),
   workflowExecutionInfo: z.any().optional(),
   pendingActivities: z.array(z.any()).optional(),
@@ -10,6 +10,6 @@ export const DescribeWorkflowExecutionResponseSchema = z.object({
   pendingNexusOperations: z.array(z.any()).optional(),
   workflowExtendedInfo: z.any().optional(),
 });
-export type DescribeWorkflowExecutionResponseSchema = z.infer<
-  typeof DescribeWorkflowExecutionResponseSchema
+export type DescribeWorkflowExecutionResponse = z.infer<
+  typeof DescribeWorkflowExecutionResponse
 >;

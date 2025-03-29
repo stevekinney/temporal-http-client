@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowExecutionFailedEventAttributesSchema = z.object({
+export const WorkflowExecutionFailedEventAttributes = z.object({
   /**Serialized result of workflow failure (ex: An exception thrown, or error returned)*/
   failure: z
     .any()
@@ -35,6 +35,6 @@ export const WorkflowExecutionFailedEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type WorkflowExecutionFailedEventAttributesSchema = z.infer<
-  typeof WorkflowExecutionFailedEventAttributesSchema
+export type WorkflowExecutionFailedEventAttributes = z.infer<
+  typeof WorkflowExecutionFailedEventAttributes
 >;

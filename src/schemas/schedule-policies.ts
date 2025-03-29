@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const SchedulePoliciesSchema = z.object({
+export const SchedulePolicies = z.object({
   /**
    * Policy for overlaps.
    *  Note that this can be changed after a schedule has taken some actions,
@@ -57,4 +57,4 @@ export const SchedulePoliciesSchema = z.object({
     )
     .optional(),
 });
-export type SchedulePoliciesSchema = z.infer<typeof SchedulePoliciesSchema>;
+export type SchedulePolicies = z.infer<typeof SchedulePolicies>;

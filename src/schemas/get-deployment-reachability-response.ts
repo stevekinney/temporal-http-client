@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**[cleanup-wv-pre-release] Pre-release deployment APIs, clean up later*/
-export const GetDeploymentReachabilityResponseSchema = z
+export const GetDeploymentReachabilityResponse = z
   .object({
     deploymentInfo: z.any().optional(),
     reachability: z
@@ -27,6 +27,6 @@ export const GetDeploymentReachabilityResponseSchema = z
   .describe(
     "[cleanup-wv-pre-release] Pre-release deployment APIs, clean up later",
   );
-export type GetDeploymentReachabilityResponseSchema = z.infer<
-  typeof GetDeploymentReachabilityResponseSchema
+export type GetDeploymentReachabilityResponse = z.infer<
+  typeof GetDeploymentReachabilityResponse
 >;

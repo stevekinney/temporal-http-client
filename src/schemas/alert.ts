@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Alert contains notification and severity.*/
-export const AlertSchema = z
+export const Alert = z
   .object({
     message: z.string().optional(),
     severity: z
@@ -14,4 +14,4 @@ export const AlertSchema = z
       .optional(),
   })
   .describe("Alert contains notification and severity.");
-export type AlertSchema = z.infer<typeof AlertSchema>;
+export type Alert = z.infer<typeof Alert>;

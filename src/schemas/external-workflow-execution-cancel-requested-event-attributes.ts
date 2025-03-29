@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-export const ExternalWorkflowExecutionCancelRequestedEventAttributesSchema =
-  z.object({
+export const ExternalWorkflowExecutionCancelRequestedEventAttributes = z.object(
+  {
     /**
      * id of the `REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_INITIATED` event this event corresponds
      *  to
@@ -24,6 +24,8 @@ export const ExternalWorkflowExecutionCancelRequestedEventAttributesSchema =
       .optional(),
     namespaceId: z.string().optional(),
     workflowExecution: z.any().optional(),
-  });
-export type ExternalWorkflowExecutionCancelRequestedEventAttributesSchema =
-  z.infer<typeof ExternalWorkflowExecutionCancelRequestedEventAttributesSchema>;
+  },
+);
+export type ExternalWorkflowExecutionCancelRequestedEventAttributes = z.infer<
+  typeof ExternalWorkflowExecutionCancelRequestedEventAttributes
+>;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ApplicationFailureInfoSchema = z.object({
+export const ApplicationFailureInfo = z.object({
   type: z.string().optional(),
   nonRetryable: z.boolean().optional(),
   details: z.any().optional(),
@@ -18,6 +18,4 @@ export const ApplicationFailureInfoSchema = z.object({
     )
     .optional(),
 });
-export type ApplicationFailureInfoSchema = z.infer<
-  typeof ApplicationFailureInfoSchema
->;
+export type ApplicationFailureInfo = z.infer<typeof ApplicationFailureInfo>;

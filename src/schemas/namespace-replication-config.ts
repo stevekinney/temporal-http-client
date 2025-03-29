@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const NamespaceReplicationConfigSchema = z.object({
+export const NamespaceReplicationConfig = z.object({
   activeClusterName: z.string().optional(),
   clusters: z.array(z.any()).optional(),
   state: z
@@ -11,6 +11,6 @@ export const NamespaceReplicationConfigSchema = z.object({
     ])
     .optional(),
 });
-export type NamespaceReplicationConfigSchema = z.infer<
-  typeof NamespaceReplicationConfigSchema
+export type NamespaceReplicationConfig = z.infer<
+  typeof NamespaceReplicationConfig
 >;

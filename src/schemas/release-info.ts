@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**ReleaseInfo contains information about specific version of temporal.*/
-export const ReleaseInfoSchema = z
+export const ReleaseInfo = z
   .object({
     version: z.string().optional(),
     releaseTime: z.string().datetime({ offset: true }).optional(),
@@ -10,4 +10,4 @@ export const ReleaseInfoSchema = z
   .describe(
     "ReleaseInfo contains information about specific version of temporal.",
   );
-export type ReleaseInfoSchema = z.infer<typeof ReleaseInfoSchema>;
+export type ReleaseInfo = z.infer<typeof ReleaseInfo>;

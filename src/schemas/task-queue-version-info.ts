@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const TaskQueueVersionInfoSchema = z.object({
+export const TaskQueueVersionInfo = z.object({
   /**Task Queue info per Task Type. Key is the numerical value of the temporal.api.enums.v1.TaskQueueType enum.*/
   typesInfo: z
     .record(z.any())
@@ -31,6 +31,4 @@ export const TaskQueueVersionInfoSchema = z.object({
     )
     .optional(),
 });
-export type TaskQueueVersionInfoSchema = z.infer<
-  typeof TaskQueueVersionInfoSchema
->;
+export type TaskQueueVersionInfo = z.infer<typeof TaskQueueVersionInfo>;

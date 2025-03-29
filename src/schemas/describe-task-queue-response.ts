@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const DescribeTaskQueueResponseSchema = z.object({
+export const DescribeTaskQueueResponse = z.object({
   /**
    * Deprecated. Use `versions_info.types_info.pollers` with `ENHANCED` mode instead.
    *  Not set in `ENHANCED` mode.
@@ -44,6 +44,6 @@ export const DescribeTaskQueueResponseSchema = z.object({
     )
     .optional(),
 });
-export type DescribeTaskQueueResponseSchema = z.infer<
-  typeof DescribeTaskQueueResponseSchema
+export type DescribeTaskQueueResponse = z.infer<
+  typeof DescribeTaskQueueResponse
 >;

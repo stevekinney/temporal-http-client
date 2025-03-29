@@ -4,7 +4,7 @@ import { z } from "zod";
  * (-- api-linter: core::0134=disabled
  *      aip.dev/not-precedent: Update RPCs don't follow Google API format. --)
  */
-export const UpdateWorkflowExecutionRequestSchema = z
+export const UpdateWorkflowExecutionRequest = z
   .object({
     /**The namespace name of the target Workflow.*/
     namespace: z
@@ -60,6 +60,6 @@ export const UpdateWorkflowExecutionRequestSchema = z
   .describe(
     "(-- api-linter: core::0134=disabled\n     aip.dev/not-precedent: Update RPCs don't follow Google API format. --)",
   );
-export type UpdateWorkflowExecutionRequestSchema = z.infer<
-  typeof UpdateWorkflowExecutionRequestSchema
+export type UpdateWorkflowExecutionRequest = z.infer<
+  typeof UpdateWorkflowExecutionRequest
 >;

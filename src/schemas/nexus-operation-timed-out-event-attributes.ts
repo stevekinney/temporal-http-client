@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Nexus operation timed out.*/
-export const NexusOperationTimedOutEventAttributesSchema = z
+export const NexusOperationTimedOutEventAttributes = z
   .object({
     /**The ID of the `NEXUS_OPERATION_SCHEDULED` event. Uniquely identifies this operation.*/
     scheduledEventId: z
@@ -24,6 +24,6 @@ export const NexusOperationTimedOutEventAttributesSchema = z
       .optional(),
   })
   .describe("Nexus operation timed out.");
-export type NexusOperationTimedOutEventAttributesSchema = z.infer<
-  typeof NexusOperationTimedOutEventAttributesSchema
+export type NexusOperationTimedOutEventAttributes = z.infer<
+  typeof NexusOperationTimedOutEventAttributes
 >;

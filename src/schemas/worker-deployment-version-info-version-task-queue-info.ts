@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkerDeploymentVersionInfo_VersionTaskQueueInfoSchema = z.object({
+export const WorkerDeploymentVersionInfo_VersionTaskQueueInfo = z.object({
   name: z.string().optional(),
   type: z
     .enum([
@@ -11,6 +11,6 @@ export const WorkerDeploymentVersionInfo_VersionTaskQueueInfoSchema = z.object({
     ])
     .optional(),
 });
-export type WorkerDeploymentVersionInfo_VersionTaskQueueInfoSchema = z.infer<
-  typeof WorkerDeploymentVersionInfo_VersionTaskQueueInfoSchema
+export type WorkerDeploymentVersionInfo_VersionTaskQueueInfo = z.infer<
+  typeof WorkerDeploymentVersionInfo_VersionTaskQueueInfo
 >;

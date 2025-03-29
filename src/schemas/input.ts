@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const InputSchema = z.object({
+export const Input = z.object({
   /**
    * Headers that are passed with the Update from the requesting entity.
    *  These can include things like auth or tracing tokens.
@@ -24,4 +24,4 @@ export const InputSchema = z.object({
     .describe("The arguments to pass to the named Update handler.")
     .optional(),
 });
-export type InputSchema = z.infer<typeof InputSchema>;
+export type Input = z.infer<typeof Input>;

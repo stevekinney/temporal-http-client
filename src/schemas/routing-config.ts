@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RoutingConfigSchema = z.object({
+export const RoutingConfig = z.object({
   /**
    * Always present. Specifies which Deployment Version should should receive new workflow
    *  executions and tasks of existing unversioned or AutoUpgrade workflows.
@@ -70,4 +70,4 @@ export const RoutingConfigSchema = z.object({
     )
     .optional(),
 });
-export type RoutingConfigSchema = z.infer<typeof RoutingConfigSchema>;
+export type RoutingConfig = z.infer<typeof RoutingConfig>;

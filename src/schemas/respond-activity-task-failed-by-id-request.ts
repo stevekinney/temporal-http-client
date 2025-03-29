@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RespondActivityTaskFailedByIdRequestSchema = z.object({
+export const RespondActivityTaskFailedByIdRequest = z.object({
   /**Namespace of the workflow which scheduled this activity*/
   namespace: z
     .string()
@@ -28,6 +28,6 @@ export const RespondActivityTaskFailedByIdRequestSchema = z.object({
     .describe("Additional details to be stored as last activity heartbeat")
     .optional(),
 });
-export type RespondActivityTaskFailedByIdRequestSchema = z.infer<
-  typeof RespondActivityTaskFailedByIdRequestSchema
+export type RespondActivityTaskFailedByIdRequest = z.infer<
+  typeof RespondActivityTaskFailedByIdRequest
 >;

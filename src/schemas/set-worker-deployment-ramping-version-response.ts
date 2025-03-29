@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const SetWorkerDeploymentRampingVersionResponseSchema = z.object({
+export const SetWorkerDeploymentRampingVersionResponse = z.object({
   /**
    * This value is returned so that it can be optionally passed to APIs
    *  that write to the Worker Deployment state to ensure that the state
@@ -28,6 +28,6 @@ export const SetWorkerDeploymentRampingVersionResponseSchema = z.object({
     .describe("The ramping version percentage before executing this operation.")
     .optional(),
 });
-export type SetWorkerDeploymentRampingVersionResponseSchema = z.infer<
-  typeof SetWorkerDeploymentRampingVersionResponseSchema
+export type SetWorkerDeploymentRampingVersionResponse = z.infer<
+  typeof SetWorkerDeploymentRampingVersionResponse
 >;

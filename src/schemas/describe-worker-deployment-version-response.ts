@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-export const DescribeWorkerDeploymentVersionResponseSchema = z.object({
+export const DescribeWorkerDeploymentVersionResponse = z.object({
   workerDeploymentVersionInfo: z.any().optional(),
 });
-export type DescribeWorkerDeploymentVersionResponseSchema = z.infer<
-  typeof DescribeWorkerDeploymentVersionResponseSchema
+export type DescribeWorkerDeploymentVersionResponse = z.infer<
+  typeof DescribeWorkerDeploymentVersionResponse
 >;

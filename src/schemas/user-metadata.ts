@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Information a user can set, often for use by user interfaces.*/
-export const UserMetadataSchema = z
+export const UserMetadata = z
   .object({
     /**
      * Short-form text that provides a summary. This payload should be a "json/plain"-encoded payload
@@ -28,4 +28,4 @@ export const UserMetadataSchema = z
       .optional(),
   })
   .describe("Information a user can set, often for use by user interfaces.");
-export type UserMetadataSchema = z.infer<typeof UserMetadataSchema>;
+export type UserMetadata = z.infer<typeof UserMetadata>;

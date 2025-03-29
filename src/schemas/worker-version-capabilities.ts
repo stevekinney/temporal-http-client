@@ -6,7 +6,7 @@ import { z } from "zod";
  *  used by matching to determine which workers ought to receive what tasks.
  *  Deprecated. Use WorkerDeploymentOptions instead.
  */
-export const WorkerVersionCapabilitiesSchema = z
+export const WorkerVersionCapabilities = z
   .object({
     /**An opaque whole-worker identifier*/
     buildId: z
@@ -34,6 +34,6 @@ export const WorkerVersionCapabilitiesSchema = z
   .describe(
     "Identifies the version that a worker is compatible with when polling or identifying itself,\n and whether or not this worker is opting into the build-id based versioning feature. This is\n used by matching to determine which workers ought to receive what tasks.\n Deprecated. Use WorkerDeploymentOptions instead.",
   );
-export type WorkerVersionCapabilitiesSchema = z.infer<
-  typeof WorkerVersionCapabilitiesSchema
+export type WorkerVersionCapabilities = z.infer<
+  typeof WorkerVersionCapabilities
 >;

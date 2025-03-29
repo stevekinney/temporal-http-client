@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const GetWorkflowExecutionHistoryResponseSchema = z.object({
+export const GetWorkflowExecutionHistoryResponse = z.object({
   history: z.any().optional(),
   /**
    * Raw history is an alternate representation of history that may be returned if configured on
@@ -21,6 +21,6 @@ export const GetWorkflowExecutionHistoryResponseSchema = z.object({
     .optional(),
   archived: z.boolean().optional(),
 });
-export type GetWorkflowExecutionHistoryResponseSchema = z.infer<
-  typeof GetWorkflowExecutionHistoryResponseSchema
+export type GetWorkflowExecutionHistoryResponse = z.infer<
+  typeof GetWorkflowExecutionHistoryResponse
 >;

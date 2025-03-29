@@ -1,6 +1,4 @@
 import { z } from "zod";
 
-export const ResetActivityResponseSchema = z.object({});
-export type ResetActivityResponseSchema = z.infer<
-  typeof ResetActivityResponseSchema
->;
+export const ResetActivityResponse = z.object({});
+export type ResetActivityResponse = z.infer<typeof ResetActivityResponse>;

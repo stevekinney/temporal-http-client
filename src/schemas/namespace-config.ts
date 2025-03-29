@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const NamespaceConfigSchema = z.object({
+export const NamespaceConfig = z.object({
   workflowExecutionRetentionTtl: z
     .string()
     .regex(new RegExp("^-?(?:0|[1-9][0-9]{0,11})(?:\\.[0-9]{1,9})?s$"))
@@ -36,4 +36,4 @@ export const NamespaceConfigSchema = z.object({
     .describe("Map from field name to alias.")
     .optional(),
 });
-export type NamespaceConfigSchema = z.infer<typeof NamespaceConfigSchema>;
+export type NamespaceConfig = z.infer<typeof NamespaceConfig>;

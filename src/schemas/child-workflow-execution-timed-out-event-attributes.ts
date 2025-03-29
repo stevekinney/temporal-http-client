@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ChildWorkflowExecutionTimedOutEventAttributesSchema = z.object({
+export const ChildWorkflowExecutionTimedOutEventAttributes = z.object({
   /**
    * Namespace of the child workflow.
    *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
@@ -41,6 +41,6 @@ export const ChildWorkflowExecutionTimedOutEventAttributesSchema = z.object({
     ])
     .optional(),
 });
-export type ChildWorkflowExecutionTimedOutEventAttributesSchema = z.infer<
-  typeof ChildWorkflowExecutionTimedOutEventAttributesSchema
+export type ChildWorkflowExecutionTimedOutEventAttributes = z.infer<
+  typeof ChildWorkflowExecutionTimedOutEventAttributes
 >;

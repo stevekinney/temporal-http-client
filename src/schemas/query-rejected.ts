@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const QueryRejectedSchema = z.object({
+export const QueryRejected = z.object({
   status: z
     .enum([
       "WORKFLOW_EXECUTION_STATUS_UNSPECIFIED",
@@ -14,4 +14,4 @@ export const QueryRejectedSchema = z.object({
     ])
     .optional(),
 });
-export type QueryRejectedSchema = z.infer<typeof QueryRejectedSchema>;
+export type QueryRejected = z.infer<typeof QueryRejected>;

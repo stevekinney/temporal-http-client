@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowExecutionUpdateAcceptedEventAttributesSchema = z.object({
+export const WorkflowExecutionUpdateAcceptedEventAttributes = z.object({
   /**The instance ID of the update protocol that generated this event.*/
   protocolInstanceId: z
     .string()
@@ -35,6 +35,6 @@ export const WorkflowExecutionUpdateAcceptedEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type WorkflowExecutionUpdateAcceptedEventAttributesSchema = z.infer<
-  typeof WorkflowExecutionUpdateAcceptedEventAttributesSchema
+export type WorkflowExecutionUpdateAcceptedEventAttributes = z.infer<
+  typeof WorkflowExecutionUpdateAcceptedEventAttributes
 >;

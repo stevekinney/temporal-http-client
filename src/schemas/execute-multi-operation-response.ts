@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-export const ExecuteMultiOperationResponseSchema = z.object({
+export const ExecuteMultiOperationResponse = z.object({
   responses: z.array(z.any()).optional(),
 });
-export type ExecuteMultiOperationResponseSchema = z.infer<
-  typeof ExecuteMultiOperationResponseSchema
+export type ExecuteMultiOperationResponse = z.infer<
+  typeof ExecuteMultiOperationResponse
 >;

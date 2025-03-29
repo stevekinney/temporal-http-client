@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const UpdateActivityOptionsRequestSchema = z.object({
+export const UpdateActivityOptionsRequest = z.object({
   /**Namespace of the workflow which scheduled this activity*/
   namespace: z
     .string()
@@ -39,6 +39,6 @@ export const UpdateActivityOptionsRequestSchema = z.object({
     .describe("Update all running activities of this type.")
     .optional(),
 });
-export type UpdateActivityOptionsRequestSchema = z.infer<
-  typeof UpdateActivityOptionsRequestSchema
+export type UpdateActivityOptionsRequest = z.infer<
+  typeof UpdateActivityOptionsRequest
 >;

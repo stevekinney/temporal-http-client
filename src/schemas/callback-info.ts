@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**CallbackInfo contains the state of an attached workflow callback.*/
-export const CallbackInfoSchema = z
+export const CallbackInfo = z
   .object({
     /**Information on how this callback should be invoked (e.g. its URL and type).*/
     callback: z
@@ -68,4 +68,4 @@ export const CallbackInfoSchema = z
   .describe(
     "CallbackInfo contains the state of an attached workflow callback.",
   );
-export type CallbackInfoSchema = z.infer<typeof CallbackInfoSchema>;
+export type CallbackInfo = z.infer<typeof CallbackInfo>;

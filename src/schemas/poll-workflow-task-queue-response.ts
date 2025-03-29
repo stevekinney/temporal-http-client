@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const PollWorkflowTaskQueueResponseSchema = z.object({
+export const PollWorkflowTaskQueueResponse = z.object({
   /**A unique identifier for this task*/
   taskToken: z
     .string()
@@ -136,6 +136,6 @@ export const PollWorkflowTaskQueueResponseSchema = z.object({
     )
     .optional(),
 });
-export type PollWorkflowTaskQueueResponseSchema = z.infer<
-  typeof PollWorkflowTaskQueueResponseSchema
+export type PollWorkflowTaskQueueResponse = z.infer<
+  typeof PollWorkflowTaskQueueResponse
 >;

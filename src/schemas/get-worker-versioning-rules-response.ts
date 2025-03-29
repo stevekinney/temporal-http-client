@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**[cleanup-wv-pre-release]*/
-export const GetWorkerVersioningRulesResponseSchema = z
+export const GetWorkerVersioningRulesResponse = z
   .object({
     assignmentRules: z.array(z.any()).optional(),
     compatibleRedirectRules: z.array(z.any()).optional(),
@@ -18,6 +18,6 @@ export const GetWorkerVersioningRulesResponseSchema = z
       .optional(),
   })
   .describe("[cleanup-wv-pre-release]");
-export type GetWorkerVersioningRulesResponseSchema = z.infer<
-  typeof GetWorkerVersioningRulesResponseSchema
+export type GetWorkerVersioningRulesResponse = z.infer<
+  typeof GetWorkerVersioningRulesResponse
 >;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ListSearchAttributesResponseSchema = z.object({
+export const ListSearchAttributesResponse = z.object({
   /**Mapping between custom (user-registered) search attribute name to its IndexedValueType.*/
   customAttributes: z
     .record(
@@ -45,6 +45,6 @@ export const ListSearchAttributesResponseSchema = z.object({
     )
     .optional(),
 });
-export type ListSearchAttributesResponseSchema = z.infer<
-  typeof ListSearchAttributesResponseSchema
+export type ListSearchAttributesResponse = z.infer<
+  typeof ListSearchAttributesResponse
 >;

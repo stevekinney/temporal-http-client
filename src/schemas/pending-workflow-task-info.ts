@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const PendingWorkflowTaskInfoSchema = z.object({
+export const PendingWorkflowTaskInfo = z.object({
   state: z
     .enum([
       "PENDING_WORKFLOW_TASK_STATE_UNSPECIFIED",
@@ -25,6 +25,4 @@ export const PendingWorkflowTaskInfoSchema = z.object({
   startedTime: z.string().datetime({ offset: true }).optional(),
   attempt: z.number().int().optional(),
 });
-export type PendingWorkflowTaskInfoSchema = z.infer<
-  typeof PendingWorkflowTaskInfoSchema
->;
+export type PendingWorkflowTaskInfo = z.infer<typeof PendingWorkflowTaskInfo>;

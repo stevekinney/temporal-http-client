@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**See https://docs.temporal.io/docs/concepts/queries/*/
-export const WorkflowQuerySchema = z
+export const WorkflowQuery = z
   .object({
     /**The workflow-author-defined identifier of the query. Typically a function name.*/
     queryType: z
@@ -29,4 +29,4 @@ export const WorkflowQuerySchema = z
       .optional(),
   })
   .describe("See https://docs.temporal.io/docs/concepts/queries/");
-export type WorkflowQuerySchema = z.infer<typeof WorkflowQuerySchema>;
+export type WorkflowQuery = z.infer<typeof WorkflowQuery>;

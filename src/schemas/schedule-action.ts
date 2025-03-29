@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ScheduleActionSchema = z.object({
+export const ScheduleAction = z.object({
   /**
    * All fields of NewWorkflowExecutionInfo are valid except for:
    *  - workflow_id_reuse_policy
@@ -15,4 +15,4 @@ export const ScheduleActionSchema = z.object({
     )
     .optional(),
 });
-export type ScheduleActionSchema = z.infer<typeof ScheduleActionSchema>;
+export type ScheduleAction = z.infer<typeof ScheduleAction>;

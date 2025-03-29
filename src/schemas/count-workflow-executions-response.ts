@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const CountWorkflowExecutionsResponseSchema = z.object({
+export const CountWorkflowExecutionsResponse = z.object({
   /**
    * If `query` is not grouping by any field, the count is an approximate number
    *  of workflows that matches the query.
@@ -25,6 +25,6 @@ export const CountWorkflowExecutionsResponseSchema = z.object({
     )
     .optional(),
 });
-export type CountWorkflowExecutionsResponseSchema = z.infer<
-  typeof CountWorkflowExecutionsResponseSchema
+export type CountWorkflowExecutionsResponse = z.infer<
+  typeof CountWorkflowExecutionsResponse
 >;

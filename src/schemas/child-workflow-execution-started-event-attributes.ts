@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ChildWorkflowExecutionStartedEventAttributesSchema = z.object({
+export const ChildWorkflowExecutionStartedEventAttributes = z.object({
   /**
    * Namespace of the child workflow.
    *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
@@ -23,6 +23,6 @@ export const ChildWorkflowExecutionStartedEventAttributesSchema = z.object({
   workflowType: z.any().optional(),
   header: z.any().optional(),
 });
-export type ChildWorkflowExecutionStartedEventAttributesSchema = z.infer<
-  typeof ChildWorkflowExecutionStartedEventAttributesSchema
+export type ChildWorkflowExecutionStartedEventAttributes = z.infer<
+  typeof ChildWorkflowExecutionStartedEventAttributes
 >;

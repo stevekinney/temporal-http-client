@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Nexus operation completed successfully.*/
-export const NexusOperationCompletedEventAttributesSchema = z
+export const NexusOperationCompletedEventAttributes = z
   .object({
     /**The ID of the `NEXUS_OPERATION_SCHEDULED` event. Uniquely identifies this operation.*/
     scheduledEventId: z
@@ -27,6 +27,6 @@ export const NexusOperationCompletedEventAttributesSchema = z
       .optional(),
   })
   .describe("Nexus operation completed successfully.");
-export type NexusOperationCompletedEventAttributesSchema = z.infer<
-  typeof NexusOperationCompletedEventAttributesSchema
+export type NexusOperationCompletedEventAttributes = z.infer<
+  typeof NexusOperationCompletedEventAttributes
 >;

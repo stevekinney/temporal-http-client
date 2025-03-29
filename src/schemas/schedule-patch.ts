@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const SchedulePatchSchema = z.object({
+export const SchedulePatch = z.object({
   /**If set, trigger one action immediately.*/
   triggerImmediately: z
     .any()
@@ -29,4 +29,4 @@ export const SchedulePatchSchema = z.object({
     .optional(),
   unpause: z.string().optional(),
 });
-export type SchedulePatchSchema = z.infer<typeof SchedulePatchSchema>;
+export type SchedulePatch = z.infer<typeof SchedulePatch>;

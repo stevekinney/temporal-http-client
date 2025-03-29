@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const PollerInfoSchema = z.object({
+export const PollerInfo = z.object({
   lastAccessTime: z.string().datetime({ offset: true }).optional(),
   identity: z.string().optional(),
   ratePerSecond: z.number().optional(),
@@ -21,4 +21,4 @@ export const PollerInfoSchema = z.object({
     .describe("Worker deployment options that SDK sent to server.")
     .optional(),
 });
-export type PollerInfoSchema = z.infer<typeof PollerInfoSchema>;
+export type PollerInfo = z.infer<typeof PollerInfo>;

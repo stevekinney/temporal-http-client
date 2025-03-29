@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**A cluster-global binding from an endpoint ID to a target for dispatching incoming Nexus requests.*/
-export const EndpointSchema = z
+export const Endpoint = z
   .object({
     /**Data version for this endpoint, incremented for every update issued via the UpdateNexusEndpoint API.*/
     version: z
@@ -54,4 +54,4 @@ export const EndpointSchema = z
   .describe(
     "A cluster-global binding from an endpoint ID to a target for dispatching incoming Nexus requests.",
   );
-export type EndpointSchema = z.infer<typeof EndpointSchema>;
+export type Endpoint = z.infer<typeof Endpoint>;

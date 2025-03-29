@@ -6,7 +6,7 @@ import { z } from "zod";
  *  The only reason that this is exposed is because callbacks are replicated across clusters via the
  *  WorkflowExecutionStarted event, which is defined in the public API.
  */
-export const Callback_InternalSchema = z
+export const Callback_Internal = z
   .object({
     /**Opaque internal data.*/
     data: z.string().describe("Opaque internal data.").optional(),
@@ -14,4 +14,4 @@ export const Callback_InternalSchema = z
   .describe(
     "Callbacks to be delivered internally within the system.\n This variant is not settable in the API and will be rejected by the service with an INVALID_ARGUMENT error.\n The only reason that this is exposed is because callbacks are replicated across clusters via the\n WorkflowExecutionStarted event, which is defined in the public API.",
   );
-export type Callback_InternalSchema = z.infer<typeof Callback_InternalSchema>;
+export type Callback_Internal = z.infer<typeof Callback_Internal>;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const PendingActivityInfoSchema = z.object({
+export const PendingActivityInfo = z.object({
   activityId: z.string().optional(),
   activityType: z.any().optional(),
   state: z
@@ -97,6 +97,4 @@ export const PendingActivityInfoSchema = z.object({
   /**Priority metadata*/
   priority: z.any().describe("Priority metadata").optional(),
 });
-export type PendingActivityInfoSchema = z.infer<
-  typeof PendingActivityInfoSchema
->;
+export type PendingActivityInfo = z.infer<typeof PendingActivityInfo>;

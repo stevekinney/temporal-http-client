@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowExecutionUpdateRejectedEventAttributesSchema = z.object({
+export const WorkflowExecutionUpdateRejectedEventAttributes = z.object({
   /**The instance ID of the update protocol that generated this event.*/
   protocolInstanceId: z
     .string()
@@ -37,6 +37,6 @@ export const WorkflowExecutionUpdateRejectedEventAttributesSchema = z.object({
   /**The cause of rejection.*/
   failure: z.any().describe("The cause of rejection.").optional(),
 });
-export type WorkflowExecutionUpdateRejectedEventAttributesSchema = z.infer<
-  typeof WorkflowExecutionUpdateRejectedEventAttributesSchema
+export type WorkflowExecutionUpdateRejectedEventAttributes = z.infer<
+  typeof WorkflowExecutionUpdateRejectedEventAttributes
 >;

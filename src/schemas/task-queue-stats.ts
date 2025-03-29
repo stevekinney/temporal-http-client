@@ -6,7 +6,7 @@ import { z } from "zod";
  *  For workflow task queue type, this result is partial because tasks sent to sticky queues are not included. Read
  *  comments above each metric to understand the impact of sticky queue exclusion on that metric accuracy.
  */
-export const TaskQueueStatsSchema = z
+export const TaskQueueStats = z
   .object({
     /**
      * The approximate number of tasks backlogged in this task queue. May count expired tasks but eventually
@@ -85,4 +85,4 @@ export const TaskQueueStatsSchema = z
   .describe(
     "TaskQueueStats contains statistics about task queue backlog and activity.\n\n For workflow task queue type, this result is partial because tasks sent to sticky queues are not included. Read\n comments above each metric to understand the impact of sticky queue exclusion on that metric accuracy.",
   );
-export type TaskQueueStatsSchema = z.infer<typeof TaskQueueStatsSchema>;
+export type TaskQueueStats = z.infer<typeof TaskQueueStats>;

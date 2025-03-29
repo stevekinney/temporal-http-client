@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const DescribeWorkerDeploymentResponseSchema = z.object({
+export const DescribeWorkerDeploymentResponse = z.object({
   /**
    * This value is returned so that it can be optionally passed to APIs
    *  that write to the Worker Deployment state to ensure that the state
@@ -14,6 +14,6 @@ export const DescribeWorkerDeploymentResponseSchema = z.object({
     .optional(),
   workerDeploymentInfo: z.any().optional(),
 });
-export type DescribeWorkerDeploymentResponseSchema = z.infer<
-  typeof DescribeWorkerDeploymentResponseSchema
+export type DescribeWorkerDeploymentResponse = z.infer<
+  typeof DescribeWorkerDeploymentResponse
 >;

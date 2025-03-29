@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Metadata relevant for metering purposes*/
-export const MeteringMetadataSchema = z
+export const MeteringMetadata = z
   .object({
     /**
      * Count of local activities which have begun an execution attempt during this workflow task,
@@ -20,4 +20,4 @@ export const MeteringMetadataSchema = z
       .optional(),
   })
   .describe("Metadata relevant for metering purposes");
-export type MeteringMetadataSchema = z.infer<typeof MeteringMetadataSchema>;
+export type MeteringMetadata = z.infer<typeof MeteringMetadata>;

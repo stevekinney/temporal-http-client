@@ -4,7 +4,7 @@ import { z } from "zod";
  * BatchOperationReset sends reset requests to batch workflows.
  *  Keep the parameter in sync with temporal.api.workflowservice.v1.ResetWorkflowExecutionRequest.
  */
-export const BatchOperationResetSchema = z
+export const BatchOperationReset = z
   .object({
     /**The identity of the worker/client.*/
     identity: z
@@ -41,6 +41,4 @@ export const BatchOperationResetSchema = z
   .describe(
     "BatchOperationReset sends reset requests to batch workflows.\n Keep the parameter in sync with temporal.api.workflowservice.v1.ResetWorkflowExecutionRequest.",
   );
-export type BatchOperationResetSchema = z.infer<
-  typeof BatchOperationResetSchema
->;
+export type BatchOperationReset = z.infer<typeof BatchOperationReset>;

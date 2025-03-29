@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const TerminateWorkflowExecutionRequestSchema = z.object({
+export const TerminateWorkflowExecutionRequest = z.object({
   namespace: z.string().optional(),
   workflowExecution: z.any().optional(),
   reason: z.string().optional(),
@@ -32,6 +32,6 @@ export const TerminateWorkflowExecutionRequestSchema = z.object({
     )
     .optional(),
 });
-export type TerminateWorkflowExecutionRequestSchema = z.infer<
-  typeof TerminateWorkflowExecutionRequestSchema
+export type TerminateWorkflowExecutionRequest = z.infer<
+  typeof TerminateWorkflowExecutionRequest
 >;

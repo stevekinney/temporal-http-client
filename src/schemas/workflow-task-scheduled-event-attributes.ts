@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowTaskScheduledEventAttributesSchema = z.object({
+export const WorkflowTaskScheduledEventAttributes = z.object({
   /**The task queue this workflow task was enqueued in, which could be a normal or sticky queue*/
   taskQueue: z
     .any()
@@ -30,6 +30,6 @@ export const WorkflowTaskScheduledEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type WorkflowTaskScheduledEventAttributesSchema = z.infer<
-  typeof WorkflowTaskScheduledEventAttributesSchema
+export type WorkflowTaskScheduledEventAttributes = z.infer<
+  typeof WorkflowTaskScheduledEventAttributes
 >;

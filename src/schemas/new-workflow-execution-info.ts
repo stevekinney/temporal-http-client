@@ -4,7 +4,7 @@ import { z } from "zod";
  * NewWorkflowExecutionInfo is a shared message that encapsulates all the
  *  required arguments to starting a workflow in different contexts.
  */
-export const NewWorkflowExecutionInfoSchema = z
+export const NewWorkflowExecutionInfo = z
   .object({
     workflowId: z.string().optional(),
     workflowType: z.any().optional(),
@@ -86,6 +86,4 @@ export const NewWorkflowExecutionInfoSchema = z
   .describe(
     "NewWorkflowExecutionInfo is a shared message that encapsulates all the\n required arguments to starting a workflow in different contexts.",
   );
-export type NewWorkflowExecutionInfoSchema = z.infer<
-  typeof NewWorkflowExecutionInfoSchema
->;
+export type NewWorkflowExecutionInfo = z.infer<typeof NewWorkflowExecutionInfo>;

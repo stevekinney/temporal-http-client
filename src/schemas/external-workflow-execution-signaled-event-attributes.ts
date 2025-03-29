@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ExternalWorkflowExecutionSignaledEventAttributesSchema = z.object({
+export const ExternalWorkflowExecutionSignaledEventAttributes = z.object({
   /**id of the `SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_INITIATED` event this event corresponds to*/
   initiatedEventId: z
     .string()
@@ -23,6 +23,6 @@ export const ExternalWorkflowExecutionSignaledEventAttributesSchema = z.object({
   /**Deprecated*/
   control: z.string().describe("Deprecated").optional(),
 });
-export type ExternalWorkflowExecutionSignaledEventAttributesSchema = z.infer<
-  typeof ExternalWorkflowExecutionSignaledEventAttributesSchema
+export type ExternalWorkflowExecutionSignaledEventAttributes = z.infer<
+  typeof ExternalWorkflowExecutionSignaledEventAttributes
 >;

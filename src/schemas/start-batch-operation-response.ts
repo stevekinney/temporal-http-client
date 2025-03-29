@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const StartBatchOperationResponseSchema = z.object({});
-export type StartBatchOperationResponseSchema = z.infer<
-  typeof StartBatchOperationResponseSchema
+export const StartBatchOperationResponse = z.object({});
+export type StartBatchOperationResponse = z.infer<
+  typeof StartBatchOperationResponse
 >;

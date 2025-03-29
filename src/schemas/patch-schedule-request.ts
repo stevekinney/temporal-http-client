@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const PatchScheduleRequestSchema = z.object({
+export const PatchScheduleRequest = z.object({
   /**The namespace of the schedule to patch.*/
   namespace: z
     .string()
@@ -25,6 +25,4 @@ export const PatchScheduleRequestSchema = z.object({
     )
     .optional(),
 });
-export type PatchScheduleRequestSchema = z.infer<
-  typeof PatchScheduleRequestSchema
->;
+export type PatchScheduleRequest = z.infer<typeof PatchScheduleRequest>;

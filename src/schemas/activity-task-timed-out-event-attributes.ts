@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ActivityTaskTimedOutEventAttributesSchema = z.object({
+export const ActivityTaskTimedOutEventAttributes = z.object({
   /**
    * If this activity had failed, was retried, and then timed out, that failure is stored as the
    *  `cause` in here.
@@ -38,6 +38,6 @@ export const ActivityTaskTimedOutEventAttributesSchema = z.object({
     ])
     .optional(),
 });
-export type ActivityTaskTimedOutEventAttributesSchema = z.infer<
-  typeof ActivityTaskTimedOutEventAttributesSchema
+export type ActivityTaskTimedOutEventAttributes = z.infer<
+  typeof ActivityTaskTimedOutEventAttributes
 >;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowExecutionUpdateAdmittedEventAttributesSchema = z.object({
+export const WorkflowExecutionUpdateAdmittedEventAttributes = z.object({
   /**The update request associated with this event.*/
   request: z
     .any()
@@ -15,6 +15,6 @@ export const WorkflowExecutionUpdateAdmittedEventAttributesSchema = z.object({
     .describe("An explanation of why this event was written to history.")
     .optional(),
 });
-export type WorkflowExecutionUpdateAdmittedEventAttributesSchema = z.infer<
-  typeof WorkflowExecutionUpdateAdmittedEventAttributesSchema
+export type WorkflowExecutionUpdateAdmittedEventAttributes = z.infer<
+  typeof WorkflowExecutionUpdateAdmittedEventAttributes
 >;

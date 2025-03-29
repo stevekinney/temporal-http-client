@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ResetWorkflowExecutionRequestSchema = z.object({
+export const ResetWorkflowExecutionRequest = z.object({
   namespace: z.string().optional(),
   /**
    * The workflow to reset. If this contains a run ID then the workflow will be reset back to the
@@ -55,6 +55,6 @@ export const ResetWorkflowExecutionRequestSchema = z.object({
     .describe("Event types not to be reapplied")
     .optional(),
 });
-export type ResetWorkflowExecutionRequestSchema = z.infer<
-  typeof ResetWorkflowExecutionRequestSchema
+export type ResetWorkflowExecutionRequest = z.infer<
+  typeof ResetWorkflowExecutionRequest
 >;

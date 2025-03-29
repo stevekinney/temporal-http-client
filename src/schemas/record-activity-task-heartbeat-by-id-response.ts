@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RecordActivityTaskHeartbeatByIdResponseSchema = z.object({
+export const RecordActivityTaskHeartbeatByIdResponse = z.object({
   /**
    * Will be set to true if the activity has been asked to cancel itself. The SDK should then
    *  notify the activity of cancellation if it is still running.
@@ -17,6 +17,6 @@ export const RecordActivityTaskHeartbeatByIdResponseSchema = z.object({
     .describe("Will be set to true if the activity is paused.")
     .optional(),
 });
-export type RecordActivityTaskHeartbeatByIdResponseSchema = z.infer<
-  typeof RecordActivityTaskHeartbeatByIdResponseSchema
+export type RecordActivityTaskHeartbeatByIdResponse = z.infer<
+  typeof RecordActivityTaskHeartbeatByIdResponse
 >;

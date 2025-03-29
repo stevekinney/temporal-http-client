@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const NexusHandlerFailureInfoSchema = z.object({
+export const NexusHandlerFailureInfo = z.object({
   /**
    * The Nexus error type as defined in the spec:
    *  https://github.com/nexus-rpc/api/blob/main/SPEC.md#predefined-handler-errors.
@@ -23,6 +23,4 @@ export const NexusHandlerFailureInfoSchema = z.object({
     )
     .optional(),
 });
-export type NexusHandlerFailureInfoSchema = z.infer<
-  typeof NexusHandlerFailureInfoSchema
->;
+export type NexusHandlerFailureInfo = z.infer<typeof NexusHandlerFailureInfo>;

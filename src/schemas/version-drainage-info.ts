@@ -5,7 +5,7 @@ import { z } from "zod";
  *  to decommission a Version. Not present while version is current or ramping.
  *  Experimental. Worker Deployments are experimental and might significantly change in the future.
  */
-export const VersionDrainageInfoSchema = z
+export const VersionDrainageInfo = z
   .object({
     /**
      * Set to DRAINING when the version first stops accepting new executions (is no longer current or ramping).
@@ -37,6 +37,4 @@ export const VersionDrainageInfoSchema = z
   .describe(
     "Information about workflow drainage to help the user determine when it is safe\n to decommission a Version. Not present while version is current or ramping.\n Experimental. Worker Deployments are experimental and might significantly change in the future.",
   );
-export type VersionDrainageInfoSchema = z.infer<
-  typeof VersionDrainageInfoSchema
->;
+export type VersionDrainageInfo = z.infer<typeof VersionDrainageInfo>;

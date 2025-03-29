@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowExecutionTerminatedEventAttributesSchema = z.object({
+export const WorkflowExecutionTerminatedEventAttributes = z.object({
   /**User/client provided reason for termination*/
   reason: z
     .string()
@@ -13,6 +13,6 @@ export const WorkflowExecutionTerminatedEventAttributesSchema = z.object({
     .describe("id of the client who requested termination")
     .optional(),
 });
-export type WorkflowExecutionTerminatedEventAttributesSchema = z.infer<
-  typeof WorkflowExecutionTerminatedEventAttributesSchema
+export type WorkflowExecutionTerminatedEventAttributes = z.infer<
+  typeof WorkflowExecutionTerminatedEventAttributes
 >;

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Event marking that an operation was scheduled by a workflow via the ScheduleNexusOperation command.*/
-export const NexusOperationScheduledEventAttributesSchema = z
+export const NexusOperationScheduledEventAttributes = z
   .object({
     /**Endpoint name, must exist in the endpoint registry.*/
     endpoint: z
@@ -80,6 +80,6 @@ export const NexusOperationScheduledEventAttributesSchema = z
   .describe(
     "Event marking that an operation was scheduled by a workflow via the ScheduleNexusOperation command.",
   );
-export type NexusOperationScheduledEventAttributesSchema = z.infer<
-  typeof NexusOperationScheduledEventAttributesSchema
+export type NexusOperationScheduledEventAttributes = z.infer<
+  typeof NexusOperationScheduledEventAttributes
 >;

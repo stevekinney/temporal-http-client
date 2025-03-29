@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const TimerCanceledEventAttributesSchema = z.object({
+export const TimerCanceledEventAttributes = z.object({
   /**Will match the `timer_id` from `TIMER_STARTED` event for this timer*/
   timerId: z
     .string()
@@ -26,6 +26,6 @@ export const TimerCanceledEventAttributesSchema = z.object({
     .describe("The id of the worker who requested this cancel")
     .optional(),
 });
-export type TimerCanceledEventAttributesSchema = z.infer<
-  typeof TimerCanceledEventAttributesSchema
+export type TimerCanceledEventAttributes = z.infer<
+  typeof TimerCanceledEventAttributes
 >;

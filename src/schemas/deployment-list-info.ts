@@ -5,7 +5,7 @@ import { z } from "zod";
  *  ListDeployments.
  *  Deprecated.
  */
-export const DeploymentListInfoSchema = z
+export const DeploymentListInfo = z
   .object({
     deployment: z.any().optional(),
     createTime: z.string().datetime({ offset: true }).optional(),
@@ -20,4 +20,4 @@ export const DeploymentListInfoSchema = z
   .describe(
     "DeploymentListInfo is an abbreviated set of fields from DeploymentInfo that's returned in\n ListDeployments.\n Deprecated.",
   );
-export type DeploymentListInfoSchema = z.infer<typeof DeploymentListInfoSchema>;
+export type DeploymentListInfo = z.infer<typeof DeploymentListInfo>;

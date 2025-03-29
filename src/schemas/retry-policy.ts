@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**How retries ought to be handled, usable by both workflows and activities*/
-export const RetryPolicySchema = z
+export const RetryPolicy = z
   .object({
     /**Interval of the first retry. If retryBackoffCoefficient is 1.0 then it is used for all retries.*/
     initialInterval: z
@@ -58,4 +58,4 @@ export const RetryPolicySchema = z
   .describe(
     "How retries ought to be handled, usable by both workflows and activities",
   );
-export type RetryPolicySchema = z.infer<typeof RetryPolicySchema>;
+export type RetryPolicy = z.infer<typeof RetryPolicy>;

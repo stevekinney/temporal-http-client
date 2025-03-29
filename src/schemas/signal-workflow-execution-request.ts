@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const SignalWorkflowExecutionRequestSchema = z.object({
+export const SignalWorkflowExecutionRequest = z.object({
   namespace: z.string().optional(),
   workflowExecution: z.any().optional(),
   /**The workflow author-defined name of the signal to send to the workflow*/
@@ -39,6 +39,6 @@ export const SignalWorkflowExecutionRequestSchema = z.object({
     )
     .optional(),
 });
-export type SignalWorkflowExecutionRequestSchema = z.infer<
-  typeof SignalWorkflowExecutionRequestSchema
+export type SignalWorkflowExecutionRequest = z.infer<
+  typeof SignalWorkflowExecutionRequest
 >;

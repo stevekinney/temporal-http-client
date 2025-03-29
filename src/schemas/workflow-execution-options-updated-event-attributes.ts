@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowExecutionOptionsUpdatedEventAttributesSchema = z.object({
+export const WorkflowExecutionOptionsUpdatedEventAttributes = z.object({
   /**
    * Versioning override upserted in this event.
    *  Ignored if nil or if unset_versioning_override is true.
@@ -34,6 +34,6 @@ export const WorkflowExecutionOptionsUpdatedEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type WorkflowExecutionOptionsUpdatedEventAttributesSchema = z.infer<
-  typeof WorkflowExecutionOptionsUpdatedEventAttributesSchema
+export type WorkflowExecutionOptionsUpdatedEventAttributes = z.infer<
+  typeof WorkflowExecutionOptionsUpdatedEventAttributes
 >;

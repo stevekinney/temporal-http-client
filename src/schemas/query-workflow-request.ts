@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const QueryWorkflowRequestSchema = z.object({
+export const QueryWorkflowRequest = z.object({
   namespace: z.string().optional(),
   execution: z.any().optional(),
   query: z.any().optional(),
@@ -20,6 +20,4 @@ export const QueryWorkflowRequestSchema = z.object({
     )
     .optional(),
 });
-export type QueryWorkflowRequestSchema = z.infer<
-  typeof QueryWorkflowRequestSchema
->;
+export type QueryWorkflowRequest = z.infer<typeof QueryWorkflowRequest>;

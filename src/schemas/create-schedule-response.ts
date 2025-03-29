@@ -1,8 +1,6 @@
 import { z } from "zod";
 
-export const CreateScheduleResponseSchema = z.object({
+export const CreateScheduleResponse = z.object({
   conflictToken: z.string().optional(),
 });
-export type CreateScheduleResponseSchema = z.infer<
-  typeof CreateScheduleResponseSchema
->;
+export type CreateScheduleResponse = z.infer<typeof CreateScheduleResponse>;

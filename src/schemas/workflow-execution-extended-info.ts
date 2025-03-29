@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Holds all the extra information about workflow execution that is not part of Visibility.*/
-export const WorkflowExecutionExtendedInfoSchema = z
+export const WorkflowExecutionExtendedInfo = z
   .object({
     /**
      * Workflow execution expiration time is defined as workflow start time plus expiration timeout.
@@ -45,6 +45,6 @@ export const WorkflowExecutionExtendedInfoSchema = z
   .describe(
     "Holds all the extra information about workflow execution that is not part of Visibility.",
   );
-export type WorkflowExecutionExtendedInfoSchema = z.infer<
-  typeof WorkflowExecutionExtendedInfoSchema
+export type WorkflowExecutionExtendedInfo = z.infer<
+  typeof WorkflowExecutionExtendedInfo
 >;

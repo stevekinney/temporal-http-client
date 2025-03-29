@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const UpdateWorkflowExecutionOptionsRequestSchema = z.object({
+export const UpdateWorkflowExecutionOptionsRequest = z.object({
   /**The namespace name of the target Workflow.*/
   namespace: z
     .string()
@@ -35,6 +35,6 @@ export const UpdateWorkflowExecutionOptionsRequestSchema = z.object({
     )
     .optional(),
 });
-export type UpdateWorkflowExecutionOptionsRequestSchema = z.infer<
-  typeof UpdateWorkflowExecutionOptionsRequestSchema
+export type UpdateWorkflowExecutionOptionsRequest = z.infer<
+  typeof UpdateWorkflowExecutionOptionsRequest
 >;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const StopBatchOperationResponseSchema = z.object({});
-export type StopBatchOperationResponseSchema = z.infer<
-  typeof StopBatchOperationResponseSchema
+export const StopBatchOperationResponse = z.object({});
+export type StopBatchOperationResponse = z.infer<
+  typeof StopBatchOperationResponse
 >;

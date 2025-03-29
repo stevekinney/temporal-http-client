@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const DescribeNamespaceResponseSchema = z.object({
+export const DescribeNamespaceResponse = z.object({
   namespaceInfo: z.any().optional(),
   config: z.any().optional(),
   replicationConfig: z.any().optional(),
@@ -17,6 +17,6 @@ export const DescribeNamespaceResponseSchema = z.object({
     )
     .optional(),
 });
-export type DescribeNamespaceResponseSchema = z.infer<
-  typeof DescribeNamespaceResponseSchema
+export type DescribeNamespaceResponse = z.infer<
+  typeof DescribeNamespaceResponse
 >;

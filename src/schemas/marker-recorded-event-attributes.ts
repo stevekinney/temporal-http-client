@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const MarkerRecordedEventAttributesSchema = z.object({
+export const MarkerRecordedEventAttributes = z.object({
   /**Workers use this to identify the "types" of various markers. Ex: Local activity, side effect.*/
   markerName: z
     .string()
@@ -29,6 +29,6 @@ export const MarkerRecordedEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type MarkerRecordedEventAttributesSchema = z.infer<
-  typeof MarkerRecordedEventAttributesSchema
+export type MarkerRecordedEventAttributes = z.infer<
+  typeof MarkerRecordedEventAttributes
 >;

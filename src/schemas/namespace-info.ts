@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const NamespaceInfoSchema = z.object({
+export const NamespaceInfo = z.object({
   name: z.string().optional(),
   state: z
     .enum([
@@ -34,4 +34,4 @@ export const NamespaceInfoSchema = z.object({
     )
     .optional(),
 });
-export type NamespaceInfoSchema = z.infer<typeof NamespaceInfoSchema>;
+export type NamespaceInfo = z.infer<typeof NamespaceInfo>;

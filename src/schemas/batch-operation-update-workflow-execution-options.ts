@@ -4,7 +4,7 @@ import { z } from "zod";
  * BatchOperationUpdateWorkflowExecutionOptions sends UpdateWorkflowExecutionOptions requests to batch workflows.
  *  Keep the parameters in sync with temporal.api.workflowservice.v1.UpdateWorkflowExecutionOptionsRequest.
  */
-export const BatchOperationUpdateWorkflowExecutionOptionsSchema = z
+export const BatchOperationUpdateWorkflowExecutionOptions = z
   .object({
     /**The identity of the worker/client.*/
     identity: z
@@ -32,6 +32,6 @@ export const BatchOperationUpdateWorkflowExecutionOptionsSchema = z
   .describe(
     "BatchOperationUpdateWorkflowExecutionOptions sends UpdateWorkflowExecutionOptions requests to batch workflows.\n Keep the parameters in sync with temporal.api.workflowservice.v1.UpdateWorkflowExecutionOptionsRequest.",
   );
-export type BatchOperationUpdateWorkflowExecutionOptionsSchema = z.infer<
-  typeof BatchOperationUpdateWorkflowExecutionOptionsSchema
+export type BatchOperationUpdateWorkflowExecutionOptions = z.infer<
+  typeof BatchOperationUpdateWorkflowExecutionOptions
 >;

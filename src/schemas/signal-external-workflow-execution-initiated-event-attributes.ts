@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-export const SignalExternalWorkflowExecutionInitiatedEventAttributesSchema =
-  z.object({
+export const SignalExternalWorkflowExecutionInitiatedEventAttributes = z.object(
+  {
     /**The `WORKFLOW_TASK_COMPLETED` event which this command was reported with*/
     workflowTaskCompletedEventId: z
       .string()
@@ -44,6 +44,8 @@ export const SignalExternalWorkflowExecutionInitiatedEventAttributesSchema =
       )
       .optional(),
     header: z.any().optional(),
-  });
-export type SignalExternalWorkflowExecutionInitiatedEventAttributesSchema =
-  z.infer<typeof SignalExternalWorkflowExecutionInitiatedEventAttributesSchema>;
+  },
+);
+export type SignalExternalWorkflowExecutionInitiatedEventAttributes = z.infer<
+  typeof SignalExternalWorkflowExecutionInitiatedEventAttributes
+>;

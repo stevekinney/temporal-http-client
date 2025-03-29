@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const UpdateNexusEndpointResponseSchema = z.object({
+export const UpdateNexusEndpointResponse = z.object({
   /**Data post acceptance. Can be used to issue additional updates to this record.*/
   endpoint: z
     .any()
@@ -9,6 +9,6 @@ export const UpdateNexusEndpointResponseSchema = z.object({
     )
     .optional(),
 });
-export type UpdateNexusEndpointResponseSchema = z.infer<
-  typeof UpdateNexusEndpointResponseSchema
+export type UpdateNexusEndpointResponse = z.infer<
+  typeof UpdateNexusEndpointResponse
 >;

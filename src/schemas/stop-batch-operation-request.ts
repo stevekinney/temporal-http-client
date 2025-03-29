@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const StopBatchOperationRequestSchema = z.object({
+export const StopBatchOperationRequest = z.object({
   /**Namespace that contains the batch operation*/
   namespace: z
     .string()
@@ -13,6 +13,6 @@ export const StopBatchOperationRequestSchema = z.object({
   /**Identity of the operator*/
   identity: z.string().describe("Identity of the operator").optional(),
 });
-export type StopBatchOperationRequestSchema = z.infer<
-  typeof StopBatchOperationRequestSchema
+export type StopBatchOperationRequest = z.infer<
+  typeof StopBatchOperationRequest
 >;

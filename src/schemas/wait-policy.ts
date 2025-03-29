@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Specifies client's intent to wait for Update results.*/
-export const WaitPolicySchema = z
+export const WaitPolicy = z
   .object({
     /**
      * Indicates the Update lifecycle stage that the Update must reach before
@@ -23,4 +23,4 @@ export const WaitPolicySchema = z
       .optional(),
   })
   .describe("Specifies client's intent to wait for Update results.");
-export type WaitPolicySchema = z.infer<typeof WaitPolicySchema>;
+export type WaitPolicy = z.infer<typeof WaitPolicy>;

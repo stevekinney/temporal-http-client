@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowExecutionConfigSchema = z.object({
+export const WorkflowExecutionConfig = z.object({
   taskQueue: z.any().optional(),
   workflowExecutionTimeout: z
     .string()
@@ -20,6 +20,4 @@ export const WorkflowExecutionConfigSchema = z.object({
     .describe("User metadata provided on start workflow.")
     .optional(),
 });
-export type WorkflowExecutionConfigSchema = z.infer<
-  typeof WorkflowExecutionConfigSchema
->;
+export type WorkflowExecutionConfig = z.infer<typeof WorkflowExecutionConfig>;

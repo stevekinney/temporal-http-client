@@ -5,7 +5,7 @@ import { z } from "zod";
  *  build id or binary checksum. A new reset point will be created if either build id or binary
  *  checksum changes (although in general only one or the other will be used at a time).
  */
-export const ResetPointInfoSchema = z
+export const ResetPointInfo = z
   .object({
     /**Worker build id.*/
     buildId: z.string().describe("Worker build id.").optional(),
@@ -52,4 +52,4 @@ export const ResetPointInfoSchema = z
   .describe(
     "ResetPointInfo records the workflow event id that is the first one processed by a given\n build id or binary checksum. A new reset point will be created if either build id or binary\n checksum changes (although in general only one or the other will be used at a time).",
   );
-export type ResetPointInfoSchema = z.infer<typeof ResetPointInfoSchema>;
+export type ResetPointInfo = z.infer<typeof ResetPointInfo>;

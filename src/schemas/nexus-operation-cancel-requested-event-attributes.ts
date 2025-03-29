@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const NexusOperationCancelRequestedEventAttributesSchema = z.object({
+export const NexusOperationCancelRequestedEventAttributes = z.object({
   /**The id of the `NEXUS_OPERATION_SCHEDULED` event this cancel request corresponds to.*/
   scheduledEventId: z
     .string()
@@ -19,6 +19,6 @@ export const NexusOperationCancelRequestedEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type NexusOperationCancelRequestedEventAttributesSchema = z.infer<
-  typeof NexusOperationCancelRequestedEventAttributesSchema
+export type NexusOperationCancelRequestedEventAttributes = z.infer<
+  typeof NexusOperationCancelRequestedEventAttributes
 >;

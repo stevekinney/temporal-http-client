@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ChildWorkflowExecutionFailureInfoSchema = z.object({
+export const ChildWorkflowExecutionFailureInfo = z.object({
   namespace: z.string().optional(),
   workflowExecution: z.any().optional(),
   workflowType: z.any().optional(),
@@ -19,6 +19,6 @@ export const ChildWorkflowExecutionFailureInfoSchema = z.object({
     ])
     .optional(),
 });
-export type ChildWorkflowExecutionFailureInfoSchema = z.infer<
-  typeof ChildWorkflowExecutionFailureInfoSchema
+export type ChildWorkflowExecutionFailureInfo = z.infer<
+  typeof ChildWorkflowExecutionFailureInfo
 >;

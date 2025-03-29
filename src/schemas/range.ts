@@ -6,7 +6,7 @@ import { z } from "zod";
  *  equal to start. This means you can use a Range with start set to a value, and
  *  end and step unset (defaulting to 0) to represent a single value.
  */
-export const RangeSchema = z
+export const Range = z
   .object({
     /**Start of range (inclusive).*/
     start: z.number().int().describe("Start of range (inclusive).").optional(),
@@ -18,4 +18,4 @@ export const RangeSchema = z
   .describe(
     "Range represents a set of integer values, used to match fields of a calendar\n time in StructuredCalendarSpec. If end < start, then end is interpreted as\n equal to start. This means you can use a Range with start set to a value, and\n end and step unset (defaulting to 0) to represent a single value.",
   );
-export type RangeSchema = z.infer<typeof RangeSchema>;
+export type Range = z.infer<typeof Range>;

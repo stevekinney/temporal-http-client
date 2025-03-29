@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const SetWorkerDeploymentCurrentVersionResponseSchema = z.object({
+export const SetWorkerDeploymentCurrentVersionResponse = z.object({
   /**
    * This value is returned so that it can be optionally passed to APIs
    *  that write to the Worker Deployment state to ensure that the state
@@ -23,6 +23,6 @@ export const SetWorkerDeploymentCurrentVersionResponseSchema = z.object({
     )
     .optional(),
 });
-export type SetWorkerDeploymentCurrentVersionResponseSchema = z.infer<
-  typeof SetWorkerDeploymentCurrentVersionResponseSchema
+export type SetWorkerDeploymentCurrentVersionResponse = z.infer<
+  typeof SetWorkerDeploymentCurrentVersionResponse
 >;

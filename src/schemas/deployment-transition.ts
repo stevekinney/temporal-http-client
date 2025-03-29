@@ -4,7 +4,7 @@ import { z } from "zod";
  * Holds information about ongoing transition of a workflow execution from one deployment to another.
  *  Deprecated. Use DeploymentVersionTransition.
  */
-export const DeploymentTransitionSchema = z
+export const DeploymentTransition = z
   .object({
     /**
      * The target deployment of the transition. Null means a so-far-versioned workflow is
@@ -20,6 +20,4 @@ export const DeploymentTransitionSchema = z
   .describe(
     "Holds information about ongoing transition of a workflow execution from one deployment to another.\n Deprecated. Use DeploymentVersionTransition.",
   );
-export type DeploymentTransitionSchema = z.infer<
-  typeof DeploymentTransitionSchema
->;
+export type DeploymentTransition = z.infer<typeof DeploymentTransition>;

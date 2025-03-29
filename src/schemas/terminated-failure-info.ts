@@ -1,6 +1,4 @@
 import { z } from "zod";
 
-export const TerminatedFailureInfoSchema = z.object({});
-export type TerminatedFailureInfoSchema = z.infer<
-  typeof TerminatedFailureInfoSchema
->;
+export const TerminatedFailureInfo = z.object({});
+export type TerminatedFailureInfo = z.infer<typeof TerminatedFailureInfo>;

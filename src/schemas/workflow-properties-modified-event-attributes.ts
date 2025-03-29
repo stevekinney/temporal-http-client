@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowPropertiesModifiedEventAttributesSchema = z.object({
+export const WorkflowPropertiesModifiedEventAttributes = z.object({
   /**The `WORKFLOW_TASK_COMPLETED` event which this command was reported with*/
   workflowTaskCompletedEventId: z
     .string()
@@ -20,6 +20,6 @@ export const WorkflowPropertiesModifiedEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type WorkflowPropertiesModifiedEventAttributesSchema = z.infer<
-  typeof WorkflowPropertiesModifiedEventAttributesSchema
+export type WorkflowPropertiesModifiedEventAttributes = z.infer<
+  typeof WorkflowPropertiesModifiedEventAttributes
 >;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RecordActivityTaskHeartbeatByIdRequestSchema = z.object({
+export const RecordActivityTaskHeartbeatByIdRequest = z.object({
   /**Namespace of the workflow which scheduled this activity*/
   namespace: z
     .string()
@@ -31,6 +31,6 @@ export const RecordActivityTaskHeartbeatByIdRequestSchema = z.object({
   /**The identity of the worker/client*/
   identity: z.string().describe("The identity of the worker/client").optional(),
 });
-export type RecordActivityTaskHeartbeatByIdRequestSchema = z.infer<
-  typeof RecordActivityTaskHeartbeatByIdRequestSchema
+export type RecordActivityTaskHeartbeatByIdRequest = z.infer<
+  typeof RecordActivityTaskHeartbeatByIdRequest
 >;

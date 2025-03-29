@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ScheduleActionResultSchema = z.object({
+export const ScheduleActionResult = z.object({
   /**Time that the action was taken (according to the schedule, including jitter).*/
   scheduleTime: z
     .string()
@@ -40,6 +40,4 @@ export const ScheduleActionResultSchema = z.object({
     )
     .optional(),
 });
-export type ScheduleActionResultSchema = z.infer<
-  typeof ScheduleActionResultSchema
->;
+export type ScheduleActionResult = z.infer<typeof ScheduleActionResult>;

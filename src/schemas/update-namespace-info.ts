@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const UpdateNamespaceInfoSchema = z.object({
+export const UpdateNamespaceInfo = z.object({
   description: z.string().optional(),
   ownerEmail: z.string().optional(),
   /**
@@ -33,6 +33,4 @@ export const UpdateNamespaceInfoSchema = z.object({
     )
     .optional(),
 });
-export type UpdateNamespaceInfoSchema = z.infer<
-  typeof UpdateNamespaceInfoSchema
->;
+export type UpdateNamespaceInfo = z.infer<typeof UpdateNamespaceInfo>;

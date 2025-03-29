@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ActivityTaskCanceledEventAttributesSchema = z.object({
+export const ActivityTaskCanceledEventAttributes = z.object({
   /**Additional information that the activity reported upon confirming cancellation*/
   details: z
     .any()
@@ -48,6 +48,6 @@ export const ActivityTaskCanceledEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type ActivityTaskCanceledEventAttributesSchema = z.infer<
-  typeof ActivityTaskCanceledEventAttributesSchema
+export type ActivityTaskCanceledEventAttributes = z.infer<
+  typeof ActivityTaskCanceledEventAttributes
 >;

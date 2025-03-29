@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowExecutionCompletedEventAttributesSchema = z.object({
+export const WorkflowExecutionCompletedEventAttributes = z.object({
   /**Serialized result of workflow completion (ie: The return value of the workflow function)*/
   result: z
     .any()
@@ -23,6 +23,6 @@ export const WorkflowExecutionCompletedEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type WorkflowExecutionCompletedEventAttributesSchema = z.infer<
-  typeof WorkflowExecutionCompletedEventAttributesSchema
+export type WorkflowExecutionCompletedEventAttributes = z.infer<
+  typeof WorkflowExecutionCompletedEventAttributes
 >;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RequestCancelExternalWorkflowExecutionFailedEventAttributesSchema =
+export const RequestCancelExternalWorkflowExecutionFailedEventAttributes =
   z.object({
     cause: z
       .enum([
@@ -41,7 +41,5 @@ export const RequestCancelExternalWorkflowExecutionFailedEventAttributesSchema =
     /**Deprecated*/
     control: z.string().describe("Deprecated").optional(),
   });
-export type RequestCancelExternalWorkflowExecutionFailedEventAttributesSchema =
-  z.infer<
-    typeof RequestCancelExternalWorkflowExecutionFailedEventAttributesSchema
-  >;
+export type RequestCancelExternalWorkflowExecutionFailedEventAttributes =
+  z.infer<typeof RequestCancelExternalWorkflowExecutionFailedEventAttributes>;

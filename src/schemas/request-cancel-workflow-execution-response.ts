@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RequestCancelWorkflowExecutionResponseSchema = z.object({});
-export type RequestCancelWorkflowExecutionResponseSchema = z.infer<
-  typeof RequestCancelWorkflowExecutionResponseSchema
+export const RequestCancelWorkflowExecutionResponse = z.object({});
+export type RequestCancelWorkflowExecutionResponse = z.infer<
+  typeof RequestCancelWorkflowExecutionResponse
 >;

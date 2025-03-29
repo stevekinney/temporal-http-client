@@ -20,7 +20,7 @@ import { z } from "zod";
  *  If a spec has no matching times after the current time, then the schedule
  *  will be subject to automatic deletion (after several days).
  */
-export const ScheduleSpecSchema = z
+export const ScheduleSpec = z
   .object({
     /**Calendar-based specifications of times.*/
     structuredCalendar: z
@@ -136,4 +136,4 @@ export const ScheduleSpecSchema = z
   .describe(
     "ScheduleSpec is a complete description of a set of absolute timestamps\n (possibly infinite) that an action should occur at. The meaning of a\n ScheduleSpec depends only on its contents and never changes, except that the\n definition of a time zone can change over time (most commonly, when daylight\n saving time policy changes for an area). To create a totally self-contained\n ScheduleSpec, use UTC or include timezone_data.\n\n For input, you can provide zero or more of: structured_calendar, calendar,\n cron_string, interval, and exclude_structured_calendar, and all of them will\n be used (the schedule will take action at the union of all of their times,\n minus the ones that match exclude_structured_calendar).\n\n On input, calendar and cron_string fields will be compiled into\n structured_calendar (and maybe interval and timezone_name), so if you\n Describe a schedule, you'll see only structured_calendar, interval, etc.\n\n If a spec has no matching times after the current time, then the schedule\n will be subject to automatic deletion (after several days).",
   );
-export type ScheduleSpecSchema = z.infer<typeof ScheduleSpecSchema>;
+export type ScheduleSpec = z.infer<typeof ScheduleSpec>;

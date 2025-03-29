@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**ScheduleListEntry is returned by ListSchedules.*/
-export const ScheduleListEntrySchema = z
+export const ScheduleListEntry = z
   .object({
     scheduleId: z.string().optional(),
     memo: z.any().optional(),
@@ -9,4 +9,4 @@ export const ScheduleListEntrySchema = z
     info: z.any().optional(),
   })
   .describe("ScheduleListEntry is returned by ListSchedules.");
-export type ScheduleListEntrySchema = z.infer<typeof ScheduleListEntrySchema>;
+export type ScheduleListEntry = z.infer<typeof ScheduleListEntry>;

@@ -1,6 +1,4 @@
 import { z } from "zod";
 
-export const PatchScheduleResponseSchema = z.object({});
-export type PatchScheduleResponseSchema = z.infer<
-  typeof PatchScheduleResponseSchema
->;
+export const PatchScheduleResponse = z.object({});
+export type PatchScheduleResponse = z.infer<typeof PatchScheduleResponse>;

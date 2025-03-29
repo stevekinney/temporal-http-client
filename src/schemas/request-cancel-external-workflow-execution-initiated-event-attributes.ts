@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RequestCancelExternalWorkflowExecutionInitiatedEventAttributesSchema =
+export const RequestCancelExternalWorkflowExecutionInitiatedEventAttributes =
   z.object({
     /**The `WORKFLOW_TASK_COMPLETED` event which this command was reported with*/
     workflowTaskCompletedEventId: z
@@ -39,7 +39,7 @@ export const RequestCancelExternalWorkflowExecutionInitiatedEventAttributesSchem
       .describe("Reason for requesting the cancellation")
       .optional(),
   });
-export type RequestCancelExternalWorkflowExecutionInitiatedEventAttributesSchema =
+export type RequestCancelExternalWorkflowExecutionInitiatedEventAttributes =
   z.infer<
-    typeof RequestCancelExternalWorkflowExecutionInitiatedEventAttributesSchema
+    typeof RequestCancelExternalWorkflowExecutionInitiatedEventAttributes
   >;

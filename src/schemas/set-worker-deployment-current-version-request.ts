@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Set/unset the Current Version of a Worker Deployment.*/
-export const SetWorkerDeploymentCurrentVersionRequestSchema = z
+export const SetWorkerDeploymentCurrentVersionRequest = z
   .object({
     namespace: z.string().optional(),
     deploymentName: z.string().optional(),
@@ -59,6 +59,6 @@ export const SetWorkerDeploymentCurrentVersionRequestSchema = z
       .optional(),
   })
   .describe("Set/unset the Current Version of a Worker Deployment.");
-export type SetWorkerDeploymentCurrentVersionRequestSchema = z.infer<
-  typeof SetWorkerDeploymentCurrentVersionRequestSchema
+export type SetWorkerDeploymentCurrentVersionRequest = z.infer<
+  typeof SetWorkerDeploymentCurrentVersionRequest
 >;

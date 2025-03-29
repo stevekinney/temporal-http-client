@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**GetClusterInfoResponse contains information about Temporal cluster.*/
-export const GetClusterInfoResponseSchema = z
+export const GetClusterInfoResponse = z
   .object({
     /**
      * Key is client name i.e "temporal-go", "temporal-java", or "temporal-cli".
@@ -24,6 +24,4 @@ export const GetClusterInfoResponseSchema = z
   .describe(
     "GetClusterInfoResponse contains information about Temporal cluster.",
   );
-export type GetClusterInfoResponseSchema = z.infer<
-  typeof GetClusterInfoResponseSchema
->;
+export type GetClusterInfoResponse = z.infer<typeof GetClusterInfoResponse>;

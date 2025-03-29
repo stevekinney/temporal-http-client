@@ -1,8 +1,6 @@
 import { z } from "zod";
 
-export const ClusterReplicationConfigSchema = z.object({
+export const ClusterReplicationConfig = z.object({
   clusterName: z.string().optional(),
 });
-export type ClusterReplicationConfigSchema = z.infer<
-  typeof ClusterReplicationConfigSchema
->;
+export type ClusterReplicationConfig = z.infer<typeof ClusterReplicationConfig>;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const StartChildWorkflowExecutionFailedEventAttributesSchema = z.object({
+export const StartChildWorkflowExecutionFailedEventAttributes = z.object({
   /**
    * Namespace of the child workflow.
    *  SDKs and UI tools should use `namespace` field but server must use `namespace_id` only.
@@ -38,6 +38,6 @@ export const StartChildWorkflowExecutionFailedEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type StartChildWorkflowExecutionFailedEventAttributesSchema = z.infer<
-  typeof StartChildWorkflowExecutionFailedEventAttributesSchema
+export type StartChildWorkflowExecutionFailedEventAttributes = z.infer<
+  typeof StartChildWorkflowExecutionFailedEventAttributes
 >;

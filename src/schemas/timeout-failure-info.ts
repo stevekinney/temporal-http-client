@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const TimeoutFailureInfoSchema = z.object({
+export const TimeoutFailureInfo = z.object({
   timeoutType: z
     .enum([
       "TIMEOUT_TYPE_UNSPECIFIED",
@@ -12,4 +12,4 @@ export const TimeoutFailureInfoSchema = z.object({
     .optional(),
   lastHeartbeatDetails: z.any().optional(),
 });
-export type TimeoutFailureInfoSchema = z.infer<typeof TimeoutFailureInfoSchema>;
+export type TimeoutFailureInfo = z.infer<typeof TimeoutFailureInfo>;

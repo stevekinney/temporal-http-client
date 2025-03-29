@@ -4,7 +4,7 @@ import { z } from "zod";
  * BatchOperationSignal sends signals to batch workflows.
  *  Keep the parameter in sync with temporal.api.workflowservice.v1.SignalWorkflowExecutionRequest.
  */
-export const BatchOperationSignalSchema = z
+export const BatchOperationSignal = z
   .object({
     /**The workflow author-defined name of the signal to send to the workflow*/
     signal: z
@@ -37,6 +37,4 @@ export const BatchOperationSignalSchema = z
   .describe(
     "BatchOperationSignal sends signals to batch workflows.\n Keep the parameter in sync with temporal.api.workflowservice.v1.SignalWorkflowExecutionRequest.",
   );
-export type BatchOperationSignalSchema = z.infer<
-  typeof BatchOperationSignalSchema
->;
+export type BatchOperationSignal = z.infer<typeof BatchOperationSignal>;

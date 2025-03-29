@@ -1,9 +1,7 @@
 import { z } from "zod";
 
-export const QueryWorkflowResponseSchema = z.object({
+export const QueryWorkflowResponse = z.object({
   queryResult: z.any().optional(),
   queryRejected: z.any().optional(),
 });
-export type QueryWorkflowResponseSchema = z.infer<
-  typeof QueryWorkflowResponseSchema
->;
+export type QueryWorkflowResponse = z.infer<typeof QueryWorkflowResponse>;

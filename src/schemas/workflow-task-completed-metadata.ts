@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowTaskCompletedMetadataSchema = z.object({
+export const WorkflowTaskCompletedMetadata = z.object({
   /**
    * Internal flags used by the core SDK. SDKs using flags must comply with the following behavior:
    *
@@ -68,6 +68,6 @@ export const WorkflowTaskCompletedMetadataSchema = z.object({
     )
     .optional(),
 });
-export type WorkflowTaskCompletedMetadataSchema = z.infer<
-  typeof WorkflowTaskCompletedMetadataSchema
+export type WorkflowTaskCompletedMetadata = z.infer<
+  typeof WorkflowTaskCompletedMetadata
 >;

@@ -4,7 +4,7 @@ import { z } from "zod";
  * Describes where and how to reset a workflow, used for batch reset currently
  *  and may be used for single-workflow reset later.
  */
-export const ResetOptionsSchema = z
+export const ResetOptions = z
   .object({
     /**
      * The id of a specific `WORKFLOW_TASK_COMPLETED`,`WORKFLOW_TASK_TIMED_OUT`, `WORKFLOW_TASK_FAILED`, or
@@ -72,4 +72,4 @@ export const ResetOptionsSchema = z
   .describe(
     "Describes where and how to reset a workflow, used for batch reset currently\n and may be used for single-workflow reset later.",
   );
-export type ResetOptionsSchema = z.infer<typeof ResetOptionsSchema>;
+export type ResetOptions = z.infer<typeof ResetOptions>;

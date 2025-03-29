@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Used to update the user-defined metadata of a Worker Deployment Version.*/
-export const UpdateWorkerDeploymentVersionMetadataRequestSchema = z
+export const UpdateWorkerDeploymentVersionMetadataRequest = z
   .object({
     namespace: z.string().optional(),
     /**Deployment Version identifier in the form "<deployment_name>.<build_id>".*/
@@ -21,6 +21,6 @@ export const UpdateWorkerDeploymentVersionMetadataRequestSchema = z
   .describe(
     "Used to update the user-defined metadata of a Worker Deployment Version.",
   );
-export type UpdateWorkerDeploymentVersionMetadataRequestSchema = z.infer<
-  typeof UpdateWorkerDeploymentVersionMetadataRequestSchema
+export type UpdateWorkerDeploymentVersionMetadataRequest = z.infer<
+  typeof UpdateWorkerDeploymentVersionMetadataRequest
 >;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const DeleteWorkerDeploymentResponseSchema = z.object({});
-export type DeleteWorkerDeploymentResponseSchema = z.infer<
-  typeof DeleteWorkerDeploymentResponseSchema
+export const DeleteWorkerDeploymentResponse = z.object({});
+export type DeleteWorkerDeploymentResponse = z.infer<
+  typeof DeleteWorkerDeploymentResponse
 >;

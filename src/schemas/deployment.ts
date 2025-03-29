@@ -6,7 +6,7 @@ import { z } from "zod";
  *  programs to specify these values.
  *  Deprecated.
  */
-export const DeploymentSchema = z
+export const Deployment = z
   .object({
     /**
      * Different versions of the same worker service/application are related together by having a
@@ -35,4 +35,4 @@ export const DeploymentSchema = z
   .describe(
     "`Deployment` identifies a deployment of Temporal workers. The combination of deployment series\n name + build ID serves as the identifier. User can use `WorkerDeploymentOptions` in their worker\n programs to specify these values.\n Deprecated.",
   );
-export type DeploymentSchema = z.infer<typeof DeploymentSchema>;
+export type Deployment = z.infer<typeof Deployment>;

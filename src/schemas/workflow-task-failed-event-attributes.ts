@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowTaskFailedEventAttributesSchema = z.object({
+export const WorkflowTaskFailedEventAttributes = z.object({
   /**The id of the `WORKFLOW_TASK_SCHEDULED` event this task corresponds to*/
   scheduledEventId: z
     .string()
@@ -99,6 +99,6 @@ export const WorkflowTaskFailedEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type WorkflowTaskFailedEventAttributesSchema = z.infer<
-  typeof WorkflowTaskFailedEventAttributesSchema
+export type WorkflowTaskFailedEventAttributes = z.infer<
+  typeof WorkflowTaskFailedEventAttributes
 >;

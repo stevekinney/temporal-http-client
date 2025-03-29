@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Reachability of tasks for a worker on a single task queue.*/
-export const TaskQueueReachabilitySchema = z
+export const TaskQueueReachability = z
   .object({
     taskQueue: z.string().optional(),
     /**
@@ -25,6 +25,4 @@ export const TaskQueueReachabilitySchema = z
       .optional(),
   })
   .describe("Reachability of tasks for a worker on a single task queue.");
-export type TaskQueueReachabilitySchema = z.infer<
-  typeof TaskQueueReachabilitySchema
->;
+export type TaskQueueReachability = z.infer<typeof TaskQueueReachability>;

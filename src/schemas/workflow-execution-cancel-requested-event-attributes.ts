@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowExecutionCancelRequestedEventAttributesSchema = z.object({
+export const WorkflowExecutionCancelRequestedEventAttributes = z.object({
   /**
    * User provided reason for requesting cancellation
    *  TODO: shall we create a new field with name "reason" and deprecate this one?
@@ -25,6 +25,6 @@ export const WorkflowExecutionCancelRequestedEventAttributesSchema = z.object({
     .describe("id of the worker or client who requested this cancel")
     .optional(),
 });
-export type WorkflowExecutionCancelRequestedEventAttributesSchema = z.infer<
-  typeof WorkflowExecutionCancelRequestedEventAttributesSchema
+export type WorkflowExecutionCancelRequestedEventAttributes = z.infer<
+  typeof WorkflowExecutionCancelRequestedEventAttributes
 >;

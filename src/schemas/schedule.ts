@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-export const ScheduleSchema = z.object({
+export const Schedule = z.object({
   spec: z.any().optional(),
   action: z.any().optional(),
   policies: z.any().optional(),
   state: z.any().optional(),
 });
-export type ScheduleSchema = z.infer<typeof ScheduleSchema>;
+export type Schedule = z.infer<typeof Schedule>;

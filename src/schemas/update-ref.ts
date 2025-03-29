@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**The data needed by a client to refer to a previously invoked Workflow Update.*/
-export const UpdateRefSchema = z
+export const UpdateRef = z
   .object({
     workflowExecution: z.any().optional(),
     updateId: z.string().optional(),
@@ -9,4 +9,4 @@ export const UpdateRefSchema = z
   .describe(
     "The data needed by a client to refer to a previously invoked Workflow Update.",
   );
-export type UpdateRefSchema = z.infer<typeof UpdateRefSchema>;
+export type UpdateRef = z.infer<typeof UpdateRef>;

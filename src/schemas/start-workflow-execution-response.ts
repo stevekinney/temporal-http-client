@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const StartWorkflowExecutionResponseSchema = z.object({
+export const StartWorkflowExecutionResponse = z.object({
   /**The run id of the workflow that was started - or used (via WorkflowIdConflictPolicy USE_EXISTING).*/
   runId: z
     .string()
@@ -25,6 +25,6 @@ export const StartWorkflowExecutionResponseSchema = z.object({
     )
     .optional(),
 });
-export type StartWorkflowExecutionResponseSchema = z.infer<
-  typeof StartWorkflowExecutionResponseSchema
+export type StartWorkflowExecutionResponse = z.infer<
+  typeof StartWorkflowExecutionResponse
 >;

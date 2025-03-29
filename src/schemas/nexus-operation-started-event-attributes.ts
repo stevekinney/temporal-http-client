@@ -6,7 +6,7 @@ import { z } from "zod";
  *  In rare situations, such as request timeouts, the service may fail to record the actual start time and will fabricate
  *  this event upon receiving the operation completion via callback.
  */
-export const NexusOperationStartedEventAttributesSchema = z
+export const NexusOperationStartedEventAttributes = z
   .object({
     /**The ID of the `NEXUS_OPERATION_SCHEDULED` event this task corresponds to.*/
     scheduledEventId: z
@@ -46,6 +46,6 @@ export const NexusOperationStartedEventAttributesSchema = z
   .describe(
     "Event marking an asynchronous operation was started by the responding Nexus handler.\n If the operation completes synchronously, this event is not generated.\n In rare situations, such as request timeouts, the service may fail to record the actual start time and will fabricate\n this event upon receiving the operation completion via callback.",
   );
-export type NexusOperationStartedEventAttributesSchema = z.infer<
-  typeof NexusOperationStartedEventAttributesSchema
+export type NexusOperationStartedEventAttributes = z.infer<
+  typeof NexusOperationStartedEventAttributes
 >;

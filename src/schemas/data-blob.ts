@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const DataBlobSchema = z.object({
+export const DataBlob = z.object({
   encodingType: z
     .enum([
       "ENCODING_TYPE_UNSPECIFIED",
@@ -10,4 +10,4 @@ export const DataBlobSchema = z.object({
     .optional(),
   data: z.string().optional(),
 });
-export type DataBlobSchema = z.infer<typeof DataBlobSchema>;
+export type DataBlob = z.infer<typeof DataBlob>;

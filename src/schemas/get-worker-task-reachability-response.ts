@@ -4,7 +4,7 @@ import { z } from "zod";
  * [cleanup-wv-pre-release]
  *  Deprecated. Use `DescribeTaskQueue`.
  */
-export const GetWorkerTaskReachabilityResponseSchema = z
+export const GetWorkerTaskReachabilityResponse = z
   .object({
     /**
      * Task reachability, broken down by build id and then task queue.
@@ -25,6 +25,6 @@ export const GetWorkerTaskReachabilityResponseSchema = z
       .optional(),
   })
   .describe("[cleanup-wv-pre-release]\n Deprecated. Use `DescribeTaskQueue`.");
-export type GetWorkerTaskReachabilityResponseSchema = z.infer<
-  typeof GetWorkerTaskReachabilityResponseSchema
+export type GetWorkerTaskReachabilityResponse = z.infer<
+  typeof GetWorkerTaskReachabilityResponse
 >;

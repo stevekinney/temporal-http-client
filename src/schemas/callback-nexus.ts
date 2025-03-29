@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const Callback_NexusSchema = z.object({
+export const Callback_Nexus = z.object({
   /**Callback URL.*/
   url: z.string().describe("Callback URL.").optional(),
   /**Header to attach to callback request.*/
@@ -9,4 +9,4 @@ export const Callback_NexusSchema = z.object({
     .describe("Header to attach to callback request.")
     .optional(),
 });
-export type Callback_NexusSchema = z.infer<typeof Callback_NexusSchema>;
+export type Callback_Nexus = z.infer<typeof Callback_Nexus>;

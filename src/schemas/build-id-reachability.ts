@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Reachability of tasks for a worker by build id, in one or more task queues.*/
-export const BuildIdReachabilitySchema = z
+export const BuildIdReachability = z
   .object({
     /**A build id or empty if unversioned.*/
     buildId: z
@@ -17,6 +17,4 @@ export const BuildIdReachabilitySchema = z
   .describe(
     "Reachability of tasks for a worker by build id, in one or more task queues.",
   );
-export type BuildIdReachabilitySchema = z.infer<
-  typeof BuildIdReachabilitySchema
->;
+export type BuildIdReachability = z.infer<typeof BuildIdReachability>;

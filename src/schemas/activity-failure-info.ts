@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ActivityFailureInfoSchema = z.object({
+export const ActivityFailureInfo = z.object({
   scheduledEventId: z.string().optional(),
   startedEventId: z.string().optional(),
   identity: z.string().optional(),
@@ -19,6 +19,4 @@ export const ActivityFailureInfoSchema = z.object({
     ])
     .optional(),
 });
-export type ActivityFailureInfoSchema = z.infer<
-  typeof ActivityFailureInfoSchema
->;
+export type ActivityFailureInfo = z.infer<typeof ActivityFailureInfo>;

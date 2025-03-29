@@ -1,6 +1,4 @@
 import { z } from "zod";
 
-export const UnpauseActivityResponseSchema = z.object({});
-export type UnpauseActivityResponseSchema = z.infer<
-  typeof UnpauseActivityResponseSchema
->;
+export const UnpauseActivityResponse = z.object({});
+export type UnpauseActivityResponse = z.infer<typeof UnpauseActivityResponse>;

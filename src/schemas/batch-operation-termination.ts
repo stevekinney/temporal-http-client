@@ -5,7 +5,7 @@ import { z } from "zod";
  *  Keep the parameter in sync with temporal.api.workflowservice.v1.TerminateWorkflowExecutionRequest.
  *  Ignore first_execution_run_id because this is used for single workflow operation.
  */
-export const BatchOperationTerminationSchema = z
+export const BatchOperationTermination = z
   .object({
     /**Serialized value(s) to provide to the termination event*/
     details: z
@@ -21,6 +21,6 @@ export const BatchOperationTerminationSchema = z
   .describe(
     "BatchOperationTermination sends terminate requests to batch workflows.\n Keep the parameter in sync with temporal.api.workflowservice.v1.TerminateWorkflowExecutionRequest.\n Ignore first_execution_run_id because this is used for single workflow operation.",
   );
-export type BatchOperationTerminationSchema = z.infer<
-  typeof BatchOperationTerminationSchema
+export type BatchOperationTermination = z.infer<
+  typeof BatchOperationTermination
 >;

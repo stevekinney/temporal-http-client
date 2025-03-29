@@ -13,7 +13,7 @@ import { z } from "zod";
  *  2022-02-17T00:00:00Z (among other times). The same interval with a phase of 3
  *  days, 5 hours, and 23 minutes would match 2022-02-20T05:23:00Z instead.
  */
-export const IntervalSpecSchema = z
+export const IntervalSpec = z
   .object({
     interval: z
       .string()
@@ -27,4 +27,4 @@ export const IntervalSpecSchema = z
   .describe(
     "IntervalSpec matches times that can be expressed as:\n epoch + n * interval + phase\n where n is an integer.\n phase defaults to zero if missing. interval is required.\n Both interval and phase must be non-negative and are truncated to the nearest\n second before any calculations.\n For example, an interval of 1 hour with phase of zero would match every hour,\n on the hour. The same interval but a phase of 19 minutes would match every\n xx:19:00. An interval of 28 days with phase zero would match\n 2022-02-17T00:00:00Z (among other times). The same interval with a phase of 3\n days, 5 hours, and 23 minutes would match 2022-02-20T05:23:00Z instead.",
   );
-export type IntervalSpecSchema = z.infer<typeof IntervalSpecSchema>;
+export type IntervalSpec = z.infer<typeof IntervalSpec>;

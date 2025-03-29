@@ -1,8 +1,23 @@
 import ts from 'typescript';
+import { z } from 'zod';
 
 import { formatOperationName, formatRoute } from './format';
 import { Operations } from './operations';
 import { Parameters } from './parameters';
+import { kebabCase } from 'change-case';
+
+const ResponseSchema = z.string().startsWith(`components['schemas']['`).endsWith(`']`);
+
+const getType = (s: string) => {
+  try {
+    const response = ResponseSchema.parse(s);
+    const responseType = response.replace(`components['schemas']['`, '').replace(`']`, '');
+    const fileName = kebabCase(responseType);
+    return `import('./schemas/${fileName}.ts').${responseType}`;
+  } catch (error) {
+    throw new Error(`Invalid response schema: ${s}`);
+  }
+};
 
 export class Operation {
   private httpMethod: Uppercase<HTTPMethod> | undefined;
@@ -28,7 +43,8 @@ export class Operation {
 
   addResponse(property: APIResponse): void {
     const response = property['200']['content']["'application/json'"];
-    this.response = response;
+    const responseType = getType(response);
+    this.response = responseType;
   }
 
   addRequestBody(property: APIRequestResponseBody): void {
@@ -44,6 +60,8 @@ export class Operation {
   get name() {
     return formatOperationName(this.operationName);
   }
+
+  
 
   get sourceFile() {
     return this.operations.sourceFile;

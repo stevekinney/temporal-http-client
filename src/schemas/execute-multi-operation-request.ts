@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ExecuteMultiOperationRequestSchema = z.object({
+export const ExecuteMultiOperationRequest = z.object({
   namespace: z.string().optional(),
   /**
    * List of operations to execute within a single workflow.
@@ -19,6 +19,6 @@ export const ExecuteMultiOperationRequestSchema = z.object({
     )
     .optional(),
 });
-export type ExecuteMultiOperationRequestSchema = z.infer<
-  typeof ExecuteMultiOperationRequestSchema
+export type ExecuteMultiOperationRequest = z.infer<
+  typeof ExecuteMultiOperationRequest
 >;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const TriggerImmediatelyRequestSchema = z.object({
+export const TriggerImmediatelyRequest = z.object({
   /**If set, override overlap policy for this one request.*/
   overlapPolicy: z
     .enum([
@@ -15,6 +15,6 @@ export const TriggerImmediatelyRequestSchema = z.object({
     .describe("If set, override overlap policy for this one request.")
     .optional(),
 });
-export type TriggerImmediatelyRequestSchema = z.infer<
-  typeof TriggerImmediatelyRequestSchema
+export type TriggerImmediatelyRequest = z.infer<
+  typeof TriggerImmediatelyRequest
 >;

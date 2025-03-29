@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ExecuteMultiOperationRequest_OperationSchema = z.object({
+export const ExecuteMultiOperationRequest_Operation = z.object({
   /**
    * Additional restrictions:
    *  - setting `cron_schedule` is invalid
@@ -25,6 +25,6 @@ export const ExecuteMultiOperationRequest_OperationSchema = z.object({
     )
     .optional(),
 });
-export type ExecuteMultiOperationRequest_OperationSchema = z.infer<
-  typeof ExecuteMultiOperationRequest_OperationSchema
+export type ExecuteMultiOperationRequest_Operation = z.infer<
+  typeof ExecuteMultiOperationRequest_Operation
 >;

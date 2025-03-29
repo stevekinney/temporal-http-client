@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const PauseActivityRequestSchema = z.object({
+export const PauseActivityRequest = z.object({
   /**Namespace of the workflow which scheduled this activity.*/
   namespace: z
     .string()
@@ -27,6 +27,4 @@ export const PauseActivityRequestSchema = z.object({
     .describe("Pause all running activities of this type.")
     .optional(),
 });
-export type PauseActivityRequestSchema = z.infer<
-  typeof PauseActivityRequestSchema
->;
+export type PauseActivityRequest = z.infer<typeof PauseActivityRequest>;

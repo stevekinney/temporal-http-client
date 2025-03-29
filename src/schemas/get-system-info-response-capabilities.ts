@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**System capability details.*/
-export const GetSystemInfoResponse_CapabilitiesSchema = z
+export const GetSystemInfoResponse_Capabilities = z
   .object({
     /**True if signal and query headers are supported.*/
     signalAndQueryHeader: z
@@ -90,6 +90,6 @@ export const GetSystemInfoResponse_CapabilitiesSchema = z
       .optional(),
   })
   .describe("System capability details.");
-export type GetSystemInfoResponse_CapabilitiesSchema = z.infer<
-  typeof GetSystemInfoResponse_CapabilitiesSchema
+export type GetSystemInfoResponse_Capabilities = z.infer<
+  typeof GetSystemInfoResponse_Capabilities
 >;

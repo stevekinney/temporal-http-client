@@ -1,8 +1,6 @@
 import { z } from "zod";
 
-export const GetNexusEndpointResponseSchema = z.object({
+export const GetNexusEndpointResponse = z.object({
   endpoint: z.any().optional(),
 });
-export type GetNexusEndpointResponseSchema = z.infer<
-  typeof GetNexusEndpointResponseSchema
->;
+export type GetNexusEndpointResponse = z.infer<typeof GetNexusEndpointResponse>;

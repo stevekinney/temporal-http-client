@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Nexus operation failed.*/
-export const NexusOperationFailedEventAttributesSchema = z
+export const NexusOperationFailedEventAttributes = z
   .object({
     /**The ID of the `NEXUS_OPERATION_SCHEDULED` event. Uniquely identifies this operation.*/
     scheduledEventId: z
@@ -24,6 +24,6 @@ export const NexusOperationFailedEventAttributesSchema = z
       .optional(),
   })
   .describe("Nexus operation failed.");
-export type NexusOperationFailedEventAttributesSchema = z.infer<
-  typeof NexusOperationFailedEventAttributesSchema
+export type NexusOperationFailedEventAttributes = z.infer<
+  typeof NexusOperationFailedEventAttributes
 >;

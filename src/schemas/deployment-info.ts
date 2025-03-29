@@ -6,7 +6,7 @@ import { z } from "zod";
  *  can be multiple task queue workers in a single deployment which are listed in this message.
  *  Deprecated.
  */
-export const DeploymentInfoSchema = z
+export const DeploymentInfo = z
   .object({
     deployment: z.any().optional(),
     createTime: z.string().datetime({ offset: true }).optional(),
@@ -32,4 +32,4 @@ export const DeploymentInfoSchema = z
   .describe(
     "`DeploymentInfo` holds information about a deployment. Deployment information is tracked\n automatically by server as soon as the first poll from that deployment reaches the server. There\n can be multiple task queue workers in a single deployment which are listed in this message.\n Deprecated.",
   );
-export type DeploymentInfoSchema = z.infer<typeof DeploymentInfoSchema>;
+export type DeploymentInfo = z.infer<typeof DeploymentInfo>;

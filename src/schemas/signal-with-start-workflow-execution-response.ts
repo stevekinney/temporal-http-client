@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const SignalWithStartWorkflowExecutionResponseSchema = z.object({
+export const SignalWithStartWorkflowExecutionResponse = z.object({
   /**The run id of the workflow that was started - or just signaled, if it was already running.*/
   runId: z
     .string()
@@ -14,6 +14,6 @@ export const SignalWithStartWorkflowExecutionResponseSchema = z.object({
     .describe("If true, a new workflow was started.")
     .optional(),
 });
-export type SignalWithStartWorkflowExecutionResponseSchema = z.infer<
-  typeof SignalWithStartWorkflowExecutionResponseSchema
+export type SignalWithStartWorkflowExecutionResponse = z.infer<
+  typeof SignalWithStartWorkflowExecutionResponse
 >;

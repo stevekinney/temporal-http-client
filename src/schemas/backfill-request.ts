@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const BackfillRequestSchema = z.object({
+export const BackfillRequest = z.object({
   /**
    * Time range to evaluate schedule in. Currently, this time range is
    *  exclusive on start_time and inclusive on end_time. (This is admittedly
@@ -31,4 +31,4 @@ export const BackfillRequestSchema = z.object({
     .describe("If set, override overlap policy for this request.")
     .optional(),
 });
-export type BackfillRequestSchema = z.infer<typeof BackfillRequestSchema>;
+export type BackfillRequest = z.infer<typeof BackfillRequest>;

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Experimental. Worker Deployments are experimental and might significantly change in the future.*/
-export const TaskQueueVersioningInfoSchema = z
+export const TaskQueueVersioningInfo = z
   .object({
     /**
      * Always present. Specifies which Deployment Version should receive new workflow
@@ -56,6 +56,4 @@ export const TaskQueueVersioningInfoSchema = z
   .describe(
     "Experimental. Worker Deployments are experimental and might significantly change in the future.",
   );
-export type TaskQueueVersioningInfoSchema = z.infer<
-  typeof TaskQueueVersioningInfoSchema
->;
+export type TaskQueueVersioningInfo = z.infer<typeof TaskQueueVersioningInfo>;

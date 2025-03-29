@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const TaskQueueTypeInfoSchema = z.object({
+export const TaskQueueTypeInfo = z.object({
   /**Unversioned workers (with `useVersioning=false`) are reported in unversioned result even if they set a Build ID.*/
   pollers: z
     .array(z.any())
@@ -10,4 +10,4 @@ export const TaskQueueTypeInfoSchema = z.object({
     .optional(),
   stats: z.any().optional(),
 });
-export type TaskQueueTypeInfoSchema = z.infer<typeof TaskQueueTypeInfoSchema>;
+export type TaskQueueTypeInfo = z.infer<typeof TaskQueueTypeInfo>;

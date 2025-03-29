@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowExecutionSignaledEventAttributesSchema = z.object({
+export const WorkflowExecutionSignaledEventAttributes = z.object({
   /**The name/type of the signal to fire*/
   signalName: z
     .string()
@@ -41,6 +41,6 @@ export const WorkflowExecutionSignaledEventAttributesSchema = z.object({
     .describe("When signal origin is a workflow execution, this field is set.")
     .optional(),
 });
-export type WorkflowExecutionSignaledEventAttributesSchema = z.infer<
-  typeof WorkflowExecutionSignaledEventAttributesSchema
+export type WorkflowExecutionSignaledEventAttributes = z.infer<
+  typeof WorkflowExecutionSignaledEventAttributes
 >;

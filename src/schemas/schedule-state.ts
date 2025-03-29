@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ScheduleStateSchema = z.object({
+export const ScheduleState = z.object({
   /**
    * Informative human-readable message with contextual notes, e.g. the reason
    *  a schedule is paused. The system may overwrite this message on certain
@@ -34,4 +34,4 @@ export const ScheduleStateSchema = z.object({
     .optional(),
   remainingActions: z.string().optional(),
 });
-export type ScheduleStateSchema = z.infer<typeof ScheduleStateSchema>;
+export type ScheduleState = z.infer<typeof ScheduleState>;

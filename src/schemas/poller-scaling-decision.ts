@@ -4,7 +4,7 @@ import { z } from "zod";
  * Attached to task responses to give hints to the SDK about how it may adjust its number of
  *  pollers.
  */
-export const PollerScalingDecisionSchema = z
+export const PollerScalingDecision = z
   .object({
     /**
      * How many poll requests to suggest should be added or removed, if any. As of now, server only
@@ -25,6 +25,4 @@ export const PollerScalingDecisionSchema = z
   .describe(
     "Attached to task responses to give hints to the SDK about how it may adjust its number of\n pollers.",
   );
-export type PollerScalingDecisionSchema = z.infer<
-  typeof PollerScalingDecisionSchema
->;
+export type PollerScalingDecision = z.infer<typeof PollerScalingDecision>;

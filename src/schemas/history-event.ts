@@ -4,7 +4,7 @@ import { z } from "zod";
  * History events are the method by which Temporal SDKs advance (or recreate) workflow state.
  *  See the `EventType` enum for more info about what each event is for.
  */
-export const HistoryEventSchema = z
+export const HistoryEvent = z
   .object({
     /**Monotonically increasing event number, starts at 1.*/
     eventId: z
@@ -178,4 +178,4 @@ export const HistoryEventSchema = z
   .describe(
     "History events are the method by which Temporal SDKs advance (or recreate) workflow state.\n See the `EventType` enum for more info about what each event is for.",
   );
-export type HistoryEventSchema = z.infer<typeof HistoryEventSchema>;
+export type HistoryEvent = z.infer<typeof HistoryEvent>;

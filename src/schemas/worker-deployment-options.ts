@@ -4,7 +4,7 @@ import { z } from "zod";
  * Worker Deployment options set in SDK that need to be sent to server in every poll.
  *  Experimental. Worker Deployments are experimental and might significantly change in the future.
  */
-export const WorkerDeploymentOptionsSchema = z
+export const WorkerDeploymentOptions = z
   .object({
     /**Required. Worker Deployment name.*/
     deploymentName: z
@@ -41,6 +41,4 @@ export const WorkerDeploymentOptionsSchema = z
   .describe(
     "Worker Deployment options set in SDK that need to be sent to server in every poll.\n Experimental. Worker Deployments are experimental and might significantly change in the future.",
   );
-export type WorkerDeploymentOptionsSchema = z.infer<
-  typeof WorkerDeploymentOptionsSchema
->;
+export type WorkerDeploymentOptions = z.infer<typeof WorkerDeploymentOptions>;

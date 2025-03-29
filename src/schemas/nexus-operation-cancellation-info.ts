@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**NexusOperationCancellationInfo contains the state of a nexus operation cancellation.*/
-export const NexusOperationCancellationInfoSchema = z
+export const NexusOperationCancellationInfo = z
   .object({
     /**The time when cancellation was requested.*/
     requestedTime: z
@@ -59,6 +59,6 @@ export const NexusOperationCancellationInfoSchema = z
   .describe(
     "NexusOperationCancellationInfo contains the state of a nexus operation cancellation.",
   );
-export type NexusOperationCancellationInfoSchema = z.infer<
-  typeof NexusOperationCancellationInfoSchema
+export type NexusOperationCancellationInfo = z.infer<
+  typeof NexusOperationCancellationInfo
 >;

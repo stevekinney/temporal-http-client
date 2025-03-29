@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowEvent_EventReferenceSchema = z.object({
+export const WorkflowEvent_EventReference = z.object({
   eventId: z.string().optional(),
   eventType: z
     .enum([
@@ -63,6 +63,6 @@ export const WorkflowEvent_EventReferenceSchema = z.object({
     ])
     .optional(),
 });
-export type WorkflowEvent_EventReferenceSchema = z.infer<
-  typeof WorkflowEvent_EventReferenceSchema
+export type WorkflowEvent_EventReference = z.infer<
+  typeof WorkflowEvent_EventReference
 >;

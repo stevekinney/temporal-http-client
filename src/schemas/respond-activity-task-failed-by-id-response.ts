@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RespondActivityTaskFailedByIdResponseSchema = z.object({
+export const RespondActivityTaskFailedByIdResponse = z.object({
   /**
    * Server validation failures could include
    *  last_heartbeat_details payload is too large, request failure is too large
@@ -12,6 +12,6 @@ export const RespondActivityTaskFailedByIdResponseSchema = z.object({
     )
     .optional(),
 });
-export type RespondActivityTaskFailedByIdResponseSchema = z.infer<
-  typeof RespondActivityTaskFailedByIdResponseSchema
+export type RespondActivityTaskFailedByIdResponse = z.infer<
+  typeof RespondActivityTaskFailedByIdResponse
 >;

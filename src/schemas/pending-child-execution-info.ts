@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const PendingChildExecutionInfoSchema = z.object({
+export const PendingChildExecutionInfo = z.object({
   workflowId: z.string().optional(),
   runId: z.string().optional(),
   workflowTypeName: z.string().optional(),
@@ -16,6 +16,6 @@ export const PendingChildExecutionInfoSchema = z.object({
     .describe("Default: PARENT_CLOSE_POLICY_TERMINATE.")
     .optional(),
 });
-export type PendingChildExecutionInfoSchema = z.infer<
-  typeof PendingChildExecutionInfoSchema
+export type PendingChildExecutionInfo = z.infer<
+  typeof PendingChildExecutionInfo
 >;

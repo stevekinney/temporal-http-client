@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**PendingNexusOperationInfo contains the state of a pending Nexus operation.*/
-export const PendingNexusOperationInfoSchema = z
+export const PendingNexusOperationInfo = z
   .object({
     /**
      * Endpoint name.
@@ -113,6 +113,6 @@ export const PendingNexusOperationInfoSchema = z
   .describe(
     "PendingNexusOperationInfo contains the state of a pending Nexus operation.",
   );
-export type PendingNexusOperationInfoSchema = z.infer<
-  typeof PendingNexusOperationInfoSchema
+export type PendingNexusOperationInfo = z.infer<
+  typeof PendingNexusOperationInfo
 >;

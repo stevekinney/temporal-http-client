@@ -10,7 +10,7 @@ import { z } from "zod";
  *  first poller arrives to the server.
  *  Experimental. Worker Deployments are experimental and might significantly change in the future.
  */
-export const WorkerDeploymentInfoSchema = z
+export const WorkerDeploymentInfo = z
   .object({
     /**Identifies a Worker Deployment. Must be unique within the namespace.*/
     name: z
@@ -49,6 +49,4 @@ export const WorkerDeploymentInfoSchema = z
   .describe(
     "A Worker Deployment (Deployment, for short) represents all workers serving \n a shared set of Task Queues. Typically, a Deployment represents one service or \n application.\n A Deployment contains multiple Deployment Versions, each representing a different \n version of workers. (see documentation of WorkerDeploymentVersionInfo)\n Deployment records are created in Temporal server automatically when their\n first poller arrives to the server.\n Experimental. Worker Deployments are experimental and might significantly change in the future.",
   );
-export type WorkerDeploymentInfoSchema = z.infer<
-  typeof WorkerDeploymentInfoSchema
->;
+export type WorkerDeploymentInfo = z.infer<typeof WorkerDeploymentInfo>;

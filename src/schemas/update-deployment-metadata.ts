@@ -4,7 +4,7 @@ import { z } from "zod";
  * Used as part of Deployment write APIs to update metadata attached to a deployment.
  *  Deprecated.
  */
-export const UpdateDeploymentMetadataSchema = z
+export const UpdateDeploymentMetadata = z
   .object({
     upsertEntries: z.record(z.any()).optional(),
     /**List of keys to remove from the metadata.*/
@@ -16,6 +16,4 @@ export const UpdateDeploymentMetadataSchema = z
   .describe(
     "Used as part of Deployment write APIs to update metadata attached to a deployment.\n Deprecated.",
   );
-export type UpdateDeploymentMetadataSchema = z.infer<
-  typeof UpdateDeploymentMetadataSchema
->;
+export type UpdateDeploymentMetadata = z.infer<typeof UpdateDeploymentMetadata>;

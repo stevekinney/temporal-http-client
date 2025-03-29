@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowExecutionOptionsSchema = z.object({
+export const WorkflowExecutionOptions = z.object({
   /**If set, takes precedence over the Versioning Behavior sent by the SDK on Workflow Task completion.*/
   versioningOverride: z
     .any()
@@ -9,6 +9,4 @@ export const WorkflowExecutionOptionsSchema = z.object({
     )
     .optional(),
 });
-export type WorkflowExecutionOptionsSchema = z.infer<
-  typeof WorkflowExecutionOptionsSchema
->;
+export type WorkflowExecutionOptions = z.infer<typeof WorkflowExecutionOptions>;

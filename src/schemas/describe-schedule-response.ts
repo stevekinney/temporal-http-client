@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const DescribeScheduleResponseSchema = z.object({
+export const DescribeScheduleResponse = z.object({
   /**
    * The complete current schedule details. This may not match the schedule as
    *  created because:
@@ -38,6 +38,4 @@ export const DescribeScheduleResponseSchema = z.object({
     )
     .optional(),
 });
-export type DescribeScheduleResponseSchema = z.infer<
-  typeof DescribeScheduleResponseSchema
->;
+export type DescribeScheduleResponse = z.infer<typeof DescribeScheduleResponse>;

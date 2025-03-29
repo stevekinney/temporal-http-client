@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ChildWorkflowExecutionCompletedEventAttributesSchema = z.object({
+export const ChildWorkflowExecutionCompletedEventAttributes = z.object({
   result: z.any().optional(),
   /**
    * Namespace of the child workflow.
@@ -30,6 +30,6 @@ export const ChildWorkflowExecutionCompletedEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type ChildWorkflowExecutionCompletedEventAttributesSchema = z.infer<
-  typeof ChildWorkflowExecutionCompletedEventAttributesSchema
+export type ChildWorkflowExecutionCompletedEventAttributes = z.infer<
+  typeof ChildWorkflowExecutionCompletedEventAttributes
 >;

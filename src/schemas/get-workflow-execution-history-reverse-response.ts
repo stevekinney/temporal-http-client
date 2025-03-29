@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const GetWorkflowExecutionHistoryReverseResponseSchema = z.object({
+export const GetWorkflowExecutionHistoryReverseResponse = z.object({
   history: z.any().optional(),
   /**Will be set if there are more history events than were included in this response*/
   nextPageToken: z
@@ -10,6 +10,6 @@ export const GetWorkflowExecutionHistoryReverseResponseSchema = z.object({
     )
     .optional(),
 });
-export type GetWorkflowExecutionHistoryReverseResponseSchema = z.infer<
-  typeof GetWorkflowExecutionHistoryReverseResponseSchema
+export type GetWorkflowExecutionHistoryReverseResponse = z.infer<
+  typeof GetWorkflowExecutionHistoryReverseResponse
 >;

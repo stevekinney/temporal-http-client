@@ -11,7 +11,7 @@ import { z } from "zod";
  *  TODO: add relative-to-end-of-month
  *  TODO: add nth day-of-week in month
  */
-export const StructuredCalendarSpecSchema = z
+export const StructuredCalendarSpec = z
   .object({
     /**Match seconds (0-59)*/
     second: z.array(z.any()).describe("Match seconds (0-59)").optional(),
@@ -48,6 +48,4 @@ export const StructuredCalendarSpecSchema = z
   .describe(
     "StructuredCalendarSpec describes an event specification relative to the\n calendar, in a form that's easy to work with programmatically. Each field can\n be one or more ranges.\n A timestamp matches if at least one range of each field matches the\n corresponding fields of the timestamp, except for year: if year is missing,\n that means all years match. For all fields besides year, at least one Range\n must be present to match anything.\n TODO: add relative-to-end-of-month\n TODO: add nth day-of-week in month",
   );
-export type StructuredCalendarSpecSchema = z.infer<
-  typeof StructuredCalendarSpecSchema
->;
+export type StructuredCalendarSpec = z.infer<typeof StructuredCalendarSpec>;

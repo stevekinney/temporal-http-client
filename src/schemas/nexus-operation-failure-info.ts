@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const NexusOperationFailureInfoSchema = z.object({
+export const NexusOperationFailureInfo = z.object({
   /**The NexusOperationScheduled event ID.*/
   scheduledEventId: z
     .string()
@@ -31,6 +31,6 @@ export const NexusOperationFailureInfoSchema = z.object({
     )
     .optional(),
 });
-export type NexusOperationFailureInfoSchema = z.infer<
-  typeof NexusOperationFailureInfoSchema
+export type NexusOperationFailureInfo = z.infer<
+  typeof NexusOperationFailureInfo
 >;

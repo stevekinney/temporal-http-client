@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RecordActivityTaskHeartbeatRequestSchema = z.object({
+export const RecordActivityTaskHeartbeatRequest = z.object({
   /**The task token as received in `PollActivityTaskQueueResponse`*/
   taskToken: z
     .string()
@@ -17,6 +17,6 @@ export const RecordActivityTaskHeartbeatRequestSchema = z.object({
   identity: z.string().describe("The identity of the worker/client").optional(),
   namespace: z.string().optional(),
 });
-export type RecordActivityTaskHeartbeatRequestSchema = z.infer<
-  typeof RecordActivityTaskHeartbeatRequestSchema
+export type RecordActivityTaskHeartbeatRequest = z.infer<
+  typeof RecordActivityTaskHeartbeatRequest
 >;

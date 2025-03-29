@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const UpdateWorkflowExecutionResponseSchema = z.object({
+export const UpdateWorkflowExecutionResponse = z.object({
   /**Enough information for subsequent poll calls if needed. Never null.*/
   updateRef: z
     .any()
@@ -43,6 +43,6 @@ export const UpdateWorkflowExecutionResponseSchema = z.object({
     )
     .optional(),
 });
-export type UpdateWorkflowExecutionResponseSchema = z.infer<
-  typeof UpdateWorkflowExecutionResponseSchema
+export type UpdateWorkflowExecutionResponse = z.infer<
+  typeof UpdateWorkflowExecutionResponse
 >;

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**VersionInfo contains details about current and recommended release versions as well as alerts and upgrade instructions.*/
-export const VersionInfoSchema = z
+export const VersionInfo = z
   .object({
     current: z.any().optional(),
     recommended: z.any().optional(),
@@ -12,4 +12,4 @@ export const VersionInfoSchema = z
   .describe(
     "VersionInfo contains details about current and recommended release versions as well as alerts and upgrade instructions.",
   );
-export type VersionInfoSchema = z.infer<typeof VersionInfoSchema>;
+export type VersionInfo = z.infer<typeof VersionInfo>;

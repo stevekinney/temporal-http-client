@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Target a worker polling on a Nexus task queue in a specific namespace.*/
-export const EndpointTarget_WorkerSchema = z
+export const EndpointTarget_Worker = z
   .object({
     /**Namespace to route requests to.*/
     namespace: z
@@ -17,6 +17,4 @@ export const EndpointTarget_WorkerSchema = z
   .describe(
     "Target a worker polling on a Nexus task queue in a specific namespace.",
   );
-export type EndpointTarget_WorkerSchema = z.infer<
-  typeof EndpointTarget_WorkerSchema
->;
+export type EndpointTarget_Worker = z.infer<typeof EndpointTarget_Worker>;

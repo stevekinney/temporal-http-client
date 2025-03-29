@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const DeploymentInfo_TaskQueueInfoSchema = z.object({
+export const DeploymentInfo_TaskQueueInfo = z.object({
   name: z.string().optional(),
   type: z
     .enum([
@@ -19,6 +19,6 @@ export const DeploymentInfo_TaskQueueInfoSchema = z.object({
     )
     .optional(),
 });
-export type DeploymentInfo_TaskQueueInfoSchema = z.infer<
-  typeof DeploymentInfo_TaskQueueInfoSchema
+export type DeploymentInfo_TaskQueueInfo = z.infer<
+  typeof DeploymentInfo_TaskQueueInfo
 >;

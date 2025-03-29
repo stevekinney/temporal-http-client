@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const BatchOperationInfoSchema = z.object({
+export const BatchOperationInfo = z.object({
   /**Batch job ID*/
   jobId: z.string().describe("Batch job ID").optional(),
   /**Batch operation state*/
@@ -26,4 +26,4 @@ export const BatchOperationInfoSchema = z.object({
     .describe("Batch operation close time")
     .optional(),
 });
-export type BatchOperationInfoSchema = z.infer<typeof BatchOperationInfoSchema>;
+export type BatchOperationInfo = z.infer<typeof BatchOperationInfo>;

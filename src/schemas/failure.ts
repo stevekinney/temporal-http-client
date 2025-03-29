@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const FailureSchema = z.object({
+export const Failure = z.object({
   message: z.string().optional(),
   /**
    * The source this Failure originated in, e.g. TypeScriptSDK / JavaSDK
@@ -47,4 +47,4 @@ export const FailureSchema = z.object({
   nexusOperationExecutionFailureInfo: z.any().optional(),
   nexusHandlerFailureInfo: z.any().optional(),
 });
-export type FailureSchema = z.infer<typeof FailureSchema>;
+export type Failure = z.infer<typeof Failure>;

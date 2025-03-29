@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RequestCancelWorkflowExecutionRequestSchema = z.object({
+export const RequestCancelWorkflowExecutionRequest = z.object({
   namespace: z.string().optional(),
   workflowExecution: z.any().optional(),
   /**The identity of the worker/client*/
@@ -34,6 +34,6 @@ export const RequestCancelWorkflowExecutionRequestSchema = z.object({
     )
     .optional(),
 });
-export type RequestCancelWorkflowExecutionRequestSchema = z.infer<
-  typeof RequestCancelWorkflowExecutionRequestSchema
+export type RequestCancelWorkflowExecutionRequest = z.infer<
+  typeof RequestCancelWorkflowExecutionRequest
 >;

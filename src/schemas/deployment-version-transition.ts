@@ -5,7 +5,7 @@ import { z } from "zod";
  *  deployment version to another.
  *  Experimental. Might change in the future.
  */
-export const DeploymentVersionTransitionSchema = z
+export const DeploymentVersionTransition = z
   .object({
     /**
      * Required. The target Version of the transition. May be `__unversioned__` which means a
@@ -21,6 +21,6 @@ export const DeploymentVersionTransitionSchema = z
   .describe(
     "Holds information about ongoing transition of a workflow execution from one worker\n deployment version to another.\n Experimental. Might change in the future.",
   );
-export type DeploymentVersionTransitionSchema = z.infer<
-  typeof DeploymentVersionTransitionSchema
+export type DeploymentVersionTransition = z.infer<
+  typeof DeploymentVersionTransition
 >;

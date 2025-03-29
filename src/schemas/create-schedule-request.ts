@@ -4,7 +4,7 @@ import { z } from "zod";
  * (-- api-linter: core::0203::optional=disabled
  *      aip.dev/not-precedent: field_behavior annotation not available in our gogo fork --)
  */
-export const CreateScheduleRequestSchema = z
+export const CreateScheduleRequest = z
   .object({
     /**The namespace the schedule should be created in.*/
     namespace: z
@@ -47,6 +47,4 @@ export const CreateScheduleRequestSchema = z
   .describe(
     "(-- api-linter: core::0203::optional=disabled\n     aip.dev/not-precedent: field_behavior annotation not available in our gogo fork --)",
   );
-export type CreateScheduleRequestSchema = z.infer<
-  typeof CreateScheduleRequestSchema
->;
+export type CreateScheduleRequest = z.infer<typeof CreateScheduleRequest>;

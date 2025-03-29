@@ -1,6 +1,4 @@
 import { z } from "zod";
 
-export const ResetPointsSchema = z.object({
-  points: z.array(z.any()).optional(),
-});
-export type ResetPointsSchema = z.infer<typeof ResetPointsSchema>;
+export const ResetPoints = z.object({ points: z.array(z.any()).optional() });
+export type ResetPoints = z.infer<typeof ResetPoints>;

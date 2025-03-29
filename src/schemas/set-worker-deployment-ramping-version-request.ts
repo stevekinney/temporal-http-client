@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Set/unset the Ramping Version of a Worker Deployment and its ramp percentage.*/
-export const SetWorkerDeploymentRampingVersionRequestSchema = z
+export const SetWorkerDeploymentRampingVersionRequest = z
   .object({
     namespace: z.string().optional(),
     deploymentName: z.string().optional(),
@@ -70,6 +70,6 @@ export const SetWorkerDeploymentRampingVersionRequestSchema = z
   .describe(
     "Set/unset the Ramping Version of a Worker Deployment and its ramp percentage.",
   );
-export type SetWorkerDeploymentRampingVersionRequestSchema = z.infer<
-  typeof SetWorkerDeploymentRampingVersionRequestSchema
+export type SetWorkerDeploymentRampingVersionRequest = z.infer<
+  typeof SetWorkerDeploymentRampingVersionRequest
 >;

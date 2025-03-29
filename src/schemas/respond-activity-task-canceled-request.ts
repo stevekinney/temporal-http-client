@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RespondActivityTaskCanceledRequestSchema = z.object({
+export const RespondActivityTaskCanceledRequest = z.object({
   /**The task token as received in `PollActivityTaskQueueResponse`*/
   taskToken: z
     .string()
@@ -43,6 +43,6 @@ export const RespondActivityTaskCanceledRequestSchema = z.object({
     .describe("Worker deployment options that user has set in the worker.")
     .optional(),
 });
-export type RespondActivityTaskCanceledRequestSchema = z.infer<
-  typeof RespondActivityTaskCanceledRequestSchema
+export type RespondActivityTaskCanceledRequest = z.infer<
+  typeof RespondActivityTaskCanceledRequest
 >;

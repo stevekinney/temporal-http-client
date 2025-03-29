@@ -4,7 +4,7 @@ import { z } from "zod";
  * ScheduleListInfo is an abbreviated set of values from Schedule and ScheduleInfo
  *  that's returned in ListSchedules.
  */
-export const ScheduleListInfoSchema = z
+export const ScheduleListInfo = z
   .object({
     /**
      * From spec:
@@ -42,4 +42,4 @@ export const ScheduleListInfoSchema = z
   .describe(
     "ScheduleListInfo is an abbreviated set of values from Schedule and ScheduleInfo\n that's returned in ListSchedules.",
   );
-export type ScheduleListInfoSchema = z.infer<typeof ScheduleListInfoSchema>;
+export type ScheduleListInfo = z.infer<typeof ScheduleListInfo>;

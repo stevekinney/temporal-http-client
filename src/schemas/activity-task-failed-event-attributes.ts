@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ActivityTaskFailedEventAttributesSchema = z.object({
+export const ActivityTaskFailedEventAttributes = z.object({
   /**Failure details*/
   failure: z.any().describe("Failure details").optional(),
   /**The id of the `ACTIVITY_TASK_SCHEDULED` event this failure corresponds to*/
@@ -45,6 +45,6 @@ export const ActivityTaskFailedEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type ActivityTaskFailedEventAttributesSchema = z.infer<
-  typeof ActivityTaskFailedEventAttributesSchema
+export type ActivityTaskFailedEventAttributes = z.infer<
+  typeof ActivityTaskFailedEventAttributes
 >;

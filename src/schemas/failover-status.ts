@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Represents a historical replication status of a Namespace*/
-export const FailoverStatusSchema = z
+export const FailoverStatus = z
   .object({
     /**Timestamp when the Cluster switched to the following failover_version*/
     failoverTime: z
@@ -14,4 +14,4 @@ export const FailoverStatusSchema = z
     failoverVersion: z.string().optional(),
   })
   .describe("Represents a historical replication status of a Namespace");
-export type FailoverStatusSchema = z.infer<typeof FailoverStatusSchema>;
+export type FailoverStatus = z.infer<typeof FailoverStatus>;

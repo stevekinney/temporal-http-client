@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-export const ListArchivedWorkflowExecutionsResponseSchema = z.object({
+export const ListArchivedWorkflowExecutionsResponse = z.object({
   executions: z.array(z.any()).optional(),
   nextPageToken: z.string().optional(),
 });
-export type ListArchivedWorkflowExecutionsResponseSchema = z.infer<
-  typeof ListArchivedWorkflowExecutionsResponseSchema
+export type ListArchivedWorkflowExecutionsResponse = z.infer<
+  typeof ListArchivedWorkflowExecutionsResponse
 >;

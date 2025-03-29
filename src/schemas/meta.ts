@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Metadata about a Workflow Update.*/
-export const MetaSchema = z
+export const Meta = z
   .object({
     /**An ID with workflow-scoped uniqueness for this Update.*/
     updateId: z
@@ -15,4 +15,4 @@ export const MetaSchema = z
       .optional(),
   })
   .describe("Metadata about a Workflow Update.");
-export type MetaSchema = z.infer<typeof MetaSchema>;
+export type Meta = z.infer<typeof Meta>;

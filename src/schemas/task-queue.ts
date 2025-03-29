@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**See https://docs.temporal.io/docs/concepts/task-queues/*/
-export const TaskQueueSchema = z
+export const TaskQueue = z
   .object({
     name: z.string().optional(),
     /**Default: TASK_QUEUE_KIND_NORMAL.*/
@@ -25,4 +25,4 @@ export const TaskQueueSchema = z
       .optional(),
   })
   .describe("See https://docs.temporal.io/docs/concepts/task-queues/");
-export type TaskQueueSchema = z.infer<typeof TaskQueueSchema>;
+export type TaskQueue = z.infer<typeof TaskQueue>;

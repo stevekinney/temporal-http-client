@@ -6,7 +6,7 @@ import { z } from "zod";
  *  the existing running workflow. In this case, it will create a WorkflowExecutionOptionsUpdatedEvent
  *  history event in the running workflow with the changes requested in this object.
  */
-export const OnConflictOptionsSchema = z
+export const OnConflictOptions = z
   .object({
     /**Attaches the request ID to the running workflow.*/
     attachRequestId: z
@@ -29,4 +29,4 @@ export const OnConflictOptionsSchema = z
   .describe(
     "When StartWorkflowExecution uses the conflict policy WORKFLOW_ID_CONFLICT_POLICY_USE_EXISTING and\n there is already an existing running workflow, OnConflictOptions defines actions to be taken on\n the existing running workflow. In this case, it will create a WorkflowExecutionOptionsUpdatedEvent\n history event in the running workflow with the changes requested in this object.",
   );
-export type OnConflictOptionsSchema = z.infer<typeof OnConflictOptionsSchema>;
+export type OnConflictOptions = z.infer<typeof OnConflictOptions>;

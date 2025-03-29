@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowExecutionContinuedAsNewEventAttributesSchema = z.object({
+export const WorkflowExecutionContinuedAsNewEventAttributes = z.object({
   /**The run ID of the new workflow started by this continue-as-new*/
   newExecutionRunId: z
     .string()
@@ -75,6 +75,6 @@ export const WorkflowExecutionContinuedAsNewEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type WorkflowExecutionContinuedAsNewEventAttributesSchema = z.infer<
-  typeof WorkflowExecutionContinuedAsNewEventAttributesSchema
+export type WorkflowExecutionContinuedAsNewEventAttributes = z.infer<
+  typeof WorkflowExecutionContinuedAsNewEventAttributes
 >;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ListNexusEndpointsResponseSchema = z.object({
+export const ListNexusEndpointsResponse = z.object({
   /**Token for getting the next page.*/
   nextPageToken: z
     .string()
@@ -8,6 +8,6 @@ export const ListNexusEndpointsResponseSchema = z.object({
     .optional(),
   endpoints: z.array(z.any()).optional(),
 });
-export type ListNexusEndpointsResponseSchema = z.infer<
-  typeof ListNexusEndpointsResponseSchema
+export type ListNexusEndpointsResponse = z.infer<
+  typeof ListNexusEndpointsResponse
 >;

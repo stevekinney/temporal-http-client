@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Namespace capability details. Should contain what features are enabled in a namespace.*/
-export const NamespaceInfo_CapabilitiesSchema = z
+export const NamespaceInfo_Capabilities = z
   .object({
     /**True if the namespace supports eager workflow start.*/
     eagerWorkflowStart: z
@@ -22,6 +22,6 @@ export const NamespaceInfo_CapabilitiesSchema = z
   .describe(
     "Namespace capability details. Should contain what features are enabled in a namespace.",
   );
-export type NamespaceInfo_CapabilitiesSchema = z.infer<
-  typeof NamespaceInfo_CapabilitiesSchema
+export type NamespaceInfo_Capabilities = z.infer<
+  typeof NamespaceInfo_Capabilities
 >;

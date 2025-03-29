@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ListWorkerDeploymentsResponseSchema = z.object({
+export const ListWorkerDeploymentsResponse = z.object({
   nextPageToken: z.string().optional(),
   /**The list of worker deployments.*/
   workerDeployments: z
@@ -8,6 +8,6 @@ export const ListWorkerDeploymentsResponseSchema = z.object({
     .describe("The list of worker deployments.")
     .optional(),
 });
-export type ListWorkerDeploymentsResponseSchema = z.infer<
-  typeof ListWorkerDeploymentsResponseSchema
+export type ListWorkerDeploymentsResponse = z.infer<
+  typeof ListWorkerDeploymentsResponse
 >;

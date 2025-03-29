@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ChildWorkflowExecutionFailedEventAttributesSchema = z.object({
+export const ChildWorkflowExecutionFailedEventAttributes = z.object({
   failure: z.any().optional(),
   /**
    * Namespace of the child workflow.
@@ -42,6 +42,6 @@ export const ChildWorkflowExecutionFailedEventAttributesSchema = z.object({
     ])
     .optional(),
 });
-export type ChildWorkflowExecutionFailedEventAttributesSchema = z.infer<
-  typeof ChildWorkflowExecutionFailedEventAttributesSchema
+export type ChildWorkflowExecutionFailedEventAttributes = z.infer<
+  typeof ChildWorkflowExecutionFailedEventAttributes
 >;

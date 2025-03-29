@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ActivityTaskScheduledEventAttributesSchema = z.object({
+export const ActivityTaskScheduledEventAttributes = z.object({
   /**The worker/user assigned identifier for the activity*/
   activityId: z
     .string()
@@ -100,6 +100,6 @@ export const ActivityTaskScheduledEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type ActivityTaskScheduledEventAttributesSchema = z.infer<
-  typeof ActivityTaskScheduledEventAttributesSchema
+export type ActivityTaskScheduledEventAttributes = z.infer<
+  typeof ActivityTaskScheduledEventAttributes
 >;

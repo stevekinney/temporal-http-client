@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ActivityOptionsSchema = z.object({
+export const ActivityOptions = z.object({
   taskQueue: z.any().optional(),
   /**
    * Indicates how long the caller is willing to wait for an activity completion. Limits how long
@@ -55,4 +55,4 @@ export const ActivityOptionsSchema = z.object({
     .optional(),
   retryPolicy: z.any().optional(),
 });
-export type ActivityOptionsSchema = z.infer<typeof ActivityOptionsSchema>;
+export type ActivityOptions = z.infer<typeof ActivityOptions>;

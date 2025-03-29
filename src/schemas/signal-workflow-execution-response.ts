@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const SignalWorkflowExecutionResponseSchema = z.object({});
-export type SignalWorkflowExecutionResponseSchema = z.infer<
-  typeof SignalWorkflowExecutionResponseSchema
+export const SignalWorkflowExecutionResponse = z.object({});
+export type SignalWorkflowExecutionResponse = z.infer<
+  typeof SignalWorkflowExecutionResponse
 >;

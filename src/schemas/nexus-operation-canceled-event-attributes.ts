@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Nexus operation completed as canceled. May or may not have been due to a cancellation request by the workflow.*/
-export const NexusOperationCanceledEventAttributesSchema = z
+export const NexusOperationCanceledEventAttributes = z
   .object({
     /**The ID of the `NEXUS_OPERATION_SCHEDULED` event. Uniquely identifies this operation.*/
     scheduledEventId: z
@@ -21,6 +21,6 @@ export const NexusOperationCanceledEventAttributesSchema = z
   .describe(
     "Nexus operation completed as canceled. May or may not have been due to a cancellation request by the workflow.",
   );
-export type NexusOperationCanceledEventAttributesSchema = z.infer<
-  typeof NexusOperationCanceledEventAttributesSchema
+export type NexusOperationCanceledEventAttributes = z.infer<
+  typeof NexusOperationCanceledEventAttributes
 >;

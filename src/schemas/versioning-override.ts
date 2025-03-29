@@ -7,7 +7,7 @@ import { z } from "zod";
  *  `UpdateWorkflowExecutionOptions` with a null `VersioningOverride`, and use the `update_mask`
  *  to indicate that it should be mutated.
  */
-export const VersioningOverrideSchema = z
+export const VersioningOverride = z
   .object({
     /**Required.*/
     behavior: z
@@ -44,4 +44,4 @@ export const VersioningOverrideSchema = z
   .describe(
     "Used to override the versioning behavior (and pinned deployment version, if applicable) of a\n specific workflow execution. If set, takes precedence over the worker-sent values. See\n `WorkflowExecutionInfo.VersioningInfo` for more information. To remove the override, call\n `UpdateWorkflowExecutionOptions` with a null `VersioningOverride`, and use the `update_mask`\n to indicate that it should be mutated.",
   );
-export type VersioningOverrideSchema = z.infer<typeof VersioningOverrideSchema>;
+export type VersioningOverride = z.infer<typeof VersioningOverride>;

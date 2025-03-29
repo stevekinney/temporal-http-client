@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**[cleanup-wv-pre-release]*/
-export const GetWorkerBuildIdCompatibilityResponseSchema = z
+export const GetWorkerBuildIdCompatibilityResponse = z
   .object({
     /**
      * Major version sets, in order from oldest to newest. The last element of the list will always
@@ -18,6 +18,6 @@ export const GetWorkerBuildIdCompatibilityResponseSchema = z
       .optional(),
   })
   .describe("[cleanup-wv-pre-release]");
-export type GetWorkerBuildIdCompatibilityResponseSchema = z.infer<
-  typeof GetWorkerBuildIdCompatibilityResponseSchema
+export type GetWorkerBuildIdCompatibilityResponse = z.infer<
+  typeof GetWorkerBuildIdCompatibilityResponse
 >;

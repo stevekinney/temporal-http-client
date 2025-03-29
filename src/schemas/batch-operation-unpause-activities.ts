@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**BatchOperationUnpauseActivities sends unpause requests to batch workflows.*/
-export const BatchOperationUnpauseActivitiesSchema = z
+export const BatchOperationUnpauseActivities = z
   .object({
     /**The identity of the worker/client.*/
     identity: z
@@ -35,6 +35,6 @@ export const BatchOperationUnpauseActivitiesSchema = z
   .describe(
     "BatchOperationUnpauseActivities sends unpause requests to batch workflows.",
   );
-export type BatchOperationUnpauseActivitiesSchema = z.infer<
-  typeof BatchOperationUnpauseActivitiesSchema
+export type BatchOperationUnpauseActivities = z.infer<
+  typeof BatchOperationUnpauseActivities
 >;

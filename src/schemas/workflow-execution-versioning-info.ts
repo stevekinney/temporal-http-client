@@ -4,7 +4,7 @@ import { z } from "zod";
  * Holds all the information about worker versioning for a particular workflow execution.
  *  Experimental. Versioning info is experimental and might change in the future.
  */
-export const WorkflowExecutionVersioningInfoSchema = z
+export const WorkflowExecutionVersioningInfo = z
   .object({
     /**
      * Versioning behavior determines how the server should treat this execution when workers are
@@ -129,6 +129,6 @@ export const WorkflowExecutionVersioningInfoSchema = z
   .describe(
     "Holds all the information about worker versioning for a particular workflow execution.\n Experimental. Versioning info is experimental and might change in the future.",
   );
-export type WorkflowExecutionVersioningInfoSchema = z.infer<
-  typeof WorkflowExecutionVersioningInfoSchema
+export type WorkflowExecutionVersioningInfo = z.infer<
+  typeof WorkflowExecutionVersioningInfo
 >;

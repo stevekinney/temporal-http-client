@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ScheduleInfoSchema = z.object({
+export const ScheduleInfo = z.object({
   /**Number of actions taken so far.*/
   actionCount: z
     .string()
@@ -68,4 +68,4 @@ export const ScheduleInfoSchema = z.object({
   updateTime: z.string().datetime({ offset: true }).optional(),
   invalidScheduleError: z.string().optional(),
 });
-export type ScheduleInfoSchema = z.infer<typeof ScheduleInfoSchema>;
+export type ScheduleInfo = z.infer<typeof ScheduleInfo>;

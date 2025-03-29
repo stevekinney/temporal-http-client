@@ -23,7 +23,11 @@ export function renderOperations(operation: Operation | Operations): string {
         throw new TemporalError(\`\${response.status}: ${operation.name} request failed.\`, { request, response, operation: '${operation.name}' });
       };
 
-      return response.json();
+      try {
+        const json = await response.json();
+        ${operation.response}
+      }
+      
   }
   `;
 }

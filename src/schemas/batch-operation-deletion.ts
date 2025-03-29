@@ -4,7 +4,7 @@ import { z } from "zod";
  * BatchOperationDeletion sends deletion requests to batch workflows.
  *  Keep the parameter in sync with temporal.api.workflowservice.v1.DeleteWorkflowExecutionRequest.
  */
-export const BatchOperationDeletionSchema = z
+export const BatchOperationDeletion = z
   .object({
     /**The identity of the worker/client*/
     identity: z
@@ -15,6 +15,4 @@ export const BatchOperationDeletionSchema = z
   .describe(
     "BatchOperationDeletion sends deletion requests to batch workflows.\n Keep the parameter in sync with temporal.api.workflowservice.v1.DeleteWorkflowExecutionRequest.",
   );
-export type BatchOperationDeletionSchema = z.infer<
-  typeof BatchOperationDeletionSchema
->;
+export type BatchOperationDeletion = z.infer<typeof BatchOperationDeletion>;

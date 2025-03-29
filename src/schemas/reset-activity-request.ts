@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ResetActivityRequestSchema = z.object({
+export const ResetActivityRequest = z.object({
   /**Namespace of the workflow which scheduled this activity.*/
   namespace: z
     .string()
@@ -53,6 +53,4 @@ export const ResetActivityRequestSchema = z.object({
     )
     .optional(),
 });
-export type ResetActivityRequestSchema = z.infer<
-  typeof ResetActivityRequestSchema
->;
+export type ResetActivityRequest = z.infer<typeof ResetActivityRequest>;

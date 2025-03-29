@@ -1,6 +1,4 @@
 import { z } from "zod";
 
-export const DeleteScheduleResponseSchema = z.object({});
-export type DeleteScheduleResponseSchema = z.infer<
-  typeof DeleteScheduleResponseSchema
->;
+export const DeleteScheduleResponse = z.object({});
+export type DeleteScheduleResponse = z.infer<typeof DeleteScheduleResponse>;

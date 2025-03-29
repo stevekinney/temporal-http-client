@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RegisterNamespaceRequestSchema = z.object({
+export const RegisterNamespaceRequest = z.object({
   namespace: z.string().optional(),
   description: z.string().optional(),
   ownerEmail: z.string().optional(),
@@ -42,6 +42,4 @@ export const RegisterNamespaceRequestSchema = z.object({
     .optional(),
   visibilityArchivalUri: z.string().optional(),
 });
-export type RegisterNamespaceRequestSchema = z.infer<
-  typeof RegisterNamespaceRequestSchema
->;
+export type RegisterNamespaceRequest = z.infer<typeof RegisterNamespaceRequest>;

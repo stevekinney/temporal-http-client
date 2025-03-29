@@ -1,12 +1,12 @@
 import { z } from "zod";
 
-export const UpdateActivityOptionsResponseSchema = z.object({
+export const UpdateActivityOptionsResponse = z.object({
   /**Activity options after an update*/
   activityOptions: z
     .any()
     .describe("Activity options after an update")
     .optional(),
 });
-export type UpdateActivityOptionsResponseSchema = z.infer<
-  typeof UpdateActivityOptionsResponseSchema
+export type UpdateActivityOptionsResponse = z.infer<
+  typeof UpdateActivityOptionsResponse
 >;

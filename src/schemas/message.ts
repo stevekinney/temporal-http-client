@@ -4,7 +4,7 @@ import { z } from "zod";
  * (-- api-linter: core::0146::any=disabled
  *      aip.dev/not-precedent: We want runtime extensibility for the body field --)
  */
-export const MessageSchema = z
+export const Message = z
   .object({
     /**An ID for this specific message.*/
     id: z.string().describe("An ID for this specific message.").optional(),
@@ -34,4 +34,4 @@ export const MessageSchema = z
   .describe(
     "(-- api-linter: core::0146::any=disabled\n     aip.dev/not-precedent: We want runtime extensibility for the body field --)",
   );
-export type MessageSchema = z.infer<typeof MessageSchema>;
+export type Message = z.infer<typeof Message>;

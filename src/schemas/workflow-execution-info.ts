@@ -4,7 +4,7 @@ import { z } from "zod";
  * Hold basic information about a workflow execution.
  *  This structure is a part of visibility, and thus contain a limited subset of information.
  */
-export const WorkflowExecutionInfoSchema = z
+export const WorkflowExecutionInfo = z
   .object({
     execution: z.any().optional(),
     type: z.any().optional(),
@@ -145,6 +145,4 @@ export const WorkflowExecutionInfoSchema = z
   .describe(
     "Hold basic information about a workflow execution.\n This structure is a part of visibility, and thus contain a limited subset of information.",
   );
-export type WorkflowExecutionInfoSchema = z.infer<
-  typeof WorkflowExecutionInfoSchema
->;
+export type WorkflowExecutionInfo = z.infer<typeof WorkflowExecutionInfo>;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RegisterNamespaceResponseSchema = z.object({});
-export type RegisterNamespaceResponseSchema = z.infer<
-  typeof RegisterNamespaceResponseSchema
+export const RegisterNamespaceResponse = z.object({});
+export type RegisterNamespaceResponse = z.infer<
+  typeof RegisterNamespaceResponse
 >;

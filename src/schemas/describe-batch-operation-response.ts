@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const DescribeBatchOperationResponseSchema = z.object({
+export const DescribeBatchOperationResponse = z.object({
   /**Batch operation type*/
   operationType: z
     .enum([
@@ -61,6 +61,6 @@ export const DescribeBatchOperationResponseSchema = z.object({
     .describe("Reason indicates the reason to stop a operation")
     .optional(),
 });
-export type DescribeBatchOperationResponseSchema = z.infer<
-  typeof DescribeBatchOperationResponseSchema
+export type DescribeBatchOperationResponse = z.infer<
+  typeof DescribeBatchOperationResponse
 >;

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**[cleanup-wv-pre-release] Pre-release deployment APIs, clean up later*/
-export const ListDeploymentsResponseSchema = z
+export const ListDeploymentsResponse = z
   .object({
     nextPageToken: z.string().optional(),
     deployments: z.array(z.any()).optional(),
@@ -9,6 +9,4 @@ export const ListDeploymentsResponseSchema = z
   .describe(
     "[cleanup-wv-pre-release] Pre-release deployment APIs, clean up later",
   );
-export type ListDeploymentsResponseSchema = z.infer<
-  typeof ListDeploymentsResponseSchema
->;
+export type ListDeploymentsResponse = z.infer<typeof ListDeploymentsResponse>;

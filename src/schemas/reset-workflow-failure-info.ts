@@ -1,8 +1,6 @@
 import { z } from "zod";
 
-export const ResetWorkflowFailureInfoSchema = z.object({
+export const ResetWorkflowFailureInfo = z.object({
   lastHeartbeatDetails: z.any().optional(),
 });
-export type ResetWorkflowFailureInfoSchema = z.infer<
-  typeof ResetWorkflowFailureInfoSchema
->;
+export type ResetWorkflowFailureInfo = z.infer<typeof ResetWorkflowFailureInfo>;

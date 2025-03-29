@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowExecutionTimedOutEventAttributesSchema = z.object({
+export const WorkflowExecutionTimedOutEventAttributes = z.object({
   retryState: z
     .enum([
       "RETRY_STATE_UNSPECIFIED",
@@ -21,6 +21,6 @@ export const WorkflowExecutionTimedOutEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type WorkflowExecutionTimedOutEventAttributesSchema = z.infer<
-  typeof WorkflowExecutionTimedOutEventAttributesSchema
+export type WorkflowExecutionTimedOutEventAttributes = z.infer<
+  typeof WorkflowExecutionTimedOutEventAttributes
 >;

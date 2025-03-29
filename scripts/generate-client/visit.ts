@@ -10,14 +10,3 @@ export function visit(node: ts.Node, callback: (node: ts.Node) => void) {
   ts.forEachChild(node, (child) => visit(child, callback));
 }
 
-if (import.meta.vitest) {
-  const { it, expect } = import.meta.vitest;
-  it('visits each node', () => {
-    const source = ts.createSourceFile('test.ts', 'const x = 1;', ts.ScriptTarget.ESNext);
-    let count = 0;
-
-    visit(source, () => count++);
-
-    expect(count).toBe(7);
-  });
-}

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const UpdateNamespaceRequestSchema = z.object({
+export const UpdateNamespaceRequest = z.object({
   namespace: z.string().optional(),
   updateInfo: z.any().optional(),
   config: z.any().optional(),
@@ -15,6 +15,4 @@ export const UpdateNamespaceRequestSchema = z.object({
     )
     .optional(),
 });
-export type UpdateNamespaceRequestSchema = z.infer<
-  typeof UpdateNamespaceRequestSchema
->;
+export type UpdateNamespaceRequest = z.infer<typeof UpdateNamespaceRequest>;

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Contains mutable fields for an Endpoint.*/
-export const EndpointSpecSchema = z
+export const EndpointSpec = z
   .object({
     /**
      * Endpoint name, unique for this cluster. Must match `[a-zA-Z_][a-zA-Z0-9_]*`.
@@ -28,4 +28,4 @@ export const EndpointSpecSchema = z
     target: z.any().describe("Target to route requests to.").optional(),
   })
   .describe("Contains mutable fields for an Endpoint.");
-export type EndpointSpecSchema = z.infer<typeof EndpointSpecSchema>;
+export type EndpointSpec = z.infer<typeof EndpointSpec>;

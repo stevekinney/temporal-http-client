@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Always the first event in workflow history*/
-export const WorkflowExecutionStartedEventAttributesSchema = z
+export const WorkflowExecutionStartedEventAttributes = z
   .object({
     workflowType: z.any().optional(),
     /**
@@ -233,6 +233,6 @@ export const WorkflowExecutionStartedEventAttributesSchema = z
     priority: z.any().describe("Priority metadata").optional(),
   })
   .describe("Always the first event in workflow history");
-export type WorkflowExecutionStartedEventAttributesSchema = z.infer<
-  typeof WorkflowExecutionStartedEventAttributesSchema
+export type WorkflowExecutionStartedEventAttributes = z.infer<
+  typeof WorkflowExecutionStartedEventAttributes
 >;

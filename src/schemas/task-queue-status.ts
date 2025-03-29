@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**Deprecated. Use `InternalTaskQueueStatus`. This is kept until `DescribeTaskQueue` supports legacy behavior.*/
-export const TaskQueueStatusSchema = z
+export const TaskQueueStatus = z
   .object({
     backlogCountHint: z.string().optional(),
     readLevel: z.string().optional(),
@@ -12,4 +12,4 @@ export const TaskQueueStatusSchema = z
   .describe(
     "Deprecated. Use `InternalTaskQueueStatus`. This is kept until `DescribeTaskQueue` supports legacy behavior.",
   );
-export type TaskQueueStatusSchema = z.infer<typeof TaskQueueStatusSchema>;
+export type TaskQueueStatus = z.infer<typeof TaskQueueStatus>;

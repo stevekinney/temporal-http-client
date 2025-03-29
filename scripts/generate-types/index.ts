@@ -14,7 +14,7 @@ for (const [name, component] of Object.entries(schema.components.schemas)) {
   const fileName = kebabCase(name);
   const filePath = `./src/schemas/${fileName}.ts`;
   const schema = jsonSchemaToZod(component, {
-    name: `${name}Schema`,
+    name: `${name}`,
     type: true,
     withJsdocs: true,
     module: 'esm',

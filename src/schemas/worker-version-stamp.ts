@@ -4,7 +4,7 @@ import { z } from "zod";
  * Deprecated. This message is replaced with `Deployment` and `VersioningBehavior`.
  *  Identifies the version(s) of a worker that processed a task
  */
-export const WorkerVersionStampSchema = z
+export const WorkerVersionStamp = z
   .object({
     /**
      * An opaque whole-worker identifier. Replaces the deprecated `binary_checksum` field when this
@@ -30,4 +30,4 @@ export const WorkerVersionStampSchema = z
   .describe(
     "Deprecated. This message is replaced with `Deployment` and `VersioningBehavior`.\n Identifies the version(s) of a worker that processed a task",
   );
-export type WorkerVersionStampSchema = z.infer<typeof WorkerVersionStampSchema>;
+export type WorkerVersionStamp = z.infer<typeof WorkerVersionStamp>;

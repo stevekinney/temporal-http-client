@@ -9,7 +9,7 @@ import { z } from "zod";
  *  their first poller arrives to the server.
  *  Experimental. Worker Deployments are experimental and might significantly change in the future.
  */
-export const WorkerDeploymentVersionInfoSchema = z
+export const WorkerDeploymentVersionInfo = z
   .object({
     /**The fully-qualified string representation of the version, in the form "<deployment_name>.<build_id>".*/
     version: z
@@ -99,6 +99,6 @@ export const WorkerDeploymentVersionInfoSchema = z
   .describe(
     "A Worker Deployment Version (Version, for short) represents all workers of the same \n code and config within a Deployment. Workers of the same Version are expected to \n behave exactly the same so when executions move between them there are no \n non-determinism issues.\n Worker Deployment Versions are created in Temporal server automatically when \n their first poller arrives to the server.\n Experimental. Worker Deployments are experimental and might significantly change in the future.",
   );
-export type WorkerDeploymentVersionInfoSchema = z.infer<
-  typeof WorkerDeploymentVersionInfoSchema
+export type WorkerDeploymentVersionInfo = z.infer<
+  typeof WorkerDeploymentVersionInfo
 >;

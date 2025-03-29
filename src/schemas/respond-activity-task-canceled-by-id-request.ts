@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RespondActivityTaskCanceledByIdRequestSchema = z.object({
+export const RespondActivityTaskCanceledByIdRequest = z.object({
   /**Namespace of the workflow which scheduled this activity*/
   namespace: z
     .string()
@@ -29,6 +29,6 @@ export const RespondActivityTaskCanceledByIdRequestSchema = z.object({
   /**The identity of the worker/client*/
   identity: z.string().describe("The identity of the worker/client").optional(),
 });
-export type RespondActivityTaskCanceledByIdRequestSchema = z.infer<
-  typeof RespondActivityTaskCanceledByIdRequestSchema
+export type RespondActivityTaskCanceledByIdRequest = z.infer<
+  typeof RespondActivityTaskCanceledByIdRequest
 >;

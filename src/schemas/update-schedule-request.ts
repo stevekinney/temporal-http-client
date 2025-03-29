@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const UpdateScheduleRequestSchema = z.object({
+export const UpdateScheduleRequest = z.object({
   /**The namespace of the schedule to update.*/
   namespace: z
     .string()
@@ -59,6 +59,4 @@ export const UpdateScheduleRequestSchema = z.object({
     )
     .optional(),
 });
-export type UpdateScheduleRequestSchema = z.infer<
-  typeof UpdateScheduleRequestSchema
->;
+export type UpdateScheduleRequest = z.infer<typeof UpdateScheduleRequest>;

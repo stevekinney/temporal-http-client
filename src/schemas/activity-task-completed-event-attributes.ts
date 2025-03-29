@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ActivityTaskCompletedEventAttributesSchema = z.object({
+export const ActivityTaskCompletedEventAttributes = z.object({
   /**Serialized results of the activity. IE: The return value of the activity function*/
   result: z
     .any()
@@ -38,6 +38,6 @@ export const ActivityTaskCompletedEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type ActivityTaskCompletedEventAttributesSchema = z.infer<
-  typeof ActivityTaskCompletedEventAttributesSchema
+export type ActivityTaskCompletedEventAttributes = z.infer<
+  typeof ActivityTaskCompletedEventAttributes
 >;

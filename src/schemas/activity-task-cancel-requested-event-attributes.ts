@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ActivityTaskCancelRequestedEventAttributesSchema = z.object({
+export const ActivityTaskCancelRequestedEventAttributes = z.object({
   /**The id of the `ACTIVITY_TASK_SCHEDULED` event this cancel request corresponds to*/
   scheduledEventId: z
     .string()
@@ -16,6 +16,6 @@ export const ActivityTaskCancelRequestedEventAttributesSchema = z.object({
     )
     .optional(),
 });
-export type ActivityTaskCancelRequestedEventAttributesSchema = z.infer<
-  typeof ActivityTaskCancelRequestedEventAttributesSchema
+export type ActivityTaskCancelRequestedEventAttributes = z.infer<
+  typeof ActivityTaskCancelRequestedEventAttributes
 >;

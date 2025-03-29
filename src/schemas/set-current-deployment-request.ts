@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**[cleanup-wv-pre-release] Pre-release deployment APIs, clean up later*/
-export const SetCurrentDeploymentRequestSchema = z
+export const SetCurrentDeploymentRequest = z
   .object({
     namespace: z.string().optional(),
     deployment: z.any().optional(),
@@ -27,6 +27,6 @@ export const SetCurrentDeploymentRequestSchema = z
   .describe(
     "[cleanup-wv-pre-release] Pre-release deployment APIs, clean up later",
   );
-export type SetCurrentDeploymentRequestSchema = z.infer<
-  typeof SetCurrentDeploymentRequestSchema
+export type SetCurrentDeploymentRequest = z.infer<
+  typeof SetCurrentDeploymentRequest
 >;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RespondActivityTaskCompletedByIdRequestSchema = z.object({
+export const RespondActivityTaskCompletedByIdRequest = z.object({
   /**Namespace of the workflow which scheduled this activity*/
   namespace: z
     .string()
@@ -26,6 +26,6 @@ export const RespondActivityTaskCompletedByIdRequestSchema = z.object({
   /**The identity of the worker/client*/
   identity: z.string().describe("The identity of the worker/client").optional(),
 });
-export type RespondActivityTaskCompletedByIdRequestSchema = z.infer<
-  typeof RespondActivityTaskCompletedByIdRequestSchema
+export type RespondActivityTaskCompletedByIdRequest = z.infer<
+  typeof RespondActivityTaskCompletedByIdRequest
 >;

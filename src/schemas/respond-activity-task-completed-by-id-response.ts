@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RespondActivityTaskCompletedByIdResponseSchema = z.object({});
-export type RespondActivityTaskCompletedByIdResponseSchema = z.infer<
-  typeof RespondActivityTaskCompletedByIdResponseSchema
+export const RespondActivityTaskCompletedByIdResponse = z.object({});
+export type RespondActivityTaskCompletedByIdResponse = z.infer<
+  typeof RespondActivityTaskCompletedByIdResponse
 >;

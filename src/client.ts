@@ -33,7 +33,9 @@ export default class TemporalClient {
   constructor(private readonly baseURL: string) {}
 
   /** @description GetClusterInfo returns information about temporal cluster */
-  async getClusterInfo(): Promise<components['schemas']['GetClusterInfoResponse']> {
+  async getClusterInfo(): Promise<
+    import('./schemas/get-cluster-info-response.ts').GetClusterInfoResponse
+  > {
     const url = new URL(`/api/v1/cluster-info`, this.baseURL);
 
     const request = new Request(url, {
@@ -51,7 +53,9 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    const schema = await import('./schemas/get-cluster-info-response.ts');
+
+    return schema.GetClusterInfoResponse.parse(await response.json());
   }
 
   /** @description ListNamespaces returns the information and configuration for all namespaces. */
@@ -63,7 +67,7 @@ export default class TemporalClient {
     pageSize?: number;
     nextPageToken?: string;
     namespaceFilterIncludeDeleted?: boolean;
-  }): Promise<components['schemas']['ListNamespacesResponse']> {
+  }): Promise<import('./schemas/list-namespaces-response.ts').ListNamespacesResponse> {
     const url = new URL(`/api/v1/namespaces`, this.baseURL);
 
     if (pageSize) url.searchParams.append('pageSize', String(pageSize));
@@ -104,7 +108,7 @@ export default class TemporalClient {
    */
   async registerNamespace(
     body: components['schemas']['RegisterNamespaceRequest'],
-  ): Promise<components['schemas']['RegisterNamespaceResponse']> {
+  ): Promise<import('./schemas/register-namespace-response.ts').RegisterNamespaceResponse> {
     const url = new URL(`/api/v1/namespaces`, this.baseURL);
 
     const request = new Request(url, {
@@ -133,7 +137,7 @@ export default class TemporalClient {
   }: {
     id?: string;
     namespace: string;
-  }): Promise<components['schemas']['DescribeNamespaceResponse']> {
+  }): Promise<import('./schemas/describe-namespace-response.ts').DescribeNamespaceResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}`, this.baseURL);
 
     if (id) url.searchParams.append('id', id);
@@ -166,7 +170,9 @@ export default class TemporalClient {
   async respondActivityTaskCanceled(
     { namespace }: { namespace: string },
     body: components['schemas']['RespondActivityTaskCanceledRequest'],
-  ): Promise<components['schemas']['RespondActivityTaskCanceledResponse']> {
+  ): Promise<
+    import('./schemas/respond-activity-task-canceled-response.ts').RespondActivityTaskCanceledResponse
+  > {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/cancel`, this.baseURL);
 
     const request = new Request(url, {
@@ -198,7 +204,9 @@ export default class TemporalClient {
   async respondActivityTaskCanceledById(
     { namespace }: { namespace: string },
     body: components['schemas']['RespondActivityTaskCanceledByIdRequest'],
-  ): Promise<components['schemas']['RespondActivityTaskCanceledByIdResponse']> {
+  ): Promise<
+    import('./schemas/respond-activity-task-canceled-by-id-response.ts').RespondActivityTaskCanceledByIdResponse
+  > {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/cancel-by-id`, this.baseURL);
 
     const request = new Request(url, {
@@ -230,7 +238,9 @@ export default class TemporalClient {
   async respondActivityTaskCompleted(
     { namespace }: { namespace: string },
     body: components['schemas']['RespondActivityTaskCompletedRequest'],
-  ): Promise<components['schemas']['RespondActivityTaskCompletedResponse']> {
+  ): Promise<
+    import('./schemas/respond-activity-task-completed-response.ts').RespondActivityTaskCompletedResponse
+  > {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/complete`, this.baseURL);
 
     const request = new Request(url, {
@@ -262,7 +272,9 @@ export default class TemporalClient {
   async respondActivityTaskCompletedById(
     { namespace }: { namespace: string },
     body: components['schemas']['RespondActivityTaskCompletedByIdRequest'],
-  ): Promise<components['schemas']['RespondActivityTaskCompletedByIdResponse']> {
+  ): Promise<
+    import('./schemas/respond-activity-task-completed-by-id-response.ts').RespondActivityTaskCompletedByIdResponse
+  > {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/complete-by-id`, this.baseURL);
 
     const request = new Request(url, {
@@ -293,7 +305,9 @@ export default class TemporalClient {
   async respondActivityTaskFailed(
     { namespace }: { namespace: string },
     body: components['schemas']['RespondActivityTaskFailedRequest'],
-  ): Promise<components['schemas']['RespondActivityTaskFailedResponse']> {
+  ): Promise<
+    import('./schemas/respond-activity-task-failed-response.ts').RespondActivityTaskFailedResponse
+  > {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/fail`, this.baseURL);
 
     const request = new Request(url, {
@@ -325,7 +339,9 @@ export default class TemporalClient {
   async respondActivityTaskFailedById(
     { namespace }: { namespace: string },
     body: components['schemas']['RespondActivityTaskFailedByIdRequest'],
-  ): Promise<components['schemas']['RespondActivityTaskFailedByIdResponse']> {
+  ): Promise<
+    import('./schemas/respond-activity-task-failed-by-id-response.ts').RespondActivityTaskFailedByIdResponse
+  > {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/fail-by-id`, this.baseURL);
 
     const request = new Request(url, {
@@ -358,7 +374,9 @@ export default class TemporalClient {
   async recordActivityTaskHeartbeat(
     { namespace }: { namespace: string },
     body: components['schemas']['RecordActivityTaskHeartbeatRequest'],
-  ): Promise<components['schemas']['RecordActivityTaskHeartbeatResponse']> {
+  ): Promise<
+    import('./schemas/record-activity-task-heartbeat-response.ts').RecordActivityTaskHeartbeatResponse
+  > {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/heartbeat`, this.baseURL);
 
     const request = new Request(url, {
@@ -390,7 +408,9 @@ export default class TemporalClient {
   async recordActivityTaskHeartbeatById(
     { namespace }: { namespace: string },
     body: components['schemas']['RecordActivityTaskHeartbeatByIdRequest'],
-  ): Promise<components['schemas']['RecordActivityTaskHeartbeatByIdResponse']> {
+  ): Promise<
+    import('./schemas/record-activity-task-heartbeat-by-id-response.ts').RecordActivityTaskHeartbeatByIdResponse
+  > {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/heartbeat-by-id`, this.baseURL);
 
     const request = new Request(url, {
@@ -412,18 +432,28 @@ export default class TemporalClient {
   }
 
   /**
-   * @description UpdateActivityOptionsById is called by the client to update the options of an activity
-   *  (-- api-linter: core::0136::prepositions=disabled
-   *      aip.dev/not-precedent: "By" is used to indicate request type. --)
+   * @description PauseActivity pauses the execution of an activity specified by its ID or type.
+   *  If there are multiple pending activities of the provided type - all of them will be paused
+   *
+   *  Pausing an activity means:
+   *  - If the activity is currently waiting for a retry or is running and subsequently fails,
+   *    it will not be rescheduled until it is unpaused.
+   *  - If the activity is already paused, calling this method will have no effect.
+   *  - If the activity is running and finishes successfully, the activity will be completed.
+   *  - If the activity is running and finishes with failure:
+   *    * if there is no retry left - the activity will be completed.
+   *    * if there are more retries left - the activity will be paused.
+   *  For long-running activities:
+   *  - activities in paused state will send a cancellation with "activity_paused" set to 'true' in response to 'RecordActivityTaskHeartbeat'.
+   *  - The activity should respond to the cancellation accordingly.
+   *
+   *  Returns a `NotFound` error if there is no pending activity with the provided ID or type
    */
-  async updateActivityOptionsById(
+  async pauseActivity(
     { namespace }: { namespace: string },
-    body: components['schemas']['UpdateActivityOptionsByIdRequest'],
-  ): Promise<components['schemas']['UpdateActivityOptionsByIdResponse']> {
-    const url = new URL(
-      `/api/v1/namespaces/${namespace}/activities/update-options-by-id`,
-      this.baseURL,
-    );
+    body: components['schemas']['PauseActivityRequest'],
+  ): Promise<import('./schemas/pause-activity-response.ts').PauseActivityResponse> {
+    const url = new URL(`/api/v1/namespaces/${namespace}/activities/pause`, this.baseURL);
 
     const request = new Request(url, {
       method: 'POST',
@@ -434,10 +464,125 @@ export default class TemporalClient {
     const response = await fetch(request);
 
     if (!response.ok) {
-      throw new TemporalError(`${response.status}: updateActivityOptionsById request failed.`, {
+      throw new TemporalError(`${response.status}: pauseActivity request failed.`, {
         request,
         response,
-        operation: 'updateActivityOptionsById',
+        operation: 'pauseActivity',
+      });
+    }
+
+    return response.json();
+  }
+
+  /**
+   * @description ResetActivity resets the execution of an activity specified by its ID or type.
+   *  If there are multiple pending activities of the provided type - all of them will be reset.
+   *
+   *  Resetting an activity means:
+   *  * number of attempts will be reset to 0.
+   *  * activity timeouts will be reset.
+   *  * if the activity is waiting for retry, and it is not paused or 'keep_paused' is not provided:
+   *     it will be scheduled immediately (* see 'jitter' flag),
+   *
+   *  Flags:
+   *
+   *  'jitter': the activity will be scheduled at a random time within the jitter duration.
+   *  If the activity currently paused it will be unpaused, unless 'keep_paused' flag is provided.
+   *  'reset_heartbeats': the activity heartbeat timer and heartbeats will be reset.
+   *  'keep_paused': if the activity is paused, it will remain paused.
+   *
+   *  Returns a `NotFound` error if there is no pending activity with the provided ID or type.
+   */
+  async resetActivity(
+    { namespace }: { namespace: string },
+    body: components['schemas']['ResetActivityRequest'],
+  ): Promise<import('./schemas/reset-activity-response.ts').ResetActivityResponse> {
+    const url = new URL(`/api/v1/namespaces/${namespace}/activities/reset`, this.baseURL);
+
+    const request = new Request(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      throw new TemporalError(`${response.status}: resetActivity request failed.`, {
+        request,
+        response,
+        operation: 'resetActivity',
+      });
+    }
+
+    return response.json();
+  }
+
+  /**
+   * @description UnpauseActivity unpauses the execution of an activity specified by its ID or type.
+   *  If there are multiple pending activities of the provided type - all of them will be unpaused.
+   *
+   *  If activity is not paused, this call will have no effect.
+   *  If the activity was paused while waiting for retry, it will be scheduled immediately (* see 'jitter' flag).
+   *  Once the activity is unpaused, all timeout timers will be regenerated.
+   *
+   *  Flags:
+   *  'jitter': the activity will be scheduled at a random time within the jitter duration.
+   *  'reset_attempts': the number of attempts will be reset.
+   *  'reset_heartbeat': the activity heartbeat timer and heartbeats will be reset.
+   *
+   *  Returns a `NotFound` error if there is no pending activity with the provided ID or type
+   */
+  async unpauseActivity(
+    { namespace }: { namespace: string },
+    body: components['schemas']['UnpauseActivityRequest'],
+  ): Promise<import('./schemas/unpause-activity-response.ts').UnpauseActivityResponse> {
+    const url = new URL(`/api/v1/namespaces/${namespace}/activities/unpause`, this.baseURL);
+
+    const request = new Request(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      throw new TemporalError(`${response.status}: unpauseActivity request failed.`, {
+        request,
+        response,
+        operation: 'unpauseActivity',
+      });
+    }
+
+    return response.json();
+  }
+
+  /**
+   * @description UpdateActivityOptions is called by the client to update the options of an activity by its ID or type.
+   *  If there are multiple pending activities of the provided type - all of them will be updated.
+   */
+  async updateActivityOptions(
+    { namespace }: { namespace: string },
+    body: components['schemas']['UpdateActivityOptionsRequest'],
+  ): Promise<
+    import('./schemas/update-activity-options-response.ts').UpdateActivityOptionsResponse
+  > {
+    const url = new URL(`/api/v1/namespaces/${namespace}/activities/update-options`, this.baseURL);
+
+    const request = new Request(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      throw new TemporalError(`${response.status}: updateActivityOptions request failed.`, {
+        request,
+        response,
+        operation: 'updateActivityOptions',
       });
     }
 
@@ -455,7 +600,9 @@ export default class TemporalClient {
     nextPageToken?: string;
     query?: string;
     namespace: string;
-  }): Promise<components['schemas']['ListArchivedWorkflowExecutionsResponse']> {
+  }): Promise<
+    import('./schemas/list-archived-workflow-executions-response.ts').ListArchivedWorkflowExecutionsResponse
+  > {
     const url = new URL(`/api/v1/namespaces/${namespace}/archived-workflows`, this.baseURL);
 
     if (pageSize) url.searchParams.append('pageSize', String(pageSize));
@@ -490,7 +637,7 @@ export default class TemporalClient {
     pageSize?: number;
     nextPageToken?: string;
     namespace: string;
-  }): Promise<components['schemas']['ListBatchOperationsResponse']> {
+  }): Promise<import('./schemas/list-batch-operations-response.ts').ListBatchOperationsResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/batch-operations`, this.baseURL);
 
     if (pageSize) url.searchParams.append('pageSize', String(pageSize));
@@ -522,7 +669,9 @@ export default class TemporalClient {
   }: {
     namespace: string;
     jobId: string;
-  }): Promise<components['schemas']['DescribeBatchOperationResponse']> {
+  }): Promise<
+    import('./schemas/describe-batch-operation-response.ts').DescribeBatchOperationResponse
+  > {
     const url = new URL(`/api/v1/namespaces/${namespace}/batch-operations/${jobId}`, this.baseURL);
 
     const request = new Request(url, {
@@ -547,7 +696,7 @@ export default class TemporalClient {
   async startBatchOperation(
     { namespace, jobId }: { namespace: string; jobId: string },
     body: components['schemas']['StartBatchOperationRequest'],
-  ): Promise<components['schemas']['StartBatchOperationResponse']> {
+  ): Promise<import('./schemas/start-batch-operation-response.ts').StartBatchOperationResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/batch-operations/${jobId}`, this.baseURL);
 
     const request = new Request(url, {
@@ -573,7 +722,7 @@ export default class TemporalClient {
   async stopBatchOperation(
     { namespace, jobId }: { namespace: string; jobId: string },
     body: components['schemas']['StopBatchOperationRequest'],
-  ): Promise<components['schemas']['StopBatchOperationResponse']> {
+  ): Promise<import('./schemas/stop-batch-operation-response.ts').StopBatchOperationResponse> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/batch-operations/${jobId}/stop`,
       this.baseURL,
@@ -598,6 +747,217 @@ export default class TemporalClient {
     return response.json();
   }
 
+  /**
+   * @description Sets a deployment as the current deployment for its deployment series. Can optionally update
+   *  the metadata of the deployment as well.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   *  Deprecated. Replaced by `SetWorkerDeploymentCurrentVersion`.
+   */
+  async setCurrentDeployment(
+    { namespace, seriesName }: { namespace: string; seriesName: string },
+    body: components['schemas']['SetCurrentDeploymentRequest'],
+  ): Promise<import('./schemas/set-current-deployment-response.ts').SetCurrentDeploymentResponse> {
+    const url = new URL(
+      `/api/v1/namespaces/${namespace}/current-deployment/${seriesName}`,
+      this.baseURL,
+    );
+
+    const request = new Request(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      throw new TemporalError(`${response.status}: setCurrentDeployment request failed.`, {
+        request,
+        response,
+        operation: 'setCurrentDeployment',
+      });
+    }
+
+    return response.json();
+  }
+
+  /**
+   * @description Returns the current deployment (and its info) for a given deployment series.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   *  Deprecated. Replaced by `current_version` returned by `DescribeWorkerDeployment`.
+   */
+  async getCurrentDeployment({
+    namespace,
+    seriesName,
+  }: {
+    namespace: string;
+    seriesName: string;
+  }): Promise<import('./schemas/get-current-deployment-response.ts').GetCurrentDeploymentResponse> {
+    const url = new URL(
+      `/api/v1/namespaces/${namespace}/current-deployment/${seriesName}`,
+      this.baseURL,
+    );
+
+    const request = new Request(url, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      throw new TemporalError(`${response.status}: getCurrentDeployment request failed.`, {
+        request,
+        response,
+        operation: 'getCurrentDeployment',
+      });
+    }
+
+    return response.json();
+  }
+
+  /**
+   * @description Lists worker deployments in the namespace. Optionally can filter based on deployment series
+   *  name.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   *  Deprecated. Replaced with `ListWorkerDeployments`.
+   */
+  async listDeployments({
+    pageSize,
+    nextPageToken,
+    seriesName,
+    namespace,
+  }: {
+    pageSize?: number;
+    nextPageToken?: string;
+    seriesName?: string;
+    namespace: string;
+  }): Promise<import('./schemas/list-deployments-response.ts').ListDeploymentsResponse> {
+    const url = new URL(`/api/v1/namespaces/${namespace}/deployments`, this.baseURL);
+
+    if (pageSize) url.searchParams.append('pageSize', String(pageSize));
+
+    if (nextPageToken) url.searchParams.append('nextPageToken', nextPageToken);
+
+    if (seriesName) url.searchParams.append('seriesName', seriesName);
+
+    const request = new Request(url, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      throw new TemporalError(`${response.status}: listDeployments request failed.`, {
+        request,
+        response,
+        operation: 'listDeployments',
+      });
+    }
+
+    return response.json();
+  }
+
+  /**
+   * @description Describes a worker deployment.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   *  Deprecated. Replaced with `DescribeWorkerDeploymentVersion`.
+   */
+  async describeDeployment({
+    deploymentSeriesName,
+    deploymentBuildId,
+    namespace,
+    seriesName,
+    buildId,
+  }: {
+    deploymentSeriesName?: string;
+    deploymentBuildId?: string;
+    namespace: string;
+    seriesName: string;
+    buildId: string;
+  }): Promise<import('./schemas/describe-deployment-response.ts').DescribeDeploymentResponse> {
+    const url = new URL(
+      `/api/v1/namespaces/${namespace}/deployments/${seriesName}/${buildId}`,
+      this.baseURL,
+    );
+
+    if (deploymentSeriesName)
+      url.searchParams.append('deployment.seriesName', deploymentSeriesName);
+
+    if (deploymentBuildId) url.searchParams.append('deployment.buildId', deploymentBuildId);
+
+    const request = new Request(url, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      throw new TemporalError(`${response.status}: describeDeployment request failed.`, {
+        request,
+        response,
+        operation: 'describeDeployment',
+      });
+    }
+
+    return response.json();
+  }
+
+  /**
+   * @description Returns the reachability level of a worker deployment to help users decide when it is time
+   *  to decommission a deployment. Reachability level is calculated based on the deployment's
+   *  `status` and existing workflows that depend on the given deployment for their execution.
+   *  Calculating reachability is relatively expensive. Therefore, server might return a recently
+   *  cached value. In such a case, the `last_update_time` will inform you about the actual
+   *  reachability calculation time.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   *  Deprecated. Replaced with `DrainageInfo` returned by `DescribeWorkerDeploymentVersion`.
+   */
+  async getDeploymentReachability({
+    deploymentSeriesName,
+    deploymentBuildId,
+    namespace,
+    seriesName,
+    buildId,
+  }: {
+    deploymentSeriesName?: string;
+    deploymentBuildId?: string;
+    namespace: string;
+    seriesName: string;
+    buildId: string;
+  }): Promise<
+    import('./schemas/get-deployment-reachability-response.ts').GetDeploymentReachabilityResponse
+  > {
+    const url = new URL(
+      `/api/v1/namespaces/${namespace}/deployments/${seriesName}/${buildId}/reachability`,
+      this.baseURL,
+    );
+
+    if (deploymentSeriesName)
+      url.searchParams.append('deployment.seriesName', deploymentSeriesName);
+
+    if (deploymentBuildId) url.searchParams.append('deployment.buildId', deploymentBuildId);
+
+    const request = new Request(url, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      throw new TemporalError(`${response.status}: getDeploymentReachability request failed.`, {
+        request,
+        response,
+        operation: 'getDeploymentReachability',
+      });
+    }
+
+    return response.json();
+  }
+
   /** @description List all schedules in a namespace. */
   async listSchedules({
     maximumPageSize,
@@ -609,7 +969,7 @@ export default class TemporalClient {
     nextPageToken?: string;
     query?: string;
     namespace: string;
-  }): Promise<components['schemas']['ListSchedulesResponse']> {
+  }): Promise<import('./schemas/list-schedules-response.ts').ListSchedulesResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/schedules`, this.baseURL);
 
     if (maximumPageSize) url.searchParams.append('maximumPageSize', String(maximumPageSize));
@@ -643,7 +1003,7 @@ export default class TemporalClient {
   }: {
     namespace: string;
     scheduleId: string;
-  }): Promise<components['schemas']['DescribeScheduleResponse']> {
+  }): Promise<import('./schemas/describe-schedule-response.ts').DescribeScheduleResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/schedules/${scheduleId}`, this.baseURL);
 
     const request = new Request(url, {
@@ -668,7 +1028,7 @@ export default class TemporalClient {
   async createSchedule(
     { namespace, scheduleId }: { namespace: string; scheduleId: string },
     body: components['schemas']['CreateScheduleRequest'],
-  ): Promise<components['schemas']['CreateScheduleResponse']> {
+  ): Promise<import('./schemas/create-schedule-response.ts').CreateScheduleResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/schedules/${scheduleId}`, this.baseURL);
 
     const request = new Request(url, {
@@ -699,7 +1059,7 @@ export default class TemporalClient {
     identity?: string;
     namespace: string;
     scheduleId: string;
-  }): Promise<components['schemas']['DeleteScheduleResponse']> {
+  }): Promise<import('./schemas/delete-schedule-response.ts').DeleteScheduleResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/schedules/${scheduleId}`, this.baseURL);
 
     if (identity) url.searchParams.append('identity', identity);
@@ -733,7 +1093,9 @@ export default class TemporalClient {
     endTime?: string;
     namespace: string;
     scheduleId: string;
-  }): Promise<components['schemas']['ListScheduleMatchingTimesResponse']> {
+  }): Promise<
+    import('./schemas/list-schedule-matching-times-response.ts').ListScheduleMatchingTimesResponse
+  > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/schedules/${scheduleId}/matching-times`,
       this.baseURL,
@@ -765,7 +1127,7 @@ export default class TemporalClient {
   async patchSchedule(
     { namespace, scheduleId }: { namespace: string; scheduleId: string },
     body: components['schemas']['PatchScheduleRequest'],
-  ): Promise<components['schemas']['PatchScheduleResponse']> {
+  ): Promise<import('./schemas/patch-schedule-response.ts').PatchScheduleResponse> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/schedules/${scheduleId}/patch`,
       this.baseURL,
@@ -794,7 +1156,7 @@ export default class TemporalClient {
   async updateSchedule(
     { namespace, scheduleId }: { namespace: string; scheduleId: string },
     body: components['schemas']['UpdateScheduleRequest'],
-  ): Promise<components['schemas']['UpdateScheduleResponse']> {
+  ): Promise<import('./schemas/update-schedule-response.ts').UpdateScheduleResponse> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/schedules/${scheduleId}/update`,
       this.baseURL,
@@ -824,7 +1186,7 @@ export default class TemporalClient {
     namespace,
   }: {
     namespace: string;
-  }): Promise<components['schemas']['ListSearchAttributesResponse']> {
+  }): Promise<import('./schemas/list-search-attributes-response.ts').ListSearchAttributesResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/search-attributes`, this.baseURL);
 
     const request = new Request(url, {
@@ -895,7 +1257,7 @@ export default class TemporalClient {
     reportTaskReachability?: boolean;
     namespace: string;
     name: string;
-  }): Promise<components['schemas']['DescribeTaskQueueResponse']> {
+  }): Promise<import('./schemas/describe-task-queue-response.ts').DescribeTaskQueueResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/task-queues/${name}`, this.baseURL);
 
     if (taskQueueName) url.searchParams.append('taskQueue.name', taskQueueName);
@@ -957,7 +1319,9 @@ export default class TemporalClient {
     maxSets?: number;
     namespace: string;
     taskQueue: string;
-  }): Promise<components['schemas']['GetWorkerBuildIdCompatibilityResponse']> {
+  }): Promise<
+    import('./schemas/get-worker-build-id-compatibility-response.ts').GetWorkerBuildIdCompatibilityResponse
+  > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/task-queues/${taskQueue}/worker-build-id-compatibility`,
       this.baseURL,
@@ -993,7 +1357,9 @@ export default class TemporalClient {
   }: {
     namespace: string;
     taskQueue: string;
-  }): Promise<components['schemas']['GetWorkerVersioningRulesResponse']> {
+  }): Promise<
+    import('./schemas/get-worker-versioning-rules-response.ts').GetWorkerVersioningRulesResponse
+  > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/task-queues/${taskQueue}/worker-versioning-rules`,
       this.baseURL,
@@ -1024,7 +1390,7 @@ export default class TemporalClient {
   async updateNamespace(
     { namespace }: { namespace: string },
     body: components['schemas']['UpdateNamespaceRequest'],
-  ): Promise<components['schemas']['UpdateNamespaceResponse']> {
+  ): Promise<import('./schemas/update-namespace-response.ts').UpdateNamespaceResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/update`, this.baseURL);
 
     const request = new Request(url, {
@@ -1041,6 +1407,307 @@ export default class TemporalClient {
         response,
         operation: 'updateNamespace',
       });
+    }
+
+    return response.json();
+  }
+
+  /**
+   * @description Describes a worker deployment version.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   */
+  async describeWorkerDeploymentVersion({
+    namespace,
+    version,
+  }: {
+    namespace: string;
+    version: string;
+  }): Promise<
+    import('./schemas/describe-worker-deployment-version-response.ts').DescribeWorkerDeploymentVersionResponse
+  > {
+    const url = new URL(
+      `/api/v1/namespaces/${namespace}/worker-deployment-versions/${version}`,
+      this.baseURL,
+    );
+
+    const request = new Request(url, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      throw new TemporalError(
+        `${response.status}: describeWorkerDeploymentVersion request failed.`,
+        { request, response, operation: 'describeWorkerDeploymentVersion' },
+      );
+    }
+
+    return response.json();
+  }
+
+  /**
+   * @description Used for manual deletion of Versions. User can delete a Version only when all the
+   *  following conditions are met:
+   *   - It is not the Current or Ramping Version of its Deployment.
+   *   - It has no active pollers (none of the task queues in the Version have pollers)
+   *   - It is not draining (see WorkerDeploymentVersionInfo.drainage_info). This condition
+   *     can be skipped by passing `skip-drainage=true`.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   */
+  async deleteWorkerDeploymentVersion({
+    skipDrainage,
+    identity,
+    namespace,
+    version,
+  }: {
+    skipDrainage?: boolean;
+    identity?: string;
+    namespace: string;
+    version: string;
+  }): Promise<
+    import('./schemas/delete-worker-deployment-version-response.ts').DeleteWorkerDeploymentVersionResponse
+  > {
+    const url = new URL(
+      `/api/v1/namespaces/${namespace}/worker-deployment-versions/${version}`,
+      this.baseURL,
+    );
+
+    if (skipDrainage) url.searchParams.append('skipDrainage', String(skipDrainage));
+
+    if (identity) url.searchParams.append('identity', identity);
+
+    const request = new Request(url, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      throw new TemporalError(`${response.status}: deleteWorkerDeploymentVersion request failed.`, {
+        request,
+        response,
+        operation: 'deleteWorkerDeploymentVersion',
+      });
+    }
+
+    return response.json();
+  }
+
+  /**
+   * @description Updates the user-given metadata attached to a Worker Deployment Version.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   */
+  async updateWorkerDeploymentVersionMetadata(
+    { namespace, version }: { namespace: string; version: string },
+    body: components['schemas']['UpdateWorkerDeploymentVersionMetadataRequest'],
+  ): Promise<
+    import('./schemas/update-worker-deployment-version-metadata-response.ts').UpdateWorkerDeploymentVersionMetadataResponse
+  > {
+    const url = new URL(
+      `/api/v1/namespaces/${namespace}/worker-deployment-versions/${version}/update-metadata`,
+      this.baseURL,
+    );
+
+    const request = new Request(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      throw new TemporalError(
+        `${response.status}: updateWorkerDeploymentVersionMetadata request failed.`,
+        { request, response, operation: 'updateWorkerDeploymentVersionMetadata' },
+      );
+    }
+
+    return response.json();
+  }
+
+  /**
+   * @description Lists all Worker Deployments that are tracked in the Namespace.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   */
+  async listWorkerDeployments({
+    pageSize,
+    nextPageToken,
+    namespace,
+  }: {
+    pageSize?: number;
+    nextPageToken?: string;
+    namespace: string;
+  }): Promise<
+    import('./schemas/list-worker-deployments-response.ts').ListWorkerDeploymentsResponse
+  > {
+    const url = new URL(`/api/v1/namespaces/${namespace}/worker-deployments`, this.baseURL);
+
+    if (pageSize) url.searchParams.append('pageSize', String(pageSize));
+
+    if (nextPageToken) url.searchParams.append('nextPageToken', nextPageToken);
+
+    const request = new Request(url, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      throw new TemporalError(`${response.status}: listWorkerDeployments request failed.`, {
+        request,
+        response,
+        operation: 'listWorkerDeployments',
+      });
+    }
+
+    return response.json();
+  }
+
+  /**
+   * @description Describes a Worker Deployment.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   */
+  async describeWorkerDeployment({
+    namespace,
+    deploymentName,
+  }: {
+    namespace: string;
+    deploymentName: string;
+  }): Promise<
+    import('./schemas/describe-worker-deployment-response.ts').DescribeWorkerDeploymentResponse
+  > {
+    const url = new URL(
+      `/api/v1/namespaces/${namespace}/worker-deployments/${deploymentName}`,
+      this.baseURL,
+    );
+
+    const request = new Request(url, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      throw new TemporalError(`${response.status}: describeWorkerDeployment request failed.`, {
+        request,
+        response,
+        operation: 'describeWorkerDeployment',
+      });
+    }
+
+    return response.json();
+  }
+
+  /**
+   * @description Deletes records of (an old) Deployment. A deployment can only be deleted if
+   *  it has no Version in it.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   */
+  async deleteWorkerDeployment({
+    identity,
+    namespace,
+    deploymentName,
+  }: {
+    identity?: string;
+    namespace: string;
+    deploymentName: string;
+  }): Promise<
+    import('./schemas/delete-worker-deployment-response.ts').DeleteWorkerDeploymentResponse
+  > {
+    const url = new URL(
+      `/api/v1/namespaces/${namespace}/worker-deployments/${deploymentName}`,
+      this.baseURL,
+    );
+
+    if (identity) url.searchParams.append('identity', identity);
+
+    const request = new Request(url, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      throw new TemporalError(`${response.status}: deleteWorkerDeployment request failed.`, {
+        request,
+        response,
+        operation: 'deleteWorkerDeployment',
+      });
+    }
+
+    return response.json();
+  }
+
+  /**
+   * @description Set/unset the Current Version of a Worker Deployment. Automatically unsets the Ramping
+   *  Version if it is the Version being set as Current.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   */
+  async setWorkerDeploymentCurrentVersion(
+    { namespace, deploymentName }: { namespace: string; deploymentName: string },
+    body: components['schemas']['SetWorkerDeploymentCurrentVersionRequest'],
+  ): Promise<
+    import('./schemas/set-worker-deployment-current-version-response.ts').SetWorkerDeploymentCurrentVersionResponse
+  > {
+    const url = new URL(
+      `/api/v1/namespaces/${namespace}/worker-deployments/${deploymentName}/set-current-version`,
+      this.baseURL,
+    );
+
+    const request = new Request(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      throw new TemporalError(
+        `${response.status}: setWorkerDeploymentCurrentVersion request failed.`,
+        { request, response, operation: 'setWorkerDeploymentCurrentVersion' },
+      );
+    }
+
+    return response.json();
+  }
+
+  /**
+   * @description Set/unset the Ramping Version of a Worker Deployment and its ramp percentage. Can be used for
+   *  gradual ramp to unversioned workers too.
+   *  Experimental. This API might significantly change or be removed in a future release.
+   */
+  async setWorkerDeploymentRampingVersion(
+    { namespace, deploymentName }: { namespace: string; deploymentName: string },
+    body: components['schemas']['SetWorkerDeploymentRampingVersionRequest'],
+  ): Promise<
+    import('./schemas/set-worker-deployment-ramping-version-response.ts').SetWorkerDeploymentRampingVersionResponse
+  > {
+    const url = new URL(
+      `/api/v1/namespaces/${namespace}/worker-deployments/${deploymentName}/set-ramping-version`,
+      this.baseURL,
+    );
+
+    const request = new Request(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      throw new TemporalError(
+        `${response.status}: setWorkerDeploymentRampingVersion request failed.`,
+        { request, response, operation: 'setWorkerDeploymentRampingVersion' },
+      );
     }
 
     return response.json();
@@ -1077,7 +1744,9 @@ export default class TemporalClient {
       | 'TASK_REACHABILITY_OPEN_WORKFLOWS'
       | 'TASK_REACHABILITY_CLOSED_WORKFLOWS';
     namespace: string;
-  }): Promise<components['schemas']['GetWorkerTaskReachabilityResponse']> {
+  }): Promise<
+    import('./schemas/get-worker-task-reachability-response.ts').GetWorkerTaskReachabilityResponse
+  > {
     const url = new URL(`/api/v1/namespaces/${namespace}/worker-task-reachability`, this.baseURL);
 
     if (buildIds) url.searchParams.append('buildIds', buildIds.join(','));
@@ -1111,7 +1780,9 @@ export default class TemporalClient {
   }: {
     query?: string;
     namespace: string;
-  }): Promise<components['schemas']['CountWorkflowExecutionsResponse']> {
+  }): Promise<
+    import('./schemas/count-workflow-executions-response.ts').CountWorkflowExecutionsResponse
+  > {
     const url = new URL(`/api/v1/namespaces/${namespace}/workflow-count`, this.baseURL);
 
     if (query) url.searchParams.append('query', query);
@@ -1145,7 +1816,9 @@ export default class TemporalClient {
     nextPageToken?: string;
     query?: string;
     namespace: string;
-  }): Promise<components['schemas']['ListWorkflowExecutionsResponse']> {
+  }): Promise<
+    import('./schemas/list-workflow-executions-response.ts').ListWorkflowExecutionsResponse
+  > {
     const url = new URL(`/api/v1/namespaces/${namespace}/workflows`, this.baseURL);
 
     if (pageSize) url.searchParams.append('pageSize', String(pageSize));
@@ -1183,7 +1856,9 @@ export default class TemporalClient {
     executionRunId?: string;
     namespace: string;
     workflowId: string;
-  }): Promise<components['schemas']['DescribeWorkflowExecutionResponse']> {
+  }): Promise<
+    import('./schemas/describe-workflow-execution-response.ts').DescribeWorkflowExecutionResponse
+  > {
     const url = new URL(`/api/v1/namespaces/${namespace}/workflows/${workflowId}`, this.baseURL);
 
     if (executionWorkflowId) url.searchParams.append('execution.workflowId', executionWorkflowId);
@@ -1235,7 +1910,9 @@ export default class TemporalClient {
     skipArchival?: boolean;
     namespace: string;
     workflowId: string;
-  }): Promise<components['schemas']['GetWorkflowExecutionHistoryResponse']> {
+  }): Promise<
+    import('./schemas/get-workflow-execution-history-response.ts').GetWorkflowExecutionHistoryResponse
+  > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/history`,
       this.baseURL,
@@ -1293,7 +1970,9 @@ export default class TemporalClient {
     nextPageToken?: string;
     namespace: string;
     workflowId: string;
-  }): Promise<components['schemas']['GetWorkflowExecutionHistoryReverseResponse']> {
+  }): Promise<
+    import('./schemas/get-workflow-execution-history-reverse-response.ts').GetWorkflowExecutionHistoryReverseResponse
+  > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/history-reverse`,
       this.baseURL,
@@ -1332,7 +2011,7 @@ export default class TemporalClient {
       queryType,
     }: { namespace: string; workflowId: string; queryType: string },
     body: components['schemas']['QueryWorkflowRequest'],
-  ): Promise<components['schemas']['QueryWorkflowResponse']> {
+  ): Promise<import('./schemas/query-workflow-response.ts').QueryWorkflowResponse> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/query/${queryType}`,
       this.baseURL,
@@ -1368,7 +2047,9 @@ export default class TemporalClient {
   async requestCancelWorkflowExecution(
     { namespace, workflowId }: { namespace: string; workflowId: string },
     body: components['schemas']['RequestCancelWorkflowExecutionRequest'],
-  ): Promise<components['schemas']['RequestCancelWorkflowExecutionResponse']> {
+  ): Promise<
+    import('./schemas/request-cancel-workflow-execution-response.ts').RequestCancelWorkflowExecutionResponse
+  > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/cancel`,
       this.baseURL,
@@ -1401,7 +2082,9 @@ export default class TemporalClient {
   async resetWorkflowExecution(
     { namespace, workflowId }: { namespace: string; workflowId: string },
     body: components['schemas']['ResetWorkflowExecutionRequest'],
-  ): Promise<components['schemas']['ResetWorkflowExecutionResponse']> {
+  ): Promise<
+    import('./schemas/reset-workflow-execution-response.ts').ResetWorkflowExecutionResponse
+  > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/reset`,
       this.baseURL,
@@ -1439,7 +2122,9 @@ export default class TemporalClient {
       signalName,
     }: { namespace: string; workflowId: string; signalName: string },
     body: components['schemas']['SignalWorkflowExecutionRequest'],
-  ): Promise<components['schemas']['SignalWorkflowExecutionResponse']> {
+  ): Promise<
+    import('./schemas/signal-workflow-execution-response.ts').SignalWorkflowExecutionResponse
+  > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/signal/${signalName}`,
       this.baseURL,
@@ -1472,7 +2157,9 @@ export default class TemporalClient {
   async terminateWorkflowExecution(
     { namespace, workflowId }: { namespace: string; workflowId: string },
     body: components['schemas']['TerminateWorkflowExecutionRequest'],
-  ): Promise<components['schemas']['TerminateWorkflowExecutionResponse']> {
+  ): Promise<
+    import('./schemas/terminate-workflow-execution-response.ts').TerminateWorkflowExecutionResponse
+  > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/terminate`,
       this.baseURL,
@@ -1497,11 +2184,43 @@ export default class TemporalClient {
     return response.json();
   }
 
+  /** @description UpdateWorkflowExecutionOptions partially updates the WorkflowExecutionOptions of an existing workflow execution. */
+  async updateWorkflowExecutionOptions(
+    { namespace, workflowId }: { namespace: string; workflowId: string },
+    body: components['schemas']['UpdateWorkflowExecutionOptionsRequest'],
+  ): Promise<
+    import('./schemas/update-workflow-execution-options-response.ts').UpdateWorkflowExecutionOptionsResponse
+  > {
+    const url = new URL(
+      `/api/v1/namespaces/${namespace}/workflows/${workflowId}/update-options`,
+      this.baseURL,
+    );
+
+    const request = new Request(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    const response = await fetch(request);
+
+    if (!response.ok) {
+      throw new TemporalError(
+        `${response.status}: updateWorkflowExecutionOptions request failed.`,
+        { request, response, operation: 'updateWorkflowExecutionOptions' },
+      );
+    }
+
+    return response.json();
+  }
+
   /** @description Invokes the specified Update function on user Workflow code. */
   async updateWorkflowExecution(
     { namespace, workflowId, name }: { namespace: string; workflowId: string; name: string },
     body: components['schemas']['UpdateWorkflowExecutionRequest'],
-  ): Promise<components['schemas']['UpdateWorkflowExecutionResponse']> {
+  ): Promise<
+    import('./schemas/update-workflow-execution-response.ts').UpdateWorkflowExecutionResponse
+  > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/update/${name}`,
       this.baseURL,
@@ -1536,7 +2255,9 @@ export default class TemporalClient {
   async startWorkflowExecution(
     { namespace, workflowId }: { namespace: string; workflowId: string },
     body: components['schemas']['StartWorkflowExecutionRequest'],
-  ): Promise<components['schemas']['StartWorkflowExecutionResponse']> {
+  ): Promise<
+    import('./schemas/start-workflow-execution-response.ts').StartWorkflowExecutionResponse
+  > {
     const url = new URL(`/api/v1/namespaces/${namespace}/workflows/${workflowId}`, this.baseURL);
 
     const request = new Request(url, {
@@ -1579,7 +2300,9 @@ export default class TemporalClient {
       signalName,
     }: { namespace: string; workflowId: string; signalName: string },
     body: components['schemas']['SignalWithStartWorkflowExecutionRequest'],
-  ): Promise<components['schemas']['SignalWithStartWorkflowExecutionResponse']> {
+  ): Promise<
+    import('./schemas/signal-with-start-workflow-execution-response.ts').SignalWithStartWorkflowExecutionResponse
+  > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/signal-with-start/${signalName}`,
       this.baseURL,
@@ -1617,7 +2340,9 @@ export default class TemporalClient {
   async executeMultiOperation(
     { namespace }: { namespace: string },
     body: components['schemas']['ExecuteMultiOperationRequest'],
-  ): Promise<components['schemas']['ExecuteMultiOperationResponse']> {
+  ): Promise<
+    import('./schemas/execute-multi-operation-response.ts').ExecuteMultiOperationResponse
+  > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/execute-multi-operation`,
       this.baseURL,
@@ -1656,7 +2381,7 @@ export default class TemporalClient {
     pageSize?: number;
     nextPageToken?: string;
     name?: string;
-  }): Promise<components['schemas']['ListNexusEndpointsResponse']> {
+  }): Promise<import('./schemas/list-nexus-endpoints-response.ts').ListNexusEndpointsResponse> {
     const url = new URL(`/api/v1/nexus/endpoints`, this.baseURL);
 
     if (pageSize) url.searchParams.append('pageSize', String(pageSize));
@@ -1690,7 +2415,7 @@ export default class TemporalClient {
    */
   async createNexusEndpoint(
     body: components['schemas']['CreateNexusEndpointRequest'],
-  ): Promise<components['schemas']['CreateNexusEndpointResponse']> {
+  ): Promise<import('./schemas/create-nexus-endpoint-response.ts').CreateNexusEndpointResponse> {
     const url = new URL(`/api/v1/nexus/endpoints`, this.baseURL);
 
     const request = new Request(url, {
@@ -1717,7 +2442,7 @@ export default class TemporalClient {
     id,
   }: {
     id: string;
-  }): Promise<components['schemas']['GetNexusEndpointResponse']> {
+  }): Promise<import('./schemas/get-nexus-endpoint-response.ts').GetNexusEndpointResponse> {
     const url = new URL(`/api/v1/nexus/endpoints/${id}`, this.baseURL);
 
     const request = new Request(url, {
@@ -1745,7 +2470,7 @@ export default class TemporalClient {
   }: {
     version?: string;
     id: string;
-  }): Promise<components['schemas']['DeleteNexusEndpointResponse']> {
+  }): Promise<import('./schemas/delete-nexus-endpoint-response.ts').DeleteNexusEndpointResponse> {
     const url = new URL(`/api/v1/nexus/endpoints/${id}`, this.baseURL);
 
     if (version) url.searchParams.append('version', version);
@@ -1778,7 +2503,7 @@ export default class TemporalClient {
   async updateNexusEndpoint(
     { id }: { id: string },
     body: components['schemas']['UpdateNexusEndpointRequest'],
-  ): Promise<components['schemas']['UpdateNexusEndpointResponse']> {
+  ): Promise<import('./schemas/update-nexus-endpoint-response.ts').UpdateNexusEndpointResponse> {
     const url = new URL(`/api/v1/nexus/endpoints/${id}/update`, this.baseURL);
 
     const request = new Request(url, {
@@ -1801,7 +2526,9 @@ export default class TemporalClient {
   }
 
   /** @description GetSystemInfo returns information about the system. */
-  async getSystemInfo(): Promise<components['schemas']['GetSystemInfoResponse']> {
+  async getSystemInfo(): Promise<
+    import('./schemas/get-system-info-response.ts').GetSystemInfoResponse
+  > {
     const url = new URL(`/api/v1/system-info`, this.baseURL);
 
     const request = new Request(url, {

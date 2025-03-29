@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const UpsertWorkflowSearchAttributesEventAttributesSchema = z.object({
+export const UpsertWorkflowSearchAttributesEventAttributes = z.object({
   /**The `WORKFLOW_TASK_COMPLETED` event which this command was reported with*/
   workflowTaskCompletedEventId: z
     .string()
@@ -10,6 +10,6 @@ export const UpsertWorkflowSearchAttributesEventAttributesSchema = z.object({
     .optional(),
   searchAttributes: z.any().optional(),
 });
-export type UpsertWorkflowSearchAttributesEventAttributesSchema = z.infer<
-  typeof UpsertWorkflowSearchAttributesEventAttributesSchema
+export type UpsertWorkflowSearchAttributesEventAttributes = z.infer<
+  typeof UpsertWorkflowSearchAttributesEventAttributes
 >;

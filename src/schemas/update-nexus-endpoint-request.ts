@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const UpdateNexusEndpointRequestSchema = z.object({
+export const UpdateNexusEndpointRequest = z.object({
   /**Server-generated unique endpoint ID.*/
   id: z.string().describe("Server-generated unique endpoint ID.").optional(),
   /**Data version for this endpoint. Must match current version.*/
@@ -10,6 +10,6 @@ export const UpdateNexusEndpointRequestSchema = z.object({
     .optional(),
   spec: z.any().optional(),
 });
-export type UpdateNexusEndpointRequestSchema = z.infer<
-  typeof UpdateNexusEndpointRequestSchema
+export type UpdateNexusEndpointRequest = z.infer<
+  typeof UpdateNexusEndpointRequest
 >;

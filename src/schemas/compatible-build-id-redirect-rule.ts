@@ -22,7 +22,7 @@ import { z } from "zod";
  *
  *  Redirect rules can be chained.
  */
-export const CompatibleBuildIdRedirectRuleSchema = z
+export const CompatibleBuildIdRedirectRule = z
   .object({
     sourceBuildId: z.string().optional(),
     /**
@@ -41,6 +41,6 @@ export const CompatibleBuildIdRedirectRuleSchema = z
   .describe(
     "These rules apply to tasks assigned to a particular Build ID\n (`source_build_id`) to redirect them to another *compatible* Build ID\n (`target_build_id`).\n\n It is user's responsibility to ensure that the target Build ID is compatible\n with the source Build ID (e.g. by using the Patching API).\n\n Most deployments are not expected to need these rules, however following\n situations can greatly benefit from redirects:\n  - Need to move long-running Workflow Executions from an old Build ID to a\n    newer one.\n  - Need to hotfix some broken or stuck Workflow Executions.\n\n In steady state, redirect rules are beneficial when dealing with old\n Executions ran on now-decommissioned Build IDs:\n  - To redirecting the Workflow Queries to the current (compatible) Build ID.\n  - To be able to Reset an old Execution so it can run on the current\n    (compatible) Build ID.\n\n Redirect rules can be chained.",
   );
-export type CompatibleBuildIdRedirectRuleSchema = z.infer<
-  typeof CompatibleBuildIdRedirectRuleSchema
+export type CompatibleBuildIdRedirectRule = z.infer<
+  typeof CompatibleBuildIdRedirectRule
 >;

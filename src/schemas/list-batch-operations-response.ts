@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ListBatchOperationsResponseSchema = z.object({
+export const ListBatchOperationsResponse = z.object({
   /**BatchOperationInfo contains the basic info about batch operation*/
   operationInfo: z
     .array(z.any())
@@ -10,6 +10,6 @@ export const ListBatchOperationsResponseSchema = z.object({
     .optional(),
   nextPageToken: z.string().optional(),
 });
-export type ListBatchOperationsResponseSchema = z.infer<
-  typeof ListBatchOperationsResponseSchema
+export type ListBatchOperationsResponse = z.infer<
+  typeof ListBatchOperationsResponse
 >;

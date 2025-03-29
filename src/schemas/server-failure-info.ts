@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ServerFailureInfoSchema = z.object({
+export const ServerFailureInfo = z.object({
   nonRetryable: z.boolean().optional(),
 });
-export type ServerFailureInfoSchema = z.infer<typeof ServerFailureInfoSchema>;
+export type ServerFailureInfo = z.infer<typeof ServerFailureInfo>;

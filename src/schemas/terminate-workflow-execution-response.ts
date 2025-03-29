@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const TerminateWorkflowExecutionResponseSchema = z.object({});
-export type TerminateWorkflowExecutionResponseSchema = z.infer<
-  typeof TerminateWorkflowExecutionResponseSchema
+export const TerminateWorkflowExecutionResponse = z.object({});
+export type TerminateWorkflowExecutionResponse = z.infer<
+  typeof TerminateWorkflowExecutionResponse
 >;

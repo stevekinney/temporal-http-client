@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const StartWorkflowExecutionRequestSchema = z.object({
+export const StartWorkflowExecutionRequest = z.object({
   namespace: z.string().optional(),
   workflowId: z.string().optional(),
   workflowType: z.any().optional(),
@@ -183,6 +183,6 @@ export const StartWorkflowExecutionRequestSchema = z.object({
   /**Priority metadata*/
   priority: z.any().describe("Priority metadata").optional(),
 });
-export type StartWorkflowExecutionRequestSchema = z.infer<
-  typeof StartWorkflowExecutionRequestSchema
+export type StartWorkflowExecutionRequest = z.infer<
+  typeof StartWorkflowExecutionRequest
 >;

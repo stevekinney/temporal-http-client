@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const WorkflowExecutionUpdateCompletedEventAttributesSchema = z.object({
+export const WorkflowExecutionUpdateCompletedEventAttributes = z.object({
   /**The metadata about this update.*/
   meta: z.any().describe("The metadata about this update.").optional(),
   /**The event ID indicating the acceptance of this update.*/
@@ -14,6 +14,6 @@ export const WorkflowExecutionUpdateCompletedEventAttributesSchema = z.object({
     .describe("The outcome of executing the workflow update function.")
     .optional(),
 });
-export type WorkflowExecutionUpdateCompletedEventAttributesSchema = z.infer<
-  typeof WorkflowExecutionUpdateCompletedEventAttributesSchema
+export type WorkflowExecutionUpdateCompletedEventAttributes = z.infer<
+  typeof WorkflowExecutionUpdateCompletedEventAttributes
 >;

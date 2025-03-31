@@ -10,7 +10,7 @@ export function renderOperations(operation: Operation | Operations): string {
 
   return `
   ${operation.documentation}
-    async ${operation.name}(${operation.methodSignature}): Promise<${operation.response}> {
+    async ${operation.name}(${operation.methodSignature}): Promise<import('${operation.schemaFilePath}').${operation.response}> {
       const url = new URL(\`${operation.route}\`, this.baseURL);
 
       ${operation.searchParams}
@@ -25,9 +25,11 @@ export function renderOperations(operation: Operation | Operations): string {
 
       try {
         const json = await response.json();
-        ${operation.response}
+        const { ${operation.response} } = await import('${operation.schemaFilePath}');
+        return ${operation.response}.parse(json);
+      } catch (error) {
+        throw new TemporalError(\`Failed to parse response from ${operation.name}.\`, { request, response, operation: '${operation.name}' });
       }
-      
   }
   `;
 }

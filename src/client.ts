@@ -34,7 +34,7 @@ export default class TemporalClient {
 
   /** @description GetClusterInfo returns information about temporal cluster */
   async getClusterInfo(): Promise<
-    import('./schemas/get-cluster-info-response.ts').GetClusterInfoResponse
+    import('./schemas/get-cluster-info-response').GetClusterInfoResponse
   > {
     const url = new URL(`/api/v1/cluster-info`, this.baseURL);
 
@@ -53,9 +53,17 @@ export default class TemporalClient {
       });
     }
 
-    const schema = await import('./schemas/get-cluster-info-response.ts');
-
-    return schema.GetClusterInfoResponse.parse(await response.json());
+    try {
+      const json = await response.json();
+      const { GetClusterInfoResponse } = await import('./schemas/get-cluster-info-response');
+      return GetClusterInfoResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from getClusterInfo.`, {
+        request,
+        response,
+        operation: 'getClusterInfo',
+      });
+    }
   }
 
   /** @description ListNamespaces returns the information and configuration for all namespaces. */
@@ -67,7 +75,7 @@ export default class TemporalClient {
     pageSize?: number;
     nextPageToken?: string;
     namespaceFilterIncludeDeleted?: boolean;
-  }): Promise<import('./schemas/list-namespaces-response.ts').ListNamespacesResponse> {
+  }): Promise<import('./schemas/list-namespaces-response').ListNamespacesResponse> {
     const url = new URL(`/api/v1/namespaces`, this.baseURL);
 
     if (pageSize) url.searchParams.append('pageSize', String(pageSize));
@@ -95,7 +103,17 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { ListNamespacesResponse } = await import('./schemas/list-namespaces-response');
+      return ListNamespacesResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from listNamespaces.`, {
+        request,
+        response,
+        operation: 'listNamespaces',
+      });
+    }
   }
 
   /**
@@ -108,7 +126,7 @@ export default class TemporalClient {
    */
   async registerNamespace(
     body: components['schemas']['RegisterNamespaceRequest'],
-  ): Promise<import('./schemas/register-namespace-response.ts').RegisterNamespaceResponse> {
+  ): Promise<import('./schemas/register-namespace-response').RegisterNamespaceResponse> {
     const url = new URL(`/api/v1/namespaces`, this.baseURL);
 
     const request = new Request(url, {
@@ -127,7 +145,17 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { RegisterNamespaceResponse } = await import('./schemas/register-namespace-response');
+      return RegisterNamespaceResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from registerNamespace.`, {
+        request,
+        response,
+        operation: 'registerNamespace',
+      });
+    }
   }
 
   /** @description DescribeNamespace returns the information and configuration for a registered namespace. */
@@ -137,7 +165,7 @@ export default class TemporalClient {
   }: {
     id?: string;
     namespace: string;
-  }): Promise<import('./schemas/describe-namespace-response.ts').DescribeNamespaceResponse> {
+  }): Promise<import('./schemas/describe-namespace-response').DescribeNamespaceResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}`, this.baseURL);
 
     if (id) url.searchParams.append('id', id);
@@ -157,7 +185,17 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { DescribeNamespaceResponse } = await import('./schemas/describe-namespace-response');
+      return DescribeNamespaceResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from describeNamespace.`, {
+        request,
+        response,
+        operation: 'describeNamespace',
+      });
+    }
   }
 
   /**
@@ -171,7 +209,7 @@ export default class TemporalClient {
     { namespace }: { namespace: string },
     body: components['schemas']['RespondActivityTaskCanceledRequest'],
   ): Promise<
-    import('./schemas/respond-activity-task-canceled-response.ts').RespondActivityTaskCanceledResponse
+    import('./schemas/respond-activity-task-canceled-response').RespondActivityTaskCanceledResponse
   > {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/cancel`, this.baseURL);
 
@@ -191,7 +229,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { RespondActivityTaskCanceledResponse } = await import(
+        './schemas/respond-activity-task-canceled-response'
+      );
+      return RespondActivityTaskCanceledResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from respondActivityTaskCanceled.`, {
+        request,
+        response,
+        operation: 'respondActivityTaskCanceled',
+      });
+    }
   }
 
   /**
@@ -205,7 +255,7 @@ export default class TemporalClient {
     { namespace }: { namespace: string },
     body: components['schemas']['RespondActivityTaskCanceledByIdRequest'],
   ): Promise<
-    import('./schemas/respond-activity-task-canceled-by-id-response.ts').RespondActivityTaskCanceledByIdResponse
+    import('./schemas/respond-activity-task-canceled-by-id-response').RespondActivityTaskCanceledByIdResponse
   > {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/cancel-by-id`, this.baseURL);
 
@@ -224,7 +274,19 @@ export default class TemporalClient {
       );
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { RespondActivityTaskCanceledByIdResponse } = await import(
+        './schemas/respond-activity-task-canceled-by-id-response'
+      );
+      return RespondActivityTaskCanceledByIdResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from respondActivityTaskCanceledById.`, {
+        request,
+        response,
+        operation: 'respondActivityTaskCanceledById',
+      });
+    }
   }
 
   /**
@@ -239,7 +301,7 @@ export default class TemporalClient {
     { namespace }: { namespace: string },
     body: components['schemas']['RespondActivityTaskCompletedRequest'],
   ): Promise<
-    import('./schemas/respond-activity-task-completed-response.ts').RespondActivityTaskCompletedResponse
+    import('./schemas/respond-activity-task-completed-response').RespondActivityTaskCompletedResponse
   > {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/complete`, this.baseURL);
 
@@ -259,7 +321,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { RespondActivityTaskCompletedResponse } = await import(
+        './schemas/respond-activity-task-completed-response'
+      );
+      return RespondActivityTaskCompletedResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from respondActivityTaskCompleted.`, {
+        request,
+        response,
+        operation: 'respondActivityTaskCompleted',
+      });
+    }
   }
 
   /**
@@ -273,7 +347,7 @@ export default class TemporalClient {
     { namespace }: { namespace: string },
     body: components['schemas']['RespondActivityTaskCompletedByIdRequest'],
   ): Promise<
-    import('./schemas/respond-activity-task-completed-by-id-response.ts').RespondActivityTaskCompletedByIdResponse
+    import('./schemas/respond-activity-task-completed-by-id-response').RespondActivityTaskCompletedByIdResponse
   > {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/complete-by-id`, this.baseURL);
 
@@ -292,7 +366,19 @@ export default class TemporalClient {
       );
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { RespondActivityTaskCompletedByIdResponse } = await import(
+        './schemas/respond-activity-task-completed-by-id-response'
+      );
+      return RespondActivityTaskCompletedByIdResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from respondActivityTaskCompletedById.`, {
+        request,
+        response,
+        operation: 'respondActivityTaskCompletedById',
+      });
+    }
   }
 
   /**
@@ -306,7 +392,7 @@ export default class TemporalClient {
     { namespace }: { namespace: string },
     body: components['schemas']['RespondActivityTaskFailedRequest'],
   ): Promise<
-    import('./schemas/respond-activity-task-failed-response.ts').RespondActivityTaskFailedResponse
+    import('./schemas/respond-activity-task-failed-response').RespondActivityTaskFailedResponse
   > {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/fail`, this.baseURL);
 
@@ -326,7 +412,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { RespondActivityTaskFailedResponse } = await import(
+        './schemas/respond-activity-task-failed-response'
+      );
+      return RespondActivityTaskFailedResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from respondActivityTaskFailed.`, {
+        request,
+        response,
+        operation: 'respondActivityTaskFailed',
+      });
+    }
   }
 
   /**
@@ -340,7 +438,7 @@ export default class TemporalClient {
     { namespace }: { namespace: string },
     body: components['schemas']['RespondActivityTaskFailedByIdRequest'],
   ): Promise<
-    import('./schemas/respond-activity-task-failed-by-id-response.ts').RespondActivityTaskFailedByIdResponse
+    import('./schemas/respond-activity-task-failed-by-id-response').RespondActivityTaskFailedByIdResponse
   > {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/fail-by-id`, this.baseURL);
 
@@ -360,7 +458,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { RespondActivityTaskFailedByIdResponse } = await import(
+        './schemas/respond-activity-task-failed-by-id-response'
+      );
+      return RespondActivityTaskFailedByIdResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from respondActivityTaskFailedById.`, {
+        request,
+        response,
+        operation: 'respondActivityTaskFailedById',
+      });
+    }
   }
 
   /**
@@ -375,7 +485,7 @@ export default class TemporalClient {
     { namespace }: { namespace: string },
     body: components['schemas']['RecordActivityTaskHeartbeatRequest'],
   ): Promise<
-    import('./schemas/record-activity-task-heartbeat-response.ts').RecordActivityTaskHeartbeatResponse
+    import('./schemas/record-activity-task-heartbeat-response').RecordActivityTaskHeartbeatResponse
   > {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/heartbeat`, this.baseURL);
 
@@ -395,7 +505,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { RecordActivityTaskHeartbeatResponse } = await import(
+        './schemas/record-activity-task-heartbeat-response'
+      );
+      return RecordActivityTaskHeartbeatResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from recordActivityTaskHeartbeat.`, {
+        request,
+        response,
+        operation: 'recordActivityTaskHeartbeat',
+      });
+    }
   }
 
   /**
@@ -409,7 +531,7 @@ export default class TemporalClient {
     { namespace }: { namespace: string },
     body: components['schemas']['RecordActivityTaskHeartbeatByIdRequest'],
   ): Promise<
-    import('./schemas/record-activity-task-heartbeat-by-id-response.ts').RecordActivityTaskHeartbeatByIdResponse
+    import('./schemas/record-activity-task-heartbeat-by-id-response').RecordActivityTaskHeartbeatByIdResponse
   > {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/heartbeat-by-id`, this.baseURL);
 
@@ -428,7 +550,19 @@ export default class TemporalClient {
       );
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { RecordActivityTaskHeartbeatByIdResponse } = await import(
+        './schemas/record-activity-task-heartbeat-by-id-response'
+      );
+      return RecordActivityTaskHeartbeatByIdResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from recordActivityTaskHeartbeatById.`, {
+        request,
+        response,
+        operation: 'recordActivityTaskHeartbeatById',
+      });
+    }
   }
 
   /**
@@ -452,7 +586,7 @@ export default class TemporalClient {
   async pauseActivity(
     { namespace }: { namespace: string },
     body: components['schemas']['PauseActivityRequest'],
-  ): Promise<import('./schemas/pause-activity-response.ts').PauseActivityResponse> {
+  ): Promise<import('./schemas/pause-activity-response').PauseActivityResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/pause`, this.baseURL);
 
     const request = new Request(url, {
@@ -471,7 +605,17 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { PauseActivityResponse } = await import('./schemas/pause-activity-response');
+      return PauseActivityResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from pauseActivity.`, {
+        request,
+        response,
+        operation: 'pauseActivity',
+      });
+    }
   }
 
   /**
@@ -496,7 +640,7 @@ export default class TemporalClient {
   async resetActivity(
     { namespace }: { namespace: string },
     body: components['schemas']['ResetActivityRequest'],
-  ): Promise<import('./schemas/reset-activity-response.ts').ResetActivityResponse> {
+  ): Promise<import('./schemas/reset-activity-response').ResetActivityResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/reset`, this.baseURL);
 
     const request = new Request(url, {
@@ -515,7 +659,17 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { ResetActivityResponse } = await import('./schemas/reset-activity-response');
+      return ResetActivityResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from resetActivity.`, {
+        request,
+        response,
+        operation: 'resetActivity',
+      });
+    }
   }
 
   /**
@@ -536,7 +690,7 @@ export default class TemporalClient {
   async unpauseActivity(
     { namespace }: { namespace: string },
     body: components['schemas']['UnpauseActivityRequest'],
-  ): Promise<import('./schemas/unpause-activity-response.ts').UnpauseActivityResponse> {
+  ): Promise<import('./schemas/unpause-activity-response').UnpauseActivityResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/unpause`, this.baseURL);
 
     const request = new Request(url, {
@@ -555,7 +709,17 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { UnpauseActivityResponse } = await import('./schemas/unpause-activity-response');
+      return UnpauseActivityResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from unpauseActivity.`, {
+        request,
+        response,
+        operation: 'unpauseActivity',
+      });
+    }
   }
 
   /**
@@ -565,9 +729,7 @@ export default class TemporalClient {
   async updateActivityOptions(
     { namespace }: { namespace: string },
     body: components['schemas']['UpdateActivityOptionsRequest'],
-  ): Promise<
-    import('./schemas/update-activity-options-response.ts').UpdateActivityOptionsResponse
-  > {
+  ): Promise<import('./schemas/update-activity-options-response').UpdateActivityOptionsResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/activities/update-options`, this.baseURL);
 
     const request = new Request(url, {
@@ -586,7 +748,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { UpdateActivityOptionsResponse } = await import(
+        './schemas/update-activity-options-response'
+      );
+      return UpdateActivityOptionsResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from updateActivityOptions.`, {
+        request,
+        response,
+        operation: 'updateActivityOptions',
+      });
+    }
   }
 
   /** @description ListArchivedWorkflowExecutions is a visibility API to list archived workflow executions in a specific namespace. */
@@ -601,7 +775,7 @@ export default class TemporalClient {
     query?: string;
     namespace: string;
   }): Promise<
-    import('./schemas/list-archived-workflow-executions-response.ts').ListArchivedWorkflowExecutionsResponse
+    import('./schemas/list-archived-workflow-executions-response').ListArchivedWorkflowExecutionsResponse
   > {
     const url = new URL(`/api/v1/namespaces/${namespace}/archived-workflows`, this.baseURL);
 
@@ -625,7 +799,19 @@ export default class TemporalClient {
       );
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { ListArchivedWorkflowExecutionsResponse } = await import(
+        './schemas/list-archived-workflow-executions-response'
+      );
+      return ListArchivedWorkflowExecutionsResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from listArchivedWorkflowExecutions.`, {
+        request,
+        response,
+        operation: 'listArchivedWorkflowExecutions',
+      });
+    }
   }
 
   /** @description ListBatchOperations returns a list of batch operations */
@@ -637,7 +823,7 @@ export default class TemporalClient {
     pageSize?: number;
     nextPageToken?: string;
     namespace: string;
-  }): Promise<import('./schemas/list-batch-operations-response.ts').ListBatchOperationsResponse> {
+  }): Promise<import('./schemas/list-batch-operations-response').ListBatchOperationsResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/batch-operations`, this.baseURL);
 
     if (pageSize) url.searchParams.append('pageSize', String(pageSize));
@@ -659,7 +845,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { ListBatchOperationsResponse } = await import(
+        './schemas/list-batch-operations-response'
+      );
+      return ListBatchOperationsResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from listBatchOperations.`, {
+        request,
+        response,
+        operation: 'listBatchOperations',
+      });
+    }
   }
 
   /** @description DescribeBatchOperation returns the information about a batch operation */
@@ -670,7 +868,7 @@ export default class TemporalClient {
     namespace: string;
     jobId: string;
   }): Promise<
-    import('./schemas/describe-batch-operation-response.ts').DescribeBatchOperationResponse
+    import('./schemas/describe-batch-operation-response').DescribeBatchOperationResponse
   > {
     const url = new URL(`/api/v1/namespaces/${namespace}/batch-operations/${jobId}`, this.baseURL);
 
@@ -689,14 +887,26 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { DescribeBatchOperationResponse } = await import(
+        './schemas/describe-batch-operation-response'
+      );
+      return DescribeBatchOperationResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from describeBatchOperation.`, {
+        request,
+        response,
+        operation: 'describeBatchOperation',
+      });
+    }
   }
 
   /** @description StartBatchOperation starts a new batch operation */
   async startBatchOperation(
     { namespace, jobId }: { namespace: string; jobId: string },
     body: components['schemas']['StartBatchOperationRequest'],
-  ): Promise<import('./schemas/start-batch-operation-response.ts').StartBatchOperationResponse> {
+  ): Promise<import('./schemas/start-batch-operation-response').StartBatchOperationResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/batch-operations/${jobId}`, this.baseURL);
 
     const request = new Request(url, {
@@ -715,14 +925,26 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { StartBatchOperationResponse } = await import(
+        './schemas/start-batch-operation-response'
+      );
+      return StartBatchOperationResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from startBatchOperation.`, {
+        request,
+        response,
+        operation: 'startBatchOperation',
+      });
+    }
   }
 
   /** @description StopBatchOperation stops a batch operation */
   async stopBatchOperation(
     { namespace, jobId }: { namespace: string; jobId: string },
     body: components['schemas']['StopBatchOperationRequest'],
-  ): Promise<import('./schemas/stop-batch-operation-response.ts').StopBatchOperationResponse> {
+  ): Promise<import('./schemas/stop-batch-operation-response').StopBatchOperationResponse> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/batch-operations/${jobId}/stop`,
       this.baseURL,
@@ -744,7 +966,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { StopBatchOperationResponse } = await import(
+        './schemas/stop-batch-operation-response'
+      );
+      return StopBatchOperationResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from stopBatchOperation.`, {
+        request,
+        response,
+        operation: 'stopBatchOperation',
+      });
+    }
   }
 
   /**
@@ -756,7 +990,7 @@ export default class TemporalClient {
   async setCurrentDeployment(
     { namespace, seriesName }: { namespace: string; seriesName: string },
     body: components['schemas']['SetCurrentDeploymentRequest'],
-  ): Promise<import('./schemas/set-current-deployment-response.ts').SetCurrentDeploymentResponse> {
+  ): Promise<import('./schemas/set-current-deployment-response').SetCurrentDeploymentResponse> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/current-deployment/${seriesName}`,
       this.baseURL,
@@ -778,7 +1012,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { SetCurrentDeploymentResponse } = await import(
+        './schemas/set-current-deployment-response'
+      );
+      return SetCurrentDeploymentResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from setCurrentDeployment.`, {
+        request,
+        response,
+        operation: 'setCurrentDeployment',
+      });
+    }
   }
 
   /**
@@ -792,7 +1038,7 @@ export default class TemporalClient {
   }: {
     namespace: string;
     seriesName: string;
-  }): Promise<import('./schemas/get-current-deployment-response.ts').GetCurrentDeploymentResponse> {
+  }): Promise<import('./schemas/get-current-deployment-response').GetCurrentDeploymentResponse> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/current-deployment/${seriesName}`,
       this.baseURL,
@@ -813,7 +1059,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { GetCurrentDeploymentResponse } = await import(
+        './schemas/get-current-deployment-response'
+      );
+      return GetCurrentDeploymentResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from getCurrentDeployment.`, {
+        request,
+        response,
+        operation: 'getCurrentDeployment',
+      });
+    }
   }
 
   /**
@@ -832,7 +1090,7 @@ export default class TemporalClient {
     nextPageToken?: string;
     seriesName?: string;
     namespace: string;
-  }): Promise<import('./schemas/list-deployments-response.ts').ListDeploymentsResponse> {
+  }): Promise<import('./schemas/list-deployments-response').ListDeploymentsResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/deployments`, this.baseURL);
 
     if (pageSize) url.searchParams.append('pageSize', String(pageSize));
@@ -856,7 +1114,17 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { ListDeploymentsResponse } = await import('./schemas/list-deployments-response');
+      return ListDeploymentsResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from listDeployments.`, {
+        request,
+        response,
+        operation: 'listDeployments',
+      });
+    }
   }
 
   /**
@@ -876,7 +1144,7 @@ export default class TemporalClient {
     namespace: string;
     seriesName: string;
     buildId: string;
-  }): Promise<import('./schemas/describe-deployment-response.ts').DescribeDeploymentResponse> {
+  }): Promise<import('./schemas/describe-deployment-response').DescribeDeploymentResponse> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/deployments/${seriesName}/${buildId}`,
       this.baseURL,
@@ -902,7 +1170,17 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { DescribeDeploymentResponse } = await import('./schemas/describe-deployment-response');
+      return DescribeDeploymentResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from describeDeployment.`, {
+        request,
+        response,
+        operation: 'describeDeployment',
+      });
+    }
   }
 
   /**
@@ -928,7 +1206,7 @@ export default class TemporalClient {
     seriesName: string;
     buildId: string;
   }): Promise<
-    import('./schemas/get-deployment-reachability-response.ts').GetDeploymentReachabilityResponse
+    import('./schemas/get-deployment-reachability-response').GetDeploymentReachabilityResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/deployments/${seriesName}/${buildId}/reachability`,
@@ -955,7 +1233,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { GetDeploymentReachabilityResponse } = await import(
+        './schemas/get-deployment-reachability-response'
+      );
+      return GetDeploymentReachabilityResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from getDeploymentReachability.`, {
+        request,
+        response,
+        operation: 'getDeploymentReachability',
+      });
+    }
   }
 
   /** @description List all schedules in a namespace. */
@@ -969,7 +1259,7 @@ export default class TemporalClient {
     nextPageToken?: string;
     query?: string;
     namespace: string;
-  }): Promise<import('./schemas/list-schedules-response.ts').ListSchedulesResponse> {
+  }): Promise<import('./schemas/list-schedules-response').ListSchedulesResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/schedules`, this.baseURL);
 
     if (maximumPageSize) url.searchParams.append('maximumPageSize', String(maximumPageSize));
@@ -993,7 +1283,17 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { ListSchedulesResponse } = await import('./schemas/list-schedules-response');
+      return ListSchedulesResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from listSchedules.`, {
+        request,
+        response,
+        operation: 'listSchedules',
+      });
+    }
   }
 
   /** @description Returns the schedule description and current state of an existing schedule. */
@@ -1003,7 +1303,7 @@ export default class TemporalClient {
   }: {
     namespace: string;
     scheduleId: string;
-  }): Promise<import('./schemas/describe-schedule-response.ts').DescribeScheduleResponse> {
+  }): Promise<import('./schemas/describe-schedule-response').DescribeScheduleResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/schedules/${scheduleId}`, this.baseURL);
 
     const request = new Request(url, {
@@ -1021,14 +1321,24 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { DescribeScheduleResponse } = await import('./schemas/describe-schedule-response');
+      return DescribeScheduleResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from describeSchedule.`, {
+        request,
+        response,
+        operation: 'describeSchedule',
+      });
+    }
   }
 
   /** @description Creates a new schedule. */
   async createSchedule(
     { namespace, scheduleId }: { namespace: string; scheduleId: string },
     body: components['schemas']['CreateScheduleRequest'],
-  ): Promise<import('./schemas/create-schedule-response.ts').CreateScheduleResponse> {
+  ): Promise<import('./schemas/create-schedule-response').CreateScheduleResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/schedules/${scheduleId}`, this.baseURL);
 
     const request = new Request(url, {
@@ -1047,7 +1357,17 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { CreateScheduleResponse } = await import('./schemas/create-schedule-response');
+      return CreateScheduleResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from createSchedule.`, {
+        request,
+        response,
+        operation: 'createSchedule',
+      });
+    }
   }
 
   /** @description Deletes a schedule, removing it from the system. */
@@ -1059,7 +1379,7 @@ export default class TemporalClient {
     identity?: string;
     namespace: string;
     scheduleId: string;
-  }): Promise<import('./schemas/delete-schedule-response.ts').DeleteScheduleResponse> {
+  }): Promise<import('./schemas/delete-schedule-response').DeleteScheduleResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/schedules/${scheduleId}`, this.baseURL);
 
     if (identity) url.searchParams.append('identity', identity);
@@ -1079,7 +1399,17 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { DeleteScheduleResponse } = await import('./schemas/delete-schedule-response');
+      return DeleteScheduleResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from deleteSchedule.`, {
+        request,
+        response,
+        operation: 'deleteSchedule',
+      });
+    }
   }
 
   /** @description Lists matching times within a range. */
@@ -1094,7 +1424,7 @@ export default class TemporalClient {
     namespace: string;
     scheduleId: string;
   }): Promise<
-    import('./schemas/list-schedule-matching-times-response.ts').ListScheduleMatchingTimesResponse
+    import('./schemas/list-schedule-matching-times-response').ListScheduleMatchingTimesResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/schedules/${scheduleId}/matching-times`,
@@ -1120,14 +1450,26 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { ListScheduleMatchingTimesResponse } = await import(
+        './schemas/list-schedule-matching-times-response'
+      );
+      return ListScheduleMatchingTimesResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from listScheduleMatchingTimes.`, {
+        request,
+        response,
+        operation: 'listScheduleMatchingTimes',
+      });
+    }
   }
 
   /** @description Makes a specific change to a schedule or triggers an immediate action. */
   async patchSchedule(
     { namespace, scheduleId }: { namespace: string; scheduleId: string },
     body: components['schemas']['PatchScheduleRequest'],
-  ): Promise<import('./schemas/patch-schedule-response.ts').PatchScheduleResponse> {
+  ): Promise<import('./schemas/patch-schedule-response').PatchScheduleResponse> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/schedules/${scheduleId}/patch`,
       this.baseURL,
@@ -1149,14 +1491,24 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { PatchScheduleResponse } = await import('./schemas/patch-schedule-response');
+      return PatchScheduleResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from patchSchedule.`, {
+        request,
+        response,
+        operation: 'patchSchedule',
+      });
+    }
   }
 
   /** @description Changes the configuration or state of an existing schedule. */
   async updateSchedule(
     { namespace, scheduleId }: { namespace: string; scheduleId: string },
     body: components['schemas']['UpdateScheduleRequest'],
-  ): Promise<import('./schemas/update-schedule-response.ts').UpdateScheduleResponse> {
+  ): Promise<import('./schemas/update-schedule-response').UpdateScheduleResponse> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/schedules/${scheduleId}/update`,
       this.baseURL,
@@ -1178,7 +1530,17 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { UpdateScheduleResponse } = await import('./schemas/update-schedule-response');
+      return UpdateScheduleResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from updateSchedule.`, {
+        request,
+        response,
+        operation: 'updateSchedule',
+      });
+    }
   }
 
   /** @description ListSearchAttributes returns comprehensive information about search attributes. */
@@ -1186,7 +1548,7 @@ export default class TemporalClient {
     namespace,
   }: {
     namespace: string;
-  }): Promise<import('./schemas/list-search-attributes-response.ts').ListSearchAttributesResponse> {
+  }): Promise<import('./schemas/list-search-attributes-response').ListSearchAttributesResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/search-attributes`, this.baseURL);
 
     const request = new Request(url, {
@@ -1204,7 +1566,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { ListSearchAttributesResponse } = await import(
+        './schemas/list-search-attributes-response'
+      );
+      return ListSearchAttributesResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from listSearchAttributes.`, {
+        request,
+        response,
+        operation: 'listSearchAttributes',
+      });
+    }
   }
 
   /**
@@ -1257,7 +1631,7 @@ export default class TemporalClient {
     reportTaskReachability?: boolean;
     namespace: string;
     name: string;
-  }): Promise<import('./schemas/describe-task-queue-response.ts').DescribeTaskQueueResponse> {
+  }): Promise<import('./schemas/describe-task-queue-response').DescribeTaskQueueResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/task-queues/${name}`, this.baseURL);
 
     if (taskQueueName) url.searchParams.append('taskQueue.name', taskQueueName);
@@ -1304,7 +1678,17 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { DescribeTaskQueueResponse } = await import('./schemas/describe-task-queue-response');
+      return DescribeTaskQueueResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from describeTaskQueue.`, {
+        request,
+        response,
+        operation: 'describeTaskQueue',
+      });
+    }
   }
 
   /**
@@ -1320,7 +1704,7 @@ export default class TemporalClient {
     namespace: string;
     taskQueue: string;
   }): Promise<
-    import('./schemas/get-worker-build-id-compatibility-response.ts').GetWorkerBuildIdCompatibilityResponse
+    import('./schemas/get-worker-build-id-compatibility-response').GetWorkerBuildIdCompatibilityResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/task-queues/${taskQueue}/worker-build-id-compatibility`,
@@ -1344,7 +1728,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { GetWorkerBuildIdCompatibilityResponse } = await import(
+        './schemas/get-worker-build-id-compatibility-response'
+      );
+      return GetWorkerBuildIdCompatibilityResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from getWorkerBuildIdCompatibility.`, {
+        request,
+        response,
+        operation: 'getWorkerBuildIdCompatibility',
+      });
+    }
   }
 
   /**
@@ -1358,7 +1754,7 @@ export default class TemporalClient {
     namespace: string;
     taskQueue: string;
   }): Promise<
-    import('./schemas/get-worker-versioning-rules-response.ts').GetWorkerVersioningRulesResponse
+    import('./schemas/get-worker-versioning-rules-response').GetWorkerVersioningRulesResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/task-queues/${taskQueue}/worker-versioning-rules`,
@@ -1380,7 +1776,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { GetWorkerVersioningRulesResponse } = await import(
+        './schemas/get-worker-versioning-rules-response'
+      );
+      return GetWorkerVersioningRulesResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from getWorkerVersioningRules.`, {
+        request,
+        response,
+        operation: 'getWorkerVersioningRules',
+      });
+    }
   }
 
   /**
@@ -1390,7 +1798,7 @@ export default class TemporalClient {
   async updateNamespace(
     { namespace }: { namespace: string },
     body: components['schemas']['UpdateNamespaceRequest'],
-  ): Promise<import('./schemas/update-namespace-response.ts').UpdateNamespaceResponse> {
+  ): Promise<import('./schemas/update-namespace-response').UpdateNamespaceResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/update`, this.baseURL);
 
     const request = new Request(url, {
@@ -1409,7 +1817,17 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { UpdateNamespaceResponse } = await import('./schemas/update-namespace-response');
+      return UpdateNamespaceResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from updateNamespace.`, {
+        request,
+        response,
+        operation: 'updateNamespace',
+      });
+    }
   }
 
   /**
@@ -1423,7 +1841,7 @@ export default class TemporalClient {
     namespace: string;
     version: string;
   }): Promise<
-    import('./schemas/describe-worker-deployment-version-response.ts').DescribeWorkerDeploymentVersionResponse
+    import('./schemas/describe-worker-deployment-version-response').DescribeWorkerDeploymentVersionResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/worker-deployment-versions/${version}`,
@@ -1444,7 +1862,19 @@ export default class TemporalClient {
       );
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { DescribeWorkerDeploymentVersionResponse } = await import(
+        './schemas/describe-worker-deployment-version-response'
+      );
+      return DescribeWorkerDeploymentVersionResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from describeWorkerDeploymentVersion.`, {
+        request,
+        response,
+        operation: 'describeWorkerDeploymentVersion',
+      });
+    }
   }
 
   /**
@@ -1467,7 +1897,7 @@ export default class TemporalClient {
     namespace: string;
     version: string;
   }): Promise<
-    import('./schemas/delete-worker-deployment-version-response.ts').DeleteWorkerDeploymentVersionResponse
+    import('./schemas/delete-worker-deployment-version-response').DeleteWorkerDeploymentVersionResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/worker-deployment-versions/${version}`,
@@ -1493,7 +1923,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { DeleteWorkerDeploymentVersionResponse } = await import(
+        './schemas/delete-worker-deployment-version-response'
+      );
+      return DeleteWorkerDeploymentVersionResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from deleteWorkerDeploymentVersion.`, {
+        request,
+        response,
+        operation: 'deleteWorkerDeploymentVersion',
+      });
+    }
   }
 
   /**
@@ -1504,7 +1946,7 @@ export default class TemporalClient {
     { namespace, version }: { namespace: string; version: string },
     body: components['schemas']['UpdateWorkerDeploymentVersionMetadataRequest'],
   ): Promise<
-    import('./schemas/update-worker-deployment-version-metadata-response.ts').UpdateWorkerDeploymentVersionMetadataResponse
+    import('./schemas/update-worker-deployment-version-metadata-response').UpdateWorkerDeploymentVersionMetadataResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/worker-deployment-versions/${version}/update-metadata`,
@@ -1526,7 +1968,18 @@ export default class TemporalClient {
       );
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { UpdateWorkerDeploymentVersionMetadataResponse } = await import(
+        './schemas/update-worker-deployment-version-metadata-response'
+      );
+      return UpdateWorkerDeploymentVersionMetadataResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(
+        `Failed to parse response from updateWorkerDeploymentVersionMetadata.`,
+        { request, response, operation: 'updateWorkerDeploymentVersionMetadata' },
+      );
+    }
   }
 
   /**
@@ -1541,9 +1994,7 @@ export default class TemporalClient {
     pageSize?: number;
     nextPageToken?: string;
     namespace: string;
-  }): Promise<
-    import('./schemas/list-worker-deployments-response.ts').ListWorkerDeploymentsResponse
-  > {
+  }): Promise<import('./schemas/list-worker-deployments-response').ListWorkerDeploymentsResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/worker-deployments`, this.baseURL);
 
     if (pageSize) url.searchParams.append('pageSize', String(pageSize));
@@ -1565,7 +2016,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { ListWorkerDeploymentsResponse } = await import(
+        './schemas/list-worker-deployments-response'
+      );
+      return ListWorkerDeploymentsResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from listWorkerDeployments.`, {
+        request,
+        response,
+        operation: 'listWorkerDeployments',
+      });
+    }
   }
 
   /**
@@ -1579,7 +2042,7 @@ export default class TemporalClient {
     namespace: string;
     deploymentName: string;
   }): Promise<
-    import('./schemas/describe-worker-deployment-response.ts').DescribeWorkerDeploymentResponse
+    import('./schemas/describe-worker-deployment-response').DescribeWorkerDeploymentResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/worker-deployments/${deploymentName}`,
@@ -1601,7 +2064,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { DescribeWorkerDeploymentResponse } = await import(
+        './schemas/describe-worker-deployment-response'
+      );
+      return DescribeWorkerDeploymentResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from describeWorkerDeployment.`, {
+        request,
+        response,
+        operation: 'describeWorkerDeployment',
+      });
+    }
   }
 
   /**
@@ -1618,7 +2093,7 @@ export default class TemporalClient {
     namespace: string;
     deploymentName: string;
   }): Promise<
-    import('./schemas/delete-worker-deployment-response.ts').DeleteWorkerDeploymentResponse
+    import('./schemas/delete-worker-deployment-response').DeleteWorkerDeploymentResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/worker-deployments/${deploymentName}`,
@@ -1642,7 +2117,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { DeleteWorkerDeploymentResponse } = await import(
+        './schemas/delete-worker-deployment-response'
+      );
+      return DeleteWorkerDeploymentResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from deleteWorkerDeployment.`, {
+        request,
+        response,
+        operation: 'deleteWorkerDeployment',
+      });
+    }
   }
 
   /**
@@ -1654,7 +2141,7 @@ export default class TemporalClient {
     { namespace, deploymentName }: { namespace: string; deploymentName: string },
     body: components['schemas']['SetWorkerDeploymentCurrentVersionRequest'],
   ): Promise<
-    import('./schemas/set-worker-deployment-current-version-response.ts').SetWorkerDeploymentCurrentVersionResponse
+    import('./schemas/set-worker-deployment-current-version-response').SetWorkerDeploymentCurrentVersionResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/worker-deployments/${deploymentName}/set-current-version`,
@@ -1676,7 +2163,19 @@ export default class TemporalClient {
       );
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { SetWorkerDeploymentCurrentVersionResponse } = await import(
+        './schemas/set-worker-deployment-current-version-response'
+      );
+      return SetWorkerDeploymentCurrentVersionResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from setWorkerDeploymentCurrentVersion.`, {
+        request,
+        response,
+        operation: 'setWorkerDeploymentCurrentVersion',
+      });
+    }
   }
 
   /**
@@ -1688,7 +2187,7 @@ export default class TemporalClient {
     { namespace, deploymentName }: { namespace: string; deploymentName: string },
     body: components['schemas']['SetWorkerDeploymentRampingVersionRequest'],
   ): Promise<
-    import('./schemas/set-worker-deployment-ramping-version-response.ts').SetWorkerDeploymentRampingVersionResponse
+    import('./schemas/set-worker-deployment-ramping-version-response').SetWorkerDeploymentRampingVersionResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/worker-deployments/${deploymentName}/set-ramping-version`,
@@ -1710,7 +2209,19 @@ export default class TemporalClient {
       );
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { SetWorkerDeploymentRampingVersionResponse } = await import(
+        './schemas/set-worker-deployment-ramping-version-response'
+      );
+      return SetWorkerDeploymentRampingVersionResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from setWorkerDeploymentRampingVersion.`, {
+        request,
+        response,
+        operation: 'setWorkerDeploymentRampingVersion',
+      });
+    }
   }
 
   /**
@@ -1745,7 +2256,7 @@ export default class TemporalClient {
       | 'TASK_REACHABILITY_CLOSED_WORKFLOWS';
     namespace: string;
   }): Promise<
-    import('./schemas/get-worker-task-reachability-response.ts').GetWorkerTaskReachabilityResponse
+    import('./schemas/get-worker-task-reachability-response').GetWorkerTaskReachabilityResponse
   > {
     const url = new URL(`/api/v1/namespaces/${namespace}/worker-task-reachability`, this.baseURL);
 
@@ -1770,7 +2281,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { GetWorkerTaskReachabilityResponse } = await import(
+        './schemas/get-worker-task-reachability-response'
+      );
+      return GetWorkerTaskReachabilityResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from getWorkerTaskReachability.`, {
+        request,
+        response,
+        operation: 'getWorkerTaskReachability',
+      });
+    }
   }
 
   /** @description CountWorkflowExecutions is a visibility API to count of workflow executions in a specific namespace. */
@@ -1781,7 +2304,7 @@ export default class TemporalClient {
     query?: string;
     namespace: string;
   }): Promise<
-    import('./schemas/count-workflow-executions-response.ts').CountWorkflowExecutionsResponse
+    import('./schemas/count-workflow-executions-response').CountWorkflowExecutionsResponse
   > {
     const url = new URL(`/api/v1/namespaces/${namespace}/workflow-count`, this.baseURL);
 
@@ -1802,7 +2325,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { CountWorkflowExecutionsResponse } = await import(
+        './schemas/count-workflow-executions-response'
+      );
+      return CountWorkflowExecutionsResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from countWorkflowExecutions.`, {
+        request,
+        response,
+        operation: 'countWorkflowExecutions',
+      });
+    }
   }
 
   /** @description ListWorkflowExecutions is a visibility API to list workflow executions in a specific namespace. */
@@ -1817,7 +2352,7 @@ export default class TemporalClient {
     query?: string;
     namespace: string;
   }): Promise<
-    import('./schemas/list-workflow-executions-response.ts').ListWorkflowExecutionsResponse
+    import('./schemas/list-workflow-executions-response').ListWorkflowExecutionsResponse
   > {
     const url = new URL(`/api/v1/namespaces/${namespace}/workflows`, this.baseURL);
 
@@ -1842,7 +2377,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { ListWorkflowExecutionsResponse } = await import(
+        './schemas/list-workflow-executions-response'
+      );
+      return ListWorkflowExecutionsResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from listWorkflowExecutions.`, {
+        request,
+        response,
+        operation: 'listWorkflowExecutions',
+      });
+    }
   }
 
   /** @description DescribeWorkflowExecution returns information about the specified workflow execution. */
@@ -1857,7 +2404,7 @@ export default class TemporalClient {
     namespace: string;
     workflowId: string;
   }): Promise<
-    import('./schemas/describe-workflow-execution-response.ts').DescribeWorkflowExecutionResponse
+    import('./schemas/describe-workflow-execution-response').DescribeWorkflowExecutionResponse
   > {
     const url = new URL(`/api/v1/namespaces/${namespace}/workflows/${workflowId}`, this.baseURL);
 
@@ -1880,7 +2427,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { DescribeWorkflowExecutionResponse } = await import(
+        './schemas/describe-workflow-execution-response'
+      );
+      return DescribeWorkflowExecutionResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from describeWorkflowExecution.`, {
+        request,
+        response,
+        operation: 'describeWorkflowExecution',
+      });
+    }
   }
 
   /**
@@ -1911,7 +2470,7 @@ export default class TemporalClient {
     namespace: string;
     workflowId: string;
   }): Promise<
-    import('./schemas/get-workflow-execution-history-response.ts').GetWorkflowExecutionHistoryResponse
+    import('./schemas/get-workflow-execution-history-response').GetWorkflowExecutionHistoryResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/history`,
@@ -1948,7 +2507,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { GetWorkflowExecutionHistoryResponse } = await import(
+        './schemas/get-workflow-execution-history-response'
+      );
+      return GetWorkflowExecutionHistoryResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from getWorkflowExecutionHistory.`, {
+        request,
+        response,
+        operation: 'getWorkflowExecutionHistory',
+      });
+    }
   }
 
   /**
@@ -1971,7 +2542,7 @@ export default class TemporalClient {
     namespace: string;
     workflowId: string;
   }): Promise<
-    import('./schemas/get-workflow-execution-history-reverse-response.ts').GetWorkflowExecutionHistoryReverseResponse
+    import('./schemas/get-workflow-execution-history-reverse-response').GetWorkflowExecutionHistoryReverseResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/history-reverse`,
@@ -2000,7 +2571,19 @@ export default class TemporalClient {
       );
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { GetWorkflowExecutionHistoryReverseResponse } = await import(
+        './schemas/get-workflow-execution-history-reverse-response'
+      );
+      return GetWorkflowExecutionHistoryReverseResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from getWorkflowExecutionHistoryReverse.`, {
+        request,
+        response,
+        operation: 'getWorkflowExecutionHistoryReverse',
+      });
+    }
   }
 
   /** @description QueryWorkflow requests a query be executed for a specified workflow execution. */
@@ -2011,7 +2594,7 @@ export default class TemporalClient {
       queryType,
     }: { namespace: string; workflowId: string; queryType: string },
     body: components['schemas']['QueryWorkflowRequest'],
-  ): Promise<import('./schemas/query-workflow-response.ts').QueryWorkflowResponse> {
+  ): Promise<import('./schemas/query-workflow-response').QueryWorkflowResponse> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/query/${queryType}`,
       this.baseURL,
@@ -2033,7 +2616,17 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { QueryWorkflowResponse } = await import('./schemas/query-workflow-response');
+      return QueryWorkflowResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from queryWorkflow.`, {
+        request,
+        response,
+        operation: 'queryWorkflow',
+      });
+    }
   }
 
   /**
@@ -2048,7 +2641,7 @@ export default class TemporalClient {
     { namespace, workflowId }: { namespace: string; workflowId: string },
     body: components['schemas']['RequestCancelWorkflowExecutionRequest'],
   ): Promise<
-    import('./schemas/request-cancel-workflow-execution-response.ts').RequestCancelWorkflowExecutionResponse
+    import('./schemas/request-cancel-workflow-execution-response').RequestCancelWorkflowExecutionResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/cancel`,
@@ -2070,7 +2663,19 @@ export default class TemporalClient {
       );
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { RequestCancelWorkflowExecutionResponse } = await import(
+        './schemas/request-cancel-workflow-execution-response'
+      );
+      return RequestCancelWorkflowExecutionResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from requestCancelWorkflowExecution.`, {
+        request,
+        response,
+        operation: 'requestCancelWorkflowExecution',
+      });
+    }
   }
 
   /**
@@ -2082,9 +2687,7 @@ export default class TemporalClient {
   async resetWorkflowExecution(
     { namespace, workflowId }: { namespace: string; workflowId: string },
     body: components['schemas']['ResetWorkflowExecutionRequest'],
-  ): Promise<
-    import('./schemas/reset-workflow-execution-response.ts').ResetWorkflowExecutionResponse
-  > {
+  ): Promise<import('./schemas/reset-workflow-execution-response').ResetWorkflowExecutionResponse> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/reset`,
       this.baseURL,
@@ -2106,7 +2709,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { ResetWorkflowExecutionResponse } = await import(
+        './schemas/reset-workflow-execution-response'
+      );
+      return ResetWorkflowExecutionResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from resetWorkflowExecution.`, {
+        request,
+        response,
+        operation: 'resetWorkflowExecution',
+      });
+    }
   }
 
   /**
@@ -2123,7 +2738,7 @@ export default class TemporalClient {
     }: { namespace: string; workflowId: string; signalName: string },
     body: components['schemas']['SignalWorkflowExecutionRequest'],
   ): Promise<
-    import('./schemas/signal-workflow-execution-response.ts').SignalWorkflowExecutionResponse
+    import('./schemas/signal-workflow-execution-response').SignalWorkflowExecutionResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/signal/${signalName}`,
@@ -2146,7 +2761,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { SignalWorkflowExecutionResponse } = await import(
+        './schemas/signal-workflow-execution-response'
+      );
+      return SignalWorkflowExecutionResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from signalWorkflowExecution.`, {
+        request,
+        response,
+        operation: 'signalWorkflowExecution',
+      });
+    }
   }
 
   /**
@@ -2158,7 +2785,7 @@ export default class TemporalClient {
     { namespace, workflowId }: { namespace: string; workflowId: string },
     body: components['schemas']['TerminateWorkflowExecutionRequest'],
   ): Promise<
-    import('./schemas/terminate-workflow-execution-response.ts').TerminateWorkflowExecutionResponse
+    import('./schemas/terminate-workflow-execution-response').TerminateWorkflowExecutionResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/terminate`,
@@ -2181,7 +2808,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { TerminateWorkflowExecutionResponse } = await import(
+        './schemas/terminate-workflow-execution-response'
+      );
+      return TerminateWorkflowExecutionResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from terminateWorkflowExecution.`, {
+        request,
+        response,
+        operation: 'terminateWorkflowExecution',
+      });
+    }
   }
 
   /** @description UpdateWorkflowExecutionOptions partially updates the WorkflowExecutionOptions of an existing workflow execution. */
@@ -2189,7 +2828,7 @@ export default class TemporalClient {
     { namespace, workflowId }: { namespace: string; workflowId: string },
     body: components['schemas']['UpdateWorkflowExecutionOptionsRequest'],
   ): Promise<
-    import('./schemas/update-workflow-execution-options-response.ts').UpdateWorkflowExecutionOptionsResponse
+    import('./schemas/update-workflow-execution-options-response').UpdateWorkflowExecutionOptionsResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/update-options`,
@@ -2211,7 +2850,19 @@ export default class TemporalClient {
       );
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { UpdateWorkflowExecutionOptionsResponse } = await import(
+        './schemas/update-workflow-execution-options-response'
+      );
+      return UpdateWorkflowExecutionOptionsResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from updateWorkflowExecutionOptions.`, {
+        request,
+        response,
+        operation: 'updateWorkflowExecutionOptions',
+      });
+    }
   }
 
   /** @description Invokes the specified Update function on user Workflow code. */
@@ -2219,7 +2870,7 @@ export default class TemporalClient {
     { namespace, workflowId, name }: { namespace: string; workflowId: string; name: string },
     body: components['schemas']['UpdateWorkflowExecutionRequest'],
   ): Promise<
-    import('./schemas/update-workflow-execution-response.ts').UpdateWorkflowExecutionResponse
+    import('./schemas/update-workflow-execution-response').UpdateWorkflowExecutionResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/update/${name}`,
@@ -2242,7 +2893,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { UpdateWorkflowExecutionResponse } = await import(
+        './schemas/update-workflow-execution-response'
+      );
+      return UpdateWorkflowExecutionResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from updateWorkflowExecution.`, {
+        request,
+        response,
+        operation: 'updateWorkflowExecution',
+      });
+    }
   }
 
   /**
@@ -2255,9 +2918,7 @@ export default class TemporalClient {
   async startWorkflowExecution(
     { namespace, workflowId }: { namespace: string; workflowId: string },
     body: components['schemas']['StartWorkflowExecutionRequest'],
-  ): Promise<
-    import('./schemas/start-workflow-execution-response.ts').StartWorkflowExecutionResponse
-  > {
+  ): Promise<import('./schemas/start-workflow-execution-response').StartWorkflowExecutionResponse> {
     const url = new URL(`/api/v1/namespaces/${namespace}/workflows/${workflowId}`, this.baseURL);
 
     const request = new Request(url, {
@@ -2276,7 +2937,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { StartWorkflowExecutionResponse } = await import(
+        './schemas/start-workflow-execution-response'
+      );
+      return StartWorkflowExecutionResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from startWorkflowExecution.`, {
+        request,
+        response,
+        operation: 'startWorkflowExecution',
+      });
+    }
   }
 
   /**
@@ -2301,7 +2974,7 @@ export default class TemporalClient {
     }: { namespace: string; workflowId: string; signalName: string },
     body: components['schemas']['SignalWithStartWorkflowExecutionRequest'],
   ): Promise<
-    import('./schemas/signal-with-start-workflow-execution-response.ts').SignalWithStartWorkflowExecutionResponse
+    import('./schemas/signal-with-start-workflow-execution-response').SignalWithStartWorkflowExecutionResponse
   > {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/${workflowId}/signal-with-start/${signalName}`,
@@ -2323,7 +2996,19 @@ export default class TemporalClient {
       );
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { SignalWithStartWorkflowExecutionResponse } = await import(
+        './schemas/signal-with-start-workflow-execution-response'
+      );
+      return SignalWithStartWorkflowExecutionResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from signalWithStartWorkflowExecution.`, {
+        request,
+        response,
+        operation: 'signalWithStartWorkflowExecution',
+      });
+    }
   }
 
   /**
@@ -2340,9 +3025,7 @@ export default class TemporalClient {
   async executeMultiOperation(
     { namespace }: { namespace: string },
     body: components['schemas']['ExecuteMultiOperationRequest'],
-  ): Promise<
-    import('./schemas/execute-multi-operation-response.ts').ExecuteMultiOperationResponse
-  > {
+  ): Promise<import('./schemas/execute-multi-operation-response').ExecuteMultiOperationResponse> {
     const url = new URL(
       `/api/v1/namespaces/${namespace}/workflows/execute-multi-operation`,
       this.baseURL,
@@ -2364,7 +3047,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { ExecuteMultiOperationResponse } = await import(
+        './schemas/execute-multi-operation-response'
+      );
+      return ExecuteMultiOperationResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from executeMultiOperation.`, {
+        request,
+        response,
+        operation: 'executeMultiOperation',
+      });
+    }
   }
 
   /**
@@ -2381,7 +3076,7 @@ export default class TemporalClient {
     pageSize?: number;
     nextPageToken?: string;
     name?: string;
-  }): Promise<import('./schemas/list-nexus-endpoints-response.ts').ListNexusEndpointsResponse> {
+  }): Promise<import('./schemas/list-nexus-endpoints-response').ListNexusEndpointsResponse> {
     const url = new URL(`/api/v1/nexus/endpoints`, this.baseURL);
 
     if (pageSize) url.searchParams.append('pageSize', String(pageSize));
@@ -2405,7 +3100,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { ListNexusEndpointsResponse } = await import(
+        './schemas/list-nexus-endpoints-response'
+      );
+      return ListNexusEndpointsResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from listNexusEndpoints.`, {
+        request,
+        response,
+        operation: 'listNexusEndpoints',
+      });
+    }
   }
 
   /**
@@ -2415,7 +3122,7 @@ export default class TemporalClient {
    */
   async createNexusEndpoint(
     body: components['schemas']['CreateNexusEndpointRequest'],
-  ): Promise<import('./schemas/create-nexus-endpoint-response.ts').CreateNexusEndpointResponse> {
+  ): Promise<import('./schemas/create-nexus-endpoint-response').CreateNexusEndpointResponse> {
     const url = new URL(`/api/v1/nexus/endpoints`, this.baseURL);
 
     const request = new Request(url, {
@@ -2434,7 +3141,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { CreateNexusEndpointResponse } = await import(
+        './schemas/create-nexus-endpoint-response'
+      );
+      return CreateNexusEndpointResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from createNexusEndpoint.`, {
+        request,
+        response,
+        operation: 'createNexusEndpoint',
+      });
+    }
   }
 
   /** @description Get a registered Nexus endpoint by ID. The returned version can be used for optimistic updates. */
@@ -2442,7 +3161,7 @@ export default class TemporalClient {
     id,
   }: {
     id: string;
-  }): Promise<import('./schemas/get-nexus-endpoint-response.ts').GetNexusEndpointResponse> {
+  }): Promise<import('./schemas/get-nexus-endpoint-response').GetNexusEndpointResponse> {
     const url = new URL(`/api/v1/nexus/endpoints/${id}`, this.baseURL);
 
     const request = new Request(url, {
@@ -2460,7 +3179,17 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { GetNexusEndpointResponse } = await import('./schemas/get-nexus-endpoint-response');
+      return GetNexusEndpointResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from getNexusEndpoint.`, {
+        request,
+        response,
+        operation: 'getNexusEndpoint',
+      });
+    }
   }
 
   /** @description Delete an incoming Nexus service by ID. */
@@ -2470,7 +3199,7 @@ export default class TemporalClient {
   }: {
     version?: string;
     id: string;
-  }): Promise<import('./schemas/delete-nexus-endpoint-response.ts').DeleteNexusEndpointResponse> {
+  }): Promise<import('./schemas/delete-nexus-endpoint-response').DeleteNexusEndpointResponse> {
     const url = new URL(`/api/v1/nexus/endpoints/${id}`, this.baseURL);
 
     if (version) url.searchParams.append('version', version);
@@ -2490,7 +3219,19 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { DeleteNexusEndpointResponse } = await import(
+        './schemas/delete-nexus-endpoint-response'
+      );
+      return DeleteNexusEndpointResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from deleteNexusEndpoint.`, {
+        request,
+        response,
+        operation: 'deleteNexusEndpoint',
+      });
+    }
   }
 
   /**
@@ -2503,7 +3244,7 @@ export default class TemporalClient {
   async updateNexusEndpoint(
     { id }: { id: string },
     body: components['schemas']['UpdateNexusEndpointRequest'],
-  ): Promise<import('./schemas/update-nexus-endpoint-response.ts').UpdateNexusEndpointResponse> {
+  ): Promise<import('./schemas/update-nexus-endpoint-response').UpdateNexusEndpointResponse> {
     const url = new URL(`/api/v1/nexus/endpoints/${id}/update`, this.baseURL);
 
     const request = new Request(url, {
@@ -2522,12 +3263,24 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { UpdateNexusEndpointResponse } = await import(
+        './schemas/update-nexus-endpoint-response'
+      );
+      return UpdateNexusEndpointResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from updateNexusEndpoint.`, {
+        request,
+        response,
+        operation: 'updateNexusEndpoint',
+      });
+    }
   }
 
   /** @description GetSystemInfo returns information about the system. */
   async getSystemInfo(): Promise<
-    import('./schemas/get-system-info-response.ts').GetSystemInfoResponse
+    import('./schemas/get-system-info-response').GetSystemInfoResponse
   > {
     const url = new URL(`/api/v1/system-info`, this.baseURL);
 
@@ -2546,6 +3299,16 @@ export default class TemporalClient {
       });
     }
 
-    return response.json();
+    try {
+      const json = await response.json();
+      const { GetSystemInfoResponse } = await import('./schemas/get-system-info-response');
+      return GetSystemInfoResponse.parse(json);
+    } catch (error) {
+      throw new TemporalError(`Failed to parse response from getSystemInfo.`, {
+        request,
+        response,
+        operation: 'getSystemInfo',
+      });
+    }
   }
 }

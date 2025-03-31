@@ -8,12 +8,13 @@ import { kebabCase } from 'change-case';
 
 const ResponseSchema = z.string().startsWith(`components['schemas']['`).endsWith(`']`);
 
-const getType = (s: string) => {
+const getType = (s: string): [string, string] => {
   try {
     const response = ResponseSchema.parse(s);
     const responseType = response.replace(`components['schemas']['`, '').replace(`']`, '');
     const fileName = kebabCase(responseType);
-    return `import('./schemas/${fileName}.ts').${responseType}`;
+    const filePath = `./schemas/${fileName}`;
+    return [responseType, filePath];
   } catch (error) {
     throw new Error(`Invalid response schema: ${s}`);
   }
@@ -23,6 +24,7 @@ export class Operation {
   private httpMethod: Uppercase<HTTPMethod> | undefined;
   public apiRoute: string | undefined;
   public response: string | undefined;
+  public schemaFilePath: string | undefined;
   private parameters: Parameters = new Parameters(this);
   public requestBody: string | undefined;
 
@@ -43,7 +45,8 @@ export class Operation {
 
   addResponse(property: APIResponse): void {
     const response = property['200']['content']["'application/json'"];
-    const responseType = getType(response);
+    const [responseType, filePath] = getType(response);
+    this.schemaFilePath = filePath;
     this.response = responseType;
   }
 
@@ -60,8 +63,6 @@ export class Operation {
   get name() {
     return formatOperationName(this.operationName);
   }
-
-  
 
   get sourceFile() {
     return this.operations.sourceFile;

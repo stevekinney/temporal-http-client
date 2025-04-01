@@ -65,4 +65,3 @@ export function toTemplateLiteral(str: string): string {
   }
   return str;
 }
-
